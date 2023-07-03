@@ -1,14 +1,15 @@
-version: "1.0"
+version: "1.1"
 
 services:
-  # backend:
-  #   build: ./backend
-  #   volumes:
-  #     - ./backend/:/usr/src/app/
-  #   ports:
-  #     - 8000:8000
+  backend:
+    build: ./backend
+    # command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - ./backend/:/usr/src/app/
+    ports:
+      - 8000:8000
   #   env_file:
-  #     - ./backend/.env.docker
+  #     - ./backend/.docker_backend.env
   #   depends_on:
   #     - db
   # db:
@@ -16,7 +17,7 @@ services:
   #   volumes:
   #     - postgres_data:/var/lib/postgresql/data/
   #   env_file:
-  #     - ./backend/.env.docker
+  #     - ./backend/.docker_db.env
   frontend:
     build: ./frontend
     volumes:
