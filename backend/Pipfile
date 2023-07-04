@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-fastapi = "*"
+fastapi = ">=0.99.0"
 uvicorn = "*"
 sqlalchemy = "*"
 psycopg2 = "*"
@@ -13,9 +13,10 @@ pydantic = {extras = ["email"], version = "*"}
 passlib = {extras = ["bcrypt"], version = "*"}
 python-jose = {extras = ["cryptography"], version = "*"}
 alembic = "*"
+pydantic-settings = "==2.0.1"
 
 [dev-packages]
-fastapi = {extras = ["all"], version = "*"}
+fastapi = {extras = ["all"], version = ">=0.99.0"}
 black = "*"
 pre-commit = "*"
 pylint = "*"
