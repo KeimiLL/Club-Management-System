@@ -4,7 +4,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import EmailStr, Field, computed_field
+from pydantic import EmailStr, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     POSTGRES_PORT: str = Field(default=...)
     POSTGRES_DB: str = Field(default=...)
 
-    @computed_field
+    @property
     def db_uri(self) -> str:
         """Creates a Postgres database URI from environment variables.
 
