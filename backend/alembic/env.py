@@ -8,8 +8,8 @@ from sqlalchemy import pool
 
 from alembic import context
 
-# pylint: disable=import-error
-from app.db.base_class import Base
+# pylint: disable=import-error,unused-import
+from app.db.base import Base, User
 from app.core.config import get_settings
 
 # this is the Alembic Config object, which provides
