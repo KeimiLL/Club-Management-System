@@ -4,13 +4,15 @@
 from typing import Optional
 from pydantic import BaseModel, ConfigDict, EmailStr
 
+from app.schemas.enums import Roles
+
 
 class UserBase(BaseModel):
     """Base User schema."""
 
     full_name: Optional[str] = None
     email: Optional[EmailStr] = None
-    role: Optional[str] = None
+    role: Optional[Roles] = None
 
 
 class UserCreate(UserBase):
@@ -36,7 +38,7 @@ class UserInDBBase(UserBase):
 
 
 class User(UserInDBBase):
-    """User schema for returning."""
+    """User schema for returning data from DB."""
 
 
 class UserInDB(UserInDBBase):

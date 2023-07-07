@@ -10,7 +10,7 @@ class User(Base):
     """User model class.
 
     Args:
-        Base (Base): Base class for models
+        Base (Base): Base class for models.
     """
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
