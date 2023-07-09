@@ -8,8 +8,8 @@ from sqlalchemy import pool
 
 from alembic import context
 
-# pylint: disable=import-error,unused-import
-from app.db.base import Base, User
+# pylint: disable=import-error
+from app.db import base
 from app.core.config import get_settings
 
 # this is the Alembic Config object, which provides
@@ -25,7 +25,7 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-target_metadata = Base.metadata
+target_metadata = base.Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
