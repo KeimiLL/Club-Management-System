@@ -15,3 +15,5 @@ RUN pipenv install --dev
 COPY . .
 
 EXPOSE 8000
+
+CMD ["/usr/src/app/start.sh"]

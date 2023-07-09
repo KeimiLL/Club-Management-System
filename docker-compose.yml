@@ -3,7 +3,6 @@ version: "1.1"
 services:
   backend:
     build: ./backend
-    command: bash -c "pipenv run alembic upgrade head && pipenv run python main.py"
     volumes:
       - ./backend/:/usr/src/app/
     ports:
