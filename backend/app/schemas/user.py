@@ -12,7 +12,6 @@ class UserBase(BaseModel):
 
     full_name: Optional[str] = None
     email: Optional[EmailStr] = None
-    role: Optional[Roles] = None
 
 
 class UserCreate(UserBase):
@@ -23,10 +22,17 @@ class UserCreate(UserBase):
     password: str
 
 
+class UserCreateWithRole(UserCreate):
+    """User schema for creation with a role."""
+
+    role: Roles
+
+
 class UserUpdate(UserBase):
     """User schema for updating."""
 
     password: Optional[str] = None
+    role: Optional[Roles] = None
 
 
 class UserInDBBase(UserBase):
@@ -35,6 +41,7 @@ class UserInDBBase(UserBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: Optional[int] = None
+    role: Optional[Roles] = None
 
 
 class User(UserInDBBase):

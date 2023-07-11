@@ -10,3 +10,4 @@ class Roles(str, Enum):
     ADMIN = "admin"
     COACH = "coach"
     PLAYER = "player"
+    VIEWER = "viewer"

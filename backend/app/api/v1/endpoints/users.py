@@ -5,14 +5,14 @@ from typing import Annotated
 
 from app.crud.crud_user import create_new_user, get_user_by_email
 from app.db.session import get_db
-from app.schemas.user import UserBase, UserCreate
+from app.schemas.user import User, UserCreate
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 router = APIRouter()
 
 
-@router.post("/register", response_model=UserBase)
+@router.post("/register", response_model=User)
 def register(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
     """Creates a new user based on data from a POST request.
 
