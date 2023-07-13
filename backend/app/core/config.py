@@ -27,7 +27,7 @@ class Settings(BaseSettings):
         """Creates a Postgres database URI from environment variables.
 
         Returns:
-            str: Postgres databse URI.
+            str: Postgres database URI.
         """
         return (
             f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
@@ -36,11 +36,16 @@ class Settings(BaseSettings):
 
     SECRET_KEY: str = Field(default=...)
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    REFRESH_TOKEN_EXPIRE_DAYS: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=...)
+    REFRESH_TOKEN_EXPIRE_DAYS: int = Field(default=...)
 
-    TEST_USER_USERNAME: str = "testuser"
-    TEST_USER_EMAIL: EmailStr = "test@example.com"
+    TEST_USER_FULL_NAME: str = Field(default=...)
+    TEST_USER_EMAIL: EmailStr = Field(default=...)
+    TEST_USER_PASSWORD: str = Field(default=...)
+
+    SUPER_USER_FULL_NAME: str = Field(default=...)
+    SUPER_USER_EMAIL: EmailStr = Field(default=...)
+    SUPER_USER_PASSWORD: str = Field(default=...)
 
 
 @lru_cache()
