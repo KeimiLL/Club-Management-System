@@ -26,11 +26,9 @@ def register(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
     Returns:
         new_user (UserBase): A newly created user.
     """
-    new_user = get_user_by_email(email=user.email, db=db)
-    if new_user:
+    if get_user_by_email(email=user.email, db=db):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User already exists.",
         )
-    new_user = create_new_user(user=user, db=db)
-    return new_user
+    return create_new_user(user=user, db=db)
