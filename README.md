@@ -24,16 +24,22 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
    pipenv install
    ```
 
-1. To enter the docker container, use `docker exec`:
+1. To enter the docker container, use `docker compose exec`:
 
    ```bash
    docker compose exec -it <compose service name> <command to be executed>
    ```
 
-   For example, to enter the bash shell inside the backend container:
+   For example, to enter the bash shell inside the `backend` container:
 
    ```bash
    docker compose exec -it backend /bin/bash
+   ```
+
+   Create a database migration with Alembic:
+
+   ```bash
+   docker compose exec -it backend pipenv run alembic revision --autogenerate -m "<message>"
    ```
 
 ### Working with the database
@@ -62,6 +68,12 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
 
    ```sql
    SELECT * FROM "user";
+   ```
+
+   Or:
+
+   ```sql
+   DELETE FROM "user";
    ```
 
 ### Tests
