@@ -44,8 +44,6 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
 
 ### Working with the database
 
-## Python dependencies
-
 1. Run `psql` inside the database container to be able to work with the database:
 
    ```bash
@@ -78,7 +76,7 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
 
 ### Tests
 
-1. To run backend tests locally inside the `backend/` directory:
+1. To run backend tests locally with `pytest` inside the `backend/` directory:
 
    ```bash
    pipenv run pytest
