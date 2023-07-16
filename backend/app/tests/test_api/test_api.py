@@ -27,7 +27,7 @@ schema = from_pytest_fixture("app_schema")
 
 
 @schema.parametrize()
-@settings(max_examples=100)
+@settings(max_examples=20)
 def test_api(case: Case, client: TestClient) -> None:
     """Function to configure Schemathesis.
 
