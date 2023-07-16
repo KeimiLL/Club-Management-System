@@ -25,7 +25,7 @@ def create_new_user(user: UserCreate | UserCreateWithRole, db: Session) -> User:
         email=user.email,
         hashed_password=Hasher.get_password_hash(user.password),
         role=user.role if isinstance(user, UserCreateWithRole) else Roles.VIEWER,
-    )  # type: ignore
+    )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)

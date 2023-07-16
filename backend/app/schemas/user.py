@@ -44,8 +44,10 @@ class UserInDBBase(UserBase):
     role: Optional[Roles] = None
 
 
-class User(UserInDBBase):
+class User(UserBase):
     """User schema for returning data from DB."""
+
+    role: Roles
 
 
 class UserInDB(UserInDBBase):

@@ -12,7 +12,13 @@ from sqlalchemy.orm import Session
 router = APIRouter()
 
 
-@router.post("/register", response_model=User)
+@router.post(
+    "/register",
+    response_model=User,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"detail": "User already exists."},
+    },
+)
 def register(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
     """Creates a new user based on data from a POST request.
 
