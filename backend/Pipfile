@@ -23,6 +23,8 @@ pre-commit = "*"
 pylint = "*"
 pytest = "*"
 requests = "*"
+schemathesis = "*"
+hypothesis = "*"
 
 [requires]
 python_version = "3.11"
