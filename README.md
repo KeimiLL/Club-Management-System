@@ -90,16 +90,8 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
 
 1. To run frontend tests locally inside the `frontend/` directory:
 
-   TODO: Add commands/scripts once the tests config is done.
-
    ```bash
-
-   ```
-
-   Or inside the frontend container:
-
-   ```bash
-
+   yarn test
    ```
 
 ## Authors
