@@ -541,6 +541,7 @@ markers = [
     "disable_get_user_access_token_autouse"
 ]
 testpaths = [
+    "app/tests/test_api",
     "app/tests/test_endpoints",
     "app/tests/test_utils",
 ]

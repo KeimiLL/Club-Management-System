@@ -4,7 +4,8 @@
 import pytest
 from app.schemas.enums import Roles
 from app.core.config import get_settings
-from fastapi.testclient import TestClient
+from starlette_testclient import TestClient
+
 
 data = {
     "full_name": get_settings().TEST_USER_FULL_NAME,
@@ -19,7 +20,7 @@ def test_register(client: TestClient) -> None:
     """Tests creating a new user.
 
     Args:
-        client (TestClient): Test client instance,
+        client (TestClient): TestClient instance,
     """
     response = client.post("/api/v1/users/register", json=data)
 
