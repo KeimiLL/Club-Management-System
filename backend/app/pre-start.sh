@@ -7,7 +7,7 @@ python -m app.backend_pre_start
 alembic upgrade head
 
 # Create initial data in DB
-# python -m app.initial_data
+python -m app.initial_data
 
 # Start the FastAPI app
 python -m app.main
