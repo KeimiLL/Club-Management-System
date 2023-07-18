@@ -4,7 +4,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import EmailStr, Field
+from pydantic import EmailStr, Field, validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,6 +15,28 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str = "Club Management System"
     PROJECT_VERSION: str = "0.0.1"
+
+    BACKEND_CORS_ORIGINS: list[str] = Field(default=[])
+
+    # pylint: disable=no-self-argument
+    @validator("BACKEND_CORS_ORIGINS", pre=True)
+    def assemble_cors_origins(cls, value: str | list[str]) -> str | list[str]:
+        """Validator for BACKEND_CORS_ORIGINS constant.
+
+        Args:
+            value (str | list[str]): Constant value.
+
+        Raises:
+            ValueError: If the type of the value loaded from the .env file is the wrong type.
+
+        Returns:
+            str | list[str]: A single origin or a list of origins.
+        """
+        if isinstance(value, str) and not value.startswith("["):
+            return [i.strip() for i in value.split(",")]
+        if isinstance(value, (list, str)):
+            return value
+        raise ValueError(value)
 
     POSTGRES_SERVER: str = Field(default=...)
     POSTGRES_USER: str = Field(default=...)
