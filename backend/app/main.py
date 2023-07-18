@@ -5,13 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.base import api_router
-from app.core import config
-
-
-origins = [
-    "http://localhost",
-    "http://localhost:4200",
-]
+from app.core.config import get_settings
 
 
 def include_router(application: FastAPI) -> None:
@@ -30,12 +24,12 @@ def start_application() -> FastAPI:
         application: FastAPI application.
     """
     application = FastAPI(
-        title=config.get_settings().PROJECT_NAME,
-        version=config.get_settings().PROJECT_VERSION,
+        title=get_settings().PROJECT_NAME,
+        version=get_settings().PROJECT_VERSION,
     )
     application.add_middleware(
         CORSMiddleware,
-        allow_origins=origins,
+        allow_origins=get_settings().BACKEND_CORS_ORIGINS,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
