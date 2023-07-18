@@ -4,4 +4,4 @@
 cd frontend
 yarn lint-staged
 cd ../backend
-pre-commit run
+pipenv run pre-commit run
