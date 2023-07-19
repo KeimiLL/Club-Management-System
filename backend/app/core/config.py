@@ -4,7 +4,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import EmailStr, Field, validator
+from pydantic import EmailStr, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: list[str] = Field(default=[])
 
     # pylint: disable=no-self-argument
-    @validator("BACKEND_CORS_ORIGINS", pre=True)
+    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
     def assemble_cors_origins(cls, value: str | list[str]) -> str | list[str]:
         """Validator for BACKEND_CORS_ORIGINS constant.
 
