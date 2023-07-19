@@ -79,7 +79,7 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
 1. To run backend tests locally with `pytest` inside the `backend/` directory:
 
    ```bash
-   pipenv run pytest
+   pipenv run coverage run -m pytest && pipenv run coverage report -m
    ```
 
    Or inside the backend container:
