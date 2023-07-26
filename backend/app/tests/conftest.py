@@ -38,7 +38,7 @@ engine = create_engine(
 SessionTesting = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-@pytest.fixture(scope="function", name="app")
+@pytest.fixture(scope="module", name="app")
 def fixture_app() -> Iterator[FastAPI]:
     """Creates an instance of a FastAPI application with a test sqlite database.
 
@@ -53,7 +53,7 @@ def fixture_app() -> Iterator[FastAPI]:
     Base.metadata.drop_all(engine)
 
 
-@pytest.fixture(scope="function", name="db_session")
+@pytest.fixture(scope="module", name="db_session")
 def fixture_db_session() -> Iterator[Session]:
     """Creates a new database session for testing.
 
@@ -62,16 +62,13 @@ def fixture_db_session() -> Iterator[Session]:
     Yields:
         Iterator[Session]: Database session.
     """
-    connection = engine.connect()
-    transaction = connection.begin()
-    session = SessionTesting(bind=connection)
-    yield session
-    session.close()
-    transaction.rollback()
-    connection.close()
+    with engine.connect() as connection:
+        with connection.begin():
+            with Session(bind=connection) as session:
+                yield session
 
 
-@pytest.fixture(scope="function", name="client")
+@pytest.fixture(scope="module", name="client")
 def fixture_client(app: FastAPI, db_session: Session) -> Iterator[TestClient]:
     """Creates a new FastAPI TestClient that uses the `db_session` fixture to override
     the `get_db` dependency that is injected into routes.
