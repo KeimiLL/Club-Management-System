@@ -2,7 +2,7 @@
 
 
 from typing import Optional
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
 
 from app.schemas.enums import Roles
 
@@ -20,6 +20,24 @@ class UserCreate(UserBase):
     full_name: str
     email: EmailStr
     password: str
+
+    @field_validator("password")
+    @classmethod
+    def cannot_contain_null_bytes(cls, value: str) -> str:
+        """Password field validator to check for NULL bytes.
+
+        Args:
+            value (str): The field value.
+
+        Raises:
+            ValueError: If the password string contains NULL bytes.
+
+        Returns:
+            str: The field value
+        """
+        if "\x00" in value:
+            raise ValueError("The password cannot contain NULL bytes.")
+        return value
 
 
 class UserCreateWithRole(UserCreate):

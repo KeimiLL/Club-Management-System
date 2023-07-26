@@ -11,3 +11,15 @@ class Roles(str, Enum):
     COACH = "coach"
     PLAYER = "player"
     VIEWER = "viewer"
+
+
+class ExceptionMessages(str, Enum):
+    """Enum for HTTPException detail messages."""
+
+    SUCCESS = "Operation completed successfully."
+
+    UNAUTHENTICATED = "Unauthenticated request."
+    UNAUTHORIZED = "Unauthorized request."
+    CONFLICT = "State conflict."
+
+    INTERNAL_ERROR = "Internal server error."

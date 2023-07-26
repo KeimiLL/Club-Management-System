@@ -2,12 +2,14 @@
 
 
 from typing import Annotated
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
 
-from app.crud.crud_user import create_new_user, get_user_by_email
+from app.crud.crud_user import create_new_user
 from app.db.session import get_db
 from app.schemas.user import User, UserCreate
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from app.schemas.misc import Message, MessageFromEnum
+
 
 router = APIRouter()
 
@@ -16,7 +18,8 @@ router = APIRouter()
     "/register",
     response_model=User,
     responses={
-        status.HTTP_400_BAD_REQUEST: {"detail": "User already exists."},
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
 def register(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
@@ -26,15 +29,7 @@ def register(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
         user (UserCreate): User data from POST request.
         db (Session, optional): Database session. Defaults to Depends(get_db).
 
-    Raises:
-        HTTPException: HTTPException if there was an error while creating new user.
-
     Returns:
-        new_user (UserBase): A newly created user.
+        new_user (User): The newly created user.
     """
-    if get_user_by_email(email=user.email, db=db):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User already exists.",
-        )
     return create_new_user(user=user, db=db)

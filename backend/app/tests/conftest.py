@@ -3,16 +3,18 @@
 
 import os
 import sys
+from fastapi import FastAPI
+from starlette_testclient import TestClient
+import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
 from typing import Iterator
 
-import pytest
 from app.api.base import api_router
 from app.db.base import Base
 from app.db.session import get_db
-from fastapi import FastAPI
-from starlette_testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
+from app.main import include_exception_handlers
+
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -25,6 +27,7 @@ def start_application() -> FastAPI:
     """
     application = FastAPI()
     application.include_router(api_router)
+    include_exception_handlers(application)
     return application
 
 
@@ -35,7 +38,7 @@ engine = create_engine(
 SessionTesting = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-@pytest.fixture(scope="function", name="app")
+@pytest.fixture(scope="module", name="app")
 def fixture_app() -> Iterator[FastAPI]:
     """Creates an instance of a FastAPI application with a test sqlite database.
 
@@ -50,7 +53,7 @@ def fixture_app() -> Iterator[FastAPI]:
     Base.metadata.drop_all(engine)
 
 
-@pytest.fixture(scope="function", name="db_session")
+@pytest.fixture(scope="module", name="db_session")
 def fixture_db_session() -> Iterator[Session]:
     """Creates a new database session for testing.
 
@@ -59,16 +62,13 @@ def fixture_db_session() -> Iterator[Session]:
     Yields:
         Iterator[Session]: Database session.
     """
-    connection = engine.connect()
-    transaction = connection.begin()
-    session = SessionTesting(bind=connection)
-    yield session
-    session.close()
-    transaction.rollback()
-    connection.close()
+    with engine.connect() as connection:
+        with connection.begin():
+            with Session(bind=connection) as session:
+                yield session
 
 
-@pytest.fixture(scope="function", name="client")
+@pytest.fixture(scope="module", name="client")
 def fixture_client(app: FastAPI, db_session: Session) -> Iterator[TestClient]:
     """Creates a new FastAPI TestClient that uses the `db_session` fixture to override
     the `get_db` dependency that is injected into routes.
