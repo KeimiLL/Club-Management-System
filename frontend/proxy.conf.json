@@ -1,0 +1,12 @@
+{
+    "/api/*": {
+        "target": {
+            "host": "backend",
+            "port": 8000,
+            "protocol": "http:"
+        },
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    }
+}
