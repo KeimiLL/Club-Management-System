@@ -2,7 +2,7 @@
 
 
 import pytest
-from hypothesis import settings
+from hypothesis import HealthCheck, settings
 from schemathesis import from_dict, from_pytest_fixture
 from schemathesis.models import Case
 from schemathesis.specs.openapi.schemas import BaseOpenAPISchema
@@ -27,7 +27,7 @@ schema = from_pytest_fixture("app_schema")
 
 
 @schema.parametrize()
-@settings(max_examples=20)
+@settings(max_examples=20, suppress_health_check=[HealthCheck.data_too_large])
 def test_api(case: Case, client: TestClient) -> None:
     """Function to configure Schemathesis.
 
