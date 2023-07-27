@@ -3,18 +3,17 @@
 
 import os
 import sys
-from fastapi import FastAPI
-from starlette_testclient import TestClient
-import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
 from typing import Iterator
 
+import pytest
 from app.api.base import api_router
 from app.db.base import Base
 from app.db.session import get_db
 from app.main import include_exception_handlers
-
+from fastapi import FastAPI
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+from starlette_testclient import TestClient
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 

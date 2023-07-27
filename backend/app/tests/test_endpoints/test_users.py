@@ -2,10 +2,9 @@
 
 
 import pytest
-from app.schemas.enums import Roles
 from app.core.config import get_settings
+from app.schemas.enums import Roles
 from starlette_testclient import TestClient
-
 
 data = {
     "full_name": get_settings().TEST_USER_FULL_NAME,
