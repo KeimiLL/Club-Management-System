@@ -2,9 +2,9 @@
 
 
 from typing import Optional
-from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
 
 from app.schemas.enums import Roles
+from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
 
 
 class UserBase(BaseModel):
@@ -14,10 +14,9 @@ class UserBase(BaseModel):
     email: Optional[EmailStr] = None
 
 
-class UserCreate(UserBase):
-    """User schema for creation."""
+class UserLogin(UserBase):
+    """User schema for logging in."""
 
-    full_name: str
     email: EmailStr
     password: str
 
@@ -40,8 +39,20 @@ class UserCreate(UserBase):
         return value
 
 
+class UserCreate(UserLogin):
+    """User schema for creation."""
+
+    full_name: str
+
+
 class UserCreateWithRole(UserCreate):
     """User schema for creation with a role."""
+
+    role: Roles
+
+
+class User(UserBase):
+    """User schema for returning data from DB."""
 
     role: Roles
 
@@ -60,12 +71,6 @@ class UserInDBBase(UserBase):
 
     id: Optional[int] = None
     role: Optional[Roles] = None
-
-
-class User(UserBase):
-    """User schema for returning data from DB."""
-
-    role: Roles
 
 
 class UserInDB(UserInDBBase):
