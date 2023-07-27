@@ -26,6 +26,7 @@ requests = "*"
 schemathesis = "*"
 hypothesis = "*"
 coverage = "*"
+isort = "*"
 
 [requires]
 python_version = "3.11"
