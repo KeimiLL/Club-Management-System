@@ -1,15 +1,18 @@
 """Main file for the application."""
 
 import uvicorn
+from app.api.base import api_router
+from app.core.config import get_settings
+from app.core.exceptions import (
+    DuplicateException,
+    InvalidCredentialsException,
+    MissingException,
+)
+from app.schemas.enums import ExceptionMessages
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
-
-from app.api.base import api_router
-from app.core.config import get_settings
-from app.core.exceptions import DuplicateException, MissingException
-from app.schemas.enums import ExceptionMessages
 
 
 def include_exception_handlers(application: FastAPI) -> None:
@@ -63,6 +66,25 @@ def include_exception_handlers(application: FastAPI) -> None:
         return JSONResponse(
             status_code=409,
             content={"message": ExceptionMessages.CONFLICT},
+        )
+
+    @application.exception_handler(InvalidCredentialsException)
+    async def invalid_credientals_exception_handler(
+        _: Request, exc: InvalidCredentialsException
+    ) -> JSONResponse:
+        """App-wide InvalidCredentialsException handler.
+
+        Args:
+            exc (InvalidCredentialsException): The raised InvalidCredentialsException.
+
+        Returns:
+            JSONResponse: The response with an appropriate status code and message.
+        """
+        return JSONResponse(
+            status_code=400,
+            content={
+                "message": f"Incorrect {'' if exc.only_password else 'email or '}password."
+            },
         )
 
 
