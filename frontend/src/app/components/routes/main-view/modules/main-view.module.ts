@@ -4,6 +4,7 @@ import { MainViewComponent } from "../main-view.component";
 
 @NgModule({
     declarations: [MainViewComponent],
+    exports: [MainViewComponent],
     imports: [CommonModule],
 })
-export class RoutesModule {}
+export class MainViewModule {}
