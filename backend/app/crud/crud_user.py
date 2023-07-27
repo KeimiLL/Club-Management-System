@@ -1,15 +1,13 @@
 """File responsible for implementing users related CRUD operations."""
 
 
-from typing import Optional
-from sqlalchemy.orm import Session
-from sqlalchemy.exc import NoResultFound, IntegrityError, SQLAlchemyError
-
-from app.core.exceptions import MissingException, DuplicateException
+from app.core.exceptions import DuplicateException, MissingException
 from app.core.security import Hasher
 from app.models.user import User
 from app.schemas.enums import Roles
-from app.schemas.user import UserCreate, UserCreateWithRole
+from app.schemas.user import UserCreate, UserCreateWithRole, UserInDB
+from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
+from sqlalchemy.orm import Session
 
 
 def create_new_user(user: UserCreate | UserCreateWithRole, db: Session) -> User:
@@ -39,7 +37,7 @@ def create_new_user(user: UserCreate | UserCreateWithRole, db: Session) -> User:
         raise exc
 
 
-def get_user_by_email(email: str, db: Session) -> Optional[User]:
+def get_user_by_email(email: str, db: Session) -> UserInDB:
     """Gets the user based on the given email.
 
     Args:
@@ -47,7 +45,7 @@ def get_user_by_email(email: str, db: Session) -> Optional[User]:
         db (Session): Database session.
 
     Returns:
-        user (User): User object.
+        user (UserInDB): User object.
     """
     try:
         return db.query(User).filter(User.email == email).one()
