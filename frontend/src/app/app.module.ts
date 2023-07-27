@@ -6,6 +6,7 @@ import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MaterialModule } from "./material.module";
 import { HttpClientModule } from "@angular/common/http";
+import { FooterModule } from "./components/base/footer/footer.module";
 
 @NgModule({
     declarations: [AppComponent],
@@ -15,6 +16,7 @@ import { HttpClientModule } from "@angular/common/http";
         BrowserAnimationsModule,
         MaterialModule,
         HttpClientModule,
+        FooterModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
