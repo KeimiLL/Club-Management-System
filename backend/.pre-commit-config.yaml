@@ -37,3 +37,8 @@ repos:
         language_version: python3.11
         language: python
         types: [python]
+      - id: isort
+        name: isort (python)
+        entry: isort
+        language: python
+        args: ["--profile", "black"]

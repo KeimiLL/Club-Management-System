@@ -1,13 +1,12 @@
 """File for initializing database with data."""
 
 
-from sqlalchemy.orm import Session
-
 from app.core.config import get_settings
-from app.crud.crud_user import get_user_by_email, create_new_user
+from app.crud.crud_user import create_new_user, get_user_by_email
 from app.db import base  # pylint: disable=unused-import
-from app.schemas.user import UserCreateWithRole
 from app.schemas.enums import Roles
+from app.schemas.user import UserCreateWithRole
+from sqlalchemy.orm import Session
 
 
 def init_db(db: Session) -> None:

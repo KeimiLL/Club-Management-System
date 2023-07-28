@@ -7,9 +7,8 @@ Create Date: 2023-07-05 20:47:54.807924
 """
 
 # pylint: skip-file
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = "9168b4e9d52f"
