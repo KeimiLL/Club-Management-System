@@ -1,4 +1,4 @@
-<div class="sidenav">
+<div class="sidenav" [ngClass]="{ 'sidenav--collapsed': isCollapsed }">
     <app-menu-header
         (collapsedClicked)="toggleCollapse()"
         [isCollapsed]="isCollapsed"

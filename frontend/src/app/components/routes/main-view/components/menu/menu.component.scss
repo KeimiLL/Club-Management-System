@@ -17,4 +17,8 @@
         flex-direction: column;
         align-items: center;
     }
+
+    &--collapsed {
+        width: 5vw;
+    }
 }

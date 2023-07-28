@@ -2,7 +2,8 @@
     <img src="" alt="" class="logo-container__logo" />
     <div class="logo-container__text">CMS App</div>
 </div>
-
-<button (click)="onCollapseButtonClick()" class="button">
-    {{ isCollapsed ? ">" : "<" }}
-</button>
+<div class="button-container">
+    <button (click)="onCollapseButtonClick()" class="button-container__button">
+        {{ isCollapsed ? ">" : "<" }}
+    </button>
+</div>
