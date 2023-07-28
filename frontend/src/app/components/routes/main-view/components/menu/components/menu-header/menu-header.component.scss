@@ -1,0 +1,34 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .logo-container {
+        width: 5rem;
+        height: 6.5rem;
+        display: flex;
+        flex-direction: column;
+        &__logo {
+            height: 5rem;
+            width: 5rem;
+        }
+        &__text {
+            margin-top: 0.5rem;
+            height: 1rem;
+            color: white;
+            text-align: center;
+        }
+    }
+
+    .button {
+        display: flex;
+        align-items: center;
+        width: 2vw;
+        height: 2vw;
+        border-radius: 100%;
+        border: white 2px solid;
+        color: white;
+        background-color: black;
+        margin-left: 10vw;
+    }
+}

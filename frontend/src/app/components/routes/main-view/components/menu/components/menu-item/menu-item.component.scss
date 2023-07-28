@@ -1,0 +1,15 @@
+.menu-item {
+    display: flex;
+    align-items: center;
+    height: 3rem;
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    &__link {
+        cursor: pointer;
+    }
+}
+.menu-item:hover {
+    color: black;
+    background-color: white;
+}

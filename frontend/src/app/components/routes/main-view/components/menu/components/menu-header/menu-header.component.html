@@ -1,6 +1,8 @@
-<img src="" alt="" class="logo-container__logo" />
-<div class="logo-container__logo-text">CMS App</div>
-<button mat-icon-button (click)="onCollapseButtonClick()">
-    <mat-icon *ngIf="isCollapsed">arrow_right_alt</mat-icon>
-    <mat-icon *ngIf="!isCollapsed">arrow_left_alt</mat-icon>
+<div class="logo-container">
+    <img src="" alt="" class="logo-container__logo" />
+    <div class="logo-container__text">CMS App</div>
+</div>
+
+<button (click)="onCollapseButtonClick()" class="button">
+    {{ isCollapsed ? ">" : "<" }}
 </button>
