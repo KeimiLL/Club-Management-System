@@ -1,1 +1,4 @@
-<div>ikonka i link</div>
+<a href="" class="menu-item" [routerLink]="item.route">
+    <mat-icon>{{ item.icon }}</mat-icon>
+    <span class="menu-item__link">{{ item.name }}</span>
+</a>

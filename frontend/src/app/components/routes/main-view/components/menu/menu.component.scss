@@ -1,34 +1,10 @@
-.sidenav-container {
-    height: 100vh;
-}
-
 .sidenav {
-    width: 10%;
-    min-width: 56px;
-    background-color: #f0f0f0;
-    overflow: hidden;
-}
-
-.main-content {
-    padding: 16px; /* Add some padding to the main content */
-    flex: 1; /* Make the main content fill the available space */
-}
-
-.navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 8px;
-    height: 64px;
-    background-color: #1976d2;
-}
-
-.navbar-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #fff;
-}
-
-button {
-    color: #fff;
+    background: #263238;
+    transition: all 0.5s ease;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    width: 10vw;
+    height: 100vh;
+    box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
 }

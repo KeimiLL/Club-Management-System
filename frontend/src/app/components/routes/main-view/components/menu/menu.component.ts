@@ -1,5 +1,11 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { menuItems } from "./menu.data";
+
+export interface MenuItem {
+    icon: string;
+    name: string;
+    route: string;
+}
 
 @Component({
     selector: "app-menu",
@@ -7,14 +13,14 @@ import { menuItems } from "./menu.data";
     styleUrls: ["./menu.component.scss"],
 })
 export class MenuComponent implements OnInit {
-    public collapsed = false;
-    public menuItems: string[] = [];
+    public isCollapsed = false;
+    public menuItems: MenuItem[] = [];
 
     ngOnInit(): void {
-        this.menuItems = menuItems; // filterinng permissions
+        this.menuItems = menuItems; // filterinng permissions here
     }
 
     public toggleCollapse(): void {
-        this.collapsed = !this.collapsed;
+        this.isCollapsed = !this.isCollapsed;
     }
 }
