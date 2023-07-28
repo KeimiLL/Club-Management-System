@@ -4,13 +4,13 @@
 from typing import Optional
 
 from app.schemas.enums import Roles
-from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 
 class UserBase(BaseModel):
     """Base User schema."""
 
-    full_name: Optional[str] = None
+    full_name: Optional[str] = Field(None, min_length=4)
     email: Optional[EmailStr] = None
 
 
@@ -18,7 +18,7 @@ class UserLogin(UserBase):
     """User schema for logging in."""
 
     email: EmailStr
-    password: str
+    password: str = Field(..., min_length=8)
 
     @field_validator("password")
     @classmethod
@@ -42,7 +42,7 @@ class UserLogin(UserBase):
 class UserCreate(UserLogin):
     """User schema for creation."""
 
-    full_name: str
+    full_name: str = Field(..., min_length=4)
 
 
 class UserCreateWithRole(UserCreate):
