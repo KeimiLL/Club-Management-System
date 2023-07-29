@@ -1,5 +1,11 @@
+@use "src/styles/_variables" as *;
+
 .sidenav {
-    background-image: linear-gradient(to bottom, #c2baf6, #a296f1);
+    background-image: linear-gradient(
+        to bottom,
+        $purple-light,
+        $purple-mid-dark
+    );
     transition: all 0.5s ease;
     position: fixed;
     z-index: 1;
