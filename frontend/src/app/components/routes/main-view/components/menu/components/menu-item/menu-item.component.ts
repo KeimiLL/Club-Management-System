@@ -8,4 +8,5 @@ import { MenuItem } from "../../menu.component";
 })
 export class MenuItemComponent {
     @Input() item: MenuItem;
+    @Input() isCollapsed: boolean;
 }

@@ -13,7 +13,7 @@ export interface MenuItem {
     styleUrls: ["./menu.component.scss"],
 })
 export class MenuComponent implements OnInit {
-    public isCollapsed = false;
+    public isCollapsed = true;
     public menuItems: MenuItem[] = [];
 
     ngOnInit(): void {

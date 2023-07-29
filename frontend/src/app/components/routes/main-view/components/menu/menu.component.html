@@ -5,7 +5,10 @@
     ></app-menu-header>
     <ul class="sidenav__list">
         <li *ngFor="let item of menuItems">
-            <app-menu-item [item]="item"></app-menu-item>
+            <app-menu-item
+                [item]="item"
+                [isCollapsed]="isCollapsed"
+            ></app-menu-item>
         </li>
     </ul>
 </div>

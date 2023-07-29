@@ -1,17 +1,17 @@
 .sidenav {
-    background: #263238;
+    background-image: linear-gradient(to bottom, #c2baf6, #a296f1);
     transition: all 0.5s ease;
     position: fixed;
     z-index: 1;
     top: 0;
     width: 10vw;
     height: 100vh;
-    box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
+    box-shadow: 0.1rem 0 1.25rem 0 #8690a3;
     border-right: 2px solid white;
 
     &__list {
         list-style: none;
-        padding: 1rem;
+        padding: 1rem 0;
         margin-top: 1rem;
         display: flex;
         flex-direction: column;
