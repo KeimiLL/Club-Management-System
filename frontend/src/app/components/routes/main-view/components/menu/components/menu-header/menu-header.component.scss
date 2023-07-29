@@ -1,3 +1,5 @@
+@use "src/styles/_variables" as *;
+
 :host {
     display: flex;
     flex-direction: column;
@@ -15,7 +17,7 @@
         &__text {
             margin-top: 0.5rem;
             height: 1rem;
-            color: white;
+            color: black;
             text-align: center;
         }
     }
@@ -33,7 +35,7 @@
             border-radius: 100%;
             border: white 2px solid;
             color: white;
-            background-color: black;
+            background-color: $purple-dark;
             margin-right: -1vw;
         }
     }
