@@ -11,7 +11,13 @@
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
-                    "style": "scss"
+                    "style": "scss",
+                    "standalone": true,
+                    "skipImport": true
+                },
+                "@schematics/angular:pipe": {
+                    "standalone": true,
+                    "skipImport": true
                 }
             },
             "root": "",
