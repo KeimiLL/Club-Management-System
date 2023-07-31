@@ -1,5 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { menuItems } from "./menu.data";
+import { RouterModule } from "@angular/router";
+import { MaterialModule } from "src/app/shared/modules/material.module";
+import { CommonModule } from "@angular/common";
+import { MenuHeaderComponent } from "./components/menu-header/menu-header.component";
+import { MenuItemComponent } from "./components/menu-item/menu-item.component";
 
 export interface MenuItem {
     icon: string;
@@ -11,6 +16,14 @@ export interface MenuItem {
     selector: "app-menu",
     templateUrl: "./menu.component.html",
     styleUrls: ["./menu.component.scss"],
+    standalone: true,
+    imports: [
+        CommonModule,
+        MaterialModule,
+        RouterModule,
+        MenuHeaderComponent,
+        MenuItemComponent,
+    ],
 })
 export class MenuComponent implements OnInit {
     public isCollapsed = true;
