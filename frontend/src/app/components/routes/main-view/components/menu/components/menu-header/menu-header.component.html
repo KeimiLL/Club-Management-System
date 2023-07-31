@@ -1,0 +1,13 @@
+<div class="logo-container">
+    <img src="" alt="" class="logo-container__logo" />
+    <div class="logo-container__text">CMS App</div>
+</div>
+<div class="button-container">
+    <button
+        mat-mini-fab
+        (click)="onCollapseButtonClick()"
+        class="button-container__button"
+    >
+        {{ isCollapsed ? ">" : "<" }}
+    </button>
+</div>
