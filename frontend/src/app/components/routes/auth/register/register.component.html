@@ -1,1 +1,125 @@
-<h1>TO JEST register register</h1>
+<mat-card class="register">
+    <mat-card-header class="register__header">
+        <mat-card-title>Register</mat-card-title>
+    </mat-card-header>
+    <form
+        [formGroup]="registerForm"
+        (ngSubmit)="onSubmit()"
+        class="register__form"
+    >
+        <mat-form-field class="register__form__field">
+            <mat-label class="field-label">First Name:</mat-label>
+            <input
+                class="field-input"
+                matInput
+                type="text"
+                formControlName="firstName"
+                required
+            />
+            <mat-error
+                class="field-error"
+                *ngIf="
+                    registerForm.get('firstName')?.invalid &&
+                    registerForm.get('firstName')?.touched
+                "
+            >
+                First Name is required.
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="register__form__field">
+            <mat-label class="field-label">Last Name:</mat-label>
+            <input
+                class="field-input"
+                matInput
+                type="text"
+                formControlName="lastName"
+                required
+            />
+            <mat-error
+                *ngIf="
+                    registerForm.get('lastName')?.invalid &&
+                    registerForm.get('lastName')?.touched
+                "
+            >
+                Last Name is required.
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="register__form__field">
+            <mat-label class="field-label">Email:</mat-label>
+            <input
+                class="field-input"
+                matInput
+                type="email"
+                formControlName="email"
+                required
+            />
+            <mat-error
+                *ngIf="
+                    registerForm.get('email')?.invalid &&
+                    registerForm.get('email')?.touched
+                "
+            >
+                Email is required and must be a valid email address.
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="register__form__field">
+            <mat-label class="field-label">Password:</mat-label>
+            <input
+                class="field-input"
+                matInput
+                type="password"
+                formControlName="password"
+                required
+            />
+            <mat-error
+                *ngIf="
+                    registerForm.get('password')?.invalid &&
+                    registerForm.get('password')?.touched
+                "
+            >
+                Password is required and must be at least 6 characters long.
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="register__form__field">
+            <mat-label class="field-label">Confirm Password:</mat-label>
+            <input
+                class="field-input"
+                matInput
+                type="password"
+                formControlName="confirmPassword"
+                required
+            />
+            <mat-error
+                *ngIf="
+                    registerForm.get('confirmPassword')?.invalid &&
+                    registerForm.get('confirmPassword')?.touched
+                "
+            >
+                Confirm Password is required and must match the Password.
+            </mat-error>
+            <mat-error
+                *ngIf="
+                    registerForm
+                        .get('confirmPassword')
+                        ?.hasError('passwordMismatch') &&
+                    registerForm.get('confirmPassword')?.touched
+                "
+            >
+                Passwords do not match.
+            </mat-error>
+        </mat-form-field>
+
+        <button
+            class="submit-btn"
+            mat-raised-button
+            type="submit"
+            [disabled]="!registerForm.valid"
+        >
+            Register
+        </button>
+    </form>
+</mat-card>
