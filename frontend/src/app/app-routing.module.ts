@@ -1,7 +1,12 @@
-import { AuthModule } from "./components/routes/auth/modules/auth.module";
-import { MainViewComponent } from "./components/routes/main-view/main-view.component";
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import "./components/routes/auth/modules/auth.module"
+import "./components/routes/main-view/main-view.component"
+import "@angular/core"
+import "@angular/router"
+import RouterModule }
+import { AuthModule }
+import { MainViewComponent }
+import { NgModule }
+import { Routes
 
 const routes: Routes = [
     {
