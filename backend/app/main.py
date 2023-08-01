@@ -1,18 +1,20 @@
 """Main file for the application."""
 
 import uvicorn
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from sqlalchemy.exc import SQLAlchemyError
+
 from app.api.base import api_router
 from app.core.config import get_settings
 from app.core.exceptions import (
     DuplicateException,
     InvalidCredentialsException,
+    JWTTokensException,
     MissingException,
 )
 from app.schemas.enums import ExceptionMessages
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from sqlalchemy.exc import SQLAlchemyError
 
 
 def include_exception_handlers(application: FastAPI) -> None:
@@ -69,7 +71,7 @@ def include_exception_handlers(application: FastAPI) -> None:
         )
 
     @application.exception_handler(InvalidCredentialsException)
-    async def invalid_credientals_exception_handler(
+    async def invalid_credentials_exception_handler(
         _: Request, exc: InvalidCredentialsException
     ) -> JSONResponse:
         """App-wide InvalidCredentialsException handler.
@@ -86,6 +88,15 @@ def include_exception_handlers(application: FastAPI) -> None:
                 "message": f"Incorrect {'' if exc.only_password else 'email or '}password."
             },
         )
+
+    @application.exception_handler(JWTTokensException)
+    async def jwttokens_exception_handler(_: Request, exc: JWTTokensException):
+        """App-wide JWTTokensException handler.
+
+        Returns:
+            JSONResponse: The response with an appropriate status code and message.
+        """
+        return JSONResponse(status_code=401, content={"message": exc.message})
 
 
 def start_application() -> FastAPI:
