@@ -20,3 +20,10 @@ class InvalidCredentialsException(Exception):
 
     def __init__(self, only_password: bool = False):
         self.only_password = only_password
+
+
+class JWTTokensException(Exception):
+    """Class for raising a JWTTokens exception from API calls."""
+
+    def __init__(self, message: str):
+        self.message = message
