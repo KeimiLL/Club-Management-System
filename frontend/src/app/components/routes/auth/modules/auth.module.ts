@@ -1,13 +1,24 @@
-import { LoginComponent } from "../login/login.component";
-import { RegisterComponent } from "../register/register.component";
-import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
-import { MatButtonModule } from "@angular/material/button";
-import { MatCardModule } from "@angular/material/card";
-import { MatInputModule } from "@angular/material/input";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { RouterModule } from "@angular/router";
+import "../login/login.component"
+import "../register/register.component"
+import "@angular/common"
+import "@angular/core"
+import "@angular/forms"
+import "@angular/material/button"
+import "@angular/material/card"
+import "@angular/material/input"
+import "@angular/platform-browser/animations"
+import "@angular/router"
+import { BrowserAnimationsModule }
+import { CommonModule }
+import { LoginComponent }
+import { MatButtonModule }
+import { MatCardModule }
+import { MatInputModule }
+import { NgModule }
+import { ReactiveFormsModule }
+import { RegisterComponent }
+import { RouterModule }
+
 
 @NgModule({
     declarations: [LoginComponent, RegisterComponent],

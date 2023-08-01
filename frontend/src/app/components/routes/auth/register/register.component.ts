@@ -1,5 +1,11 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import "@angular/core"
+import "@angular/forms"
+import FormGroup
+import OnInit }
+import Validators }
+import { Component
+import { FormBuilder
+
 
 @Component({
     selector: "app-register",
