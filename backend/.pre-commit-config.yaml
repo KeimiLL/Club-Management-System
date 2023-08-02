@@ -42,3 +42,4 @@ repos:
         entry: isort
         language: python
         args: ["--profile", "black"]
+        files: .*py$
