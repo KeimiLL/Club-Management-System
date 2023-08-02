@@ -114,12 +114,24 @@
         </mat-form-field>
 
         <button
-            class="submit-btn"
+            class="btn submit-btn"
             mat-raised-button
             type="submit"
             [disabled]="!registerForm.valid"
         >
             Register
         </button>
+
+        <div class="register__login-link">
+            <p class="register__paragraph">Already have an account?</p>
+            <a
+                class="register__router-link"
+                mat-raised-button
+                routerLinkActive="active"
+                routerLink="/login"
+            >
+                Log in
+            </a>
+        </div>
     </form>
 </mat-card>
