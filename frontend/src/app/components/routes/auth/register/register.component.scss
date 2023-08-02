@@ -40,11 +40,24 @@
             margin-top: 5px;
         }
 
-        .submit-btn {
+        .btn {
             width: 100%;
             margin-top: 10px;
             background-color: $purple-dark;
             color: $light-grey;
         }
+    }
+
+    &__login-link {
+        display: flex;
+        align-items: center;
+    }
+
+    &__paragraph {
+        flex-grow: 3;
+    }
+
+    &__router-link {
+        flex-grow: 1;
     }
 }
