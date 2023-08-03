@@ -1,5 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { Validators, FormBuilder, FormGroup } from "@angular/forms";
+import {
+    Validators,
+    FormBuilder,
+    FormGroup,
+    ValidatorFn,
+    AbstractControl,
+} from "@angular/forms";
 
 @Component({
     selector: "app-register",
@@ -20,7 +26,7 @@ export class RegisterComponent implements OnInit {
                 password: ["", [Validators.required, Validators.minLength(6)]],
                 confirmPassword: ["", Validators.required],
             },
-            { validator: this.passwordMatchValidator }
+            { validators: this.passwordMatchValidator }
         );
     }
 
@@ -28,21 +34,22 @@ export class RegisterComponent implements OnInit {
         if (this.registerForm.valid) {
             console.log(this.registerForm.value);
         } else {
-            // Mark all fields as touched to trigger validation error messages
             Object.keys(this.registerForm.controls).forEach((controlName) => {
                 this.registerForm.controls[controlName].markAsTouched();
             });
         }
     }
 
-    passwordMatchValidator(formGroup: FormGroup) {
-        const passwordControl = formGroup.get("password");
-        const confirmPasswordControl = formGroup.get("confirmPassword");
+    passwordMatchValidator: ValidatorFn = (control: AbstractControl) => {
+        const passwordControl = control.get("password");
+        const confirmPasswordControl = control.get("confirmPassword");
 
         if (passwordControl?.value !== confirmPasswordControl?.value) {
             confirmPasswordControl?.setErrors({ passwordMismatch: true });
         } else {
             confirmPasswordControl?.setErrors(null);
         }
-    }
+
+        return null;
+    };
 }
