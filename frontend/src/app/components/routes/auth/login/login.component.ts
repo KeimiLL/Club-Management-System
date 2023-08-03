@@ -6,6 +6,7 @@ import {
     FormGroup,
     ReactiveFormsModule,
 } from "@angular/forms";
+import { RouterModule } from "@angular/router";
 import { MaterialModule } from "src/app/shared/modules/material.module";
 
 @Component({
@@ -13,7 +14,7 @@ import { MaterialModule } from "src/app/shared/modules/material.module";
     templateUrl: "./login.component.html",
     styleUrls: ["./login.component.scss"],
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+    imports: [CommonModule, ReactiveFormsModule, MaterialModule, RouterModule],
 })
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;

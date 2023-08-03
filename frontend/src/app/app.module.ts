@@ -16,7 +16,6 @@ import { AuthRoutingModule } from "./components/routes/auth/auth-routing.module"
         BrowserAnimationsModule,
         HttpClientModule,
         FooterComponent,
-        FooterComponent,
         MainViewRoutingModule,
         AuthRoutingModule,
     ],

@@ -8,6 +8,7 @@ import {
     AbstractControl,
     ReactiveFormsModule,
 } from "@angular/forms";
+import { RouterModule } from "@angular/router";
 import { MaterialModule } from "src/app/shared/modules/material.module";
 
 @Component({
@@ -15,7 +16,7 @@ import { MaterialModule } from "src/app/shared/modules/material.module";
     templateUrl: "./register.component.html",
     styleUrls: ["./register.component.scss"],
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+    imports: [CommonModule, ReactiveFormsModule, MaterialModule, RouterModule],
 })
 export class RegisterComponent implements OnInit {
     registerForm: FormGroup;
