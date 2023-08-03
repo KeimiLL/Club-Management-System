@@ -2,7 +2,7 @@
     <mat-card-header class="login__header">
         <mat-card-title>Login</mat-card-title>
     </mat-card-header>
-    <form class="login__form">
+    <form class="login__form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field class="login__form__field">
             <mat-label class="field-label">Email:</mat-label>
             <input
@@ -12,9 +12,7 @@
                 formControlName="email"
                 required
             />
-            <mat-error *ngIf="">
-                Email is required and must be a valid email address.
-            </mat-error>
+            <mat-error class="field-error"> Incorrect email. </mat-error>
         </mat-form-field>
 
         <mat-form-field class="login__form__field">
@@ -26,22 +24,21 @@
                 formControlName="password"
                 required
             />
-            <mat-error *ngIf="">
-                Password is required and must be at least 6 characters long.
-            </mat-error>
+            <mat-error> Incorrect password. </mat-error>
         </mat-form-field>
 
-        <button class="btn submit-btn" mat-raised-button type="submit">
+        <button class="submit-btn" mat-raised-button type="submit">
             Login
         </button>
-
-        <button
-            class="btn router-btn"
-            mat-raised-button
-            routerLinkActive="active"
-            routerLink="/register"
-        >
-            Don't have an account? Sign up
-        </button>
+        <div class="login__register">
+            <div class="login__register-text">
+                <span>Don't have an account?</span>
+            </div>
+            <div class="login__register-link">
+                <a routerLinkActive="active" routerLink="/register">
+                    Register
+                </a>
+            </div>
+        </div>
     </form>
 </mat-card>
