@@ -19,11 +19,15 @@ import { MaterialModule } from "src/app/shared/modules/material.module";
     imports: [CommonModule, ReactiveFormsModule, MaterialModule, RouterModule],
 })
 export class RegisterComponent implements OnInit {
-    registerForm: FormGroup;
+    public registerForm: FormGroup;
 
     constructor(private formBuilder: FormBuilder) {}
 
     ngOnInit(): void {
+        this.createForm();
+    }
+
+    private createForm(): void {
         this.registerForm = this.formBuilder.group(
             {
                 firstName: ["", Validators.required],
@@ -36,7 +40,7 @@ export class RegisterComponent implements OnInit {
         );
     }
 
-    onSubmit() {
+    public onSubmit(): void {
         if (this.registerForm.valid) {
             console.log(this.registerForm.value);
         } else {
@@ -46,7 +50,7 @@ export class RegisterComponent implements OnInit {
         }
     }
 
-    passwordMatchValidator: ValidatorFn = (control: AbstractControl) => {
+    public passwordMatchValidator: ValidatorFn = (control: AbstractControl) => {
         const passwordControl = control.get("password");
         const confirmPasswordControl = control.get("confirmPassword");
 
