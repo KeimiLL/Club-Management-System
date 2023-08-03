@@ -27,17 +27,17 @@
 
             &.mat-form-field-invalid {
                 .field-label {
-                    color: red;
+                    color: $red;
                 }
 
                 .field_input {
-                    border-color: red;
+                    border-color: $red;
                 }
             }
         }
 
         .field-error {
-            color: red;
+            color: $red;
             margin-top: 5px;
         }
 
@@ -54,7 +54,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 16px;
         padding-top: 1.5rem;
 
         &-text {
