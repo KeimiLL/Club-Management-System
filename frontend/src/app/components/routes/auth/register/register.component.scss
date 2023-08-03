@@ -4,6 +4,7 @@
     width: 500px;
     border-radius: 10px !important;
     background-color: $purple-light;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
     &__header {
         background-color: $purple-mid-dark;
@@ -40,24 +41,32 @@
             margin-top: 5px;
         }
 
-        .btn {
+        .submit-btn {
             width: 100%;
             margin-top: 10px;
             background-color: $purple-dark;
             color: $light-grey;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         }
     }
 
-    &__login-link {
+    &__login {
         display: flex;
+        justify-content: center;
         align-items: center;
-    }
+        font-size: 16px;
+        padding-top: 1.5rem;
 
-    &__paragraph {
-        flex-grow: 3;
-    }
+        &-text {
+            padding-right: 1rem;
+        }
 
-    &__router-link {
-        flex-grow: 1;
+        &-link {
+            a {
+                text-decoration: none;
+                color: $purple-dark;
+                font-weight: 800;
+            }
+        }
     }
 }
