@@ -19,7 +19,7 @@ import { MaterialModule } from "src/app/shared/modules/material.module";
 export class LoginComponent implements OnInit {
     public loginForm: FormGroup;
 
-    constructor(private formBuilder: FormBuilder) {}
+    constructor(private readonly formBuilder: FormBuilder) {}
 
     ngOnInit(): void {
         this.loginForm = this.formBuilder.group({
