@@ -11,6 +11,7 @@
             <mat-label class="field-label">First Name:</mat-label>
             <input
                 class="field-input"
+                title="firstName"
                 matInput
                 type="text"
                 formControlName="firstName"
@@ -31,6 +32,7 @@
             <mat-label class="field-label">Last Name:</mat-label>
             <input
                 class="field-input"
+                title="lastName"
                 matInput
                 type="text"
                 formControlName="lastName"
@@ -50,6 +52,7 @@
             <mat-label class="field-label">Email:</mat-label>
             <input
                 class="field-input"
+                title="email"
                 matInput
                 type="email"
                 formControlName="email"
@@ -69,6 +72,7 @@
             <mat-label class="field-label">Password:</mat-label>
             <input
                 class="field-input"
+                title="password"
                 matInput
                 type="password"
                 formControlName="password"
@@ -88,6 +92,7 @@
             <mat-label class="field-label">Confirm Password:</mat-label>
             <input
                 class="field-input"
+                title="confirmPassword"
                 matInput
                 type="password"
                 formControlName="confirmPassword"
@@ -121,7 +126,7 @@
                 <span>Already have an account?</span>
             </div>
             <div class="register__login-link">
-                <a routerLinkActive="active" routerLink="/login"> Log in </a>
+                <a routerLink="/auth/login"> Log in </a>
             </div>
         </div>
     </form>
