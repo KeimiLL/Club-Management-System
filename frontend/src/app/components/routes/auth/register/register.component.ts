@@ -1,3 +1,4 @@
+import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import {
     Validators,
@@ -5,12 +6,16 @@ import {
     FormGroup,
     ValidatorFn,
     AbstractControl,
+    ReactiveFormsModule,
 } from "@angular/forms";
+import { MaterialModule } from "src/app/shared/modules/material.module";
 
 @Component({
     selector: "app-register",
     templateUrl: "./register.component.html",
     styleUrls: ["./register.component.scss"],
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule, MaterialModule],
 })
 export class RegisterComponent implements OnInit {
     registerForm: FormGroup;
