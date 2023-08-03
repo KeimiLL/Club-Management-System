@@ -6,28 +6,21 @@ import { Validators, FormBuilder, FormGroup } from "@angular/forms";
     templateUrl: "./login.component.html",
     styleUrls: ["./login.component.scss"],
 })
-// export class LoginComponent implements OnInit {
-export class LoginComponent {
+export class LoginComponent implements OnInit {
     loginForm: FormGroup;
 
     constructor(private formBuilder: FormBuilder) {}
 
-    // ngOnInit(): void {
+    ngOnInit(): void {
+        this.loginForm = this.formBuilder.group({
+            email: ["", [Validators.required, Validators.email]],
+            password: ["", [Validators.required, Validators.minLength(6)]],
+        });
+    }
 
-    // }
-
-    // onSubmit() {
-
-    // }
-
-    passwordMatchValidator(formGroup: FormGroup) {
-        const passwordControl = formGroup.get("password");
-        const confirmPasswordControl = formGroup.get("confirmPassword");
-
-        if (passwordControl?.value !== confirmPasswordControl?.value) {
-            confirmPasswordControl?.setErrors({ passwordMismatch: true });
-        } else {
-            confirmPasswordControl?.setErrors(null);
+    onSubmit() {
+        if (this.loginForm.valid) {
+            console.log(this.loginForm.value);
         }
     }
 }
