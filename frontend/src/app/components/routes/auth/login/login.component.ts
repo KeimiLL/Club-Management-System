@@ -17,7 +17,7 @@ import { MaterialModule } from "src/app/shared/modules/material.module";
     imports: [CommonModule, ReactiveFormsModule, MaterialModule, RouterModule],
 })
 export class LoginComponent implements OnInit {
-    loginForm: FormGroup;
+    public loginForm: FormGroup;
 
     constructor(private formBuilder: FormBuilder) {}
 
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
         });
     }
 
-    onSubmit() {
+    public onSubmit(): void {
         if (this.loginForm.valid) {
             console.log(this.loginForm.value);
         }
