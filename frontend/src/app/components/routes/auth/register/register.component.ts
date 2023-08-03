@@ -21,7 +21,7 @@ import { MaterialModule } from "src/app/shared/modules/material.module";
 export class RegisterComponent implements OnInit {
     public registerForm: FormGroup;
 
-    constructor(private formBuilder: FormBuilder) {}
+    constructor(private readonly formBuilder: FormBuilder) {}
 
     ngOnInit(): void {
         this.createForm();
