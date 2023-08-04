@@ -10,6 +10,6 @@ import { MaterialModule } from "../../modules/material.module";
     styleUrls: ["./wide-main-card.component.scss"],
 })
 export class WideMainCardComponent {
-    @Input() name: string;
-    @Input() subName = "";
+    @Input() public name: string;
+    @Input() public subName = "";
 }
