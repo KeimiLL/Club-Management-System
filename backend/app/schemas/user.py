@@ -3,8 +3,9 @@
 
 from typing import Optional
 
-from app.schemas.enums import Roles
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+
+from app.schemas.enums import Roles
 
 
 class UserBase(BaseModel):

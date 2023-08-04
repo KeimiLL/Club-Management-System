@@ -545,3 +545,6 @@ testpaths = [
     "app/tests/test_endpoints",
     "app/tests/test_utils",
 ]
+
+[tool.isort]
+skip = [".gitignore", ".dockerignore", "*.png"]
