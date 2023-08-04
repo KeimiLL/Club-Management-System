@@ -1,13 +1,14 @@
 """File responsible for implementing users related CRUD operations."""
 
 
+from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
+from sqlalchemy.orm import Session
+
 from app.core.exceptions import DuplicateException, MissingException
 from app.core.security import Hasher
 from app.models.user import User
 from app.schemas.enums import Roles
 from app.schemas.user import UserCreate, UserCreateWithRole, UserInDB
-from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
-from sqlalchemy.orm import Session
 
 
 def create_new_user(user: UserCreate | UserCreateWithRole, db: Session) -> User:
