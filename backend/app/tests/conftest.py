@@ -6,17 +6,18 @@ import sys
 from typing import Iterator
 
 import pytest
+from fastapi import FastAPI
+from sqlalchemy import create_engine
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session, sessionmaker
+from starlette_testclient import TestClient
+
 from app.api.base import api_router
 from app.core.config import get_settings
 from app.db.base import Base
 from app.db.session import get_db
 from app.main import include_exception_handlers
 from app.schemas.enums import Roles
-from fastapi import FastAPI
-from sqlalchemy import create_engine
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Session, sessionmaker
-from starlette_testclient import TestClient
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -113,7 +114,7 @@ def fixture_correct_user_data() -> dict[str, str]:
     return {
         "full_name": get_settings().TEST_USER_FULL_NAME,
         "email": get_settings().TEST_USER_EMAIL,
-        "password": get_settings().TEST_USER_EMAIL,
+        "password": get_settings().TEST_USER_PASSWORD,
         "role": Roles.VIEWER,
     }
 
@@ -128,6 +129,6 @@ def fixture_incorrect_user_data() -> dict[str, str]:
     return {
         "full_name": get_settings().TEST_USER_FULL_NAME + "m",
         "email": get_settings().TEST_USER_EMAIL + "m",
-        "password": get_settings().TEST_USER_EMAIL + "m",
+        "password": get_settings().TEST_USER_PASSWORD + "m",
         "role": Roles.VIEWER,
     }
