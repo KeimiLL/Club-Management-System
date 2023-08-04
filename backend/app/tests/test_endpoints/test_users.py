@@ -1,8 +1,9 @@
 """File for testing users-related endpoints."""
 
 
-from app.schemas.enums import Roles
 from starlette_testclient import TestClient
+
+from app.schemas.enums import ExceptionMessages, Roles
 
 
 def test_correct__register(
@@ -67,7 +68,6 @@ def test_incorrect__login(
         client (TestClient): TestClient instance.
         incorrect_user_data (dict[str, str]): Data to be sent.
     """
-    print(f"{incorrect_user_data['email']=}")
     response = client.post(
         "/api/v1/users/login",
         json={
@@ -78,3 +78,31 @@ def test_incorrect__login(
 
     assert response.status_code == 404
     assert "does not exist" in response.json()["message"]
+
+
+def test_correct__logout(client: TestClient) -> None:
+    """Tests logging an exising user out.
+
+    Args:
+        client (TestClient): TestClient instance.
+    """
+    response = client.post(
+        "/api/v1/users/logout",
+    )
+
+    assert response.status_code == 200
+    assert response.json()["message"] == ExceptionMessages.SUCCESS
+
+
+def test_incorrect__logout(client: TestClient) -> None:
+    """Tests logging out when the user isn't logged in.
+
+    Args:
+        client (TestClient): TestClient instance.
+    """
+    response = client.post(
+        "/api/v1/users/logout",
+    )
+
+    assert response.status_code == 401
+    assert response.json()["message"] == "Invalid tokens"
