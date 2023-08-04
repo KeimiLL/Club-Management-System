@@ -10,6 +10,7 @@ import {
 } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { MaterialModule } from "src/app/shared/modules/material.module";
+import { matchStringValidator } from "src/app/shared/utils/validators";
 
 @Component({
     selector: "app-register",
@@ -28,16 +29,19 @@ export class RegisterComponent implements OnInit {
     }
 
     private createForm(): void {
-        this.registerForm = this.formBuilder.group(
-            {
-                firstName: ["", Validators.required],
-                lastName: ["", Validators.required],
-                email: ["", [Validators.required, Validators.email]],
-                password: ["", [Validators.required, Validators.minLength(6)]],
-                confirmPassword: ["", Validators.required],
-            },
-            { validators: this.passwordMatchValidator }
-        );
+        this.registerForm = this.formBuilder.group({
+            firstName: ["", Validators.required],
+            lastName: ["", Validators.required],
+            email: ["", [Validators.required, Validators.email]],
+            password: ["", [Validators.required, Validators.minLength(6)]],
+            confirmPassword: ["", [Validators.required]],
+        });
+        this.registerForm
+            .get("confirmPassword")
+            ?.setValidators(
+                matchStringValidator(this.registerForm.get("password"))
+            );
+        this.registerForm.get("confirmPassword")?.updateValueAndValidity();
     }
 
     public onSubmit(): void {
