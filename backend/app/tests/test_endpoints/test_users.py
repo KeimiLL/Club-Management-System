@@ -5,6 +5,8 @@ from starlette_testclient import TestClient
 
 from app.schemas.enums import ExceptionMessages, Roles
 
+from app.schemas.enums import ExceptionMessages, Roles
+
 
 def test_correct__register(
     client: TestClient, correct_user_data: dict[str, str]
