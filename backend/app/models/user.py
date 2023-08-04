@@ -1,9 +1,10 @@
 """File for User model."""
 
 
-from app.db.base_class import Base
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
+
+from app.db.base_class import Base
 
 
 class User(Base):
