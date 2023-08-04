@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { settingsMenuItems } from "./settings-menu.data";
+import { RouterModule } from "@angular/router";
 
 export interface SettingsMenuItem {
     name: string;
@@ -10,7 +11,7 @@ export interface SettingsMenuItem {
 @Component({
     selector: "app-settings-menu",
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, RouterModule],
     templateUrl: "./settings-menu.component.html",
     styleUrls: ["./settings-menu.component.scss"],
 })

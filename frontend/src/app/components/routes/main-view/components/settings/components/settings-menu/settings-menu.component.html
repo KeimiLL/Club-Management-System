@@ -1,6 +1,15 @@
 <div class="sidenav">
     <div class="sidenav__header">Settings</div>
     <ul class="sidenav__list">
-        <li *ngFor="let item of menuItems"></li>
+        <li *ngFor="let item of menuItems">
+            <a
+                href=""
+                class="sidenav__link"
+                routerLinkActive="active"
+                [routerLink]="item.route"
+            >
+                <span class="sidenav__link-text">{{ item.name }}</span>
+            </a>
+        </li>
     </ul>
 </div>
