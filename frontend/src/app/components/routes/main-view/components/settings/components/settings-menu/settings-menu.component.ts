@@ -2,11 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { settingsMenuItems } from "./settings-menu.data";
 import { RouterModule } from "@angular/router";
-
-export interface SettingsMenuItem {
-    name: string;
-    route: string;
-}
+import { SettingsMenuItem } from "src/app/shared/models/settings.models";
 
 @Component({
     selector: "app-settings-menu",

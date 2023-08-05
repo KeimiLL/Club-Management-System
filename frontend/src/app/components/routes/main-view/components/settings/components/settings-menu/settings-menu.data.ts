@@ -1,4 +1,4 @@
-import { SettingsMenuItem } from "./settings-menu.component";
+import { SettingsMenuItem } from "src/app/shared/models/settings.models";
 
 export const settingsMenuItems: SettingsMenuItem[] = [
     { name: "General", route: "/app/settings/general" },
