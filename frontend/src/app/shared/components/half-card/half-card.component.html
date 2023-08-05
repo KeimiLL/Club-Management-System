@@ -1,1 +1,17 @@
-<p>half-card works!</p>
+<mat-card class="card">
+    <mat-card-header class="card__header">
+        <div class="card__title">
+            {{ name }} <span class="card__subtitle"> {{ subName }} </span>
+        </div>
+        <ng-content
+            select="app-button-container"
+            class="card__buttons"
+        ></ng-content>
+        <button *ngIf="isRight" mat-icon-button (click)="onClosedButtonClick()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-card-header>
+    <div class="card__content">
+        <ng-content></ng-content>
+    </div>
+</mat-card>
