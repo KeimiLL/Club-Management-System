@@ -4,7 +4,6 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Response, status
-from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_user_from_token, refresh_token_dependency
@@ -88,19 +87,20 @@ def login(
     },
 )
 def logout(
+    response: Response,
     _: Annotated[str, Depends(refresh_token_dependency)],
 ):
     """Logs the user out.
 
+    Args:
+        response (Response): Response object.
+
     Returns:
-        response (JSONResponse): The response signalling a correct logout.
+        dict[str, ExceptionMessages]: The response signalling a correct logout.
     """
-    response = JSONResponse(
-        status_code=200, content={"message": ExceptionMessages.SUCCESS}
-    )
     response.delete_cookie("access_token")
     response.delete_cookie("refresh_token")
-    return response
+    return {"message": ExceptionMessages.SUCCESS}
 
 
 @router.get(
