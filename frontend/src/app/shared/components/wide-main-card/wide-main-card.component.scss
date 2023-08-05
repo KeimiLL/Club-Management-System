@@ -1,7 +1,7 @@
 @import "../../../../styles/variables";
 
 :host {
-    width: 98%; /* This will make the component 100% width of its parent (.meetings) */
+    width: 97.5%; /* This will make the component 100% width of its parent (.meetings) */
     height: 95%; /* Set the height of the wide-card to 100% to fill its parent container */
 
     .card {
@@ -14,14 +14,16 @@
 
         &__header {
             background-color: $purple-mid-dark;
-            padding: 1rem;
             border-radius: 10px !important;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            height: 10%;
+            padding: 0.5rem;
         }
 
         &__title {
-            font-size: 3rem !important;
+            font-size: 2rem !important;
         }
 
         &__subtitle {
