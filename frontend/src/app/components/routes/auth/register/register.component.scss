@@ -1,0 +1,75 @@
+@import "../../../../../styles/variables";
+
+.register {
+    width: 500px;
+    border-radius: 10px !important;
+    background-color: $purple-light;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+    &__header {
+        background-color: $purple-mid-dark;
+        padding: 25px;
+        border-radius: 10px !important;
+    }
+
+    &__title {
+        font-size: $very-large-font !important;
+    }
+
+    &__form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+
+        &__field {
+            width: 100%;
+            margin-bottom: 10px;
+
+            .field_input {
+                width: 100%;
+            }
+
+            &.mat-form-field-invalid {
+                .field-label {
+                    color: $red;
+                }
+
+                .field_input {
+                    border-color: $red;
+                }
+            }
+        }
+
+        .field-error {
+            color: $red;
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 10px;
+            background-color: $purple-dark;
+            color: $light-grey;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+    }
+
+    &__login {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 1.5rem;
+
+        &-text {
+            padding-right: 1rem;
+        }
+
+        &-link {
+            a {
+                text-decoration: none;
+                color: $purple-dark;
+                font-weight: $bold-weight;
+            }
+        }
+    }
+}
