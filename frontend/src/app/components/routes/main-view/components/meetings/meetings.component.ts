@@ -9,4 +9,10 @@ import { CardsModule } from "src/app/shared/modules/cards.module";
     templateUrl: "./meetings.component.html",
     styleUrls: ["./meetings.component.scss"],
 })
-export class MeetingsComponent {}
+export class MeetingsComponent {
+    public isDetail = false;
+
+    public changeState(): void {
+        this.isDetail = !this.isDetail;
+    }
+}

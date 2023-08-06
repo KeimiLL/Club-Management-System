@@ -1,13 +1,42 @@
 <div class="meetings">
-    <app-wide-main-card [name]="'Meetings'" [subName]="'team1'">
+    <app-wide-main-card
+        *ngIf="!isDetail"
+        [name]="'Meetings'"
+        [subName]="'team1'"
+    >
         <app-button-container>
             <button>button1</button>
             <button>button2</button>
-            <button>button3</button>
+            <button (click)="changeState()">button3</button>
         </app-button-container>
 
         <div class="xd">Example of component1</div>
         <div class="xd">Example of component2</div>
         <div class="xd">Example of component3</div>
     </app-wide-main-card>
+
+    <app-half-card
+        *ngIf="isDetail"
+        [name]="'Meetings'"
+        [subName]="'team1'"
+        [isRight]="false"
+    >
+        <div class="xd">Example of component1</div>
+        <div class="xd">Example of component2</div>
+        <div class="xd">Example of component3</div>
+    </app-half-card>
+
+    <app-half-card
+        *ngIf="isDetail"
+        [name]="'Meeting Name 1'"
+        (closedClicked)="changeState()"
+    >
+        <app-button-container>
+            <button>button1</button>
+        </app-button-container>
+
+        <div class="xd">Example of component1</div>
+        <div class="xd">Example of component2</div>
+        <div class="xd">Example of component3</div>
+    </app-half-card>
 </div>
