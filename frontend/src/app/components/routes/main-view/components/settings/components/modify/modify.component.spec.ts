@@ -1,8 +1,5 @@
-import "./modify.component"
-import "@angular/core/testing"
-import TestBed }
-import { ComponentFixture
-import { ModifyComponent }
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ModifyComponent } from "./modify.component";
 
 describe("ModifyComponent", () => {
     let component: ModifyComponent;

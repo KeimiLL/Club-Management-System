@@ -21,6 +21,10 @@ def test_correct__register(
     assert response.json()["full_name"] == correct_user_data["full_name"]
     assert response.json()["email"] == correct_user_data["email"]
     assert response.json()["role"] == Roles.VIEWER
+    assert "access_token" not in response.cookies
+    assert "refresh_token" not in response.cookies
+    assert "xsrf_access_token" not in response.cookies
+    assert "xsrf_refresh_token" not in response.cookies
 
 
 def test_duplicate__register(
@@ -36,10 +40,14 @@ def test_duplicate__register(
 
     assert response.status_code == 400
     assert "already exists" in response.json()["message"]
+    assert "access_token" not in response.cookies
+    assert "refresh_token" not in response.cookies
+    assert "xsrf_access_token" not in response.cookies
+    assert "xsrf_refresh_token" not in response.cookies
 
 
 def test_correct__login(client: TestClient, correct_user_data: dict[str, str]) -> None:
-    """Tests logging an exising user in.
+    """Tests logging an existing user in.
 
     Args:
         client (TestClient): TestClient instance.
@@ -57,12 +65,16 @@ def test_correct__login(client: TestClient, correct_user_data: dict[str, str]) -
     assert response.json()["full_name"] == correct_user_data["full_name"]
     assert response.json()["email"] == correct_user_data["email"]
     assert response.json()["role"] == correct_user_data["role"]
+    assert "access_token" in response.cookies
+    assert "refresh_token" in response.cookies
+    assert "xsrf_access_token" in response.cookies
+    assert "xsrf_refresh_token" in response.cookies
 
 
 def test_incorrect__login(
     client: TestClient, incorrect_user_data: dict[str, str]
 ) -> None:
-    """Tests logging an exising user in.
+    """Tests logging an existing user in.
 
     Args:
         client (TestClient): TestClient instance.
@@ -78,20 +90,35 @@ def test_incorrect__login(
 
     assert response.status_code == 404
     assert "does not exist" in response.json()["message"]
+    assert "access_token" not in response.cookies
+    assert "refresh_token" not in response.cookies
+    assert "xsrf_access_token" not in response.cookies
+    assert "xsrf_refresh_token" not in response.cookies
 
 
-def test_correct__logout(client: TestClient) -> None:
+def test_correct__logout(client: TestClient, correct_user_data: dict[str, str]) -> None:
     """Tests logging an exising user out.
 
     Args:
         client (TestClient): TestClient instance.
+        correct_user_data (dict[str, str]): Data to be sent.
     """
     response = client.post(
-        "/api/v1/users/logout",
+        "/api/v1/users/login",
+        json={
+            "email": correct_user_data["email"],
+            "password": correct_user_data["password"],
+        },
     )
+    xsrf_token = response.cookies["xsrf_access_token"]
+    response = client.post("/api/v1/users/logout", headers={"x-xsrf-token": xsrf_token})
 
     assert response.status_code == 200
     assert response.json()["message"] == ExceptionMessages.SUCCESS
+    assert "access_token" not in response.cookies
+    assert "refresh_token" not in response.cookies
+    assert "xsrf_access_token" not in response.cookies
+    assert "xsrf_refresh_token" not in response.cookies
 
 
 def test_incorrect__logout(client: TestClient) -> None:
@@ -106,6 +133,10 @@ def test_incorrect__logout(client: TestClient) -> None:
 
     assert response.status_code == 401
     assert response.json()["message"] == "Invalid tokens"
+    assert "access_token" not in response.cookies
+    assert "refresh_token" not in response.cookies
+    assert "xsrf_access_token" not in response.cookies
+    assert "xsrf_refresh_token" not in response.cookies
 
 
 def test_correct__get_current_user(
@@ -118,21 +149,25 @@ def test_correct__get_current_user(
         client (TestClient): TestClient instance.
         correct_user_data (dict[str, str]): Data to be sent.
     """
-    client.post(
+    response = client.post(
         "/api/v1/users/login",
         json={
             "email": correct_user_data["email"],
             "password": correct_user_data["password"],
         },
     )
-    response = client.get(
-        "/api/v1/users/current",
-    )
+    xsrf_token = response.cookies["xsrf_access_token"]
+    response = client.get("/api/v1/users/current", headers={"x-xsrf-token": xsrf_token})
+    print(response)
 
     assert response.status_code == 200
     assert response.json()["full_name"] == correct_user_data["full_name"]
     assert response.json()["email"] == correct_user_data["email"]
     assert response.json()["role"] == correct_user_data["role"]
+    assert "access_token" not in response.cookies
+    assert "refresh_token" not in response.cookies
+    assert "xsrf_access_token" not in response.cookies
+    assert "xsrf_refresh_token" not in response.cookies
 
 
 def test_incorrect__get_current_user(
@@ -152,3 +187,7 @@ def test_incorrect__get_current_user(
 
     assert response.status_code == 401
     assert response.json()["message"] == "Invalid tokens"
+    assert "access_token" not in response.cookies
+    assert "refresh_token" not in response.cookies
+    assert "xsrf_access_token" not in response.cookies
+    assert "xsrf_refresh_token" not in response.cookies

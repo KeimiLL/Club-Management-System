@@ -1,10 +1,16 @@
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { FooterComponent } from "./components/base/footer/footer.component";
-import { HttpClientModule } from "@angular/common/http";
+import {
+    HTTP_INTERCEPTORS,
+    HttpClientModule,
+    HttpClientXsrfModule,
+} from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { CsrfHttpInterceptor } from "./shared/interceptors/csrf-http.interceptor";
+import { UserService } from "./shared/services/user.service";
 
 @NgModule({
     declarations: [AppComponent],
@@ -14,8 +20,19 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
         BrowserAnimationsModule,
         HttpClientModule,
         FooterComponent,
+        HttpClientXsrfModule.withOptions({
+            cookieName: "xsrf_access_token",
+            headerName: "X-XSRF-TOKEN",
+        }),
     ],
-    providers: [],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: CsrfHttpInterceptor,
+            multi: true,
+        },
+        UserService,
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

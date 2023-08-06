@@ -4,7 +4,6 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Response, status
-from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_user_from_token, refresh_token_dependency
@@ -70,9 +69,17 @@ def login(
     """
     access_token = create_access_token({"sub": user.email})
     refresh_token = create_refresh_token({"sub": user.email})
+    xsrf_access_token = create_access_token({"sub": user.email, "type": "xsrf"})
+    xsrf_refresh_token = create_refresh_token({"sub": user.email, "type": "xsrf"})
 
     response.set_cookie(key="access_token", value=access_token, httponly=True)
     response.set_cookie(key="refresh_token", value=refresh_token, httponly=True)
+    response.set_cookie(
+        key="xsrf_access_token", value=xsrf_access_token, httponly=False
+    )
+    response.set_cookie(
+        key="xsrf_refresh_token", value=xsrf_refresh_token, httponly=False
+    )
 
     user_by_email = get_user_by_email(email=user.email, db=db)
     if not Hasher.verify_password(user.password, user_by_email.hashed_password):
@@ -88,19 +95,22 @@ def login(
     },
 )
 def logout(
-    _: Annotated[str, Depends(refresh_token_dependency)],
+    response: Response,
+    _: Annotated[tuple[str, str], Depends(refresh_token_dependency)],
 ):
     """Logs the user out.
 
+    Args:
+        response (Response): Response object.
+
     Returns:
-        response (JSONResponse): The response signalling a correct logout.
+        dict[str, ExceptionMessages]: The response signalling a correct logout.
     """
-    response = JSONResponse(
-        status_code=200, content={"message": ExceptionMessages.SUCCESS}
-    )
     response.delete_cookie("access_token")
     response.delete_cookie("refresh_token")
-    return response
+    response.delete_cookie("xsrf_access_token")
+    response.delete_cookie("xsrf_refresh_token")
+    return {"message": ExceptionMessages.SUCCESS}
 
 
 @router.get(
@@ -113,15 +123,15 @@ def logout(
 )
 def get_current_user(
     response: Response,
-    new_access_token: Annotated[str, Depends(refresh_token_dependency)],
+    new_access_tokens: Annotated[tuple[str, str], Depends(refresh_token_dependency)],
     current_user: Annotated[str, Depends(get_user_from_token)],
 ):
     """Gets current user from authentication cookies.
 
     Args:
         response (Response): Response object.
-        new_access_token (Annotated[str, Depends]): New JWT access token,
-            generated if the previous one has expired.
+        new_access_tokens (Annotated[tuple[str, str], Depends]): New JWT access tokens,
+            generated if the previous ones have expired.
             Defaults to Depends(refresh_token_dependency).
         current_user (Annotated[str, Depends]): Current user read from access token,
             Defaults to Depends(get_user_from_token).
@@ -129,6 +139,10 @@ def get_current_user(
     Returns:
         current_user (User): The currently logged in user.
     """
-    if new_access_token:
-        response.set_cookie(key="access_token", value=new_access_token, httponly=True)
+    if new_access_tokens:
+        access_token, xsrf_access_token = new_access_tokens
+        response.set_cookie(key="access_token", value=access_token, httponly=True)
+        response.set_cookie(
+            key="xsrf_access_token", value=xsrf_access_token, httponly=False
+        )
     return current_user
