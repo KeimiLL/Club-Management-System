@@ -1,0 +1,11 @@
+<mat-card class="card">
+    <mat-card-header class="card__header">
+        <mat-card-title class="card__title">
+            {{ name }} <span class="card__subtitle"> {{ subName }} </span>
+        </mat-card-title>
+        <ng-content select="app-button-container"></ng-content>
+    </mat-card-header>
+    <div class="card__content">
+        <ng-content></ng-content>
+    </div>
+</mat-card>
