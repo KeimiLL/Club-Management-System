@@ -3,10 +3,7 @@
         (collapsedClicked)="toggleCollapse()"
         [isCollapsed]="isCollapsed"
     ></app-menu-header>
-    <ul
-        class="sidenav__list"
-        [ngClass]="{ 'sidenav__list--unfolded': !isCollapsed }"
-    >
+    <ul class="sidenav__list">
         <li *ngFor="let item of menuItems">
             <app-menu-item
                 [item]="item"
