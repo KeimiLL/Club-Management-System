@@ -8,6 +8,9 @@ import {
 } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { MaterialModule } from "src/app/shared/modules/material.module";
+import { UserService } from "../../../../shared/services/user.service";
+import { switchMap } from "rxjs";
+import { User } from "../../../../shared/models/user.model";
 
 @Component({
     selector: "app-login",
@@ -19,7 +22,10 @@ import { MaterialModule } from "src/app/shared/modules/material.module";
 export class LoginComponent implements OnInit {
     public loginForm: FormGroup;
 
-    constructor(private readonly formBuilder: FormBuilder) {}
+    constructor(
+        private readonly formBuilder: FormBuilder,
+        private userService: UserService
+    ) {}
 
     ngOnInit(): void {
         this.loginForm = this.formBuilder.group({
@@ -30,7 +36,10 @@ export class LoginComponent implements OnInit {
 
     public onSubmit(): void {
         if (this.loginForm.valid) {
-            console.log(this.loginForm.value);
+            this.userService
+                .login(this.loginForm.value)
+                .pipe(switchMap(() => this.userService.get_current_user()))
+                .subscribe((user: User) => console.log(user));
         }
     }
 }
