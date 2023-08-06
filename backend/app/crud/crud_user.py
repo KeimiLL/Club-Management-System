@@ -15,11 +15,15 @@ def create_new_user(user: UserCreate | UserCreateWithRole, db: Session) -> User:
     """Creates a new user based on user data.
 
     Args:
-        user (UserCreate): User based on User schema.
+        user (UserCreate | UserCreateWithRole): User based on User schema.
         db (Session): Database session.
 
+    Raises:
+        DuplicateException: If there is already a user with the given email.
+        SQLAlchemyError: If there is a different exception.
+
     Returns:
-        user (User): User object.
+        new_user (User): User object.
     """
     try:
         new_user = User(
@@ -45,8 +49,12 @@ def get_user_by_email(email: str, db: Session) -> UserInDB:
         email (str): User email.
         db (Session): Database session.
 
+    Raises:
+        MissingException: If no user matches the given email.
+        SQLAlchemyError: If there is a different exception.
+
     Returns:
-        user (UserInDB): User object.
+        UserInDB: User object.
     """
     try:
         return db.query(User).filter(User.email == email).one()
