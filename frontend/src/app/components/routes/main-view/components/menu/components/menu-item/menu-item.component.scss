@@ -9,10 +9,20 @@
     color: black;
     text-decoration: none;
     transition: color 0.3s ease;
+
     &__link {
         cursor: pointer;
+        overflow: hidden;
+        opacity: 0;
+        max-height: 0;
+        transition: max-height 0.3s ease, opacity 0.3s ease;
+
         &--collapsed {
             display: none;
+        }
+
+        &--expanded {
+            animation: expandLink 0.3s ease 0.5s forwards;
         }
     }
     &.active {
@@ -25,5 +35,16 @@
         &--unfolded {
             padding-right: 15px;
         }
+    }
+}
+
+@keyframes expandLink {
+    0% {
+        max-height: 0;
+        opacity: 0;
+    }
+    100% {
+        max-height: 100px;
+        opacity: 1;
     }
 }

@@ -7,6 +7,6 @@ export const menuItems: MenuItem[] = [
     { name: "teams", icon: "groups", route: "/app" },
     { name: "schedule", icon: "event_available", route: "/app" },
     { name: "finances", icon: "savings", route: "/app" },
-    { name: "medic-center", icon: "local_hospital", route: "/app" },
+    { name: "medic", icon: "local_hospital", route: "/app" },
     { name: "settings", icon: "settings", route: "/app/settings" },
 ];
