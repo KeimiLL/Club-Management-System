@@ -90,13 +90,18 @@ def include_exception_handlers(application: FastAPI) -> None:
         )
 
     @application.exception_handler(JWTTokensException)
-    async def jwttokens_exception_handler(_: Request, exc: JWTTokensException):
+    async def jwt_tokens_exception_handler(_: Request, exc: JWTTokensException):
         """App-wide JWTTokensException handler.
 
         Returns:
             JSONResponse: The response with an appropriate status code and message.
         """
-        return JSONResponse(status_code=401, content={"message": exc.message})
+        response = JSONResponse(status_code=401, content={"message": exc.message})
+        response.delete_cookie("access_token")
+        response.delete_cookie("refresh_token")
+        response.delete_cookie("xsrf_access_token")
+        response.delete_cookie("xsrf_refresh_token")
+        return response
 
 
 def start_application() -> FastAPI:
