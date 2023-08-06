@@ -1,5 +1,9 @@
 <a class="menu-item" [routerLink]="item.route" routerLinkActive="active">
-    <mat-icon>{{ item.icon }} i</mat-icon>
+    <mat-icon
+        class="menu-item__icon"
+        [ngClass]="{ 'menu-item__icon--unfolded': !isCollapsed }"
+        >{{ item.icon }}</mat-icon
+    >
     <span
         class="menu-item__link"
         [ngClass]="{ 'menu-item__link--collapsed': isCollapsed }"

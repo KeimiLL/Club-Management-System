@@ -8,6 +8,6 @@
         (click)="onCollapseButtonClick()"
         class="button-container__button"
     >
-        {{ isCollapsed ? ">" : "<" }}
+        <mat-icon>{{ isCollapsed ? "arrow_forward" : "arrow_back" }}</mat-icon>
     </button>
 </div>
