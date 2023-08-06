@@ -6,7 +6,14 @@ import { DashboardComponent } from "./components/dashboard/dashboard.component";
 const routes: Routes = [
     { path: "", redirectTo: "dashboard", pathMatch: "full" },
     { path: "dashboard", component: DashboardComponent },
-    { path: "settings", component: SettingsComponent },
+    {
+        path: "settings",
+        component: SettingsComponent,
+        loadChildren: () =>
+            import("./components/settings/settings-routing.module").then(
+                (m) => m.SettingsRoutingModule
+            ),
+    },
 ];
 
 @NgModule({
