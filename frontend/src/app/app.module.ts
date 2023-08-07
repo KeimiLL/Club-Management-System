@@ -11,6 +11,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CsrfHttpInterceptor } from "./shared/interceptors/csrf-http.interceptor";
 import { UserService } from "./shared/services/user.service";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @NgModule({
     declarations: [AppComponent],
@@ -20,6 +21,7 @@ import { UserService } from "./shared/services/user.service";
         BrowserAnimationsModule,
         HttpClientModule,
         FooterComponent,
+        MatSnackBarModule,
         HttpClientXsrfModule.withOptions({
             cookieName: "xsrf_access_token",
             headerName: "X-XSRF-TOKEN",
