@@ -1,0 +1,18 @@
+@import "../../../../styles/variables";
+
+.snackbar {
+    transition: all 0.3s ease-in-out;
+
+    &__message {
+        font-size: $small-font;
+        font-weight: $light-weight;
+    }
+
+    &.normal {
+        color: #fff;
+    }
+
+    &.error {
+        color: $red;
+    }
+}

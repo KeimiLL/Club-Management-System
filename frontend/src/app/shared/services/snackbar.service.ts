@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { SnackbarComponent } from "../components/snackbar/snackbar.component";
 
 @Injectable({
     providedIn: "root",
@@ -8,18 +9,23 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 export class SnackbarService {
     constructor(private readonly snackBar: MatSnackBar) {}
 
-    public showSnackMessage(message: string, time = 3000): void {
-        this.snackBar.open(message, "", {
-            duration: time, // 3 seconds
+    public showNormalSnackBar(message: string, time = 3000): void {
+        this.snackBar.openFromComponent(SnackbarComponent, {
+            data: {
+                message: message,
+                variant: "normal",
+            },
+            duration: time,
         });
     }
 
-    public showHttpErrorResponse(
-        response: HttpErrorResponse,
-        time = 3000
-    ): void {
-        this.snackBar.open(response.error.Param, "Close", {
-            duration: time, // 5 seconds
+    public showErrorSnackBar(response: HttpErrorResponse, time = 3000): void {
+        this.snackBar.openFromComponent(SnackbarComponent, {
+            data: {
+                message: response.error.Param,
+                variant: "error",
+            },
+            duration: time,
         });
     }
 }
