@@ -4,7 +4,11 @@
         "browser": true,
         "es2021": true
     },
-    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "standard-with-typescript"
+    ],
     "overrides": [
         {
             "files": ["*.ts"],
@@ -45,6 +49,7 @@
                 "@angular-eslint/no-pipe-impure": "error",
                 "@angular-eslint/use-lifecycle-interface": "warn",
                 "@angular-eslint/use-pipe-transform-interface": "error",
+
                 "@typescript-eslint/array-type": "error",
                 "@typescript-eslint/ban-types": "error",
                 "@typescript-eslint/consistent-type-definitions": "error",
@@ -57,7 +62,39 @@
                 "@typescript-eslint/no-redundant-type-constituents": "error",
                 "@typescript-eslint/no-require-imports": "error",
                 "@typescript-eslint/no-unnecessary-condition": "error",
-                "@typescript-eslint/prefer-optional-chain": "error"
+                "@typescript-eslint/prefer-optional-chain": "error",
+
+                "arrow-body-style": ["warn", "asNeeded"],
+                "arrow-parens": "error",
+                "arrow-spacing": "error",
+                "camelcase": "error",
+                "comma-dangle": ["error", "always-multiline"],
+                "consistent-return": "error",
+                "curly": "error",
+                "default-case": "error",
+                "default-case-last": "error",
+                "default-param-last": "error",
+                "dot-location": ["error", "property"],
+                "dot-notation": "error",
+                "no-console": "warn",
+                "no-duplicate-imports": "error",
+                "no-else-return": "error",
+                "no-multi-str": "error",
+                "no-template-curly-in-string": "error",
+                "no-unused-expressions": [
+                    "error",
+                    {
+                        "allowShortCircuit": true,
+                        "allowTernary": true
+                    }
+                ],
+                "no-var": "error",
+                "prefer-arrow-callback": "error",
+                "prefer-const": "error",
+                "prefer-destructuring": "error",
+                "prefer-spread": "error",
+                "sort-imports": "error",
+                "spaced-comment": "error"
             },
             "parserOptions": {
                 "ecmaVersion": "latest",
