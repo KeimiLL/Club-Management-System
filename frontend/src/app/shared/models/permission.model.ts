@@ -1,5 +1,10 @@
 import { Roles } from "./user.model";
 
+export interface RolePermission {
+    modules: ModulesPermissions[];
+    permissions: SubPermissions[];
+}
+
 export enum ModulesPermissions {
     Settings = "settings",
     Dashboard = "dashboard",
@@ -8,14 +13,11 @@ export enum ModulesPermissions {
     Schedule = "schedule",
 }
 
-export interface RolePermission {
-    modules: ModulesPermissions[];
-    settings: SettingsPermission[];
-    dashboard: null;
-    meetings: MeetingsPermission[];
-    teams: TeamPermission[];
-    schedule: SchedulePermission[];
-}
+export type SubPermissions =
+    | TeamPermission
+    | MeetingsPermission
+    | SettingsPermission
+    | SchedulePermission;
 
 export enum TeamPermission {
     Bio = "bio",
@@ -35,37 +37,36 @@ export enum SchedulePermission {
     Marks = "marks",
 }
 
+export const allPermissions: SubPermissions[] = [
+    ...Object.values(TeamPermission),
+    ...Object.values(MeetingsPermission),
+    ...Object.values(SettingsPermission),
+    ...Object.values(SchedulePermission),
+];
+
 export const RoleDefinitions: Record<Roles, RolePermission> = {
     [Roles.Admin]: {
         modules: Object.values(ModulesPermissions),
-        settings: Object.values(SettingsPermission),
-        dashboard: null,
-        meetings: Object.values(MeetingsPermission),
-        teams: Object.values(TeamPermission),
-        schedule: Object.values(SchedulePermission),
+        permissions: [
+            ...Object.values(TeamPermission),
+            ...Object.values(MeetingsPermission),
+            ...Object.values(SettingsPermission),
+            ...Object.values(SchedulePermission),
+        ],
     },
     [Roles.Coach]: {
-        modules: [],
-        settings: [],
-        dashboard: null,
-        meetings: [],
-        teams: [],
-        schedule: [],
+        modules: Object.values(ModulesPermissions),
+        permissions: [
+            ...Object.values(TeamPermission),
+            ...Object.values(SchedulePermission),
+        ],
     },
     [Roles.Player]: {
-        modules: [],
-        settings: [],
-        dashboard: null,
-        meetings: [],
-        teams: Object.values(TeamPermission),
-        schedule: [],
+        modules: Object.values(ModulesPermissions),
+        permissions: [TeamPermission.Bio],
     },
     [Roles.Viewer]: {
-        modules: [ModulesPermissions.Settings],
-        settings: [],
-        dashboard: null,
-        meetings: [],
-        teams: [],
-        schedule: [],
+        modules: [ModulesPermissions.Dashboard, ModulesPermissions.Settings],
+        permissions: [],
     },
 };
