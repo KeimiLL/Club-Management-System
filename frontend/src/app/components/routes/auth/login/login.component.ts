@@ -11,16 +11,25 @@ import { MaterialModule } from "src/app/shared/modules/material.module";
 import { UserService } from "../../../../shared/services/user.service";
 import { switchMap } from "rxjs";
 import { User } from "../../../../shared/models/user.model";
+import { PermissionDirective } from "src/app/shared/directives/permission.directive";
+import { TeamPermission } from "src/app/shared/models/permission.model";
 
 @Component({
     selector: "app-login",
     templateUrl: "./login.component.html",
     styleUrls: ["./login.component.scss"],
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, MaterialModule, RouterModule],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        RouterModule,
+        PermissionDirective,
+    ],
 })
 export class LoginComponent implements OnInit {
     public loginForm: FormGroup;
+    public permissions = TeamPermission;
 
     constructor(
         private readonly formBuilder: FormBuilder,
