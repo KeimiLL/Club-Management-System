@@ -1,27 +1,30 @@
-// import { Directive, Input, TemplateRef, ViewContainerRef } from "@angular/core";
-// import { Roles } from "../models/user.model";
-// import { UserService } from "../services/user.service";
-// import { Permission } from "../models/permission.model";
+import { Directive, Input, TemplateRef, ViewContainerRef } from "@angular/core";
+import { Roles } from "../models/user.model";
+import { UserService } from "../services/user.service";
+import { RoleDefinitions, SubPermissions } from "../models/permission.model";
 
-// @Directive({
-//     selector: "[appPermission]",
-//     standalone: true,
-// })
-// export class PermissionDirective {
-//     constructor(
-//         private templateRef: TemplateRef<unknown>,
-//         private viewContainer: ViewContainerRef,
-//         private readonly userService: UserService
-//     ) {}
+@Directive({
+    selector: "[appPermission]",
+    standalone: true,
+})
+export class PermissionDirective {
+    constructor(
+        private templateRef: TemplateRef<unknown>,
+        private viewContainer: ViewContainerRef,
+        private readonly userService: UserService
+    ) {}
 
-//     @Input() set appPermission(requiredPermission: Roles[]) {
-//         // const userRole = this.userService.get_current_user.role
-//         const userRole = Roles.Admin;
+    @Input() set appPermission(requiredPermission: SubPermissions) {
+        // const userRole = this.userService.currentUser.role
+        const userRole = Roles.Admin; //for now to test
 
-//         if (requiredPermission.includes(userRole)) {
-//             this.viewContainer.createEmbeddedView(this.templateRef);
-//         } else {
-//             this.viewContainer.clear();
-//         }
-//     }
-// }
+        const rolePermissions = RoleDefinitions[userRole].permissions;
+        const hasPermission = rolePermissions.includes(requiredPermission);
+
+        if (hasPermission) {
+            this.viewContainer.createEmbeddedView(this.templateRef);
+        } else {
+            this.viewContainer.clear();
+        }
+    }
+}
