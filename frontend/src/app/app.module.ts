@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CsrfHttpInterceptor } from "./shared/interceptors/csrf-http.interceptor";
 import { UserService } from "./shared/services/user.service";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { ErrorHttpInterceptor } from "./shared/interceptors/error-http.interceptor";
 
 @NgModule({
     declarations: [AppComponent],
@@ -31,6 +32,11 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
         {
             provide: HTTP_INTERCEPTORS,
             useClass: CsrfHttpInterceptor,
+            multi: true,
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ErrorHttpInterceptor,
             multi: true,
         },
         UserService,
