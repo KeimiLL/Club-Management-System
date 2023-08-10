@@ -22,7 +22,7 @@ export class SnackbarService {
     public showErrorSnackBar(response: HttpErrorResponse, time = 3000): void {
         this.snackBar.openFromComponent(SnackbarComponent, {
             data: {
-                message: response.error.Param,
+                message: `Error: ${response.status}, ${response.statusText}`,
                 variant: "error",
             },
             duration: time,
