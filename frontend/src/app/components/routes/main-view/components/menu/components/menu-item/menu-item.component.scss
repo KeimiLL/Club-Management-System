@@ -14,9 +14,11 @@
     &__link {
         cursor: pointer;
         opacity: 0;
+        display: none;
 
         &--expanded {
             animation: expandLink 0.2s ease 0.2s forwards;
+            display: block;
         }
     }
     &.active {
@@ -38,8 +40,10 @@
 @keyframes expandLink {
     0% {
         opacity: 0;
+        display: none;
     }
     100% {
+        display: block;
         opacity: 1;
     }
 }
