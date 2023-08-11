@@ -1,10 +1,11 @@
+import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import { menuItems } from "./menu.data";
 import { RouterModule } from "@angular/router";
 import { MaterialModule } from "src/app/shared/modules/material.module";
-import { CommonModule } from "@angular/common";
+
 import { MenuHeaderComponent } from "./components/menu-header/menu-header.component";
 import { MenuItemComponent } from "./components/menu-item/menu-item.component";
+import { menuItems } from "./menu.data";
 
 export interface MenuItem {
     icon: string;

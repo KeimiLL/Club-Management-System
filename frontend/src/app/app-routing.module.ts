@@ -1,7 +1,9 @@
-import { MainViewComponent } from "./components/routes/main-view/main-view.component";
+/* eslint-disable @typescript-eslint/promise-function-async */
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+
 import { AuthComponent } from "./components/routes/auth/auth.component";
+import { MainViewComponent } from "./components/routes/main-view/main-view.component";
 
 const routes: Routes = [
     {

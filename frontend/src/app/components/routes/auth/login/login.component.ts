@@ -1,18 +1,19 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import {
-    Validators,
     FormBuilder,
     FormGroup,
     ReactiveFormsModule,
+    Validators,
 } from "@angular/forms";
 import { RouterModule } from "@angular/router";
-import { MaterialModule } from "src/app/shared/modules/material.module";
-import { UserService } from "../../../../shared/services/user.service";
 import { switchMap } from "rxjs";
-import { User } from "../../../../shared/models/user.model";
 import { PermissionDirective } from "src/app/shared/directives/permission.directive";
 import { TeamPermission } from "src/app/shared/models/permission.model";
+import { MaterialModule } from "src/app/shared/modules/material.module";
+
+import { User } from "../../../../shared/models/user.model";
+import { UserService } from "../../../../shared/services/user.service";
 
 @Component({
     selector: "app-login",
@@ -52,7 +53,9 @@ export class LoginComponent implements OnInit {
             this.userService
                 .login(this.loginForm.value)
                 .pipe(switchMap(() => this.userService.get_current_user()))
-                .subscribe((user: User) => console.log(user));
+                .subscribe((user: User) => {
+                    console.log(user);
+                });
         }
     }
 }
