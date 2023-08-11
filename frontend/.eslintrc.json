@@ -7,7 +7,8 @@
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        "standard-with-typescript"
+        "standard-with-typescript",
+        "prettier"
     ],
     "overrides": [
         {
@@ -53,6 +54,19 @@
                 "@typescript-eslint/array-type": "error",
                 "@typescript-eslint/ban-types": "error",
                 "@typescript-eslint/consistent-type-definitions": "error",
+                "@typescript-eslint/consistent-type-assertions": [
+                    "error",
+                    {
+                        "assertionStyle": "as",
+                        "objectLiteralTypeAssertions": "allow"
+                    }
+                ],
+                "@typescript-eslint/consistent-type-imports": [
+                    "error",
+                    {
+                        "prefer": "no-type-imports"
+                    }
+                ],
                 "@typescript-eslint/explicit-function-return-type": "error",
                 "@typescript-eslint/no-duplicate-enum-values": "error",
                 "@typescript-eslint/no-duplicate-type-constituents": "error",
@@ -63,12 +77,13 @@
                 "@typescript-eslint/no-require-imports": "error",
                 "@typescript-eslint/no-unnecessary-condition": "error",
                 "@typescript-eslint/prefer-optional-chain": "error",
+                "@typescript-eslint/quotes": ["error", "double"],
 
-                "arrow-body-style": ["warn", "asNeeded"],
+                "accessor-pairs": "off",
+                "arrow-body-style": ["error", "as-needed"],
                 "arrow-parens": "error",
                 "arrow-spacing": "error",
                 "camelcase": "error",
-                "comma-dangle": ["error", "always-multiline"],
                 "consistent-return": "error",
                 "curly": "error",
                 "default-case": "error",
@@ -76,7 +91,8 @@
                 "default-param-last": "error",
                 "dot-location": ["error", "property"],
                 "dot-notation": "error",
-                "no-console": "warn",
+                "no-console": ["warn", { "allow": ["warn", "error"] }],
+                "no-confusing-arrow": "warn",
                 "no-duplicate-imports": "error",
                 "no-else-return": "error",
                 "no-multi-str": "error",
@@ -93,7 +109,6 @@
                 "prefer-const": "error",
                 "prefer-destructuring": "error",
                 "prefer-spread": "error",
-                "sort-imports": "error",
                 "spaced-comment": "error"
             },
             "parserOptions": {
@@ -101,14 +116,6 @@
                 "sourceType": "module",
                 "project": ["./tsconfig.json"]
             }
-        },
-        {
-            "files": ["*.html"],
-            "extends": [
-                "plugin:@angular-eslint/template/recommended",
-                "plugin:@angular-eslint/template/accessibility"
-            ],
-            "rules": {}
         }
     ],
     "parser": "@typescript-eslint/parser",
@@ -116,5 +123,12 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "rules": {}
+    "plugins": ["simple-import-sort", "import"],
+    "rules": {
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
+        "import/first": "error",
+        "import/newline-after-import": "error",
+        "import/no-duplicates": "error"
+    }
 }
