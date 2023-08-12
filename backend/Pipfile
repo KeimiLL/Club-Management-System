@@ -4,29 +4,29 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-fastapi = ">=0.99.0"
-uvicorn = "*"
-sqlalchemy = "*"
-psycopg2 = "*"
-python-dotenv = "*"
-pydantic = {extras = ["email"], version = "*"}
-passlib = {extras = ["bcrypt"], version = "*"}
-python-jose = {extras = ["cryptography"], version = "*"}
-alembic = "*"
+fastapi = "==0.100.1"
+uvicorn = "==0.23."
+sqlalchemy = "==2.0.19"
+psycopg2 = "==2.9.6"
+python-dotenv = "==1.0.0"
+pydantic = {extras = ["email"], version = "==2.1.1"}
+passlib = {extras = ["bcrypt"], version = "==1.7.4"}
+python-jose = {extras = ["cryptography"], version = "==3.3.0"}
+alembic = "==1.11.1"
 pydantic-settings = "==2.0.1"
-tenacity = "*"
+tenacity = "==8.2.2"
 
 [dev-packages]
-fastapi = {extras = ["all"], version = ">=0.99.0"}
-black = "*"
-pre-commit = "*"
-pylint = "*"
-pytest = "*"
-requests = "*"
-schemathesis = "*"
-hypothesis = "*"
-coverage = "*"
-isort = "*"
+fastapi = {extras = ["all"], version = "==0.100.1"}
+black = "==23.7.0"
+pre-commit = "==3.3.3"
+pylint = "==2.17.5"
+pytest = "==7.4.0"
+requests = "==2.31.0"
+schemathesis = "==3.19.5"
+hypothesis = "==6.82.0"
+coverage = "==7.2.7"
+isort = "==5.12.0"
 
 [requires]
 python_version = "3.11"
