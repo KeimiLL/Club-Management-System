@@ -20,17 +20,10 @@ import { UserService } from "../../../../shared/services/user.service";
     templateUrl: "./login.component.html",
     styleUrls: ["./login.component.scss"],
     standalone: true,
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MaterialModule,
-        RouterModule,
-        PermissionDirective,
-    ],
+    imports: [CommonModule, ReactiveFormsModule, MaterialModule, RouterModule],
 })
 export class LoginComponent implements OnInit {
     public loginForm: FormGroup;
-    public permissions = TeamPermission;
 
     constructor(
         private readonly formBuilder: FormBuilder,
