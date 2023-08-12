@@ -1,28 +1,28 @@
-import { Injectable } from "@angular/core";
 import {
-    HttpRequest,
-    HttpHandler,
     HttpEvent,
+    HttpHandler,
     HttpInterceptor,
+    HttpRequest,
     HttpXsrfTokenExtractor,
 } from "@angular/common/http";
+import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 @Injectable()
 export class CsrfHttpInterceptor implements HttpInterceptor {
-    constructor(private tokenExtractor: HttpXsrfTokenExtractor) {}
+    constructor(private readonly tokenExtractor: HttpXsrfTokenExtractor) {}
 
     intercept(
         request: HttpRequest<unknown>,
         next: HttpHandler
     ): Observable<HttpEvent<unknown>> {
-        let new_request = request;
+        let newRequest = request;
         const token = this.tokenExtractor.getToken();
         if (token !== null) {
-            new_request = request.clone({
+            newRequest = request.clone({
                 setHeaders: { "X-XSRF-TOKEN": token },
             });
         }
-        return next.handle(new_request);
+        return next.handle(newRequest);
     }
 }

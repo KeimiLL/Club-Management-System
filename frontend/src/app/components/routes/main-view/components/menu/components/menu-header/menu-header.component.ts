@@ -11,7 +11,7 @@ import { MaterialModule } from "src/app/shared/modules/material.module";
 })
 export class MenuHeaderComponent {
     @Input() public isCollapsed: boolean;
-    @Output() public collapsedClicked: EventEmitter<void> = new EventEmitter();
+    @Output() public collapsedClicked = new EventEmitter<void>();
 
     public onCollapseButtonClick(): void {
         this.collapsedClicked.emit();

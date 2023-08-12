@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+
 import { MaterialModule } from "../../modules/material.module";
 
 @Component({
@@ -13,7 +14,7 @@ export class HalfCardComponent {
     @Input() public isRight = true;
     @Input() public name: string;
     @Input() public subName = "";
-    @Output() public closedClicked: EventEmitter<void> = new EventEmitter();
+    @Output() public closedClicked = new EventEmitter<void>();
 
     public onClosedButtonClick(): void {
         this.closedClicked.emit();

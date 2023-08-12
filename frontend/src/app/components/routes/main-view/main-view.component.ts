@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
-import { MenuComponent } from "./components/menu/menu.component";
 import { RouterModule } from "@angular/router";
+
+import { MenuComponent } from "./components/menu/menu.component";
 
 @Component({
     selector: "app-main-view",

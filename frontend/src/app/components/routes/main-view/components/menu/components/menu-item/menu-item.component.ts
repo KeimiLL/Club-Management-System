@@ -1,8 +1,9 @@
-import { Component, Input } from "@angular/core";
-import { MenuItem } from "../../menu.component";
 import { CommonModule } from "@angular/common";
+import { Component, Input } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { MaterialModule } from "src/app/shared/modules/material.module";
+
+import { MenuItem } from "../../menu.component";
 
 @Component({
     selector: "app-menu-item",

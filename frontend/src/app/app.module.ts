@@ -1,18 +1,19 @@
-import { AppRoutingModule } from "./app-routing.module";
-import { AppComponent } from "./app.component";
-import { FooterComponent } from "./components/base/footer/footer.component";
 import {
     HTTP_INTERCEPTORS,
     HttpClientModule,
     HttpClientXsrfModule,
 } from "@angular/common/http";
 import { NgModule } from "@angular/core";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+
+import { AppComponent } from "./app.component";
+import { AppRoutingModule } from "./app-routing.module";
+import { FooterComponent } from "./components/base/footer/footer.component";
 import { CsrfHttpInterceptor } from "./shared/interceptors/csrf-http.interceptor";
-import { UserService } from "./shared/services/user.service";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { ErrorHttpInterceptor } from "./shared/interceptors/error-http.interceptor";
+import { UserService } from "./shared/services/user.service";
 
 @NgModule({
     declarations: [AppComponent],

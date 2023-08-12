@@ -1,12 +1,12 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import {
-    Validators,
+    AbstractControl,
     FormBuilder,
     FormGroup,
-    ValidatorFn,
-    AbstractControl,
     ReactiveFormsModule,
+    ValidatorFn,
+    Validators,
 } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { MaterialModule } from "src/app/shared/modules/material.module";

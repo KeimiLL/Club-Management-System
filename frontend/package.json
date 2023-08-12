@@ -7,7 +7,7 @@
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test --watch",
-        "lint": "npx eslint \"src/**/*.{js,ts,html}\" --quiet --fix",
+        "lint": "npx eslint \"src/**/*.{js,ts}\" --quiet --fix",
         "format": "npx prettier \"src/**/*.{js,ts,html,css,scss}\" --write",
         "prepare": "cd .. && husky install frontend/.husky"
     },
@@ -46,6 +46,7 @@
         "eslint-plugin-n": "^15.0.0",
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-promise": "^6.0.0",
+        "eslint-plugin-simple-import-sort": "^10.0.0",
         "husky": "^8.0.0",
         "jasmine-core": "~4.6.0",
         "karma": "~6.4.0",
@@ -62,7 +63,7 @@
         "src/**/*.{js,ts,html,scss}": [
             "prettier --write ."
         ],
-        "src/**/*.{js,ts,html}": [
+        "src/**/*.{js,ts}": [
             "eslint . --fix --quiet"
         ]
     }

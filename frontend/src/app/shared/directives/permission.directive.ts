@@ -1,7 +1,8 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from "@angular/core";
+
+import { RoleDefinitions, SubPermissions } from "../models/permission.model";
 import { Roles } from "../models/user.model";
 import { UserService } from "../services/user.service";
-import { RoleDefinitions, SubPermissions } from "../models/permission.model";
 
 @Directive({
     selector: "[appPermission]",
@@ -9,14 +10,14 @@ import { RoleDefinitions, SubPermissions } from "../models/permission.model";
 })
 export class PermissionDirective {
     constructor(
-        private templateRef: TemplateRef<unknown>,
-        private viewContainer: ViewContainerRef,
+        private readonly templateRef: TemplateRef<unknown>,
+        private readonly viewContainer: ViewContainerRef,
         private readonly userService: UserService
     ) {}
 
     @Input() set appPermission(requiredPermission: SubPermissions) {
         // const userRole = this.userService.currentUser.role
-        const userRole = Roles.Admin; //for now to test
+        const userRole = Roles.Admin; // for now to test
 
         const rolePermissions = RoleDefinitions[userRole].permissions;
         const hasPermission = rolePermissions.includes(requiredPermission);
