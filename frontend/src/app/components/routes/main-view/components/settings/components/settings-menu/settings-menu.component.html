@@ -7,7 +7,9 @@
                 routerLinkActive="active"
                 [routerLink]="item.route"
             >
-                <span class="sidenav__link-text">{{ item.name }}</span>
+                <span class="sidenav__link-text">{{
+                    item.name | menuItem
+                }}</span>
             </a>
         </li>
     </ul>

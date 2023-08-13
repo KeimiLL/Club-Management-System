@@ -30,7 +30,9 @@ export enum MeetingsPermission {
 }
 
 export enum SettingsPermission {
-    Modifyusers = "modifyUsers",
+    Modifyusers = "modify_users",
+    Help = "help",
+    General = "general",
 }
 
 export enum SchedulePermission {
