@@ -3,7 +3,7 @@
 
 from starlette_testclient import TestClient
 
-from app.schemas.enums import ExceptionMessages, Roles
+from app.schemas.enums import HTTPResponseMessage, Roles
 
 
 def test_correct__register(
@@ -114,7 +114,7 @@ def test_correct__logout(client: TestClient, correct_user_data: dict[str, str]) 
     response = client.post("/api/v1/users/logout", headers={"x-xsrf-token": xsrf_token})
 
     assert response.status_code == 200
-    assert response.json()["message"] == ExceptionMessages.SUCCESS
+    assert response.json()["message"] == HTTPResponseMessage.SUCCESS
     assert "access_token" not in response.cookies
     assert "refresh_token" not in response.cookies
     assert "xsrf_access_token" not in response.cookies

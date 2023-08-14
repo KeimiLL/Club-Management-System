@@ -12,7 +12,7 @@ from app.core.jwt_utils import create_access_token, create_refresh_token
 from app.core.security import Hasher
 from app.crud.crud_user import create_new_user, get_user_by_email
 from app.db.session import get_db
-from app.schemas.enums import ExceptionMessages
+from app.schemas.enums import HTTPResponseMessage
 from app.schemas.misc import Message, MessageFromEnum
 from app.schemas.user import User, UserCreate, UserLogin
 
@@ -98,19 +98,19 @@ def logout(
     response: Response,
     _: Annotated[tuple[str, str], Depends(refresh_token_dependency)],
 ):
-    """Logs the user out.
+    """Logs the user out by removing the necessary cookies.
 
     Args:
         response (Response): Response object.
 
     Returns:
-        dict[str, ExceptionMessages]: The response signalling a correct logout.
+        dict[str, HTTPResponseMessage]: The response signalling a correct logout.
     """
     response.delete_cookie("access_token")
     response.delete_cookie("refresh_token")
     response.delete_cookie("xsrf_access_token")
     response.delete_cookie("xsrf_refresh_token")
-    return {"message": ExceptionMessages.SUCCESS}
+    return {"message": HTTPResponseMessage.SUCCESS}
 
 
 @router.get(

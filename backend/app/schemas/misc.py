@@ -3,7 +3,7 @@
 
 from pydantic import BaseModel
 
-from app.schemas.enums import ExceptionMessages
+from app.schemas.enums import HTTPResponseMessage
 
 
 class Message(BaseModel):
@@ -13,6 +13,6 @@ class Message(BaseModel):
 
 
 class MessageFromEnum(BaseModel):
-    """Class representation of JSONResponse content message from ExceptionMessages enum."""
+    """Class representation of JSONResponse content message from HTTPResponseMessage enum."""
 
-    message: ExceptionMessages
+    message: HTTPResponseMessage
