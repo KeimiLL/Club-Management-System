@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
-import { CardsModule } from "src/app/shared/modules/cards.module";
+
+import { CardsModule } from "../../../../../shared/modules/cards.module";
 
 @Component({
     selector: "app-meetings",
