@@ -8,6 +8,8 @@ import { User, UserCreate, UserLogin } from "../models/user.model";
     providedIn: "root",
 })
 export class UserService {
+    public currentUser: User;
+
     constructor(private readonly http: HttpClient) {}
 
     public register(userCreate: UserCreate): Observable<User> {
@@ -22,7 +24,7 @@ export class UserService {
         return this.http.post<object>("api/v1/users/logout", {});
     }
 
-    public get_current_user(): Observable<User> {
+    public getCurrentUser(): Observable<User> {
         return this.http.get<User>("api/v1/users/current");
     }
 }
