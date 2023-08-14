@@ -11,7 +11,7 @@ import {
 import { Router, RouterModule } from "@angular/router";
 import { catchError, of } from "rxjs";
 
-import { User } from "../../../../shared/models/user.model";
+import { BackendResponse } from "../../../../shared/models/misc.model";
 import { MaterialModule } from "../../../../shared/modules/material.module";
 import { UserService } from "../../../../shared/services/user.service";
 import { matchStringValidator } from "../../../../shared/utils/validators";
@@ -63,11 +63,10 @@ export class RegisterComponent implements OnInit {
                     }`,
                 })
                 .pipe(catchError(() => of(null)))
-                .subscribe((user: User | null) => {
-                    if (user !== null) {
-                        this.userService.currentUser = user;
+                .subscribe((response: BackendResponse | null) => {
+                    if (response !== null) {
                         this.router.navigate(["/auth/login"]);
-                        // some info about a correct register
+                        // some info about a correct register, can be extracted from the response
                     } else {
                         this.buildForm();
                         // dialog about an incorrect register

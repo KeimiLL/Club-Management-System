@@ -21,7 +21,7 @@ router = APIRouter()
 
 @router.post(
     "/register",
-    response_model=User,
+    response_model=Message,
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
@@ -35,9 +35,10 @@ def register(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Returns:
-        (User): The newly created user.
+        dict[str, HTTPResponseMessage]: The response signalling a correct register.
     """
-    return create_new_user(user=user, db=db)
+    create_new_user(user=user, db=db)
+    return {"message": HTTPResponseMessage.SUCCESS}
 
 
 @router.post(

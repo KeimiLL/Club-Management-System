@@ -3,7 +3,7 @@
 
 from starlette_testclient import TestClient
 
-from app.schemas.enums import HTTPResponseMessage, Roles
+from app.schemas.enums import HTTPResponseMessage
 
 
 def test_correct__register(
@@ -18,9 +18,7 @@ def test_correct__register(
     response = client.post("/api/v1/users/register", json=correct_user_data)
 
     assert response.status_code == 200
-    assert response.json()["full_name"] == correct_user_data["full_name"]
-    assert response.json()["email"] == correct_user_data["email"]
-    assert response.json()["role"] == Roles.VIEWER
+    assert response.json()["message"] == HTTPResponseMessage.SUCCESS
     assert "access_token" not in response.cookies
     assert "refresh_token" not in response.cookies
     assert "xsrf_access_token" not in response.cookies
