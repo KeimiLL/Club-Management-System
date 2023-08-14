@@ -80,6 +80,7 @@
                 "@typescript-eslint/prefer-optional-chain": "error",
                 "@typescript-eslint/promise-function-async": "off",
                 "@typescript-eslint/quotes": ["error", "double"],
+                "@typescript-eslint/restrict-template-expressions": "off",
 
                 "accessor-pairs": "off",
                 "arrow-body-style": ["error", "as-needed"],
