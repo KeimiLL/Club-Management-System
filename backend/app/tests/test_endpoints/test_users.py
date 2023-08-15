@@ -1,8 +1,12 @@
 """File for testing users-related endpoints."""
 
 
+from datetime import timedelta
+from http.cookiejar import Cookie
+
 import pytest
 from app.core.config import get_settings
+from app.core.jwt_utils import create_token
 from app.schemas.enums import HTTPResponseMessage, Roles
 from starlette_testclient import TestClient
 
@@ -110,7 +114,32 @@ def test_correct__login(client: TestClient, correct_user_data: dict[str, str]) -
     assert "xsrf_refresh_token" in response.cookies
 
 
-def test_incorrect__login(
+def test_invalid_password__login(
+    client: TestClient, correct_user_data: dict[str, str]
+) -> None:
+    """Tests logging an existing user in.
+
+    Args:
+        client (TestClient): TestClient instance.
+        correct_user_data (dict[str, str]): Data to be sent.
+    """
+    response = client.post(
+        "/api/v1/users/login",
+        json={
+            "email": correct_user_data["email"],
+            "password": correct_user_data["password"] + "0",
+        },
+    )
+
+    assert response.status_code == 400
+    assert "Incorrect email or password" in response.json()["message"]
+    assert "access_token" not in response.cookies
+    assert "refresh_token" not in response.cookies
+    assert "xsrf_access_token" not in response.cookies
+    assert "xsrf_refresh_token" not in response.cookies
+
+
+def test_invalid_credentials__login(
     client: TestClient, incorrect_user_data: dict[str, str]
 ) -> None:
     """Tests logging an existing user in.
@@ -262,6 +291,162 @@ def test_incorrect__get_current_user(
     response = client.get(
         "/api/v1/users/current",
     )
+
+    assert response.status_code == 401
+    assert response.json()["message"] == "Invalid tokens"
+    assert "access_token" not in response.cookies
+    assert "refresh_token" not in response.cookies
+    assert "xsrf_access_token" not in response.cookies
+    assert "xsrf_refresh_token" not in response.cookies
+
+
+def test_expired_tokens__get_current_user(
+    client: TestClient, correct_user_data: dict[str, str]
+) -> None:
+    """Tests getting the currently logged in when the tokens are expired.
+
+    Args:
+        client (TestClient): TestClient instance.
+        correct_user_data (dict[str, str]): Data to be sent.
+    """
+    response = client.post(
+        "/api/v1/users/login",
+        json={
+            "email": correct_user_data["email"],
+            "password": correct_user_data["password"],
+        },
+    )
+    client.cookies.pop("access_token")
+    client.cookies.pop("refresh_token")
+    access_token = create_token(
+        {"sub": correct_user_data["email"]}, timedelta(minutes=-1)
+    )
+    refresh_token = create_token(
+        {"sub": correct_user_data["email"]}, timedelta(minutes=-1)
+    )
+    client.cookies.set_cookie(
+        Cookie(
+            version=0,
+            name="access_token",
+            value=access_token,
+            port=None,
+            port_specified=False,
+            domain="testserver.local",
+            domain_specified=False,
+            domain_initial_dot=False,
+            path="/",
+            path_specified=True,
+            secure=False,
+            expires=None,
+            discard=True,
+            comment=None,
+            comment_url=None,
+            rest={"SameSite": "lax"},
+        )
+    )
+    client.cookies.set_cookie(
+        Cookie(
+            version=0,
+            name="refresh_token",
+            value=refresh_token,
+            port=None,
+            port_specified=False,
+            domain="testserver.local",
+            domain_specified=False,
+            domain_initial_dot=False,
+            path="/",
+            path_specified=True,
+            secure=False,
+            expires=None,
+            discard=True,
+            comment=None,
+            comment_url=None,
+            rest={"SameSite": "lax"},
+        )
+    )
+    xsrf_token = response.cookies["xsrf_access_token"]
+    response = client.get(
+        "/api/v1/users/current",
+        headers={"x-xsrf-token": xsrf_token},
+    )
+
+    assert response.status_code == 401
+    assert response.json()["message"] == "Expired tokens"
+    assert "access_token" not in response.cookies
+    assert "refresh_token" not in response.cookies
+    assert "xsrf_access_token" not in response.cookies
+    assert "xsrf_refresh_token" not in response.cookies
+
+
+def test_invalid_tokens__get_current_user(
+    client: TestClient, correct_user_data: dict[str, str]
+) -> None:
+    """Tests getting the currently logged in when the tokens are expired.
+
+    Args:
+        client (TestClient): TestClient instance.
+        correct_user_data (dict[str, str]): Data to be sent.
+    """
+    response = client.post(
+        "/api/v1/users/login",
+        json={
+            "email": correct_user_data["email"],
+            "password": correct_user_data["password"],
+        },
+    )
+    client.cookies.pop("access_token")
+    client.cookies.set_cookie(
+        Cookie(
+            version=0,
+            name="refresh_token",
+            value="",
+            port=None,
+            port_specified=False,
+            domain="testserver.local",
+            domain_specified=False,
+            domain_initial_dot=False,
+            path="/",
+            path_specified=True,
+            secure=False,
+            expires=None,
+            discard=True,
+            comment=None,
+            comment_url=None,
+            rest={"SameSite": "lax"},
+        )
+    )
+    xsrf_token = response.cookies["xsrf_access_token"]
+    response = client.get(
+        "/api/v1/users/current",
+        headers={"x-xsrf-token": xsrf_token},
+    )
+
+    assert response.status_code == 401
+    assert response.json()["message"] == "Invalid tokens"
+    assert "access_token" not in response.cookies
+    assert "refresh_token" not in response.cookies
+    assert "xsrf_access_token" not in response.cookies
+    assert "xsrf_refresh_token" not in response.cookies
+
+
+def test_no_csrf_header__get_current_user(
+    client: TestClient,
+    correct_user_data: dict[str, str],
+) -> None:
+    """Tests getting the currently logged in user.
+
+    Args:
+        client (TestClient): TestClient instance.
+        correct_user_data (dict[str, str]): Data to be sent.
+    """
+    response = client.post(
+        "/api/v1/users/login",
+        json={
+            "email": correct_user_data["email"],
+            "password": correct_user_data["password"],
+        },
+    )
+    response = client.get("/api/v1/users/current")
 
     assert response.status_code == 401
     assert response.json()["message"] == "Invalid tokens"
