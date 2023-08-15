@@ -537,11 +537,9 @@ redefining-builtins-modules = ["six.moves", "past.builtins", "future.builtins", 
 
 [tool.pytest.ini_options]
 addopts = "--maxfail=2"
-markers = [
-    "disable_get_user_access_token_autouse"
-]
 testpaths = [
     "app/tests/test_api",
+    "app/tests/test_crud",
     "app/tests/test_endpoints",
     "app/tests/test_utils",
 ]
