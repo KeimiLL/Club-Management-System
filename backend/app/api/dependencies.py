@@ -1,7 +1,7 @@
 """File for API dependencies."""
 
 
-from typing import Annotated, Optional
+from typing import Annotated
 
 from fastapi import Cookie, Depends, Header
 from jose import ExpiredSignatureError, JWTError
@@ -20,7 +20,7 @@ def refresh_token_dependency(
     xsrf_access_token: Annotated[str | None, Cookie()] = None,
     xsrf_refresh_token: Annotated[str | None, Cookie()] = None,
     x_xsrf_token: Annotated[str | None, Header()] = None,
-) -> Optional[tuple[str, str]]:
+) -> tuple[str, str] | None:
     """Dependency to refresh access_token if it has expired.
 
     Args:
@@ -40,7 +40,7 @@ def refresh_token_dependency(
         JWTTokensException: If any of the tokens is invalid in another way.
 
     Returns:
-        Optional[tuple[str, str]]: Refreshed access_tokens if they have expired, otherwise None.
+        tuple[str, str] | None: Refreshed access_tokens if they have expired, otherwise None.
     """
     try:
         if (
