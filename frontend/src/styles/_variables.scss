@@ -1,3 +1,15 @@
+// fonts
+$primary-font-family: Roboto, "Helvetica Neue", sans-serif;
+
+// padding
+$base-spacing: 8px;
+$medium-spacing: 16px;
+$large-spacing: 24px;
+$extra-large-spacing: 32px;
+
+$container-padding: $medium-spacing;
+$section-padding: $large-spacing;
+
 // colors
 $purple-dark: #6351c2;
 $purple-mid-dark: #a296f1;
@@ -6,13 +18,41 @@ $purple-light: #d8d5f7;
 $light-grey: #f2f4f8;
 $red: #e04242;
 
-//font-weights
+// font-weights
 $bold-weight: 800;
-$medium-weight: 400;
+$normal-weight: 400;
 $light-weight: 200;
 
-//font-sizes
+// font-sizes
 $small-font: 12px;
-$medium-font: 15px;
+$normal-font: 16px;
 $large-font: 18px;
 $very-large-font: 28px;
+
+// utility classes
+// miscellaneous
+.text-center {
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.border {
+    border: 1px solid black;
+}
+
+.rounded {
+    border-radius: 10px;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+}
