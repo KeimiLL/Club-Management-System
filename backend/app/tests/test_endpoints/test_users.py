@@ -1,9 +1,10 @@
 """File for testing users-related endpoints."""
 
 
+import pytest
+from app.core.config import get_settings
+from app.schemas.enums import HTTPResponseMessage, Roles
 from starlette_testclient import TestClient
-
-from app.schemas.enums import HTTPResponseMessage
 
 
 def test_correct__register(
@@ -38,6 +39,46 @@ def test_duplicate__register(
 
     assert response.status_code == 400
     assert "already exists" in response.json()["message"]
+    assert "access_token" not in response.cookies
+    assert "refresh_token" not in response.cookies
+    assert "xsrf_access_token" not in response.cookies
+    assert "xsrf_refresh_token" not in response.cookies
+
+
+@pytest.mark.parametrize(
+    "user_data",
+    [
+        {},
+        {1: 1},
+        {1: 1, 2: 2},
+        {1: 1, 2: 2, 3: 3},
+        {1: 1, 2: 2, 3: 3, 4: 4},
+        {"email": ""},
+        {"password": ""},
+        {"full_name": ""},
+        {"email": "", "password": ""},
+        {"full_name": "", "password": ""},
+        {"full_name": "", "email": ""},
+        {"full_name": "", "email": "test", "password": ""},
+        {"full_name": "", "email": "test", "password": ""},
+        {"full_name": "", "email": "test", "password": "", "role": Roles.ADMIN},
+        {
+            "full_name": get_settings().TEST_USER_FULL_NAME,
+            "email": get_settings().TEST_USER_FULL_NAME,
+            "password": get_settings().TEST_USER_PASSWORD,
+        },
+    ],
+)
+def test_incorrect_data__register(client: TestClient, user_data: dict) -> None:
+    """Tests creating a new user.
+
+    Args:
+        client (TestClient): TestClient instance.
+        user_data (dict[str, str]): Data to be sent.
+    """
+    response = client.post("/api/v1/users/register", json=user_data)
+
+    assert response.status_code == 422
     assert "access_token" not in response.cookies
     assert "refresh_token" not in response.cookies
     assert "xsrf_access_token" not in response.cookies
@@ -86,8 +127,48 @@ def test_incorrect__login(
         },
     )
 
-    assert response.status_code == 404
-    assert "does not exist" in response.json()["message"]
+    assert response.status_code == 400
+    assert "Incorrect email or password" in response.json()["message"]
+    assert "access_token" not in response.cookies
+    assert "refresh_token" not in response.cookies
+    assert "xsrf_access_token" not in response.cookies
+    assert "xsrf_refresh_token" not in response.cookies
+
+
+@pytest.mark.parametrize(
+    "user_data",
+    [
+        {},
+        {1: 1},
+        {1: 1, 2: 2},
+        {1: 1, 2: 2, 3: 3},
+        {"email": ""},
+        {"password": ""},
+        {"full_name": ""},
+        {"email": "", "password": ""},
+        {"full_name": "", "password": ""},
+        {"full_name": "", "email": ""},
+        {"full_name": "", "email": "test", "password": ""},
+        {
+            "full_name": get_settings().TEST_USER_FULL_NAME,
+            "email": get_settings().TEST_USER_FULL_NAME,
+            "password": get_settings().TEST_USER_PASSWORD,
+        },
+    ],
+)
+def test_incorrect_data__login(client: TestClient, user_data: dict) -> None:
+    """Tests logging an existing user in.
+
+    Args:
+        client (TestClient): TestClient instance.
+        user_data (dict[str, str]): Data to be sent.
+    """
+    response = client.post(
+        "/api/v1/users/login",
+        json=user_data,
+    )
+
+    assert response.status_code == 422
     assert "access_token" not in response.cookies
     assert "refresh_token" not in response.cookies
     assert "xsrf_access_token" not in response.cookies
@@ -156,7 +237,6 @@ def test_correct__get_current_user(
     )
     xsrf_token = response.cookies["xsrf_access_token"]
     response = client.get("/api/v1/users/current", headers={"x-xsrf-token": xsrf_token})
-    print(response)
 
     assert response.status_code == 200
     assert response.json()["full_name"] == correct_user_data["full_name"]

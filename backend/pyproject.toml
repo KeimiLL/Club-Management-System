@@ -546,4 +546,5 @@ testpaths = [
 
 filterwarnings = [
     "ignore::sqlalchemy.exc.SAWarning",
+    "ignore::DeprecationWarning"
 ]
