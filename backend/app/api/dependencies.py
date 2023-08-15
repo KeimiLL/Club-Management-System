@@ -3,15 +3,14 @@
 
 from typing import Annotated
 
-from fastapi import Cookie, Depends, Header
-from jose import ExpiredSignatureError, JWTError
-from sqlalchemy.orm import Session
-
 from app.core.exceptions import JWTTokensException
 from app.core.jwt_utils import create_access_token, decode_token
 from app.crud.crud_user import get_user_by_email
 from app.db.session import get_db
 from app.schemas.user import UserInDB
+from fastapi import Cookie, Depends, Header
+from jose import ExpiredSignatureError, JWTError
+from sqlalchemy.orm import Session
 
 
 def refresh_token_dependency(
@@ -73,10 +72,8 @@ def refresh_token_dependency(
             return new_access_token, new_xsrf_access_token
         except ExpiredSignatureError as exc:
             raise JWTTokensException("Expired tokens") from exc
-        except JWTError as exc:
-            raise JWTTokensException("Invalid tokens") from exc
     except JWTError as exc:
-        raise JWTTokensException("Expired tokens") from exc
+        raise JWTTokensException("Invalid tokens") from exc
 
 
 def get_user_from_token(
