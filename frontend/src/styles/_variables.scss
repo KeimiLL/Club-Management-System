@@ -56,3 +56,21 @@ $very-large-font: 28px;
 .text-uppercase {
     text-transform: uppercase;
 }
+
+.mat-mdc-raised-button.button {
+    &--dark {
+        width: 100%;
+        margin-top: 10px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        background-color: $purple-dark !important;
+        color: $light-grey;
+    }
+
+    &--light {
+        width: 100%;
+        margin-top: 10px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        background-color: $purple-light;
+        color: $purple-dark;
+    }
+}
