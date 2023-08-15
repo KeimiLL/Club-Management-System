@@ -546,5 +546,6 @@ testpaths = [
     "app/tests/test_utils",
 ]
 
-[tool.isort]
-skip = [".gitignore", ".dockerignore", "*.png"]
+filterwarnings = [
+    "ignore::sqlalchemy.exc.SAWarning",
+]

@@ -56,24 +56,31 @@ def fixture_app() -> Iterator[FastAPI]:
     Base.metadata.drop_all(engine)
 
 
-@pytest.fixture(scope="module", name="db_session")
+@pytest.fixture(scope="function", name="db_session")
 def fixture_db_session() -> Iterator[Session]:
     """Creates a new database session for testing.
 
-    The database session is closed when a test is complete.
+    If there's an error processing the transaction, it gets rolled back.
 
     Yields:
         Iterator[Session]: Database session.
     """
-    with engine.connect() as connection:
-        with connection.begin():
-            with Session(bind=connection) as session:
-                yield session
+    Base.metadata.create_all(engine)
+    transaction = None
+    try:
+        with engine.connect() as connection:
+            with connection.begin() as transaction:
+                with Session(bind=connection) as session:
+                    yield session
+                transaction.rollback()
+    except SQLAlchemyError:
+        if transaction:
+            transaction.rollback()
 
 
 @pytest.fixture(scope="module", name="client")
 def fixture_client(app: FastAPI) -> Iterator[TestClient]:
-    """Creates a new FastAPI TestClient that uses the `db_session` fixture to override
+    """Creates a new FastAPI TestClient that overrides
     the `get_db` dependency that is injected into routes.
 
     Args:
