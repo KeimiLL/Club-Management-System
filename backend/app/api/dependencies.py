@@ -1,17 +1,16 @@
 """File for API dependencies."""
 
 
-from typing import Annotated, Optional
-
-from fastapi import Cookie, Depends, Header
-from jose import ExpiredSignatureError, JWTError
-from sqlalchemy.orm import Session
+from typing import Annotated
 
 from app.core.exceptions import JWTTokensException
 from app.core.jwt_utils import create_access_token, decode_token
 from app.crud.crud_user import get_user_by_email
 from app.db.session import get_db
 from app.schemas.user import UserInDB
+from fastapi import Cookie, Depends, Header
+from jose import ExpiredSignatureError, JWTError
+from sqlalchemy.orm import Session
 
 
 def refresh_token_dependency(
@@ -20,7 +19,7 @@ def refresh_token_dependency(
     xsrf_access_token: Annotated[str | None, Cookie()] = None,
     xsrf_refresh_token: Annotated[str | None, Cookie()] = None,
     x_xsrf_token: Annotated[str | None, Header()] = None,
-) -> Optional[tuple[str, str]]:
+) -> tuple[str, str] | None:
     """Dependency to refresh access_token if it has expired.
 
     Args:
@@ -40,7 +39,7 @@ def refresh_token_dependency(
         JWTTokensException: If any of the tokens is invalid in another way.
 
     Returns:
-        Optional[tuple[str, str]]: Refreshed access_tokens if they have expired, otherwise None.
+        tuple[str, str] | None: Refreshed access_tokens if they have expired, otherwise None.
     """
     try:
         if (
@@ -73,10 +72,8 @@ def refresh_token_dependency(
             return new_access_token, new_xsrf_access_token
         except ExpiredSignatureError as exc:
             raise JWTTokensException("Expired tokens") from exc
-        except JWTError as exc:
-            raise JWTTokensException("Invalid tokens") from exc
     except JWTError as exc:
-        raise JWTTokensException("Expired tokens") from exc
+        raise JWTTokensException("Invalid tokens") from exc
 
 
 def get_user_from_token(

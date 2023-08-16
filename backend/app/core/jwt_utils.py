@@ -2,7 +2,6 @@
 
 
 from datetime import datetime, timedelta
-from typing import Optional
 
 from jose import ExpiredSignatureError, JWTError, jwt
 
@@ -10,12 +9,12 @@ from app.core.config import get_settings
 from app.core.exceptions import JWTTokensException
 
 
-def create_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+def create_token(data: dict, expires_delta: timedelta | None = None) -> str:
     """Creates a JWT token with the provided data.
 
     Args:
         data (dict): A dictionary with the data to encode inside the token.
-        expires_delta (Optional[timedelta], optional): Expiry time for the token. Defaults to None.
+        expires_delta (timedelta | None, optional): Expiry time for the token. Defaults to None.
 
     Returns:
         str: The encoded JWT token.

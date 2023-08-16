@@ -3,11 +3,8 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Response, status
-from sqlalchemy.orm import Session
-
 from app.api.dependencies import get_user_from_token, refresh_token_dependency
-from app.core.exceptions import InvalidCredentialsException
+from app.core.exceptions import InvalidCredentialsException, MissingException
 from app.core.jwt_utils import create_access_token, create_refresh_token
 from app.core.security import Hasher
 from app.crud.crud_user import create_new_user, get_user_by_email
@@ -15,6 +12,9 @@ from app.db.session import get_db
 from app.schemas.enums import HTTPResponseMessage
 from app.schemas.misc import Message, MessageFromEnum
 from app.schemas.user import User, UserCreate, UserLogin
+from fastapi import APIRouter, Depends, Response, status
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
@@ -82,9 +82,12 @@ def login(
         key="xsrf_refresh_token", value=xsrf_refresh_token, httponly=False
     )
 
-    user_by_email = get_user_by_email(email=user.email, db=db)
-    if not Hasher.verify_password(user.password, user_by_email.hashed_password):
-        raise InvalidCredentialsException()
+    try:
+        user_by_email = get_user_by_email(email=user.email, db=db)
+        if not Hasher.verify_password(user.password, user_by_email.hashed_password):
+            raise InvalidCredentialsException()
+    except (MissingException, SQLAlchemyError) as exc:
+        raise InvalidCredentialsException() from exc
     return user_by_email
 
 
