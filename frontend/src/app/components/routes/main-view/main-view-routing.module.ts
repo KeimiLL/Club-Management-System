@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/promise-function-async */
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 

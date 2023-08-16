@@ -8,9 +8,13 @@ import {
     ValidatorFn,
     Validators,
 } from "@angular/forms";
-import { RouterModule } from "@angular/router";
-import { MaterialModule } from "src/app/shared/modules/material.module";
-import { matchStringValidator } from "src/app/shared/utils/validators";
+import { Router, RouterModule } from "@angular/router";
+import { catchError, of } from "rxjs";
+
+import { User } from "../../../../shared/models/user.model";
+import { MaterialModule } from "../../../../shared/modules/material.module";
+import { UserService } from "../../../../shared/services/user.service";
+import { matchStringValidator } from "../../../../shared/utils/validators";
 
 @Component({
     selector: "app-register",
@@ -22,13 +26,17 @@ import { matchStringValidator } from "src/app/shared/utils/validators";
 export class RegisterComponent implements OnInit {
     public registerForm: FormGroup;
 
-    constructor(private readonly formBuilder: FormBuilder) {}
+    constructor(
+        private readonly formBuilder: FormBuilder,
+        private readonly userService: UserService,
+        private readonly router: Router
+    ) {}
 
     ngOnInit(): void {
-        this.createForm();
+        this.buildForm();
     }
 
-    private createForm(): void {
+    private buildForm(): void {
         this.registerForm = this.formBuilder.group({
             firstName: ["", Validators.required],
             lastName: ["", Validators.required],
@@ -46,7 +54,25 @@ export class RegisterComponent implements OnInit {
 
     public onSubmit(): void {
         if (this.registerForm.valid) {
-            console.log(this.registerForm.value);
+            this.userService
+                .register({
+                    email: this.registerForm.get("email")?.value,
+                    password: this.registerForm.get("password")?.value,
+                    full_name: `${this.registerForm.get("firstName")?.value} ${
+                        this.registerForm.get("lastName")?.value
+                    }`,
+                })
+                .pipe(catchError(() => of(null)))
+                .subscribe((user: User | null) => {
+                    if (user !== null) {
+                        this.userService.currentUser = user;
+                        this.router.navigate(["/auth/login"]);
+                        // some info about a correct register
+                    } else {
+                        this.buildForm();
+                        // dialog about an incorrect register
+                    }
+                });
         } else {
             Object.keys(this.registerForm.controls).forEach((controlName) => {
                 this.registerForm.controls[controlName].markAsTouched();

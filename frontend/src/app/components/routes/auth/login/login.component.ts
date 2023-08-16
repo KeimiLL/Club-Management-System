@@ -6,13 +6,13 @@ import {
     ReactiveFormsModule,
     Validators,
 } from "@angular/forms";
-import { RouterModule } from "@angular/router";
-import { switchMap } from "rxjs";
-import { PermissionDirective } from "src/app/shared/directives/permission.directive";
-import { TeamPermission } from "src/app/shared/models/permission.model";
-import { MaterialModule } from "src/app/shared/modules/material.module";
+import { Router, RouterModule } from "@angular/router";
+import { catchError, of } from "rxjs";
 
+import { PermissionDirective } from "../../../../shared/directives/permission.directive";
+import { TeamPermission } from "../../../../shared/models/permission.model";
 import { User } from "../../../../shared/models/user.model";
+import { MaterialModule } from "../../../../shared/modules/material.module";
 import { UserService } from "../../../../shared/services/user.service";
 
 @Component({
@@ -34,7 +34,8 @@ export class LoginComponent implements OnInit {
 
     constructor(
         private readonly formBuilder: FormBuilder,
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private readonly router: Router
     ) {}
 
     ngOnInit(): void {
@@ -52,9 +53,21 @@ export class LoginComponent implements OnInit {
         if (this.loginForm.valid) {
             this.userService
                 .login(this.loginForm.value)
-                .pipe(switchMap(() => this.userService.get_current_user()))
-                .subscribe((user: User) => {
-                    console.log(user);
+                .pipe(catchError(() => of(null)))
+                .subscribe((user: User | null) => {
+                    if (user !== null) {
+                        this.userService.currentUser = user;
+                        this.router.navigate(["/app"]);
+                    } else {
+                        Object.keys(this.loginForm.controls).forEach(
+                            (controlName) => {
+                                this.loginForm.controls[
+                                    controlName
+                                ].markAsTouched();
+                            }
+                        );
+                        // dialog about an incorrect login
+                    }
                 });
         }
     }

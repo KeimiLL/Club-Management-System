@@ -1,8 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { SettingsMenuItem } from "src/app/shared/models/settings.models";
 
+import { SettingsMenuItem } from "../../../../../../../shared/models/settings.models";
 import { settingsMenuItems } from "./settings-menu.data";
 
 @Component({

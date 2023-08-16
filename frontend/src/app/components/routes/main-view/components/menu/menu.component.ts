@@ -1,8 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { MaterialModule } from "src/app/shared/modules/material.module";
 
+import { MaterialModule } from "../../../../../shared/modules/material.module";
 import { MenuHeaderComponent } from "./components/menu-header/menu-header.component";
 import { MenuItemComponent } from "./components/menu-item/menu-item.component";
 import { menuItems } from "./menu.data";

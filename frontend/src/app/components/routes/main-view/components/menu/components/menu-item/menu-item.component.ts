@@ -1,8 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { MaterialModule } from "src/app/shared/modules/material.module";
 
+import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { MenuItem } from "../../menu.component";
 
 @Component({
