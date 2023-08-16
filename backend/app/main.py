@@ -14,7 +14,7 @@ from app.core.exceptions import (
     JWTTokensException,
     MissingException,
 )
-from app.schemas.enums import ExceptionMessages
+from app.schemas.enums import HTTPResponseMessage
 
 
 def include_exception_handlers(application: FastAPI) -> None:
@@ -67,7 +67,7 @@ def include_exception_handlers(application: FastAPI) -> None:
         """
         return JSONResponse(
             status_code=409,
-            content={"message": ExceptionMessages.CONFLICT},
+            content={"message": HTTPResponseMessage.CONFLICT},
         )
 
     @application.exception_handler(InvalidCredentialsException)

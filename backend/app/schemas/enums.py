@@ -13,8 +13,8 @@ class Roles(str, Enum):
     VIEWER = "viewer"
 
 
-class ExceptionMessages(str, Enum):
-    """Enum for HTTPException detail messages."""
+class HTTPResponseMessage(str, Enum):
+    """Enum for HTTP responses messages."""
 
     SUCCESS = "Operation completed successfully."
 
