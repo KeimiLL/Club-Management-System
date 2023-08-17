@@ -15,7 +15,7 @@
             width: 5vw;
         }
         &__text {
-            margin-top: 0.5rem;
+            margin-top: $medium-spacing;
             height: 1rem;
             color: $black;
             text-align: center;
@@ -23,7 +23,7 @@
     }
 
     .button-container {
-        margin-top: 1rem;
+        margin-top: $medium-spacing;
         display: flex;
         width: 100%;
         justify-content: flex-end;

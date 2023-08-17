@@ -18,7 +18,7 @@
     &__list {
         list-style: none;
         padding: $medium-spacing 0;
-        margin-top: 1rem;
+        margin-top: $medium-spacing;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
