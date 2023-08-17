@@ -10,13 +10,19 @@ $extra-large-spacing: 32px;
 $container-padding: $medium-spacing;
 $section-padding: $large-spacing;
 
-// colors
+// app colors
 $purple-dark: #6351c2;
 $purple-mid-dark: #a296f1;
 $purple-mid-light: #c2baf6;
 $purple-light: #d8d5f7;
 $light-grey: #f2f4f8;
-$red: #e04242;
+
+// text colors
+$red: #e63b2e; // error text
+$green: #32cd32; // correct text
+$blue: #0055ff; // important links
+$accent-color: #ff9900;
+$tooltip-color: #00bfff;
 
 // font-weights
 $bold-weight: 800;
