@@ -7,7 +7,7 @@
 
     .mat-mdc-card-header.auth__header {
         background-color: $purple-mid-dark;
-        padding: 25px;
+        padding: $large-spacing;
         border-radius: 10px;
     }
 
@@ -18,7 +18,7 @@
     &__form {
         max-width: 400px;
         margin: 0 auto;
-        padding: 20px;
+        padding: $medium-spacing;
 
         &__field {
             width: 100%;
@@ -49,10 +49,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding-top: 1.5rem;
+        padding-top: $large-spacing;
 
         &-text {
-            padding-right: 1rem;
+            padding-right: $medium-spacing;
         }
 
         &-link {

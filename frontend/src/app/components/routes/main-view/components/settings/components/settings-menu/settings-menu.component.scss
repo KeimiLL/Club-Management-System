@@ -22,7 +22,7 @@
 
     &__list {
         list-style: none;
-        padding: 1rem;
+        padding: $medium-spacing;
         display: flex;
         flex-direction: column;
     }
