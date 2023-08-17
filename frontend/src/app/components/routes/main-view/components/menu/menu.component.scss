@@ -12,8 +12,8 @@
     top: 0;
     width: 12vw;
     height: 100vh;
-    box-shadow: 0.1rem 0 1.25rem 0 #8690a3;
-    border-right: 2px solid white;
+    box-shadow: 0.1rem 0 1.25rem 0 $dark-grey;
+    border-right: 2px solid $white;
 
     &__list {
         list-style: none;

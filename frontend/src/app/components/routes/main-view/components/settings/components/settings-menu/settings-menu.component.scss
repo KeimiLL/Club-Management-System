@@ -1,7 +1,7 @@
 @use "src/styles/_variables" as *;
 
 .sidenav {
-    background-color: white;
+    background-color: $white;
     transition: all 0.5s ease;
     position: sticky;
     z-index: 0;
@@ -33,7 +33,7 @@
         justify-content: space-between;
         width: 100%;
         margin-top: 1rem;
-        color: black;
+        color: $black;
         text-decoration: none;
         transition: color 0.3s ease;
         &-text {
