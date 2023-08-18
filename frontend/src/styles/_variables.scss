@@ -27,6 +27,12 @@ $blue: #0055ff; // important links
 $accent-color: #ff9900;
 $tooltip-color: #00bfff;
 
+// button colors
+$dark-btn-back: #5d217e;
+$dark-btn-text: #fdfaff;
+$light-btn-back: #b4befe;
+$light-btn-text: #020b1b;
+
 // font-weights
 $bold-weight: 800;
 $normal-weight: 400;
@@ -51,15 +57,15 @@ $very-large-font: 28px;
         width: 100%;
         margin-top: 10px;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-        background-color: $purple-dark;
-        color: $light-grey;
+        background-color: $dark-btn-back;
+        color: $dark-btn-text;
     }
 
     &--light {
         width: 100%;
         margin-top: 10px;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-        background-color: $purple-light;
-        color: $purple-dark;
+        background-color: $light-btn-back;
+        color: $light-btn-text;
     }
 }

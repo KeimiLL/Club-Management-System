@@ -5,9 +5,15 @@
         [subName]="'team1'"
     >
         <app-button-container>
-            <button>button1</button>
-            <button>button2</button>
-            <button (click)="changeState()">button3</button>
+            <button mat-raised-button class="button--light">button1</button>
+            <button mat-raised-button class="button--light">button2</button>
+            <button
+                mat-raised-button
+                class="button--light"
+                (click)="changeState()"
+            >
+                button3
+            </button>
         </app-button-container>
 
         <div class="xd">Example of component1</div>
@@ -32,7 +38,7 @@
         (closedClicked)="changeState()"
     >
         <app-button-container>
-            <button>button1</button>
+            <button mat-raised-button class="button--light">button1</button>
         </app-button-container>
 
         <div class="xd">Example of component1</div>
