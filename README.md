@@ -56,16 +56,22 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
    \dt
    ```
 
-1. For queries to work correctly, remember to put double quotes around the table names, for example:
+1. For queries to work correctly, remember to put double quotes around the table names, for example selecting every record from the table:
 
    ```sql
    SELECT * FROM "user";
    ```
 
-   Or:
+   Or deleting everything from the table:
 
    ```sql
    DELETE FROM "user";
+   ```
+
+   Or clearing the table and resetting the counter:
+
+   ```sql
+   TRUNCATE TABLE "user" RESTART IDENTITY;
    ```
 
 ### Tests
