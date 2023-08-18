@@ -44,16 +44,10 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
 
 ### Working with the database
 
-1. Run `psql` inside the database container to be able to work with the database:
+1. Run `psql` inside the database container to be able to work with the database and connect to it:
 
    ```bash
-   docker compose exec -it db psql -U postgres
-   ```
-
-1. Connect to the databse:
-
-   ```
-   \c dms_dev
+   docker compose exec -it db psql -U postgres cms_dev
    ```
 
 1. List all tables:
