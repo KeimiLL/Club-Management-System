@@ -2,16 +2,12 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
 
+import { MainMenuItem } from "../../../../../shared/models/misc.model";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
+import { filterMenuItemsByPermissions } from "../../../../../shared/utils/permissionFilter";
 import { MenuHeaderComponent } from "./components/menu-header/menu-header.component";
 import { MenuItemComponent } from "./components/menu-item/menu-item.component";
 import { menuItems } from "./menu.data";
-
-export interface MenuItem {
-    icon: string;
-    name: string;
-    route: string;
-}
 
 @Component({
     selector: "app-menu",
@@ -28,10 +24,10 @@ export interface MenuItem {
 })
 export class MenuComponent implements OnInit {
     public isCollapsed = true;
-    public menuItems: MenuItem[] = [];
+    public menuItems: MainMenuItem[];
 
     ngOnInit(): void {
-        this.menuItems = menuItems; // filterinng permissions here
+        this.menuItems = filterMenuItemsByPermissions(menuItems); // filterinng permissions here
     }
 
     public toggleCollapse(): void {

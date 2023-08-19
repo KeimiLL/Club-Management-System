@@ -1,7 +1,8 @@
-import { SettingsMenuItem } from "../../../../../../../shared/models/settings.models";
+import { MenuItem } from "../../../../../../../shared/models/misc.model";
+import { SettingsPermission } from "../../../../../../../shared/models/permission.model";
 
-export const settingsMenuItems: SettingsMenuItem[] = [
-    { name: "General", route: "/app/settings/general" },
-    { name: "Modify users", route: "/app/settings/modify" },
-    { name: "Help", route: "/app/settings/help" },
+export const settingsMenuItems: MenuItem[] = [
+    { name: SettingsPermission.General, route: "/app/settings/general" },
+    { name: SettingsPermission.Modifyusers, route: "/app/settings/modify" },
+    { name: SettingsPermission.Help, route: "/app/settings/help" },
 ];
