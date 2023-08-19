@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
+import { UserService } from "src/app/shared/services/user.service";
 
 import { MenuItem } from "../../../../../../..//shared/models/misc.model";
 import { MenuItemPipe } from "../../../../../../..//shared/pipes/menu-item.pipe";
@@ -17,7 +18,13 @@ import { settingsMenuItems } from "./settings-menu.data";
 export class SettingsMenuComponent implements OnInit {
     menuItems: MenuItem[] = [];
 
+    constructor(private readonly userService: UserService) {}
+
     ngOnInit(): void {
-        this.menuItems = filterMenuItemsByPermissions(settingsMenuItems, false); // method to filter items will be here
+        this.menuItems = filterMenuItemsByPermissions(
+            settingsMenuItems,
+            this.userService.currentUser.role,
+            false
+        );
     }
 }

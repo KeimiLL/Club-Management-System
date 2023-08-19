@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
+import { UserService } from "src/app/shared/services/user.service";
 
 import { MainMenuItem } from "../../../../../shared/models/misc.model";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
@@ -26,8 +27,13 @@ export class MenuComponent implements OnInit {
     public isCollapsed = true;
     public menuItems: MainMenuItem[];
 
+    constructor(private readonly userService: UserService) {}
+
     ngOnInit(): void {
-        this.menuItems = filterMenuItemsByPermissions(menuItems); // filterinng permissions here
+        this.menuItems = filterMenuItemsByPermissions(
+            menuItems,
+            this.userService.currentUser.role
+        );
     }
 
     public toggleCollapse(): void {
