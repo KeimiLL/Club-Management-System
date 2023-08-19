@@ -1,0 +1,52 @@
+@import "../../../../styles/variables";
+@import "../../../../styles/component-styles/components";
+
+.error {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    background-color: $light-grey;
+    justify-content: space-between;
+
+    .card-container {
+        height: 100%;
+        width: 50vw;
+        display: flex;
+        align-items: center;
+
+        &__card {
+            height: 50%;
+            width: 80%;
+            margin: 0 auto;
+
+            &-text {
+                display: flex;
+                align-items: center;
+                height: 60%;
+                padding: $large-spacing;
+                line-height: 32px;
+                text-align: justify;
+                justify-content: center;
+                font-size: $very-large-font;
+                font-weight: $bold-weight;
+            }
+        }
+
+        .button-container {
+            width: 60%;
+            margin: $large-spacing auto;
+
+            &__button {
+                font-size: $large-font;
+                font-weight: $normal-weight;
+            }
+        }
+    }
+
+    &__image {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+    }
+}
