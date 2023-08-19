@@ -1,5 +1,5 @@
-import { MenuItem } from "src/app/shared/models/misc.model";
-import { SettingsPermission } from "src/app/shared/models/permission.model";
+import { MenuItem } from "../../../../../../../shared/models/misc.model";
+import { SettingsPermission } from "../../../../../../../shared/models/permission.model";
 
 export const settingsMenuItems: MenuItem[] = [
     { name: SettingsPermission.General, route: "/app/settings/general" },

@@ -1,11 +1,10 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { MainMenuItem } from "src/app/shared/models/misc.model";
-import { MaterialModule } from "src/app/shared/modules/material.module";
-import { filterMenuItemsByPermissions } from "src/app/shared/utils/permissionFilter";
 
+import { MainMenuItem } from "../../../../../shared/models/misc.model";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
+import { filterMenuItemsByPermissions } from "../../../../../shared/utils/permissionFilter";
 import { MenuHeaderComponent } from "./components/menu-header/menu-header.component";
 import { MenuItemComponent } from "./components/menu-item/menu-item.component";
 import { menuItems } from "./menu.data";

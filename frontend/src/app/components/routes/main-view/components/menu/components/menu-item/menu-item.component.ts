@@ -1,9 +1,10 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { MainMenuItem } from "src/app/shared/models/misc.model";
-import { MaterialModule } from "src/app/shared/modules/material.module";
-import { MenuItemPipe } from "src/app/shared/pipes/menu-item.pipe";
+
+import { MainMenuItem } from "../../../../../../../shared/models/misc.model";
+import { MaterialModule } from "../../../../../../../shared/modules/material.module";
+import { MenuItemPipe } from "../../../../../../../shared/pipes/menu-item.pipe";
 
 @Component({
     selector: "app-menu-item",

@@ -1,5 +1,5 @@
-import { MainMenuItem } from "src/app/shared/models/misc.model";
-import { ModulesPermissions } from "src/app/shared/models/permission.model";
+import { ModulesPermissions } from "../../../../..//shared/models/permission.model";
+import { MainMenuItem } from "../../../../../shared/models/misc.model";
 
 export const menuItems: MainMenuItem[] = [
     {
