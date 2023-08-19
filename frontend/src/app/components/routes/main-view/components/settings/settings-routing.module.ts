@@ -39,7 +39,7 @@ const routes: Routes = [
         component: ModifyComponent,
         data: {
             modulesPermission: ModulesPermissions.Settings,
-            requiredPermissions: SettingsPermission.Modifyusers,
+            requiredPermission: SettingsPermission.Modifyusers,
         },
         canActivate: [PermissionGuard],
     },

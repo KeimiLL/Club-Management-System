@@ -10,20 +10,21 @@ import {
     RequiredPermissions,
     RoleDefinitions,
 } from "../models/permission.model";
-import { Roles } from "../models/user.model";
+import { UserService } from "../services/user.service";
 
 @Injectable({ providedIn: "root" })
 export class PermissionGuard {
-    constructor(private readonly router: Router) {}
+    constructor(
+        private readonly router: Router,
+        private readonly userService: UserService
+    ) {}
 
     canActivate(
         next: ActivatedRoute,
         state: RouterStateSnapshot
     ): boolean | UrlTree {
-        // const userRole = this.userService.currentUser.role
-        // const requiredPermissions = next.data;
+        const userRole = this.userService.currentUser.role;
         const requiredPermissions = next.data as unknown as RequiredPermissions;
-        const userRole = Roles.Coach; // for now to test
         const roleDefinitions = RoleDefinitions[userRole];
 
         if (
@@ -31,15 +32,16 @@ export class PermissionGuard {
                 requiredPermissions.modulesPermission
             )
         ) {
-            return this.router.parseUrl("/auth"); // then 404 page
+            return this.router.parseUrl("/app"); // then 404 page
         }
-        if (
-            requiredPermissions.requiredPermission !== null &&
-            !roleDefinitions.permissions.includes(
-                requiredPermissions.requiredPermission
-            )
-        ) {
-            return this.router.parseUrl("/auth"); // then 404 page
+        if (requiredPermissions.requiredPermission !== null) {
+            if (
+                !roleDefinitions.permissions.includes(
+                    requiredPermissions.requiredPermission
+                )
+            ) {
+                return this.router.parseUrl("/app"); // then 404 page
+            }
         }
 
         return true;
