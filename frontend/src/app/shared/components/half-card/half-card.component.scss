@@ -1,4 +1,4 @@
-@import "../../../../styles/variables";
+@import "../../../../styles/component-styles/components";
 
 :host {
     margin: 0;
@@ -7,41 +7,9 @@
     height: 95%; /* Set the height of the wide-card to 100% to fill its parent container */
 
     .card {
-        display: flex;
-        width: 100%;
-        height: 100%;
-        border-radius: 10px !important;
-        background-color: $purple-light;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-
-        &__header {
-            background-color: $purple-mid-dark;
-            border-radius: 10px !important;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 10%;
-            padding: 0.5rem;
-        }
-
         &__buttons {
             display: flex;
             flex-direction: row;
-        }
-
-        &__title {
-            font-size: 2rem !important;
-            flex: 1;
-        }
-
-        &__subtitle {
-            font-size: 1.5rem !important;
-            font-weight: 400;
-        }
-
-        &__content {
-            height: 100%;
-            width: 100%;
         }
     }
 }

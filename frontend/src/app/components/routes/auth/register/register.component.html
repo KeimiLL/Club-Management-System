@@ -1,13 +1,9 @@
-<mat-card class="register">
-    <mat-card-header class="register__header">
-        <mat-card-title class="register__title">Register</mat-card-title>
+<mat-card class="auth">
+    <mat-card-header class="auth__header">
+        <mat-card-title class="auth__title">Register</mat-card-title>
     </mat-card-header>
-    <form
-        [formGroup]="registerForm"
-        (ngSubmit)="onSubmit()"
-        class="register__form"
-    >
-        <mat-form-field class="register__form__field">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth__form">
+        <mat-form-field class="auth__form__field">
             <mat-label class="field-label">First Name:</mat-label>
             <input
                 class="field-input"
@@ -20,7 +16,7 @@
             <mat-error class="field-error"> First Name is required. </mat-error>
         </mat-form-field>
 
-        <mat-form-field class="register__form__field">
+        <mat-form-field class="auth__form__field">
             <mat-label class="field-label">Last Name:</mat-label>
             <input
                 class="field-input"
@@ -33,7 +29,7 @@
             <mat-error> Last Name is required. </mat-error>
         </mat-form-field>
 
-        <mat-form-field class="register__form__field">
+        <mat-form-field class="auth__form__field">
             <mat-label class="field-label">Email:</mat-label>
             <input
                 class="field-input"
@@ -48,7 +44,7 @@
             </mat-error>
         </mat-form-field>
 
-        <mat-form-field class="register__form__field">
+        <mat-form-field class="auth__form__field">
             <mat-label class="field-label">Password:</mat-label>
             <input
                 class="field-input"
@@ -63,7 +59,7 @@
             </mat-error>
         </mat-form-field>
 
-        <mat-form-field class="register__form__field">
+        <mat-form-field class="auth__form__field">
             <mat-label class="field-label">Confirm Password:</mat-label>
             <input
                 class="field-input"
@@ -78,14 +74,14 @@
             </mat-error>
         </mat-form-field>
 
-        <button class="submit-btn" mat-raised-button type="submit">
+        <button class="button--dark" mat-raised-button type="submit">
             Register
         </button>
-        <div class="register__login">
-            <div class="register__login-text">
+        <div class="auth__bottom">
+            <div class="auth__bottom-text">
                 <span>Already have an account?</span>
             </div>
-            <div class="register__login-link">
+            <div class="auth__bottom-link">
                 <a routerLink="/auth/login"> Log in </a>
             </div>
         </div>

@@ -1,9 +1,9 @@
-<mat-card class="login" *appPermission="permissions.Cluster">
-    <mat-card-header class="login__header">
-        <mat-card-title class="login__title">Login</mat-card-title>
+<mat-card class="auth" *appPermission="permissions.Cluster">
+    <mat-card-header class="auth__header">
+        <mat-card-title class="auth__title">Login</mat-card-title>
     </mat-card-header>
-    <form class="login__form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <mat-form-field class="login__form__field">
+    <form class="auth__form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="auth__form__field">
             <mat-label class="field-label">Email:</mat-label>
             <input
                 class="field-input"
@@ -16,7 +16,7 @@
             <mat-error class="field-error"> Incorrect email. </mat-error>
         </mat-form-field>
 
-        <mat-form-field class="login__form__field">
+        <mat-form-field class="auth__form__field">
             <mat-label class="field-label">Password:</mat-label>
             <input
                 class="field-input"
@@ -29,14 +29,14 @@
             <mat-error> Incorrect password. </mat-error>
         </mat-form-field>
 
-        <button class="submit-btn" mat-raised-button type="submit">
+        <button class="button--dark" mat-raised-button type="submit">
             Login
         </button>
-        <div class="login__register">
-            <div class="login__register-text">
+        <div class="auth__bottom">
+            <div class="auth__bottom-text">
                 <span>Don't have an account?</span>
             </div>
-            <div class="login__register-link">
+            <div class="auth__bottom-link">
                 <a routerLink="/auth/register"> Register </a>
             </div>
         </div>
