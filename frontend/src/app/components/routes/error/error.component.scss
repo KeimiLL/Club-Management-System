@@ -10,7 +10,7 @@
 
     .card-container {
         height: 100%;
-        width: 50vw;
+        width: 40%;
         display: flex;
         align-items: center;
 
@@ -30,22 +30,21 @@
                 font-size: $very-large-font;
                 font-weight: $bold-weight;
             }
-        }
 
-        .button-container {
-            width: 60%;
-            margin: $large-spacing auto;
+            .button-container {
+                width: 60%;
+                margin: $large-spacing auto;
 
-            &__button {
-                font-size: $large-font;
-                font-weight: $normal-weight;
+                &__button {
+                    font-size: $large-font;
+                    font-weight: $normal-weight;
+                }
             }
         }
     }
 
     &__image {
-        max-width: 100%;
-        max-height: 100%;
+        max-width: 60%;
         width: auto;
         height: auto;
     }
