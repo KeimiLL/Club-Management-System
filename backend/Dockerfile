@@ -10,7 +10,7 @@ RUN apt-get update \
 RUN pip install --upgrade pip
 RUN pip install pipenv
 COPY Pipfile Pipfile.lock /usr/src/app/
-RUN pipenv install --dev
+RUN pipenv sync --dev
 
 COPY . .
 

@@ -21,7 +21,7 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
    ```bash
    cd backend
    pipenv shell
-   pipenv install
+   pipenv sync --dev
    ```
 
 1. To enter the docker container, use `docker compose exec`:
@@ -40,6 +40,12 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
 
    ```bash
    docker compose exec -it backend pipenv run alembic revision --autogenerate -m "<message>"
+   ```
+
+1. To allow your IDE to detect frontend packages install frontend dependencies inside the `frontend/` directory using:
+
+   ```bash
+   yarn install --frozen-lockfile
    ```
 
 ### Working with the database
