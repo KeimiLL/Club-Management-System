@@ -3,10 +3,9 @@
 
 from typing import Iterator
 
+from app.core.config import get_settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
-
-from app.core.config import get_settings
 
 SQL_ALCHEMY_DATABASE_URL = get_settings().db_uri
 engine = create_engine(SQL_ALCHEMY_DATABASE_URL)
@@ -20,7 +19,6 @@ def get_db() -> Iterator[Session]:
     try:
         db = SessionLocal()
         yield db
-    except Exception as e:
-        print(e)
-        raise
+    except Exception as exc:
+        raise exc
     db.close()
