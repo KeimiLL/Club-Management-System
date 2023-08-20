@@ -7,6 +7,7 @@ from app.api.exception_handlers import (
     invalid_credentials_exception_handler,
     jwt_tokens_exception_handler,
     missing_exception_handler,
+    request_validation_exception_handler,
     sqlalchemyerror_handler,
 )
 from app.core.config import get_settings
@@ -17,6 +18,7 @@ from app.core.exceptions import (
     MissingException,
 )
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -34,6 +36,9 @@ def include_exception_handlers(application: FastAPI) -> None:
     application.add_exception_handler(JWTTokensException, jwt_tokens_exception_handler)
     application.add_exception_handler(
         InvalidCredentialsException, invalid_credentials_exception_handler
+    )
+    application.add_exception_handler(
+        RequestValidationError, request_validation_exception_handler
     )
 
 
