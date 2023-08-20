@@ -1,12 +1,14 @@
 """Main file for the application."""
 
 import uvicorn
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from sqlalchemy.exc import SQLAlchemyError
-
 from app.api.base import api_router
+from app.api.exception_handlers import (
+    duplicate_exception_handler,
+    invalid_credentials_exception_handler,
+    jwt_tokens_exception_handler,
+    missing_exception_handler,
+    sqlalchemyerror_handler,
+)
 from app.core.config import get_settings
 from app.core.exceptions import (
     DuplicateException,
@@ -14,7 +16,9 @@ from app.core.exceptions import (
     JWTTokensException,
     MissingException,
 )
-from app.schemas.enums import HTTPResponseMessage
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.exc import SQLAlchemyError
 
 
 def include_exception_handlers(application: FastAPI) -> None:
@@ -24,84 +28,13 @@ def include_exception_handlers(application: FastAPI) -> None:
         application (FastAPI): FastAPI application.
     """
 
-    @application.exception_handler(MissingException)
-    async def missing_exception_handler(
-        _: Request, exc: MissingException
-    ) -> JSONResponse:
-        """App-wide MissingException handler.
-
-        Args:
-            exc (MissingException): The raised MissingException.
-
-        Returns:
-            JSONResponse: The response with an appropriate status code and message.
-        """
-        return JSONResponse(
-            status_code=404,
-            content={"message": f"{exc.item_name} does not exist."},
-        )
-
-    @application.exception_handler(DuplicateException)
-    async def duplicate_exception_handler(
-        _: Request, exc: DuplicateException
-    ) -> JSONResponse:
-        """App-wide DuplicateException handler.
-
-        Args:
-            exc (DuplicateException): The raised DuplicateException.
-
-        Returns:
-            JSONResponse: The response with an appropriate status code and message.
-        """
-        return JSONResponse(
-            status_code=400,
-            content={"message": f"{exc.item_name} already exists."},
-        )
-
-    @application.exception_handler(SQLAlchemyError)
-    async def sqlalchemyerror_handler(*_) -> JSONResponse:
-        """App-wide SQLAlchemyError handler.
-
-        Returns:
-            JSONResponse: The response with an appropriate status code and message.
-        """
-        return JSONResponse(
-            status_code=409,
-            content={"message": HTTPResponseMessage.CONFLICT},
-        )
-
-    @application.exception_handler(InvalidCredentialsException)
-    async def invalid_credentials_exception_handler(
-        _: Request, exc: InvalidCredentialsException
-    ) -> JSONResponse:
-        """App-wide InvalidCredentialsException handler.
-
-        Args:
-            exc (InvalidCredentialsException): The raised InvalidCredentialsException.
-
-        Returns:
-            JSONResponse: The response with an appropriate status code and message.
-        """
-        return JSONResponse(
-            status_code=400,
-            content={
-                "message": f"Incorrect {'' if exc.only_password else 'email or '}password."
-            },
-        )
-
-    @application.exception_handler(JWTTokensException)
-    async def jwt_tokens_exception_handler(_: Request, exc: JWTTokensException):
-        """App-wide JWTTokensException handler.
-
-        Returns:
-            JSONResponse: The response with an appropriate status code and message.
-        """
-        response = JSONResponse(status_code=401, content={"message": exc.message})
-        response.delete_cookie("access_token")
-        response.delete_cookie("refresh_token")
-        response.delete_cookie("xsrf_access_token")
-        response.delete_cookie("xsrf_refresh_token")
-        return response
+    application.add_exception_handler(MissingException, missing_exception_handler)
+    application.add_exception_handler(DuplicateException, duplicate_exception_handler)
+    application.add_exception_handler(SQLAlchemyError, sqlalchemyerror_handler)
+    application.add_exception_handler(JWTTokensException, jwt_tokens_exception_handler)
+    application.add_exception_handler(
+        InvalidCredentialsException, invalid_credentials_exception_handler
+    )
 
 
 def start_application() -> FastAPI:
