@@ -1,5 +1,7 @@
 """Main file for the application."""
 
+import logging
+
 import uvicorn
 from app.api.base import api_router
 from app.api.exception_handlers import (
@@ -10,6 +12,7 @@ from app.api.exception_handlers import (
     request_validation_exception_handler,
     sqlalchemyerror_handler,
 )
+from app.api.middlewares import LogRequestMiddleware
 from app.core.config import get_settings
 from app.core.exceptions import (
     DuplicateException,
@@ -42,6 +45,19 @@ def include_exception_handlers(application: FastAPI) -> None:
     )
 
 
+def include_middleware(application: FastAPI) -> None:
+    """Includes the app-wide middleware.
+
+    Args:
+        application (FastAPI): FastAPI application.
+    """
+    uvicorn_access = logging.getLogger("uvicorn.access")
+    uvicorn_access.disabled = True
+    logger = logging.getLogger("uvicorn")
+    logger.setLevel(logging.getLevelName(logging.DEBUG))
+    application.add_middleware(LogRequestMiddleware, logger=logger)
+
+
 def start_application() -> FastAPI:
     """Creates the application instance.
 
@@ -61,6 +77,7 @@ def start_application() -> FastAPI:
     )
     application.include_router(api_router)
     include_exception_handlers(application)
+    include_middleware(application)
 
     return application
 
