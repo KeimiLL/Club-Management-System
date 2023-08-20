@@ -6,18 +6,17 @@ import sys
 from typing import Iterator
 
 import pytest
+from app.api.base import api_router
+from app.core.config import get_settings
+from app.db.base import Base
+from app.db.session import get_db
+from app.main import include_exception_handlers, include_middleware
+from app.schemas.enums import Roles
 from fastapi import FastAPI
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session, sessionmaker
 from starlette_testclient import TestClient
-
-from app.api.base import api_router
-from app.core.config import get_settings
-from app.db.base import Base
-from app.db.session import get_db
-from app.main import include_exception_handlers
-from app.schemas.enums import Roles
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -31,6 +30,7 @@ def start_application() -> FastAPI:
     application = FastAPI()
     application.include_router(api_router)
     include_exception_handlers(application)
+    include_middleware(application)
     return application
 
 

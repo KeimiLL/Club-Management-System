@@ -71,6 +71,11 @@ def test_duplicate__register(
             "email": get_settings().TEST_USER_FULL_NAME,
             "password": get_settings().TEST_USER_PASSWORD,
         },
+        {
+            "full_name": get_settings().TEST_USER_FULL_NAME,
+            "email": get_settings().TEST_USER_EMAIL,
+            "password": "\x0012345678",
+        },
     ],
 )
 def test_incorrect_data__register(client: TestClient, user_data: dict) -> None:
