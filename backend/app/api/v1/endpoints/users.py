@@ -38,7 +38,7 @@ def register(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
         dict[str, HTTPResponseMessage]: The response signalling a correct register.
     """
     create_new_user(user=user, db=db)
-    return {"message": HTTPResponseMessage.SUCCESS}
+    return Message(message=HTTPResponseMessage.SUCCESS)
 
 
 @router.post(
@@ -114,7 +114,7 @@ def logout(
     response.delete_cookie("refresh_token")
     response.delete_cookie("xsrf_access_token")
     response.delete_cookie("xsrf_refresh_token")
-    return {"message": HTTPResponseMessage.SUCCESS}
+    return Message(message=HTTPResponseMessage.SUCCESS)
 
 
 @router.get(
