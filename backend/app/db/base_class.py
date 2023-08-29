@@ -3,19 +3,12 @@
 
 from typing import Any
 
-from sqlalchemy.orm import as_declarative, declared_attr
+from sqlalchemy.orm import as_declarative
 
 
 @as_declarative()
 class Base:
-    """Base class for models, used to generate table names automatically."""
+    """Base class for models."""
 
     id: Any
-    __name__: str
     metadata: Any
-
-    # Generate __tablename__ automatically
-    # pylint: disable=no-self-argument
-    @declared_attr.directive
-    def __tablename__(cls) -> str:
-        return cls.__name__.lower()
