@@ -32,7 +32,7 @@ export class PermissionGuard {
                 requiredPermissions.modulesPermission
             )
         ) {
-            return this.router.parseUrl("/app"); // then 404 page
+            return this.router.parseUrl("/error");
         }
         if (requiredPermissions.requiredPermission !== null) {
             if (
@@ -40,7 +40,7 @@ export class PermissionGuard {
                     requiredPermissions.requiredPermission
                 )
             ) {
-                return this.router.parseUrl("/app"); // then 404 page
+                return this.router.parseUrl("/error");
             }
         }
 
