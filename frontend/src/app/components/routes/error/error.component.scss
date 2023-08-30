@@ -10,12 +10,12 @@
 
     .card-container {
         height: 100%;
-        width: 40%;
+        width: 45%;
         display: flex;
         align-items: center;
 
         &__card {
-            height: 50%;
+            height: 30%;
             width: 80%;
             margin: 0 auto;
 
@@ -32,7 +32,7 @@
             }
 
             .button-container {
-                width: 60%;
+                width: 55%;
                 margin: $large-spacing auto;
 
                 &__button {
@@ -44,8 +44,9 @@
     }
 
     &__image {
-        max-width: 60%;
+        max-width: 55%;
         width: auto;
         height: auto;
+        border-left: $light-grey 1px solid;
     }
 }
