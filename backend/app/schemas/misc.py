@@ -1,9 +1,8 @@
 """File for miscellaneous schemas."""
 
 
-from pydantic import BaseModel
-
 from app.schemas.enums import HTTPResponseMessage
+from pydantic import BaseModel
 
 
 class Message(BaseModel):

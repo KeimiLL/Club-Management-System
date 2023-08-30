@@ -3,10 +3,9 @@
 
 from datetime import datetime, timedelta
 
-from jose import ExpiredSignatureError, JWTError, jwt
-
 from app.core.config import get_settings
 from app.core.exceptions import JWTTokensException
+from jose import ExpiredSignatureError, JWTError, jwt
 
 
 def create_token(data: dict, expires_delta: timedelta | None = None) -> str:
