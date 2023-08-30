@@ -5,14 +5,12 @@ import {
     SettingsPermission,
 } from "../models/permission.model";
 import { Roles } from "../models/user.model";
-// import { UserService } from "../services/user.service";
 
 export function filterMenuItemsByPermissions<T extends MenuItem>(
     menuItems: T[],
+    userRole: Roles,
     isModulesFilter = true
 ): T[] {
-    // const userRole = this.userService.currentUser.role
-    const userRole = Roles.Admin; // for now to test
     const roleDefinitions = RoleDefinitions[userRole];
 
     if (isModulesFilter) {

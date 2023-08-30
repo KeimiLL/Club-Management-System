@@ -10,17 +10,24 @@ import { SnackbarComponent } from "../components/snackbar/snackbar.component";
 export class SnackbarService {
     constructor(private readonly snackBar: MatSnackBar) {}
 
-    public showNormalSnackBar(message: string, time = 3000): void {
+    public showSnackBar(
+        message: string,
+        variant: "normal" | "error" | "warn" = "normal",
+        time = 3000
+    ): void {
         this.snackBar.openFromComponent(SnackbarComponent, {
             data: {
-                message: message,
-                variant: "normal",
+                message,
+                variant,
             },
             duration: time,
         });
     }
 
-    public showErrorSnackBar(response: HttpErrorResponse, time = 3000): void {
+    public showHttpErrorSnackBar(
+        response: HttpErrorResponse,
+        time = 3000
+    ): void {
         this.snackBar.openFromComponent(SnackbarComponent, {
             data: {
                 message: `Error: ${response.status}, ${response.statusText}`,

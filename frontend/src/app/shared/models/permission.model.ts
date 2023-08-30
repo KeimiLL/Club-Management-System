@@ -1,5 +1,10 @@
 import { Roles } from "./user.model";
 
+export interface RequiredPermissions {
+    modulesPermission: ModulesPermissions;
+    requiredPermission: SubPermissions | null;
+}
+
 export interface RolePermission {
     modules: ModulesPermissions[];
     permissions: SubPermissions[];
