@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
 import { AuthComponent } from "./components/routes/auth/auth.component";
+import { ErrorComponent } from "./components/routes/error/error.component";
 import { MainViewComponent } from "./components/routes/main-view/main-view.component";
 
 const routes: Routes = [
@@ -21,7 +22,8 @@ const routes: Routes = [
                 (m) => m.AuthRoutingModule
             ),
     },
-    { path: "**", redirectTo: "auth", pathMatch: "full" },
+    { path: "error", component: ErrorComponent },
+    { path: "**", redirectTo: "error", pathMatch: "full" },
 ];
 
 @NgModule({
