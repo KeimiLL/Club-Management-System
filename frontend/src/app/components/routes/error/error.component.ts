@@ -1,7 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { MaterialModule } from "src/app/shared/modules/material.module";
+
+import { MaterialModule } from "./../../../shared/modules/material.module";
 
 @Component({
     selector: "app-error",
