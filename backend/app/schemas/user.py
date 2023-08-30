@@ -1,15 +1,13 @@
 """File for User schemas."""
 
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
-
 from app.schemas.enums import Roles
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 
 class UserBase(BaseModel):
     """Base User schema."""
 
-    full_name: str | None = Field(None, min_length=4)
     email: EmailStr | None = None
 
 
@@ -61,6 +59,7 @@ class User(UserBase):
 class UserUpdate(UserBase):
     """User schema for updating."""
 
+    full_name: str | None = Field(None, min_length=4)
     password: str | None = None
     role: Roles | None = None
 
@@ -71,6 +70,7 @@ class UserInDBBase(UserBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int | None = None
+    full_name: str | None = Field(None, min_length=4)
     role: Roles | None = None
 
 
