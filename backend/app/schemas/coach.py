@@ -2,9 +2,13 @@
 
 
 import datetime
+from typing import TYPE_CHECKING
 
 from app.schemas.user import User
 from pydantic import BaseModel, ConfigDict, Field
+
+if TYPE_CHECKING:
+    from app.schemas.team import Team
 
 
 class CoachBase(BaseModel):
@@ -41,3 +45,4 @@ class CoachInDBBase(CoachBase):
 
     user_id: int | None = None
     user: User
+    teams: list["Team"]
