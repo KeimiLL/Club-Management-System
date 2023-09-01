@@ -9,6 +9,7 @@ from sqlalchemy import Date, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
+    from app.models.team import Team
     from app.models.user import User
 
 
@@ -27,3 +28,4 @@ class Coach(Base):
     date_of_joining: Mapped[datetime.date] = mapped_column(Date, nullable=False)
     date_of_birth: Mapped[datetime.date] = mapped_column(Date, nullable=False)
     user: Mapped["User"] = relationship(back_populates="coach")
+    teams: Mapped[list["Team"]] = relationship(back_populates="coach")
