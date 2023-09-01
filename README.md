@@ -62,6 +62,11 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
    \dt
    ```
 
+1. Describe a table:
+   ```
+   \d+ <table name>
+   ```
+
    #### Queries examples
 
 1. Selecting every record from the table:
