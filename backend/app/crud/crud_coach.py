@@ -44,7 +44,7 @@ def create_new_coach(coach: CoachCreate, db: Session) -> Coach:
         raise exc
 
 
-def get_coach_by_id(user_id: int, db: Session) -> CoachInDBBase:
+def get_coach_by_user_id(user_id: int, db: Session) -> CoachInDBBase:
     """Gets the coach based on the given user id.
 
     Args:
