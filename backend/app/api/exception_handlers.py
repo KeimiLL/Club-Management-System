@@ -80,7 +80,6 @@ async def invalid_credentials_exception_handler(
     Returns:
         JSONResponse: The response with an appropriate status code and message.
     """
-    logging.getLogger("uvicorn").info(msg=exc, exc_info=True)
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={
@@ -107,7 +106,6 @@ async def jwt_tokens_exception_handler(
     response.delete_cookie("refresh_token")
     response.delete_cookie("xsrf_access_token")
     response.delete_cookie("xsrf_refresh_token")
-    logging.getLogger("uvicorn").info(msg=exc, exc_info=True)
     return response
 
 
