@@ -23,3 +23,16 @@ class HTTPResponseMessage(str, Enum):
     CONFLICT = "State conflict."
 
     INTERNAL_ERROR = "Internal server error."
+
+
+class Injuries(str, Enum):
+    """Enum for players injuries."""
+
+    ANKLE = "Ankle"
+    KNEE = "Knee"
+    HAMSTRING = "Hamstring"
+    HIP = "Hip"
+    SHOULDER = "Shoulder"
+    HAND = "Hand"
+    WRIST = "Wrist"
+    CONCUSSION = "Concussion"
