@@ -14,6 +14,9 @@ from fastapi import Request, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import SQLAlchemyError
+
+logger = logging.getLogger(__name__)
 
 
 async def missing_exception_handler(_: Request, exc: MissingException) -> JSONResponse:
@@ -25,6 +28,7 @@ async def missing_exception_handler(_: Request, exc: MissingException) -> JSONRe
     Returns:
         JSONResponse: The response with an appropriate status code and message.
     """
+    logging.getLogger("uvicorn").info(msg=exc, exc_info=True)
     return JSONResponse(
         status_code=status.HTTP_404_NOT_FOUND,
         content={"message": f"{exc.item_name} does not exist."},
@@ -42,18 +46,23 @@ async def duplicate_exception_handler(
     Returns:
         JSONResponse: The response with an appropriate status code and message.
     """
+    logging.getLogger("uvicorn").info(msg=exc, exc_info=True)
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={"message": f"{exc.item_name} already exists."},
     )
 
 
-async def sqlalchemyerror_handler(*_) -> JSONResponse:
+async def sqlalchemyerror_handler(_: Request, exc: SQLAlchemyError) -> JSONResponse:
     """App-wide SQLAlchemyError handler.
+
+    Args:
+        exc (SQLAlchemyError): The raised SQLAlchemyError.
 
     Returns:
         JSONResponse: The response with an appropriate status code and message.
     """
+    logging.getLogger("uvicorn").info(msg=exc, exc_info=True)
     return JSONResponse(
         status_code=status.HTTP_409_CONFLICT,
         content={"message": HTTPResponseMessage.CONFLICT},
@@ -71,6 +80,7 @@ async def invalid_credentials_exception_handler(
     Returns:
         JSONResponse: The response with an appropriate status code and message.
     """
+    logging.getLogger("uvicorn").info(msg=exc, exc_info=True)
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={
@@ -97,6 +107,7 @@ async def jwt_tokens_exception_handler(
     response.delete_cookie("refresh_token")
     response.delete_cookie("xsrf_access_token")
     response.delete_cookie("xsrf_refresh_token")
+    logging.getLogger("uvicorn").info(msg=exc, exc_info=True)
     return response
 
 
