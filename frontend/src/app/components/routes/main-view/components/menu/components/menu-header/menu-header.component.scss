@@ -1,4 +1,4 @@
-@use "src/styles/_variables" as *;
+@import "../../../../../../../../styles/variables";
 
 :host {
     display: flex;
@@ -6,19 +6,30 @@
     align-items: center;
 
     .logo-container {
-        width: 5rem;
-        height: 6.5rem;
+        width: 5vw;
+        height: 5vw;
         display: flex;
-        flex-direction: column;
+        // background: linear-gradient(0.25turn, #3f87a6, #ebf8e1);
+        align-items: center;
+        justify-content: center;
+
         &__logo {
-            height: 5vw;
-            width: 5vw;
+            font-size: 3vw;
+            width: 3vw;
+            height: 3vw;
+            fill: transparent;
         }
-        &__text {
-            margin-top: $medium-spacing;
-            height: 1rem;
+    }
+
+    .text {
+        margin-top: $small-spacing;
+        color: $black;
+        text-align: center;
+        &--bold {
+            margin-top: $small-spacing;
             color: $black;
             text-align: center;
+            font-weight: $bold-weight;
         }
     }
 
