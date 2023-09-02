@@ -5,6 +5,7 @@ import datetime
 from typing import TYPE_CHECKING
 
 from app.db.base_class import Base
+from app.models.injury import Injury
 from app.models.team import Team
 from sqlalchemy import Boolean, Date, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -35,3 +36,4 @@ class Player(Base):
     diet: Mapped[str] = mapped_column(String, nullable=True)
     user: Mapped["User"] = relationship(back_populates="player")
     team: Mapped["Team"] = relationship(back_populates="players")
+    injuries: Mapped[list["Injury"]] = relationship()
