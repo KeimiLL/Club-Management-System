@@ -7,6 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
     from app.schemas.coach import Coach
+    from app.schemas.player import Player
 
 
 class TeamBase(BaseModel):
@@ -27,6 +28,7 @@ class Team(TeamBase):
 
     name: str
     coach: "Coach"
+    players: list["Player"]
 
 
 class TeamUpdate(TeamBase):
@@ -40,3 +42,4 @@ class TeamInDBBase(TeamBase):
 
     user_id: int | None = None
     coach: "Coach"
+    players: list["Player"]
