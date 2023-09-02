@@ -4,7 +4,6 @@
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_user import get_user_by_id
 from app.models.coach import Coach
-from app.models.user import User
 from app.schemas.coach import CoachCreate, CoachInDBBase
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -19,7 +18,6 @@ def create_new_coach(coach: CoachCreate, db: Session) -> Coach:
 
     Raises:
         DuplicateException: If there is already a coach with the given user id.
-        MissingException: If a user with the given id does not exist.
         SQLAlchemyError: If there is a different exception.
 
     Returns:
@@ -38,8 +36,6 @@ def create_new_coach(coach: CoachCreate, db: Session) -> Coach:
         return new_coach
     except IntegrityError as exc:
         raise DuplicateException(Coach.__name__) from exc
-    except NoResultFound as exc:
-        raise MissingException(User.__name__) from exc
     except SQLAlchemyError as exc:
         raise exc
 
