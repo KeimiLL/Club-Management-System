@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
+    from app.schemas.injury import Injury
     from app.schemas.team import Team
     from app.schemas.user import User
 
@@ -47,6 +48,7 @@ class Player(PlayerBase):
     is_injured: bool
     user: "User"
     team: "Team"
+    injuries: list["Injury"]
 
 
 class PlayerUpdate(PlayerBase):
@@ -62,3 +64,4 @@ class PlayerInDBBase(PlayerBase):
     team_id: int | None = None
     user: "User"
     team: "Team"
+    injuries: list["Injury"]
