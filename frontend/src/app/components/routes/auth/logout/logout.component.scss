@@ -1,0 +1,19 @@
+@import "../../../../../styles/variables";
+
+.mat-mdc-raised-button.button {
+    &--dark {
+        width: 100%;
+        margin-top: 10px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        background-color: $dark-btn-back;
+        color: $dark-btn-text;
+    }
+
+    &--light {
+        width: 100%;
+        margin-top: 10px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        background-color: $light-btn-back;
+        color: $light-btn-text;
+    }
+}
