@@ -1,14 +1,12 @@
 """File for User model."""
 
 
-from typing import TYPE_CHECKING
-
 from app.db.base_class import Base
+from app.models.coach import Coach
+from app.models.player import Player
+from app.schemas.enums import Roles
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-if TYPE_CHECKING:
-    from app.models.coach import Coach
 
 
 class User(Base):
@@ -24,5 +22,6 @@ class User(Base):
     full_name: Mapped[str] = mapped_column(String, nullable=False)
     email: Mapped[str] = mapped_column(String, unique=True, nullable=False, index=True)
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
-    role: Mapped[str] = mapped_column(String, nullable=False)
+    role: Mapped[Roles] = mapped_column(String, nullable=False)
     coach: Mapped["Coach"] = relationship(back_populates="user")
+    player: Mapped["Player"] = relationship(back_populates="user")

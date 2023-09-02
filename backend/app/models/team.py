@@ -9,6 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from app.models.coach import Coach
+    from app.models.player import Player
 
 
 class Team(Base):
@@ -24,3 +25,4 @@ class Team(Base):
     name: Mapped[str] = mapped_column(String, nullable=False)
     coach_id: Mapped[int] = mapped_column(Integer, ForeignKey("coaches.user_id"))
     coach: Mapped["Coach"] = relationship(back_populates="teams")
+    players: Mapped[list["Player"]] = relationship(back_populates="team")

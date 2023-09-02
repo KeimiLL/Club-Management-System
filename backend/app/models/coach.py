@@ -5,11 +5,11 @@ import datetime
 from typing import TYPE_CHECKING
 
 from app.db.base_class import Base
+from app.models.team import Team
 from sqlalchemy import Date, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from app.models.team import Team
     from app.models.user import User
 
 
