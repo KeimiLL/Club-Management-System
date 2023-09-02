@@ -1,15 +1,18 @@
 <div class="sidenav" [ngClass]="{ 'sidenav--collapsed': isCollapsed }">
-    <app-menu-header
-        (collapsedClicked)="toggleCollapse()"
-        [isCollapsed]="isCollapsed"
-    ></app-menu-header>
-    <ul class="sidenav__list">
-        <li *ngFor="let item of menuItems">
-            <app-menu-item
-                [item]="item"
-                [isCollapsed]="isCollapsed"
-            ></app-menu-item>
-        </li>
-    </ul>
+    <div>
+        <app-menu-header
+            (collapsedClicked)="toggleCollapse()"
+            [isCollapsed]="isCollapsed"
+        ></app-menu-header>
+        <ul class="sidenav__list">
+            <li *ngFor="let item of menuItems">
+                <app-menu-item
+                    [item]="item"
+                    [isCollapsed]="isCollapsed"
+                ></app-menu-item>
+            </li>
+        </ul>
+    </div>
+
     <app-logout [isCollapsed]="isCollapsed"></app-logout>
 </div>

@@ -1,4 +1,4 @@
-@use "src/styles/_variables" as *;
+@import "../../../../../../styles/variables";
 
 .sidenav {
     background-image: linear-gradient(
@@ -14,6 +14,9 @@
     height: 100vh;
     box-shadow: 0.1rem 0 1.25rem 0 $dark-grey;
     border-right: 2px solid $white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     &__list {
         list-style: none;
