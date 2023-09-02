@@ -5,11 +5,12 @@ import { RouterModule } from "@angular/router";
 import { MainMenuItem } from "../../../../../shared/models/misc.model";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
 import { filterMenuItemsByPermissions } from "../../../../../shared/utils/permissionFilter";
-import { LogoutComponent } from "../../../auth/logout/logout.component";
 import { UserService } from "./../../../../../shared/services/user.service";
+import { LogoutComponent } from "./components/logout/logout.component";
 import { MenuHeaderComponent } from "./components/menu-header/menu-header.component";
 import { MenuItemComponent } from "./components/menu-item/menu-item.component";
 import { menuItems } from "./menu.data";
+import { MenuRootService } from "./menu-root.service";
 
 @Component({
     selector: "app-menu",
@@ -24,6 +25,7 @@ import { menuItems } from "./menu.data";
         MenuItemComponent,
         LogoutComponent,
     ],
+    providers: [MenuRootService],
 })
 export class MenuComponent implements OnInit {
     public isCollapsed = true;
@@ -32,10 +34,12 @@ export class MenuComponent implements OnInit {
     constructor(private readonly userService: UserService) {}
 
     ngOnInit(): void {
-        this.menuItems = filterMenuItemsByPermissions(
-            menuItems,
-            this.userService.currentUser.role
-        );
+        if (this.userService.currentUser !== null) {
+            this.menuItems = filterMenuItemsByPermissions(
+                menuItems,
+                this.userService.currentUser.role
+            );
+        }
     }
 
     public toggleCollapse(): void {

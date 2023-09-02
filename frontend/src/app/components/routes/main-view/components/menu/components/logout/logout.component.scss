@@ -1,18 +1,17 @@
 @import "../../../../../../../../styles/variables";
 
-.menu-item {
+.logout {
     display: flex;
     align-items: center;
     width: 100%;
-    margin-top: $extra-large-spacing;
     color: $black;
     text-decoration: none;
     font-size: $large-font;
-    font-weight: $light-weight;
+    font-weight: $normal-weight;
     transition: color 0.3s ease;
+    cursor: pointer;
 
     &__link {
-        cursor: pointer;
         opacity: 0;
         display: none;
 
@@ -20,10 +19,6 @@
             animation: expandLink 0.2s ease 0.2s forwards;
             display: block;
         }
-    }
-    &.active {
-        font-size: $large-font;
-        font-weight: $normal-weight;
     }
 
     &__icon-container {
@@ -37,7 +32,7 @@
     }
 }
 
-.menu-item:hover {
+.logout:hover {
     color: $dark-btn-back;
 }
 
