@@ -48,7 +48,7 @@ def get_coach_by_user_id(user_id: int, db: Session) -> CoachInDBBase:
         db (Session): Database session.
 
     Raises:
-        MissingException: If no user matches the given user id.
+        MissingException: If no coach matches the given user id.
         SQLAlchemyError: If there is a different exception.
 
     Returns:

@@ -18,7 +18,7 @@ def create_new_player(player: PlayerCreate, db: Session) -> Player:
         db (Session): Database session.
 
     Raises:
-        DuplicateException: If there is already a player with the given user id.
+        DuplicateException: If there is already a player with the given user or team id.
         SQLAlchemyError: If there is a different exception.
 
     Returns:
@@ -56,7 +56,7 @@ def get_player_by_user_id(user_id: int, db: Session) -> PlayerInDBBase:
         db (Session): Database session.
 
     Raises:
-        MissingException: If no user matches the given user id.
+        MissingException: If no player matches the given user id.
         SQLAlchemyError: If there is a different exception.
 
     Returns:

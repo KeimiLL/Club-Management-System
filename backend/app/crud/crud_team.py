@@ -17,7 +17,7 @@ def create_new_team(team: TeamCreate, db: Session) -> Team:
         db (Session): Database session.
 
     Raises:
-        DuplicateException: If there is already a team with the given user id.
+        DuplicateException: If there is already a team with the given coach id.
         SQLAlchemyError: If there is a different exception.
 
     Returns:
