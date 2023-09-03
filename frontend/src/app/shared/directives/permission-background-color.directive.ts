@@ -5,10 +5,10 @@ import { Roles } from "../models/user.model";
 import { UserService } from "../services/user.service";
 
 @Directive({
-    selector: "[appPermissionColor]",
+    selector: "[appPermissionBackgroundColor]",
     standalone: true,
 })
-export class PermissionColorDirective implements OnInit {
+export class PermissionBackgroundColorDirective implements OnInit {
     constructor(
         private readonly elementRef: ElementRef,
         private readonly userService: UserService
@@ -19,10 +19,10 @@ export class PermissionColorDirective implements OnInit {
             RoleColorsMapping[
                 this.userService.currentUser?.role ?? Roles.Viewer
             ];
-        this.changeColor(color);
+        this.changeBackgroundcolor(color);
     }
 
-    private changeColor(color: string): void {
-        this.elementRef.nativeElement.style.color = color;
+    private changeBackgroundcolor(color: string): void {
+        this.elementRef.nativeElement.style.backgroundColor = color;
     }
 }

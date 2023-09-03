@@ -1,11 +1,11 @@
-<div class="logo-container" appPermissionColor>
+<div class="logo-container" appPermissionBackgroundColor>
     <img
         class="logo-container__img"
         src="../../../../../../../../assets/images/user-icon.png"
         alt=""
     />
 </div>
-<p class="text--bold">{{ user.role }}</p>
+<p class="text--bold">{{ user.role | menuItem }}</p>
 
 <div class="button-container">
     <button
@@ -13,6 +13,8 @@
         (click)="onCollapseButtonClick()"
         class="button-container__button"
     >
-        <mat-icon>{{ isCollapsed ? "arrow_forward" : "arrow_back" }}</mat-icon>
+        <mat-icon class="button-container__icon">{{
+            isCollapsed ? "arrow_forward" : "arrow_back"
+        }}</mat-icon>
     </button>
 </div>

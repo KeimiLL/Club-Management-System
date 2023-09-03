@@ -51,6 +51,15 @@ export const allPermissions: SubPermissions[] = [
     ...Object.values(SchedulePermission),
 ];
 
+export const RoleColorsMapping: Record<Roles, string> = {
+    [Roles.Admin]: "#ef436b",
+    [Roles.Coach]: "#26547d",
+    [Roles.Player]: "#ffce5c",
+    [Roles.Viewer]: "#b4befe",
+    [Roles.Medic]: "#ffb056",
+    [Roles.Board]: "#06d6a0",
+};
+
 export const RoleDefinitions: Record<Roles, RolePermission> = {
     [Roles.Admin]: {
         modules: Object.values(ModulesPermissions),

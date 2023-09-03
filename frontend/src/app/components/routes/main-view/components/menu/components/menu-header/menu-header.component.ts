@@ -1,7 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { PermissionColorDirective } from "src/app/shared/directives/permission-color.directive";
+import { PermissionBackgroundColorDirective } from "src/app/shared/directives/permission-background-color.directive";
 import { User } from "src/app/shared/models/user.model";
+import { MenuItemPipe } from "src/app/shared/pipes/menu-item.pipe";
 import { UserService } from "src/app/shared/services/user.service";
 
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
@@ -11,7 +12,12 @@ import { MaterialModule } from "../../../../../../../shared/modules/material.mod
     templateUrl: "./menu-header.component.html",
     styleUrls: ["./menu-header.component.scss"],
     standalone: true,
-    imports: [CommonModule, MaterialModule, PermissionColorDirective],
+    imports: [
+        CommonModule,
+        MaterialModule,
+        PermissionBackgroundColorDirective,
+        MenuItemPipe,
+    ],
 })
 export class MenuHeaderComponent implements OnInit {
     public user: User;
