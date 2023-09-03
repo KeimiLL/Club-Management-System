@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
+    from app.schemas.player import Player
     from app.schemas.team import Team
 
 
@@ -43,6 +44,7 @@ class Match(MatchBase):
     notes: str
     date: datetime.date
     team: "Team"
+    players: list["Player"]
 
 
 class MatchUpdate(MatchBase):
@@ -57,3 +59,4 @@ class MatchInDBBase(MatchBase):
     id: int | None = None
     team_id: int | None = None
     team: "Team"
+    players: list["Player"]

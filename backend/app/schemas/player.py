@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
     from app.schemas.injury import Injury
+    from app.schemas.match import Match
     from app.schemas.team import Team
     from app.schemas.user import User
 
@@ -49,6 +50,7 @@ class Player(PlayerBase):
     user: "User"
     team: "Team"
     injuries: list["Injury"]
+    matches: list["Match"]
 
 
 class PlayerUpdate(PlayerBase):
@@ -65,3 +67,4 @@ class PlayerInDBBase(PlayerBase):
     user: "User"
     team: "Team"
     injuries: list["Injury"]
+    matches: list["Match"]
