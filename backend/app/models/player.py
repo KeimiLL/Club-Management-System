@@ -6,11 +6,14 @@ from typing import TYPE_CHECKING
 
 from app.db.base_class import Base
 from app.models.injury import Injury
+from app.models.match_player import MatchPlayer
 from app.models.team import Team
 from sqlalchemy import Boolean, Date, ForeignKey, Integer, String
+from sqlalchemy.ext.associationproxy import AssociationProxy, association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
+    from app.models.match import Match
     from app.models.user import User
 
 
@@ -34,6 +37,14 @@ class Player(Base):
     notes: Mapped[str] = mapped_column(String, nullable=False)
     is_injured: Mapped[bool] = mapped_column(Boolean, nullable=False)
     diet: Mapped[str] = mapped_column(String, nullable=True)
+
     user: Mapped["User"] = relationship(back_populates="player")
     team: Mapped["Team"] = relationship(back_populates="players")
-    injuries: Mapped[list["Injury"]] = relationship()
+    injuries: Mapped[list["Injury"]] = relationship(cascade="all, delete-orphan")
+
+    match_association: Mapped[list["MatchPlayer"]] = relationship(
+        back_populates="player"
+    )
+    matches: AssociationProxy[list["Match"]] = association_proxy(
+        "match_association", "match"
+    )
