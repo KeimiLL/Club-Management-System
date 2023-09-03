@@ -42,7 +42,8 @@ class TeamInDBBase(TeamBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    user_id: int | None = None
+    id: int | None = None
+    coach_id: int | None = None
     coach: "Coach"
     players: list["Player"]
     matches: list["Match"]

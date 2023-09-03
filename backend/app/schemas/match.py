@@ -54,5 +54,6 @@ class MatchInDBBase(MatchBase):
 
     model_config = ConfigDict(from_attributes=True)
 
+    id: int | None = None
     team_id: int | None = None
     team: "Team"
