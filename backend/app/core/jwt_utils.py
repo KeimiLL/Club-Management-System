@@ -4,7 +4,6 @@
 from datetime import datetime, timedelta
 
 from app.core.config import get_settings
-from app.core.exceptions import JWTTokensException
 from jose import ExpiredSignatureError, JWTError, jwt
 
 
@@ -63,7 +62,8 @@ def decode_token(token: str) -> dict:
     """Decodes the provided JWT token.
 
     Raises:
-        JWTTokensException: If the provided token is invalid or expired.
+        ExpiredSignatureError: If the provided token is expired.
+        JWTError: If the provided token is invalid in any other way.
 
     Returns:
         dict: The decoded JWT token.
@@ -73,6 +73,6 @@ def decode_token(token: str) -> dict:
             token, get_settings().SECRET_KEY, algorithms=get_settings().ALGORITHM
         )
     except ExpiredSignatureError as exc:
-        raise JWTTokensException("Expired tokens") from exc
+        raise exc
     except JWTError as exc:
-        raise JWTTokensException("Invalid tokens") from exc
+        raise exc
