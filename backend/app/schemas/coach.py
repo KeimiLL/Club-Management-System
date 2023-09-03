@@ -4,11 +4,11 @@
 import datetime
 from typing import TYPE_CHECKING
 
-from app.schemas.user import User
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
     from app.schemas.team import Team
+    from app.schemas.user import User
 
 
 class CoachBase(BaseModel):
@@ -31,7 +31,7 @@ class Coach(CoachBase):
 
     date_of_joining: datetime.date
     date_of_birth: datetime.date
-    user: User
+    user: "User"
 
 
 class CoachUpdate(CoachBase):
@@ -44,5 +44,5 @@ class CoachInDBBase(CoachBase):
     model_config = ConfigDict(from_attributes=True)
 
     user_id: int | None = None
-    user: User
+    user: "User"
     teams: list["Team"]
