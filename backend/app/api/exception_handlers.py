@@ -16,8 +16,6 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 
-logger = logging.getLogger(__name__)
-
 
 async def missing_exception_handler(_: Request, exc: MissingException) -> JSONResponse:
     """App-wide MissingException handler.
@@ -80,6 +78,7 @@ async def invalid_credentials_exception_handler(
     Returns:
         JSONResponse: The response with an appropriate status code and message.
     """
+    logging.getLogger("uvicorn").info(msg=exc, exc_info=True)
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={
