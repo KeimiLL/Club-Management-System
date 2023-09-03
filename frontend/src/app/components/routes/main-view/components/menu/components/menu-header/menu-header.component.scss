@@ -6,17 +6,26 @@
     align-items: center;
 
     .logo-container {
-        width: 5vw;
-        height: 5vw;
+        margin-top: 10px;
+        width: 3vw;
+        height: 3vw;
         display: flex;
         // background: linear-gradient(0.25turn, #3f87a6, #ebf8e1);
         align-items: center;
         justify-content: center;
+        background-color: $admin-icon-back;
+        border-radius: 3vw;
 
         &__logo {
             font-size: 3vw;
             width: 3vw;
             height: 3vw;
+            fill: transparent;
+        }
+
+        &__img {
+            width: 2.5vw;
+            height: 2.5vw;
             fill: transparent;
         }
     }
