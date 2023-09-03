@@ -27,5 +27,6 @@ class Coach(Base):
     )
     date_of_joining: Mapped[datetime.date] = mapped_column(Date, nullable=False)
     date_of_birth: Mapped[datetime.date] = mapped_column(Date, nullable=False)
+
     user: Mapped["User"] = relationship(back_populates="coach")
     teams: Mapped[list["Team"]] = relationship(back_populates="coach")

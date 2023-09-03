@@ -17,6 +17,6 @@ class Injury(Base):
     __tablename__ = "injuries"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    player_id: Mapped[int] = mapped_column(Integer, ForeignKey("players.user_id"))
     injury_type: Mapped[Injuries] = mapped_column(String, nullable=False)
     prescriptions: Mapped[str] = mapped_column(String, nullable=False)
-    player_id: Mapped[int] = mapped_column(Integer, ForeignKey("players.user_id"))

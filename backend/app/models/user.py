@@ -23,5 +23,6 @@ class User(Base):
     email: Mapped[str] = mapped_column(String, unique=True, nullable=False, index=True)
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
     role: Mapped[Roles] = mapped_column(String, nullable=False)
+
     coach: Mapped["Coach"] = relationship(back_populates="user")
     player: Mapped["Player"] = relationship(back_populates="user")

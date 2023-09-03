@@ -23,8 +23,9 @@ class Team(Base):
     __tablename__ = "teams"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    name: Mapped[str] = mapped_column(String, nullable=False)
     coach_id: Mapped[int] = mapped_column(Integer, ForeignKey("coaches.user_id"))
+    name: Mapped[str] = mapped_column(String, nullable=False)
+
     coach: Mapped["Coach"] = relationship(back_populates="teams")
     players: Mapped[list["Player"]] = relationship(back_populates="team")
     matches: Mapped[list["Match"]] = relationship(back_populates="team")
