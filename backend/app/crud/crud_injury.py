@@ -26,9 +26,9 @@ def create_new_injury(injury: InjuryCreate, db: Session) -> Injury:
     try:
         get_user_by_id(injury.player_id, db)
         new_injury = Injury(
+            player_id=injury.player_id,
             injury_type=injury.injury_type,
             prescriptions=injury.prescriptions,
-            player_id=injury.player_id,
         )
         db.add(new_injury)
         db.commit()
