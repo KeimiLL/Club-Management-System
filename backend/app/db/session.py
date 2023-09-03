@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 SQL_ALCHEMY_DATABASE_URL = get_settings().db_uri
-engine = create_engine(SQL_ALCHEMY_DATABASE_URL)
+engine = create_engine(SQL_ALCHEMY_DATABASE_URL, echo=True)
 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
