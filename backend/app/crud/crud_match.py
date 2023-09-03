@@ -44,7 +44,7 @@ def create_new_match(match: MatchCreate, db: Session) -> Match:
         raise exc
 
 
-def get_match_by_user_id(match_id: int, db: Session) -> MatchInDBBase:
+def get_match_by_id(match_id: int, db: Session) -> MatchInDBBase:
     """Gets the match based on the given match id.
 
     Args:
