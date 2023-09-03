@@ -1,8 +1,8 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { PermissionGuard } from "src/app/shared/guards/permission.guard";
-import { ModulesPermissions } from "src/app/shared/models/permission.model";
 
+import { PermissionGuard } from "./../../../shared/guards/permission.guard";
+import { ModulesPermissions } from "./../../../shared/models/permission.model";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { MeetingsComponent } from "./components/meetings/meetings.component";
 import { SettingsComponent } from "./components/settings/settings.component";

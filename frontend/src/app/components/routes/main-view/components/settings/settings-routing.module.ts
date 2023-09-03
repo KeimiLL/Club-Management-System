@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { PermissionGuard } from "src/app/shared/guards/permission.guard";
 
+import { PermissionGuard } from "./../../../../../shared/guards/permission.guard";
 import {
     ModulesPermissions,
     SettingsPermission,

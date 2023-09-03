@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { catchError, of, tap } from "rxjs";
-import { BackendResponse } from "src/app/shared/models/misc.model";
-import { SnackbarService } from "src/app/shared/services/snackbar.service";
 
+import { BackendResponse } from "./../../../../../shared/models/misc.model";
+import { SnackbarService } from "./../../../../../shared/services/snackbar.service";
 import { UserService } from "./../../../../../shared/services/user.service";
 
 @Injectable()

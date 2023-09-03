@@ -1,11 +1,11 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { PermissionBackgroundColorDirective } from "src/app/shared/directives/permission-background-color.directive";
-import { User } from "src/app/shared/models/user.model";
-import { MenuItemPipe } from "src/app/shared/pipes/menu-item.pipe";
-import { UserService } from "src/app/shared/services/user.service";
 
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
+import { PermissionBackgroundColorDirective } from "./../../../../../../../shared/directives/permission-background-color.directive";
+import { User } from "./../../../../../../../shared/models/user.model";
+import { MenuItemPipe } from "./../../../../../../../shared/pipes/menu-item.pipe";
+import { UserService } from "./../../../../../../../shared/services/user.service";
 
 @Component({
     selector: "app-menu-header",
