@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { PermissionColorDirective } from "src/app/shared/directives/permission-color.directive";
 import { User } from "src/app/shared/models/user.model";
 import { UserService } from "src/app/shared/services/user.service";
 
@@ -10,16 +11,18 @@ import { MaterialModule } from "../../../../../../../shared/modules/material.mod
     templateUrl: "./menu-header.component.html",
     styleUrls: ["./menu-header.component.scss"],
     standalone: true,
-    imports: [CommonModule, MaterialModule],
+    imports: [CommonModule, MaterialModule, PermissionColorDirective],
 })
-export class MenuHeaderComponent {
+export class MenuHeaderComponent implements OnInit {
     public user: User;
     @Input() public isCollapsed: boolean;
     @Output() public collapsedClicked = new EventEmitter<void>();
 
-    constructor(private readonly userService: UserService) {
-        if (userService.currentUser !== null) {
-            this.user = userService.currentUser;
+    constructor(private readonly userService: UserService) {}
+
+    ngOnInit(): void {
+        if (this.userService.currentUser !== null) {
+            this.user = this.userService.currentUser;
         }
     }
 

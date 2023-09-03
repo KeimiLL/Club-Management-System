@@ -76,4 +76,12 @@ export const RoleDefinitions: Record<Roles, RolePermission> = {
         modules: [ModulesPermissions.Dashboard, ModulesPermissions.Settings],
         permissions: [],
     },
+    [Roles.Medic]: {
+        modules: [ModulesPermissions.Dashboard, ModulesPermissions.Settings],
+        permissions: [],
+    },
+    [Roles.Board]: {
+        modules: [ModulesPermissions.Dashboard, ModulesPermissions.Settings],
+        permissions: [],
+    },
 };
