@@ -9,7 +9,7 @@ import { User, UserCreate, UserLogin } from "../models/user.model";
     providedIn: "root",
 })
 export class UserService {
-    public currentUser: User;
+    public currentUser: User | null = null;
 
     constructor(private readonly http: HttpClient) {}
 

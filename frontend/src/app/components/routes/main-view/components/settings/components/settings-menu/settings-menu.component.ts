@@ -21,10 +21,12 @@ export class SettingsMenuComponent implements OnInit {
     constructor(private readonly userService: UserService) {}
 
     ngOnInit(): void {
-        this.menuItems = filterMenuItemsByPermissions(
-            settingsMenuItems,
-            this.userService.currentUser.role,
-            false
-        );
+        if (this.userService.currentUser !== null) {
+            this.menuItems = filterMenuItemsByPermissions(
+                settingsMenuItems,
+                this.userService.currentUser.role,
+                false
+            );
+        }
     }
 }
