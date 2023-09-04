@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { catchError, of, tap } from "rxjs";
 
-import { BackendResponse } from "./../../../../../shared/models/misc.model";
+import { SnackbarMessages } from "../../../../../shared/models/messages.model";
 import { SnackbarService } from "./../../../../../shared/services/snackbar.service";
 import { UserService } from "./../../../../../shared/services/user.service";
 
@@ -18,13 +18,14 @@ export class MenuRootService {
         this.userService
             .logout()
             .pipe(
-                tap((response: BackendResponse) => {
-                    this.userService.currentUser = null;
-                    this.snack.showSnackBar(response.message, "normal");
-                    this.router.navigate(["/auth/login"]);
+                tap(() => {
+                    this.snack.showSnackBar(SnackbarMessages.LOGOUT, "normal");
                 }),
                 catchError(() => of(null))
             )
-            .subscribe();
+            .subscribe(() => {
+                this.userService.currentUser = null;
+                this.router.navigate(["/auth/login"]);
+            });
     }
 }
