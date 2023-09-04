@@ -10,3 +10,9 @@ export interface MenuItem {
 export interface MainMenuItem extends MenuItem {
     icon: string;
 }
+
+export enum MainRoutes {
+    App = "app",
+    Auth = "auth",
+    Error = "error",
+}
