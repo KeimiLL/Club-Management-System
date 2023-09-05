@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from app.schemas.coach import Coach
     from app.schemas.match import Match
     from app.schemas.player import Player
+    from app.schemas.training import Training
 
 
 class TeamBase(BaseModel):
@@ -31,6 +32,7 @@ class Team(TeamBase):
     coach: "Coach"
     players: list["Player"]
     matches: list["Match"]
+    trainings: list["Training"]
 
 
 class TeamUpdate(TeamBase):
@@ -47,3 +49,4 @@ class TeamInDBBase(TeamBase):
     coach: "Coach"
     players: list["Player"]
     matches: list["Match"]
+    trainings: list["Training"]
