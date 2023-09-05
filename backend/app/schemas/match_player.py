@@ -34,8 +34,8 @@ class MatchPlayer(MatchPlayerBase):
     starter: bool
     minutes_played: int
     rating: int
-    players: list["Player"]
-    matches: list["Match"]
+    match: "Match"
+    player: "Player"
 
 
 class MatchPlayerUpdate(MatchPlayerBase):
@@ -51,4 +51,4 @@ class MatchPlayerInDBBase(MatchPlayerBase):
     match_id: int | None = None
     player_id: int | None = None
     match: "Match"
-    playe: "Player"
+    player: "Player"
