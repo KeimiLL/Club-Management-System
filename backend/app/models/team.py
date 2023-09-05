@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from app.models.coach import Coach
     from app.models.match import Match
     from app.models.player import Player
+    from app.models.training import Training
 
 
 class Team(Base):
@@ -29,3 +30,4 @@ class Team(Base):
     coach: Mapped["Coach"] = relationship(back_populates="teams")
     players: Mapped[list["Player"]] = relationship(back_populates="team")
     matches: Mapped[list["Match"]] = relationship(back_populates="team")
+    trainings: Mapped[list["Training"]] = relationship(back_populates="team")
