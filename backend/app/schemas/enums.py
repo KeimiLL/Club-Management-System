@@ -36,3 +36,11 @@ class Injuries(str, Enum):
     HAND = "Hand"
     WRIST = "Wrist"
     CONCUSSION = "Concussion"
+
+
+class TrainingPresence(str, Enum):
+    """Enum for players training presence."""
+
+    PRESENT = "Present"
+    ABSENT = "Absent"
+    EXCUSED = "Excused"
