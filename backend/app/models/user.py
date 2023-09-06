@@ -3,6 +3,7 @@
 
 from app.db.base_class import Base
 from app.models.coach import Coach
+from app.models.meeting import Meeting
 from app.models.player import Player
 from app.schemas.enums import Roles
 from sqlalchemy import Integer, String
@@ -26,3 +27,6 @@ class User(Base):
 
     coach: Mapped["Coach"] = relationship(back_populates="user")
     player: Mapped["Player"] = relationship(back_populates="user")
+    created_meetings: Mapped[list["Meeting"]] = relationship(
+        back_populates="created_by_user"
+    )
