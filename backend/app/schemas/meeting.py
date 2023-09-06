@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
-    from app.schemas.team import Team
     from app.schemas.user import User
 
 
@@ -35,6 +34,7 @@ class Meeting(MeetingBase):
     description: str
     date: datetime.date
     created_by_user: "User"
+    users: list["User"]
 
 
 class MeetingUpdate(MeetingBase):
@@ -49,3 +49,4 @@ class MeetingInDBBase(MeetingBase):
     id: int | None = None
     user_id: int | None = None
     created_by_user: "User"
+    users: list["User"]
