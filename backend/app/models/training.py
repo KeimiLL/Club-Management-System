@@ -4,8 +4,11 @@
 import datetime
 
 from app.db.base_class import Base
+from app.models.player import Player
 from app.models.team import Team
+from app.models.training_player import TrainingPlayer
 from sqlalchemy import Date, ForeignKey, Integer, String
+from sqlalchemy.ext.associationproxy import AssociationProxy, association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
@@ -24,3 +27,10 @@ class Training(Base):
     date: Mapped[datetime.date] = mapped_column(Date, nullable=False)
 
     team: Mapped["Team"] = relationship(back_populates="trainings")
+
+    player_association: Mapped[list["TrainingPlayer"]] = relationship(
+        back_populates="training"
+    )
+    players: AssociationProxy[list["Player"]] = association_proxy(
+        "player_association", "player"
+    )

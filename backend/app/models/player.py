@@ -8,12 +8,14 @@ from app.db.base_class import Base
 from app.models.injury import Injury
 from app.models.match_player import MatchPlayer
 from app.models.team import Team
+from app.models.training_player import TrainingPlayer
 from sqlalchemy import Boolean, Date, ForeignKey, Integer, String
 from sqlalchemy.ext.associationproxy import AssociationProxy, association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from app.models.match import Match
+    from app.models.training import Training
     from app.models.user import User
 
 
@@ -47,4 +49,11 @@ class Player(Base):
     )
     matches: AssociationProxy[list["Match"]] = association_proxy(
         "match_association", "match"
+    )
+
+    training_association: Mapped[list["TrainingPlayer"]] = relationship(
+        back_populates="player"
+    )
+    trainings: AssociationProxy[list["Training"]] = association_proxy(
+        "training_association", "training"
     )
