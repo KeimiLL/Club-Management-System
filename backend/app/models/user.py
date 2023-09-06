@@ -4,9 +4,11 @@
 from app.db.base_class import Base
 from app.models.coach import Coach
 from app.models.meeting import Meeting
+from app.models.meeting_user import MeetingUser
 from app.models.player import Player
 from app.schemas.enums import Roles
 from sqlalchemy import Integer, String
+from sqlalchemy.ext.associationproxy import AssociationProxy, association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
@@ -29,4 +31,11 @@ class User(Base):
     player: Mapped["Player"] = relationship(back_populates="user")
     created_meetings: Mapped[list["Meeting"]] = relationship(
         back_populates="created_by_user"
+    )
+
+    meeting_association: Mapped[list["MeetingUser"]] = relationship(
+        back_populates="user"
+    )
+    meetings: AssociationProxy[list["Meeting"]] = association_proxy(
+        "meeting_association", "meeting"
     )
