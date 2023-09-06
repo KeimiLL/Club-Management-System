@@ -20,14 +20,14 @@ export class AuthGuard {
         next: ActivatedRoute,
         state: RouterStateSnapshot
     ): boolean | UrlTree {
-        console.log(this.userService.currentUser);
+        if (next.routeConfig?.path === MainRoutes.Error) {
+            if (this.userService.currentUser !== null) return true;
+            return this.router.parseUrl("/auth/login");
+        }
         if (next.routeConfig?.path === MainRoutes.Auth) {
-            console.log("in if");
             if (this.userService.currentUser === null) return true;
             return this.router.parseUrl("/app/dashboard");
         }
-        console.log("out if");
-
         if (this.userService.currentUser !== null) return true;
         return this.router.parseUrl("/auth/login");
     }

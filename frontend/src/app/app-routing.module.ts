@@ -28,8 +28,12 @@ const routes: Routes = [
                 (m) => m.AuthRoutingModule
             ),
     },
-    { path: MainRoutes.Error, component: ErrorComponent },
-    { path: "**", redirectTo: MainRoutes.Error, pathMatch: "full" },
+    {
+        path: MainRoutes.Error,
+        component: ErrorComponent,
+        canActivate: [AuthGuard],
+    },
+    { path: "**", redirectTo: MainRoutes.Auth, pathMatch: "full" },
 ];
 
 @NgModule({
