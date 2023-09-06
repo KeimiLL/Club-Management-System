@@ -4,10 +4,11 @@
 import datetime
 from typing import TYPE_CHECKING
 
+from app.schemas.injury import Injury
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
-    from app.schemas.injury import Injury
+    from app.models.training import Training
     from app.schemas.match import Match
     from app.schemas.team import Team
     from app.schemas.user import User
@@ -51,6 +52,7 @@ class Player(PlayerBase):
     team: "Team"
     injuries: list["Injury"]
     matches: list["Match"]
+    trainings: list["Training"]
 
 
 class PlayerUpdate(PlayerBase):
@@ -68,3 +70,4 @@ class PlayerInDBBase(PlayerBase):
     team: "Team"
     injuries: list["Injury"]
     matches: list["Match"]
+    trainings: list["Training"]

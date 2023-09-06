@@ -3,6 +3,7 @@
 
 import datetime
 
+from app.models.player import Player
 from app.schemas.team import Team
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -28,6 +29,7 @@ class Training(TrainingBase):
     notes: str
     date: datetime.date
     team: "Team"
+    players: list["Player"]
 
 
 class TrainingUpdate(TrainingBase):
@@ -42,3 +44,4 @@ class TrainingInDBBase(TrainingBase):
     id: int | None = None
     team_id: int | None = None
     team: "Team"
+    players: list["Player"]
