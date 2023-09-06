@@ -32,6 +32,7 @@ class Coach(CoachBase):
     date_of_joining: datetime.date
     date_of_birth: datetime.date
     user: "User"
+    teams: list["Team"]
 
 
 class CoachUpdate(CoachBase):
