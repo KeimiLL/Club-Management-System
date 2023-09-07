@@ -17,14 +17,12 @@ class InjuryCreate(InjuryBase):
 
     player_id: int = Field(..., ge=1)
     injury_type: Injuries
-    prescriptions: str
 
 
 class Injury(InjuryBase):
     """Injury schema for returning data from DB."""
 
     injury_type: Injuries
-    prescriptions: str
 
 
 class InjuryUpdate(InjuryBase):

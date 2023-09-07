@@ -26,7 +26,7 @@ class Meeting(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
     description: Mapped[str] = mapped_column(String, nullable=False)
-    notes: Mapped[str] = mapped_column(String, nullable=False)
+    notes: Mapped[str | None] = mapped_column(String, nullable=True)
     date: Mapped[datetime.date] = mapped_column(Date, nullable=False)
 
     created_by_user: Mapped["User"] = relationship(back_populates="created_meetings")

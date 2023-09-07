@@ -22,7 +22,6 @@ class MeetingCreate(MeetingBase):
     """Meeting schema for creation."""
 
     user_id: int = Field(..., ge=1)
-    notes: str
     description: str
     date: datetime.date
 
@@ -30,7 +29,6 @@ class MeetingCreate(MeetingBase):
 class Meeting(MeetingBase):
     """Meeting schema for returning data from DB."""
 
-    notes: str
     description: str
     date: datetime.date
     created_by_user: "User"
