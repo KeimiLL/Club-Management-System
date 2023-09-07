@@ -36,6 +36,9 @@ class Injuries(str, Enum):
     HAND = "Hand"
     WRIST = "Wrist"
     CONCUSSION = "Concussion"
+    ADDUCTOR = "Adductor"
+    QUADRICEPS = "Quadriceps"
+    BICEPS = "Biceps"
 
 
 class TrainingPresence(str, Enum):
