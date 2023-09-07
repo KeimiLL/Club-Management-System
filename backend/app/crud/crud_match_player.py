@@ -32,7 +32,7 @@ def create_new_match_player(
         new_match_player = MatchPlayer(
             match_id=match_player.match_id,
             player_id=match_player.player_id,
-            starter=match_player.starter,
+            is_starter=match_player.is_starter,
             minutes_played=match_player.minutes_played,
             rating=match_player.rating,
         )
