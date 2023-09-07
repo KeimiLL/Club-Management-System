@@ -37,8 +37,8 @@ class Player(Base):
     height: Mapped[int] = mapped_column(Integer, nullable=False)
     weight: Mapped[int] = mapped_column(Integer, nullable=False)
     notes: Mapped[str] = mapped_column(String, nullable=False)
-    is_injured: Mapped[bool] = mapped_column(Boolean, nullable=False)
-    diet: Mapped[str] = mapped_column(String, nullable=True)
+    is_injured: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    diet: Mapped[str | None] = mapped_column(String, nullable=True)
 
     user: Mapped["User"] = relationship(back_populates="player")
     team: Mapped["Team"] = relationship(back_populates="players")

@@ -24,7 +24,7 @@ class Match(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     team_id: Mapped[int] = mapped_column(Integer, ForeignKey("teams.id"))
     opponent: Mapped[str] = mapped_column(String, nullable=False)
-    is_home: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    is_home: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     goals_scored: Mapped[int] = mapped_column(Integer, nullable=False)
     goals_conceded: Mapped[int] = mapped_column(Integer, nullable=False)
     notes: Mapped[str] = mapped_column(String, nullable=False)
