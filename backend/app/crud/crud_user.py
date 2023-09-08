@@ -61,3 +61,25 @@ def get_user_by_email(email: str, db: Session) -> UserInDB:
         raise MissingException(User.__name__) from exc
     except SQLAlchemyError as exc:
         raise exc
+
+
+def get_user_by_id(user_id: int, db: Session) -> UserInDB:
+    """Gets the user based on the given id.
+
+    Args:
+        user_id (int): User id.
+        db (Session): Database session.
+
+    Raises:
+        MissingException: If no user matches the given id.
+        SQLAlchemyError: If there is a different exception.
+
+    Returns:
+        UserInDB: User object.
+    """
+    try:
+        return db.query(User).filter(User.id == user_id).one()
+    except NoResultFound as exc:
+        raise MissingException(User.__name__) from exc
+    except SQLAlchemyError as exc:
+        raise exc

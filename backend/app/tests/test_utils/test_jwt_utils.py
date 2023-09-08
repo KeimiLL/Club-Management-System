@@ -4,8 +4,8 @@
 from datetime import timedelta
 
 import pytest
-from app.core.exceptions import JWTTokensException
 from app.core.jwt_utils import create_token, decode_token
+from jose import ExpiredSignatureError, JWTError
 
 
 def test_correct__decode_token(correct_user_data: dict[str, str]) -> None:
@@ -26,16 +26,14 @@ def test_expired__decode_token(correct_user_data: dict[str, str]) -> None:
     Args:
         correct_user_data (dict[str, str]): Correct user data.
     """
-    with pytest.raises(JWTTokensException) as excinfo:
+    with pytest.raises(ExpiredSignatureError):
         new_token = create_token(
             {"sub": correct_user_data["email"]}, timedelta(minutes=-1)
         )
         decode_token(new_token)
-    assert "Expired tokens" == str(excinfo.value)
 
 
 def test_incorrect__decode_token() -> None:
     """Tests decoding an invalid JWT token."""
-    with pytest.raises(JWTTokensException) as excinfo:
+    with pytest.raises(JWTError):
         decode_token("test")
-    assert "Invalid tokens" == str(excinfo.value)

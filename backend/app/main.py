@@ -20,6 +20,7 @@ from app.core.exceptions import (
     JWTTokensException,
     MissingException,
 )
+from app.db import base  # pylint: disable=unused-import
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
