@@ -22,6 +22,9 @@ class Coach(Base):
 
     __tablename__ = "coaches"
 
+    def __repr__(self):
+        return f"Coach(id={self.user_id}, doj={self.date_of_joining}, dob={self.date_of_birth})"
+
     user_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("users.id"), primary_key=True
     )

@@ -21,6 +21,13 @@ class User(Base):
 
     __tablename__ = "users"
 
+    def __repr__(self):
+        return (
+            f"Match(id={self.id}, full_name={self.full_name}, "
+            f"email={self.email}, hashed_password={self.hashed_password}, "
+            f"notes={self.role})"
+        )
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     full_name: Mapped[str] = mapped_column(String, nullable=False)
     email: Mapped[str] = mapped_column(String, unique=True, nullable=False, index=True)
