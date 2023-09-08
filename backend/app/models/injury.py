@@ -16,6 +16,12 @@ class Injury(Base):
 
     __tablename__ = "injuries"
 
+    def __repr__(self):
+        return (
+            f"Injury(id={self.id}, player_id={self.player_id}, "
+            f"type={self.injury_type}, pres={self.prescriptions})"
+        )
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     player_id: Mapped[int] = mapped_column(Integer, ForeignKey("players.user_id"))
     injury_type: Mapped[Injuries] = mapped_column(String, nullable=False)

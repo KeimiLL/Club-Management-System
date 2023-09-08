@@ -28,6 +28,15 @@ class Player(Base):
 
     __tablename__ = "players"
 
+    def __repr__(self):
+        return (
+            f"Player(user_id={self.user_id}, team_id={self.team_id}, "
+            f"doj={self.date_of_joining}, dob={self.date_of_birth}, "
+            f"height={self.height}, weight={self.weight}, "
+            f"notes={self.notes}, is_injured={self.is_injured}, "
+            f"diet={self.diet})"
+        )
+
     user_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("users.id"), primary_key=True
     )

@@ -5,7 +5,7 @@ from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_meeting import get_meeting_by_id
 from app.crud.crud_user import get_user_by_id
 from app.models.meeting_user import MeetingUser
-from app.schemas.meeting_user import MeetingUserCreate, MeetingUserInDBBase
+from app.schemas.meeting_user import MeetingUserCreate
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -43,7 +43,7 @@ def create_new_meeting_user(
         raise exc
 
 
-def get_meeting_user_by_id(meeting_user_id: int, db: Session) -> MeetingUserInDBBase:
+def get_meeting_user_by_id(meeting_user_id: int, db: Session) -> MeetingUser:
     """Gets the meeting_user based on the given meeting_user id.
 
     Args:
@@ -55,7 +55,7 @@ def get_meeting_user_by_id(meeting_user_id: int, db: Session) -> MeetingUserInDB
         SQLAlchemyError: If there is a different exception.
 
     Returns:
-        MeetingUserInDB: MeetingUser object.
+        MeetingUser: MeetingUser object.
     """
     try:
         return db.query(MeetingUser).filter(MeetingUser.id == meeting_user_id).one()

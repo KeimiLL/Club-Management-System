@@ -4,7 +4,7 @@
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_coach import get_coach_by_user_id
 from app.models.team import Team
-from app.schemas.team import TeamCreate, TeamInDBBase
+from app.schemas.team import TeamCreate
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -39,7 +39,7 @@ def create_new_team(team: TeamCreate, db: Session) -> Team:
         raise exc
 
 
-def get_team_by_id(team_id: int, db: Session) -> TeamInDBBase:
+def get_team_by_id(team_id: int, db: Session) -> Team:
     """Gets the team based on the given team id.
 
     Args:
@@ -51,7 +51,7 @@ def get_team_by_id(team_id: int, db: Session) -> TeamInDBBase:
         SQLAlchemyError: If there is a different exception.
 
     Returns:
-        TeamInDB: Team object.
+        Team: Team object.
     """
     try:
         return db.query(Team).filter(Team.id == team_id).one()

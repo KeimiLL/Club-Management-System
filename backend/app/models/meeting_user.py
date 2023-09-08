@@ -21,6 +21,12 @@ class MeetingUser(Base):
 
     __tablename__ = "meetings_users"
 
+    def __repr__(self):
+        return (
+            f"MeetingUser(id={self.id}, meeting_id={self.meeting_id}, "
+            f"user_id={self.user_id})"
+        )
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     meeting_id: Mapped[int] = mapped_column(Integer, ForeignKey("meetings.id"))
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))

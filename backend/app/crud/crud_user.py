@@ -5,7 +5,7 @@ from app.core.exceptions import DuplicateException, MissingException
 from app.core.security import Hasher
 from app.models.user import User
 from app.schemas.enums import Roles
-from app.schemas.user import UserCreate, UserCreateWithRole, UserInDB
+from app.schemas.user import UserCreate, UserCreateWithRole
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -41,7 +41,7 @@ def create_new_user(user: UserCreate | UserCreateWithRole, db: Session) -> User:
         raise exc
 
 
-def get_user_by_email(email: str, db: Session) -> UserInDB:
+def get_user_by_email(email: str, db: Session) -> User:
     """Gets the user based on the given email.
 
     Args:
@@ -53,7 +53,7 @@ def get_user_by_email(email: str, db: Session) -> UserInDB:
         SQLAlchemyError: If there is a different exception.
 
     Returns:
-        UserInDB: User object.
+        User: User object.
     """
     try:
         return db.query(User).filter(User.email == email).one()
@@ -63,7 +63,7 @@ def get_user_by_email(email: str, db: Session) -> UserInDB:
         raise exc
 
 
-def get_user_by_id(user_id: int, db: Session) -> UserInDB:
+def get_user_by_id(user_id: int, db: Session) -> User:
     """Gets the user based on the given id.
 
     Args:
@@ -75,7 +75,7 @@ def get_user_by_id(user_id: int, db: Session) -> UserInDB:
         SQLAlchemyError: If there is a different exception.
 
     Returns:
-        UserInDB: User object.
+        User: User object.
     """
     try:
         return db.query(User).filter(User.id == user_id).one()

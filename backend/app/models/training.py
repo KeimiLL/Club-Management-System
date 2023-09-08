@@ -21,6 +21,12 @@ class Training(Base):
 
     __tablename__ = "trainings"
 
+    def __repr__(self):
+        return (
+            f"Training(id={self.id}, team_id={self.team_id}, "
+            f"notes={self.notes}, date={self.date})"
+        )
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     team_id: Mapped[int] = mapped_column(Integer, ForeignKey("teams.id"))
     notes: Mapped[str] = mapped_column(String, nullable=False)

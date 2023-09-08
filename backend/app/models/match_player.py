@@ -21,6 +21,13 @@ class MatchPlayer(Base):
 
     __tablename__ = "matches_players"
 
+    def __repr__(self):
+        return (
+            f"MatchPlayer(id={self.id}, match_id={self.match_id}, "
+            f"player_id={self.player_id}, is_starter={self.is_starter}, "
+            f"mins_pl={self.minutes_played}, rating={self.rating})"
+        )
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     match_id: Mapped[int] = mapped_column(Integer, ForeignKey("matches.id"))
     player_id: Mapped[int] = mapped_column(Integer, ForeignKey("players.user_id"))

@@ -22,6 +22,12 @@ class TrainingPlayer(Base):
 
     __tablename__ = "trainings_players"
 
+    def __repr__(self):
+        return (
+            f"TrainingPlayer(id={self.id}, training_id={self.training_id}, "
+            f"player_id={self.player_id}, presence={self.presence})"
+        )
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     training_id: Mapped[int] = mapped_column(Integer, ForeignKey("trainings.id"))
     player_id: Mapped[int] = mapped_column(Integer, ForeignKey("players.user_id"))

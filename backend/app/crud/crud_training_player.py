@@ -5,7 +5,7 @@ from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_player import get_player_by_user_id
 from app.crud.crud_training import get_training_by_id
 from app.models.training_player import TrainingPlayer
-from app.schemas.training_player import TrainingPlayerCreate, TrainingPlayerInDBBase
+from app.schemas.training_player import TrainingPlayerCreate
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -44,9 +44,7 @@ def create_new_training_player(
         raise exc
 
 
-def get_training_player_by_id(
-    training_player_id: int, db: Session
-) -> TrainingPlayerInDBBase:
+def get_training_player_by_id(training_player_id: int, db: Session) -> TrainingPlayer:
     """Gets the training_player based on the given training_player id.
 
     Args:
@@ -58,7 +56,7 @@ def get_training_player_by_id(
         SQLAlchemyError: If there is a different exception.
 
     Returns:
-        TrainingPlayerInDB: TrainingPlayer object.
+        TrainingPlayer: TrainingPlayer object.
     """
     try:
         return (

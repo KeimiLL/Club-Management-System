@@ -23,6 +23,9 @@ class Team(Base):
 
     __tablename__ = "teams"
 
+    def __repr__(self):
+        return f"Team(id={self.id}, coach_id={self.coach_id}, name={self.name})"
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     coach_id: Mapped[int] = mapped_column(Integer, ForeignKey("coaches.user_id"))
     name: Mapped[str] = mapped_column(String, nullable=False)
