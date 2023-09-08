@@ -4,7 +4,7 @@
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_team import get_team_by_id
 from app.models.match import Match
-from app.schemas.match import MatchCreate, MatchInDBBase
+from app.schemas.match import MatchCreate
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -44,7 +44,7 @@ def create_new_match(match: MatchCreate, db: Session) -> Match:
         raise exc
 
 
-def get_match_by_id(match_id: int, db: Session) -> MatchInDBBase:
+def get_match_by_id(match_id: int, db: Session) -> Match:
     """Gets the match based on the given match id.
 
     Args:
@@ -56,7 +56,7 @@ def get_match_by_id(match_id: int, db: Session) -> MatchInDBBase:
         SQLAlchemyError: If there is a different exception.
 
     Returns:
-        MatchInDB: Match object.
+        Match: Match object.
     """
     try:
         return db.query(Match).filter(Match.id == match_id).one()

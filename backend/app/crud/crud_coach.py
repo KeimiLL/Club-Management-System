@@ -4,7 +4,7 @@
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_user import get_user_by_id
 from app.models.coach import Coach
-from app.schemas.coach import CoachCreate, CoachInDBBase
+from app.schemas.coach import CoachCreate
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -40,7 +40,7 @@ def create_new_coach(coach: CoachCreate, db: Session) -> Coach:
         raise exc
 
 
-def get_coach_by_user_id(user_id: int, db: Session) -> CoachInDBBase:
+def get_coach_by_user_id(user_id: int, db: Session) -> Coach:
     """Gets the coach based on the given user id.
 
     Args:
@@ -52,7 +52,7 @@ def get_coach_by_user_id(user_id: int, db: Session) -> CoachInDBBase:
         SQLAlchemyError: If there is a different exception.
 
     Returns:
-        CoachInDB: Coach object.
+        Coach: Coach object.
     """
     try:
         return db.query(Coach).filter(Coach.user_id == user_id).one()

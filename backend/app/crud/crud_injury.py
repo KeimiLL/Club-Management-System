@@ -4,7 +4,7 @@
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_user import get_user_by_id
 from app.models.injury import Injury
-from app.schemas.injury import InjuryCreate, InjuryInDBBase
+from app.schemas.injury import InjuryCreate
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -40,7 +40,7 @@ def create_new_injury(injury: InjuryCreate, db: Session) -> Injury:
         raise exc
 
 
-def get_injury_by_id(injury_id: int, db: Session) -> InjuryInDBBase:
+def get_injury_by_id(injury_id: int, db: Session) -> Injury:
     """Gets the injury based on the given user id.
 
     Args:
@@ -52,7 +52,7 @@ def get_injury_by_id(injury_id: int, db: Session) -> InjuryInDBBase:
         SQLAlchemyError: If there is a different exception.
 
     Returns:
-        InjuryInDB: Injury object.
+        Injury: Injury object.
     """
     try:
         return db.query(Injury).filter(Injury.id == injury_id).one()

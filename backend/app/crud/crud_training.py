@@ -4,7 +4,7 @@
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_team import get_team_by_id
 from app.models.training import Training
-from app.schemas.training import TrainingCreate, TrainingInDBBase
+from app.schemas.training import TrainingCreate
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -40,7 +40,7 @@ def create_new_training(training: TrainingCreate, db: Session) -> Training:
         raise exc
 
 
-def get_training_by_id(training_id: int, db: Session) -> TrainingInDBBase:
+def get_training_by_id(training_id: int, db: Session) -> Training:
     """Gets the training based on the given training id.
 
     Args:
@@ -52,7 +52,7 @@ def get_training_by_id(training_id: int, db: Session) -> TrainingInDBBase:
         SQLAlchemyError: If there is a different exception.
 
     Returns:
-        TrainingInDB: Training object.
+        Training: Training object.
     """
     try:
         return db.query(Training).filter(Training.id == training_id).one()

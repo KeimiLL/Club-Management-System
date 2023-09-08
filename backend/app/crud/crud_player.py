@@ -5,7 +5,7 @@ from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_team import get_team_by_id
 from app.crud.crud_user import get_user_by_id
 from app.models.player import Player
-from app.schemas.player import PlayerCreate, PlayerInDBBase
+from app.schemas.player import PlayerCreate
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -48,7 +48,7 @@ def create_new_player(player: PlayerCreate, db: Session) -> Player:
         raise exc
 
 
-def get_player_by_user_id(user_id: int, db: Session) -> PlayerInDBBase:
+def get_player_by_user_id(user_id: int, db: Session) -> Player:
     """Gets the player based on the given user id.
 
     Args:
@@ -60,7 +60,7 @@ def get_player_by_user_id(user_id: int, db: Session) -> PlayerInDBBase:
         SQLAlchemyError: If there is a different exception.
 
     Returns:
-        PlayerInDB: Player object.
+        Player: Player object.
     """
     try:
         return db.query(Player).filter(Player.user_id == user_id).one()
