@@ -1,13 +1,13 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
-import { MatButtonModule } from "@angular/material/button";
 
 import { CardsModule } from "../../../../../shared/modules/cards.module";
+import { MaterialModule } from "../../../../../shared/modules/material.module";
 
 @Component({
     selector: "app-meetings",
     standalone: true,
-    imports: [CommonModule, CardsModule, MatButtonModule],
+    imports: [CommonModule, CardsModule, MaterialModule],
     templateUrl: "./meetings.component.html",
     styleUrls: ["./meetings.component.scss"],
 })
