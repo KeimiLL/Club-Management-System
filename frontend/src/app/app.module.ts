@@ -34,21 +34,15 @@ import { UserService } from "./shared/services/user.service";
     providers: [
         {
             provide: APP_INITIALIZER,
-            useFactory: (userService: UserService) => () => {
-                if (!window.location.pathname.includes("/auth/")) {
-                    return userService.getCurrentUser().pipe(
-                        catchError(() => of(null)),
-                        tap((user: User | null) => {
-                            if (user !== null) {
-                                userService.currentUser = user;
-                            } else {
-                                window.location.href = "/auth/login";
-                            }
-                        })
-                    );
-                }
-                return () => null;
-            },
+            useFactory: (userService: UserService) => () =>
+                userService.getCurrentUser().pipe(
+                    catchError(() => of(null)),
+                    tap((user: User | null) => {
+                        if (user !== null) {
+                            userService.currentUser = user;
+                        }
+                    })
+                ),
             multi: true,
             deps: [UserService],
         },

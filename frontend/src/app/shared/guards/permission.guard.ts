@@ -23,31 +23,29 @@ export class PermissionGuard {
         next: ActivatedRoute,
         state: RouterStateSnapshot
     ): boolean | UrlTree {
-        if (this.userService.currentUser !== null) {
-            const userRole = this.userService.currentUser.role;
-            const requiredPermissions =
-                next.data as unknown as RequiredPermissions;
-            const roleDefinitions = RoleDefinitions[userRole];
+        if (this.userService.currentUser === null) return false;
 
+        const userRole = this.userService.currentUser.role;
+        const requiredPermissions = next.data as unknown as RequiredPermissions;
+        const roleDefinitions = RoleDefinitions[userRole];
+
+        if (
+            !roleDefinitions.modules.includes(
+                requiredPermissions.modulesPermission
+            )
+        ) {
+            return this.router.parseUrl("/error");
+        }
+        if (requiredPermissions.requiredPermission !== null) {
             if (
-                !roleDefinitions.modules.includes(
-                    requiredPermissions.modulesPermission
+                !roleDefinitions.permissions.includes(
+                    requiredPermissions.requiredPermission
                 )
             ) {
                 return this.router.parseUrl("/error");
             }
-            if (requiredPermissions.requiredPermission !== null) {
-                if (
-                    !roleDefinitions.permissions.includes(
-                        requiredPermissions.requiredPermission
-                    )
-                ) {
-                    return this.router.parseUrl("/error");
-                }
-            }
-
-            return true;
         }
-        return false;
+
+        return true;
     }
 }
