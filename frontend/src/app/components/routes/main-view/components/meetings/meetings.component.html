@@ -3,24 +3,16 @@
         <app-button-container buttons>
             <button mat-raised-button class="button--light">button1</button>
             <button mat-raised-button class="button--light">button2</button>
-            <button
-                mat-raised-button
-                class="button--light"
-                (click)="changeState()"
-            >
-                button3
-            </button>
+            <button mat-raised-button class="button--light">button3</button>
         </app-button-container>
     </app-wide-card-header>
 
     <ng-container content>
-        <div class="xd">Example of component1</div>
-        <div class="xd">Example of component2</div>
-        <div class="xd">Example of component3</div>
+        <app-legend></app-legend>
     </ng-container>
 </app-content-card>
 
-<app-content-card *ngIf="!isDetail">
+<!-- <app-content-card *ngIf="!isDetail">
     <app-wide-card-header header [name]="'Meetings'" [subName]="'team1'">
         <app-button-container buttons>
             <button mat-raised-button class="button--light">button1</button>
@@ -46,4 +38,4 @@
             </div>
         </app-half-card-section>
     </div>
-</app-content-card>
+</app-content-card> -->
