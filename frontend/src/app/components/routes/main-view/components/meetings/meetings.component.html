@@ -1,10 +1,6 @@
-<div class="meetings">
-    <app-wide-main-card
-        *ngIf="!isDetail"
-        [name]="'Meetings'"
-        [subName]="'team1'"
-    >
-        <app-button-container>
+<app-content-card *ngIf="!isDetail">
+    <app-wide-card-header header [name]="'Meetings'" [subName]="'team1'">
+        <app-button-container buttons>
             <button mat-raised-button class="button--light">button1</button>
             <button mat-raised-button class="button--light">button2</button>
             <button
@@ -15,34 +11,39 @@
                 button3
             </button>
         </app-button-container>
+    </app-wide-card-header>
 
+    <ng-container content>
         <div class="xd">Example of component1</div>
         <div class="xd">Example of component2</div>
         <div class="xd">Example of component3</div>
-    </app-wide-main-card>
+    </ng-container>
+</app-content-card>
 
-    <app-half-card
-        *ngIf="isDetail"
-        [name]="'Meetings'"
-        [subName]="'team1'"
-        [isRight]="false"
-    >
-        <div class="xd">Example of component1</div>
-        <div class="xd">Example of component2</div>
-        <div class="xd">Example of component3</div>
-    </app-half-card>
-
-    <app-half-card
-        *ngIf="isDetail"
-        [name]="'Meeting Name 1'"
-        (closedClicked)="changeState()"
-    >
-        <app-button-container>
+<app-content-card *ngIf="!isDetail">
+    <app-wide-card-header header [name]="'Meetings'" [subName]="'team1'">
+        <app-button-container buttons>
             <button mat-raised-button class="button--light">button1</button>
+            <button mat-raised-button class="button--dark">button2</button>
+            <button
+                mat-raised-button
+                class="button--light"
+                (click)="changeState()"
+            >
+                button3
+            </button>
         </app-button-container>
+    </app-wide-card-header>
 
-        <div class="xd">Example of component1</div>
-        <div class="xd">Example of component2</div>
-        <div class="xd">Example of component3</div>
-    </app-half-card>
-</div>
+    <div content>
+        <app-half-card-section>
+            <app-section-header [name]="'Testowa nazwa sekcji'" sectionHeader>
+            </app-section-header>
+            <div sectionContent>
+                <div class="xd">Example of component1</div>
+                <div class="xd">Example of component2</div>
+                <div class="xd">Example of component3</div>
+            </div>
+        </app-half-card-section>
+    </div>
+</app-content-card>

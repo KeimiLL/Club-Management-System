@@ -1,0 +1,12 @@
+@import "../../../../../styles/component-styles/components";
+
+:host {
+    margin: 0;
+    padding: 0;
+
+    .card {
+        background-color: $purple-mid-light;
+        width: 95%;
+        margin: 0 auto;
+    }
+}

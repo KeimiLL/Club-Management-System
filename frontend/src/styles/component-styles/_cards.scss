@@ -18,17 +18,24 @@
         padding: $small-spacing;
     }
 
-    .mat-mdc-card-title.card__title {
-        font-size: $very-large-font;
-    }
-
-    .mat-mdc-card-subtitle.card__subtitle {
-        font-size: $large-font;
-        font-weight: $normal-weight;
-    }
-
     &__content {
         height: 100%;
         width: 100%;
     }
+}
+
+.mat-mdc-card-title.card__title {
+    font-size: $huge-font;
+    &--half {
+        font-size: $very-large-font;
+    }
+
+    &--section {
+        font-size: $large-font;
+    }
+}
+
+.mat-mdc-card-subtitle.card__subtitle {
+    font-size: $large-font;
+    font-weight: $normal-weight;
 }

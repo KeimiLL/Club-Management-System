@@ -1,0 +1,8 @@
+@import "../../../../../../styles/component-styles/components";
+
+:host {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
