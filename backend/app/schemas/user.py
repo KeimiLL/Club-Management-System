@@ -78,3 +78,9 @@ class UserInDB(UserInDBBase):
     """User schema for storing in DB."""
 
     hashed_password: str
+
+
+class UserInDBNoEmail(UserInDBBase):
+    """User schema for returning data from the database without the email."""
+
+    email: EmailStr = Field(exclude=True)

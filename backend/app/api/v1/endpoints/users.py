@@ -7,11 +7,11 @@ from app.api.dependencies import get_user_from_token, refresh_token_dependency
 from app.core.exceptions import InvalidCredentialsException, MissingException
 from app.core.jwt_utils import create_access_token, create_refresh_token
 from app.core.security import Hasher
-from app.crud.crud_user import create_new_user, get_user_by_email
+from app.crud.crud_user import create_new_user, get_all_users, get_user_by_email
 from app.db.session import get_db
 from app.schemas.enums import HTTPResponseMessage
 from app.schemas.misc import Message, MessageFromEnum
-from app.schemas.user import User, UserCreate, UserLogin
+from app.schemas.user import User, UserCreate, UserInDBNoEmail, UserLogin
 from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -138,3 +138,25 @@ def get_current_user(
         current_user (User): The currently logged in user.
     """
     return current_user
+
+
+@router.get(
+    "/",
+    response_model=list[UserInDBNoEmail],
+    responses={
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+    },
+)
+def get_users(
+    _: Annotated[str, Depends(refresh_token_dependency)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Gets the list of all registered users.
+
+    Args:
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+    Returns:
+        list[UserInDBNoEmail]: The list of all users.
+    """
+    return get_all_users(db=db)

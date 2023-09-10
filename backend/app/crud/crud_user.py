@@ -19,7 +19,7 @@ def create_new_user(user: UserCreate | UserCreateWithRole, db: Session) -> User:
 
     Raises:
         DuplicateException: If there is already a user with the given email.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         new_user (User): User object.
@@ -50,7 +50,7 @@ def get_user_by_email(email: str, db: Session) -> User:
 
     Raises:
         MissingException: If no user matches the given email.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         User: User object.
@@ -72,7 +72,7 @@ def get_user_by_id(user_id: int, db: Session) -> User:
 
     Raises:
         MissingException: If no user matches the given id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         User: User object.
@@ -81,5 +81,23 @@ def get_user_by_id(user_id: int, db: Session) -> User:
         return db.query(User).filter(User.id == user_id).one()
     except NoResultFound as exc:
         raise MissingException(User.__name__) from exc
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def get_all_users(db: Session) -> list[User]:
+    """Gets all users.
+
+    Args:
+        db (Session): Database session.
+
+    Raises:
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        list[User]: A list of all User objects.
+    """
+    try:
+        return db.query(User).all()
     except SQLAlchemyError as exc:
         raise exc
