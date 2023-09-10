@@ -7,7 +7,7 @@ from app.core.exceptions import JWTTokensException
 from app.core.jwt_utils import create_access_token, decode_token
 from app.crud.crud_user import get_user_by_email
 from app.db.session import get_db
-from app.schemas.user import UserInDB
+from app.models.user import User
 from fastapi import Cookie, Depends, Header
 from jose import ExpiredSignatureError, JWTError
 from sqlalchemy.orm import Session
@@ -79,7 +79,7 @@ def refresh_token_dependency(
 def get_user_from_token(
     db: Annotated[Session, Depends(get_db)],
     access_token: Annotated[str | None, Cookie()] = None,
-) -> UserInDB:
+) -> User:
     """Decodes the token and returns the user read by decoded email.
 
     Args:

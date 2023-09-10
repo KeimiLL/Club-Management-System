@@ -137,7 +137,7 @@ def get_current_user(
         new_access_tokens (Annotated[tuple[str, str], Depends]): New JWT access tokens,
             generated if the previous ones have expired.
             Defaults to Depends(refresh_token_dependency).
-        current_user (Annotated[str, Depends]): Current user read from access token,
+        current_user (Annotated[str, Depends]): Current user read from access token.
             Defaults to Depends(get_user_from_token).
 
     Returns:
