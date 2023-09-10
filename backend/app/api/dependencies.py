@@ -8,21 +8,23 @@ from app.core.jwt_utils import create_access_token, decode_token
 from app.crud.crud_user import get_user_by_email
 from app.db.session import get_db
 from app.models.user import User
-from fastapi import Cookie, Depends, Header
+from fastapi import Cookie, Depends, Header, Response
 from jose import ExpiredSignatureError, JWTError
 from sqlalchemy.orm import Session
 
 
 def refresh_token_dependency(
+    response: Response,
     access_token: Annotated[str | None, Cookie()] = None,
     refresh_token: Annotated[str | None, Cookie()] = None,
     xsrf_access_token: Annotated[str | None, Cookie()] = None,
     xsrf_refresh_token: Annotated[str | None, Cookie()] = None,
     x_xsrf_token: Annotated[str | None, Header()] = None,
-) -> tuple[str, str] | None:
+) -> str:
     """Dependency to refresh access_token if it has expired.
 
     Args:
+        response (Response): Response object.
         access_token (Annotated[str | None, Cookie, optional]): JWT access token.
             Defaults to None.
         refresh_token (Annotated[str | None, Cookie, optional]): JWT refresh token.
@@ -39,7 +41,7 @@ def refresh_token_dependency(
         JWTTokensException: If any of the tokens is invalid in another way.
 
     Returns:
-        tuple[str, str] | None: Refreshed access_tokens if they have expired, otherwise None.
+        str: Refreshed access_token if it has expired, access_token cookie value otherwise.
     """
     try:
         if (
@@ -59,7 +61,7 @@ def refresh_token_dependency(
                 raise JWTTokensException("Invalid tokens")
         except KeyError as exc:
             raise JWTTokensException("Invalid tokens") from exc
-        return None
+        return access_token
     except ExpiredSignatureError:
         try:
             refresh_payload = decode_token(str(refresh_token))
@@ -69,7 +71,14 @@ def refresh_token_dependency(
             new_xsrf_access_token = create_access_token(
                 {"sub": refresh_payload["sub"], "type": "xsrf"}
             )
-            return new_access_token, new_xsrf_access_token
+
+            response.set_cookie(
+                key="access_token", value=new_access_token, httponly=True
+            )
+            response.set_cookie(
+                key="xsrf_access_token", value=new_xsrf_access_token, httponly=False
+            )
+            return new_access_token
         except ExpiredSignatureError as exc:
             raise JWTTokensException("Expired tokens") from exc
     except JWTError as exc:
@@ -78,17 +87,23 @@ def refresh_token_dependency(
 
 def get_user_from_token(
     db: Annotated[Session, Depends(get_db)],
-    access_token: Annotated[str | None, Cookie()] = None,
+    access_token: Annotated[str, Depends(refresh_token_dependency)],
 ) -> User:
     """Decodes the token and returns the user read by decoded email.
 
     Args:
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
-        access_token (Annotated[str | None, Cookie, optional]): JWT access token. Defaults to None.
+        access_token (Annotated[str, Depends]): Valid JWT access token.
+            Defaults to Depends(refresh_token_dependency).
 
     Returns:
         User: User read by decoded email.
     """
-    payload = decode_token(access_token or "")
-    email = payload["sub"]
-    return get_user_by_email(str(email), db)
+    try:
+        payload = decode_token(access_token)
+        email: str = payload["sub"]
+        return get_user_by_email(email, db)
+    except ExpiredSignatureError as exc:
+        raise JWTTokensException("Expired tokens") from exc
+    except JWTError as exc:
+        raise JWTTokensException("Invalid tokens") from exc
