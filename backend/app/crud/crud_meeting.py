@@ -18,7 +18,7 @@ def create_new_meeting(meeting: MeetingCreate, db: Session) -> Meeting:
 
     Raises:
         DuplicateException: If there is already a meeting with the given id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         new_meeting (Meeting): Meeting object.
@@ -50,7 +50,7 @@ def get_meeting_by_id(meeting_id: int, db: Session) -> Meeting:
 
     Raises:
         MissingException: If no meeting matches the given meeting id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         Meeting: Meeting object.

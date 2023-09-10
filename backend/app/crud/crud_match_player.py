@@ -21,7 +21,7 @@ def create_new_match_player(
 
     Raises:
         DuplicateException: If there is already a match_player with the given user id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         new_match_player (MatchPlayer): MatchPlayer object.
@@ -55,7 +55,7 @@ def get_match_player_by_id(match_player_id: int, db: Session) -> MatchPlayer:
 
     Raises:
         MissingException: If no match_player matches the given match_player id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         MatchPlayer: MatchPlayer object.

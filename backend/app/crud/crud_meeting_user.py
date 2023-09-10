@@ -21,7 +21,7 @@ def create_new_meeting_user(
 
     Raises:
         DuplicateException: If there is already a meeting_user with the given user id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         new_meeting_user (MeetingUser): MeetingUser object.
@@ -52,7 +52,7 @@ def get_meeting_user_by_id(meeting_user_id: int, db: Session) -> MeetingUser:
 
     Raises:
         MissingException: If no meeting_user matches the given meeting_user id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         MeetingUser: MeetingUser object.

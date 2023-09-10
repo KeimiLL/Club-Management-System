@@ -21,7 +21,7 @@ def create_new_training_player(
 
     Raises:
         DuplicateException: If there is already a training_player with the given user id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         new_training_player (TrainingPlayer): TrainingPlayer object.
@@ -53,7 +53,7 @@ def get_training_player_by_id(training_player_id: int, db: Session) -> TrainingP
 
     Raises:
         MissingException: If no training_player matches the given training_player id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         TrainingPlayer: TrainingPlayer object.
