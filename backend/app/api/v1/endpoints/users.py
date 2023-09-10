@@ -126,12 +126,12 @@ def logout(
     },
 )
 def get_current_user(
-    current_user: Annotated[str, Depends(get_user_from_token)],
+    current_user: Annotated[User, Depends(get_user_from_token)],
 ):
     """Gets current user from authentication cookies.
 
     Args:
-        current_user (Annotated[str, Depends]): Current user read from access token.
+        current_user (Annotated[User, Depends]): Current user read from access token.
             Defaults to Depends(get_user_from_token).
 
     Returns:
