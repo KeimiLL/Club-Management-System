@@ -17,6 +17,8 @@ export class SplitViewManagerService {
         return this.isDetailStore$.asObservable();
     }
 
+    // checking url and setting up state of detail
+
     // functions to handle pagination
 
     // function to handle spliting records for paginations

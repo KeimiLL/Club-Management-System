@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
 
 import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
@@ -20,10 +21,16 @@ import { MeetingsRootService } from "./services/meetings-root.service";
         MeetingsRootService,
     ],
 })
-export class MeetingsComponent {
-    public isDetail = false;
+export class MeetingsComponent implements OnInit {
+    protected isDetail$: Observable<boolean>;
 
-    public changeState(): void {
-        this.isDetail = !this.isDetail;
+    constructor(private readonly splitService: SplitViewManagerService) {}
+
+    ngOnInit(): void {
+        this.isDetail$ = this.splitService.isDetail$;
+    }
+
+    protected switchDetail(): void {
+        this.splitService.changeDetailState();
     }
 }
