@@ -35,7 +35,7 @@ def register(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Returns:
-        dict[str, HTTPResponseMessage]: The response signalling a correct register.
+        Message: The response signalling a successful operation.
     """
     create_new_user(user=user, db=db)
     return Message(message=HTTPResponseMessage.SUCCESS)
@@ -100,7 +100,7 @@ def login(
 )
 def logout(
     response: Response,
-    _: Annotated[tuple[str, str], Depends(refresh_token_dependency)],
+    _: Annotated[str, Depends(refresh_token_dependency)],
 ):
     """Logs the user out by removing the necessary cookies.
 
@@ -108,7 +108,7 @@ def logout(
         response (Response): Response object.
 
     Returns:
-        dict[str, HTTPResponseMessage]: The response signalling a correct logout.
+        Message: The response signalling a successful operation.
     """
     response.delete_cookie("access_token")
     response.delete_cookie("refresh_token")
@@ -126,27 +126,15 @@ def logout(
     },
 )
 def get_current_user(
-    response: Response,
-    new_access_tokens: Annotated[tuple[str, str], Depends(refresh_token_dependency)],
     current_user: Annotated[str, Depends(get_user_from_token)],
 ):
     """Gets current user from authentication cookies.
 
     Args:
-        response (Response): Response object.
-        new_access_tokens (Annotated[tuple[str, str], Depends]): New JWT access tokens,
-            generated if the previous ones have expired.
-            Defaults to Depends(refresh_token_dependency).
-        current_user (Annotated[str, Depends]): Current user read from access token,
+        current_user (Annotated[str, Depends]): Current user read from access token.
             Defaults to Depends(get_user_from_token).
 
     Returns:
         current_user (User): The currently logged in user.
     """
-    if new_access_tokens:
-        access_token, xsrf_access_token = new_access_tokens
-        response.set_cookie(key="access_token", value=access_token, httponly=True)
-        response.set_cookie(
-            key="xsrf_access_token", value=xsrf_access_token, httponly=False
-        )
     return current_user
