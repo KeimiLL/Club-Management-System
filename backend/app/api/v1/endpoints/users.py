@@ -79,7 +79,7 @@ def login(
         key="xsrf_access_token", value=xsrf_access_token, httponly=False
     )
     response.set_cookie(
-        key="xsrf_refresh_token", value=xsrf_refresh_token, httponly=False
+        key="xsrf_refresh_token", value=xsrf_refresh_token, httponly=True
     )
 
     try:
