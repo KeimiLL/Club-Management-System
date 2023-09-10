@@ -1,9 +1,9 @@
 <mat-card-title class="card__title--half">
     {{ name }}
 </mat-card-title>
-<div>
-    <button mat-icon-button (click)="onClosedButtonClick()">
+<div class="button-container">
+    <ng-content select="[buttons]"></ng-content>
+    <button mat-icon-button (click)="closedClicked.emit()">
         <mat-icon>close</mat-icon>
     </button>
-    <ng-content select="[buttons]"></ng-content>
 </div>
