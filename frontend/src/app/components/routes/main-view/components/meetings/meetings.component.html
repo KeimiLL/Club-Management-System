@@ -18,7 +18,7 @@
         </app-wide-card-header>
 
         <ng-container content>
-            <app-legend></app-legend>
+            <app-auto-table [data]="meetingsArray"></app-auto-table>
         </ng-container>
     </app-content-card>
 </ng-template>
@@ -33,7 +33,7 @@
         </app-half-card-left-header>
 
         <ng-container content>
-            <app-legend></app-legend>
+            <app-auto-table [data]="meetingsShortArray"></app-auto-table>
         </ng-container>
     </app-content-card>
 

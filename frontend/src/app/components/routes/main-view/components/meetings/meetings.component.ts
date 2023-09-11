@@ -2,6 +2,9 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 
+import { AutoTableComponent } from "../../../../../shared/components/auto-table/auto-table.component";
+import { longMeetingsMockup } from "../../../../../shared/mock/meetings.mock";
+import { ShortMeetingDataCell } from "../../../../../shared/models/meetings.model";
 import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../shared/services/split-view-manager.service";
@@ -12,7 +15,13 @@ import { MeetingsRootService } from "./services/meetings-root.service";
 @Component({
     selector: "app-meetings",
     standalone: true,
-    imports: [CommonModule, CardsModule, MaterialModule, LegendComponent],
+    imports: [
+        CommonModule,
+        CardsModule,
+        MaterialModule,
+        LegendComponent,
+        AutoTableComponent,
+    ],
     templateUrl: "./meetings.component.html",
     styleUrls: ["./meetings.component.scss"],
     providers: [
@@ -23,6 +32,8 @@ import { MeetingsRootService } from "./services/meetings-root.service";
 })
 export class MeetingsComponent implements OnInit {
     protected isDetail$: Observable<boolean>;
+    protected meetingsArray = longMeetingsMockup;
+    protected meetingsShortArray: ShortMeetingDataCell[];
 
     constructor(private readonly splitService: SplitViewManagerService) {}
 
