@@ -1,15 +1,16 @@
 import { User } from "./user.model";
 
-export interface ShortMeetingDataCell {
+export interface ShortMeeting {
+    id: string;
     name: string;
     isYour: boolean;
 }
 
-export interface LongMeetingDataCell extends ShortMeetingDataCell {
+export interface LongMeeting extends ShortMeeting {
     date: Date;
 }
 
-export interface Meeting extends LongMeetingDataCell {
+export interface Meeting extends LongMeeting {
     attendees: User[];
     description: string;
 }

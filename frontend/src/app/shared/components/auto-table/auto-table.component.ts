@@ -2,13 +2,14 @@ import { CommonModule } from "@angular/common";
 import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
+import { RouterModule } from "@angular/router";
 
 import { MaterialModule } from "../../modules/material.module";
 
 @Component({
     selector: "app-auto-table",
     standalone: true,
-    imports: [CommonModule, MaterialModule],
+    imports: [CommonModule, MaterialModule, RouterModule],
     templateUrl: "./auto-table.component.html",
     styleUrls: ["./auto-table.component.scss"],
 })

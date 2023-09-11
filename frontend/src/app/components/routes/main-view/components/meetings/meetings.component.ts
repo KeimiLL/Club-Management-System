@@ -3,8 +3,10 @@ import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { AutoTableComponent } from "../../../../../shared/components/auto-table/auto-table.component";
-import { longMeetingsMockup } from "../../../../../shared/mock/meetings.mock";
-import { ShortMeetingDataCell } from "../../../../../shared/models/meetings.model";
+import {
+    LongMeeting,
+    ShortMeeting,
+} from "../../../../../shared/models/meetings.model";
 import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../shared/services/split-view-manager.service";
@@ -32,13 +34,18 @@ import { MeetingsRootService } from "./services/meetings-root.service";
 })
 export class MeetingsComponent implements OnInit {
     protected isDetail$: Observable<boolean>;
-    protected meetingsArray = longMeetingsMockup;
-    protected meetingsShortArray: ShortMeetingDataCell[];
+    protected longMeetings$: Observable<LongMeeting[]>;
+    protected shortMeetings$: Observable<ShortMeeting[]>;
 
-    constructor(private readonly splitService: SplitViewManagerService) {}
+    constructor(
+        private readonly splitService: SplitViewManagerService,
+        private readonly root: MeetingsRootService
+    ) {}
 
     ngOnInit(): void {
         this.isDetail$ = this.splitService.isDetail$;
+        this.longMeetings$ = this.root.longMeetings$;
+        this.shortMeetings$ = this.root.shortMeetings$;
     }
 
     protected switchDetail(): void {
