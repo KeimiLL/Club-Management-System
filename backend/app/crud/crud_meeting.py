@@ -27,7 +27,7 @@ def create_new_meeting(meeting: MeetingCreate, db: Session) -> Meeting:
         get_user_by_id(meeting.user_id, db)
         new_meeting = Meeting(
             user_id=meeting.user_id,
-            description=meeting.description,
+            name=meeting.name,
             notes=meeting.notes,
             date=meeting.date,
         )

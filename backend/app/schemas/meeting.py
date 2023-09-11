@@ -14,7 +14,7 @@ class MeetingBase(BaseModel):
     """Base Meeting schema."""
 
     notes: str | None = None
-    description: str | None = None
+    name: str | None = None
     date: datetime.date | None = None
 
 
@@ -22,21 +22,21 @@ class MeetingCreate(MeetingBase):
     """Meeting schema for creation."""
 
     user_id: int = Field(..., ge=1)
-    description: str
+    name: str
     date: datetime.date
 
 
 class MeetingCreateNoUserId(MeetingBase):
     """Meeting schema for creation with no user id."""
 
-    description: str
+    name: str
     date: datetime.date
 
 
 class Meeting(MeetingBase):
     """Meeting schema for returning data from DB."""
 
-    description: str
+    name: str
     date: datetime.date
     created_by_user: "User"
     users: list["User"]
