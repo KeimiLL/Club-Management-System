@@ -1,41 +1,71 @@
-<app-content-card *ngIf="!isDetail">
-    <app-wide-card-header header [name]="'Meetings'" [subName]="'team1'">
-        <app-button-container buttons>
-            <button mat-raised-button class="button--light">button1</button>
-            <button mat-raised-button class="button--light">button2</button>
-            <button mat-raised-button class="button--light">button3</button>
-        </app-button-container>
-    </app-wide-card-header>
+<ng-container *ngIf="isDetail$ | async; then detail; else wide"></ng-container>
 
-    <ng-container content>
-        <app-legend></app-legend>
-    </ng-container>
-</app-content-card>
+<ng-template #wide>
+    <app-content-card>
+        <app-wide-card-header header [name]="'Meetings'" [subName]="'team1'">
+            <app-button-container buttons>
+                <button
+                    mat-raised-button
+                    class="button--light"
+                    (click)="switchDetail()"
+                >
+                    Test Switch State
+                </button>
+                <button mat-raised-button class="button--light">
+                    Add Meeting
+                </button>
+            </app-button-container>
+        </app-wide-card-header>
 
-<!-- <app-content-card *ngIf="!isDetail">
-    <app-wide-card-header header [name]="'Meetings'" [subName]="'team1'">
-        <app-button-container buttons>
-            <button mat-raised-button class="button--light">button1</button>
-            <button mat-raised-button class="button--dark">button2</button>
-            <button
-                mat-raised-button
-                class="button--light"
-                (click)="changeState()"
-            >
-                button3
-            </button>
-        </app-button-container>
-    </app-wide-card-header>
+        <ng-container content>
+            <app-legend></app-legend>
+        </ng-container>
+    </app-content-card>
+</ng-template>
 
-    <div content>
-        <app-half-card-section>
-            <app-section-header [name]="'Testowa nazwa sekcji'" sectionHeader>
-            </app-section-header>
-            <div sectionContent>
-                <div class="xd">Example of component1</div>
-                <div class="xd">Example of component2</div>
-                <div class="xd">Example of component3</div>
-            </div>
-        </app-half-card-section>
-    </div>
-</app-content-card> -->
+<ng-template #detail>
+    <app-content-card>
+        <app-half-card-left-header
+            header
+            [name]="'Meetings'"
+            [subName]="'team1'"
+        >
+        </app-half-card-left-header>
+
+        <ng-container content>
+            <app-legend></app-legend>
+        </ng-container>
+    </app-content-card>
+
+    <app-content-card>
+        <app-half-card-right-header
+            header
+            [name]="'Exact Meeting Name'"
+            (closedClicked)="switchDetail()"
+        >
+            <app-button-container buttons>
+                <button mat-raised-button class="button--light">
+                    Modify Meeting
+                </button>
+            </app-button-container>
+        </app-half-card-right-header>
+
+        <ng-container content>
+            <app-half-card-section>
+                <app-section-header [name]="'Attendees'" sectionHeader>
+                    <app-button-container>
+                        <button mat-raised-button class="button--light" buttons>
+                            Modify Attendees
+                        </button></app-button-container
+                    >
+                </app-section-header>
+
+                <ng-container sectionContent>
+                    <div>Person1</div>
+                    <div>Person2</div>
+                    <div>Person3</div>
+                </ng-container>
+            </app-half-card-section>
+        </ng-container>
+    </app-content-card>
+</ng-template>

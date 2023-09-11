@@ -13,10 +13,5 @@ import { MaterialModule } from "../../../../modules/material.module";
 export class HalfCardRightHeaderComponent {
     @Input() public name: string;
     @Input() public subName: string;
-
     @Output() protected closedClicked = new EventEmitter<void>();
-
-    protected onClosedButtonClick(): void {
-        this.closedClicked.emit();
-    }
 }
