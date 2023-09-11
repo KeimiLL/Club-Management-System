@@ -26,6 +26,13 @@ class MeetingCreate(MeetingBase):
     date: datetime.date
 
 
+class MeetingCreateNoUserId(MeetingBase):
+    """Meeting schema for creation with no user id."""
+
+    description: str
+    date: datetime.date
+
+
 class Meeting(MeetingBase):
     """Meeting schema for returning data from DB."""
 

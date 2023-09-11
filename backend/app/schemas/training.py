@@ -2,10 +2,13 @@
 
 
 import datetime
+from typing import TYPE_CHECKING
 
-from app.models.player import Player
-from app.schemas.team import Team
 from pydantic import BaseModel, ConfigDict, Field
+
+if TYPE_CHECKING:
+    from app.schemas.player import Player
+    from app.schemas.team import Team
 
 
 class TrainingBase(BaseModel):

@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
-    from app.schemas.meeting import Meeting
+    from app.schemas.meeting import Meeting, MeetingCreateNoUserId
     from app.schemas.user import User
 
 
@@ -19,6 +19,13 @@ class MeetingUserCreate(MeetingUserBase):
 
     meeting_id: int = Field(..., ge=1)
     user_id: int = Field(..., ge=1)
+
+
+class MeetingUserCreateUserIdList(MeetingUserBase):
+    """MeetingUser schema for creation with a list of users ids."""
+
+    meeting: "MeetingCreateNoUserId"
+    user_ids: list[int]
 
 
 class MeetingUser(MeetingUserBase):

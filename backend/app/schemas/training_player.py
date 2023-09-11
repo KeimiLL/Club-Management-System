@@ -7,8 +7,8 @@ from app.schemas.enums import TrainingPresence
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
-    from app.models.player import Player
-    from app.models.training import Training
+    from app.schemas.player import Player
+    from app.schemas.training import Training
 
 
 class TrainingPlayerBase(BaseModel):

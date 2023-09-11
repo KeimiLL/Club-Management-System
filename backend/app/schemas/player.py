@@ -4,13 +4,13 @@
 import datetime
 from typing import TYPE_CHECKING
 
-from app.schemas.injury import Injury
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
-    from app.models.training import Training
+    from app.schemas.injury import Injury
     from app.schemas.match import Match
     from app.schemas.team import Team
+    from app.schemas.training import Training
     from app.schemas.user import User
 
 
