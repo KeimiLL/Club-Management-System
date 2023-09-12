@@ -8,6 +8,7 @@ from app.core.exceptions import (
     InvalidCredentialsException,
     JWTTokensException,
     MissingException,
+    MissingRelationshipObjectException,
 )
 from app.schemas.enums import HTTPResponseMessage
 from fastapi import Request, status
@@ -48,6 +49,29 @@ async def duplicate_exception_handler(
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={"message": f"{exc.item_name} already exists."},
+    )
+
+
+async def missing_association_object_exception_handler(
+    _: Request, exc: MissingRelationshipObjectException
+) -> JSONResponse:
+    """App-wide MissingRelationshipObjectException handler.
+
+    Args:
+        exc (MissingRelationshipObjectException): The raised MissingRelationshipObjectException.
+
+    Returns:
+        JSONResponse: The response with an appropriate status code and message.
+    """
+    logging.getLogger("uvicorn").info(msg=exc, exc_info=True)
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        content={
+            "message": (
+                f"There was a database error while creating a record "
+                f"of type {exc.item_name}."
+            )
+        },
     )
 
 
