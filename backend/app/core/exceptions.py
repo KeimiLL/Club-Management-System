@@ -15,7 +15,7 @@ class DuplicateException(Exception):
         self.item_name = item_name
 
 
-class MissingRelationshipObjectException(Exception):
+class MissingAssociationObjectException(Exception):
     """Class for raising a MissingRelationshipObject exception from db calls."""
 
     def __init__(self, item_name: str):

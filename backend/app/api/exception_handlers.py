@@ -7,8 +7,8 @@ from app.core.exceptions import (
     DuplicateException,
     InvalidCredentialsException,
     JWTTokensException,
+    MissingAssociationObjectException,
     MissingException,
-    MissingRelationshipObjectException,
 )
 from app.schemas.enums import HTTPResponseMessage
 from fastapi import Request, status
@@ -53,12 +53,12 @@ async def duplicate_exception_handler(
 
 
 async def missing_association_object_exception_handler(
-    _: Request, exc: MissingRelationshipObjectException
+    _: Request, exc: MissingAssociationObjectException
 ) -> JSONResponse:
-    """App-wide MissingRelationshipObjectException handler.
+    """App-wide MissingAssociationObjectException handler.
 
     Args:
-        exc (MissingRelationshipObjectException): The raised MissingRelationshipObjectException.
+        exc (MissingAssociationObjectException): The raised MissingAssociationObjectException.
 
     Returns:
         JSONResponse: The response with an appropriate status code and message.

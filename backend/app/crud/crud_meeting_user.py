@@ -1,9 +1,7 @@
 """File responsible for implementing meeting_useres related CRUD operations."""
 
 
-from app.core.exceptions import DuplicateException, MissingException
-from app.crud.crud_meeting import get_meeting_by_id
-from app.crud.crud_user import get_user_by_id
+from app.core.exceptions import MissingAssociationObjectException, MissingException
 from app.models.meeting_user import MeetingUser
 from app.schemas.meeting_user import MeetingUserCreate
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
@@ -20,15 +18,14 @@ def create_new_meeting_user(
         db (Session): Database session.
 
     Raises:
-        DuplicateException: If there is already a meeting_user with the given user id.
+        MissingAssociationObjectException: If there is an IntegrityError
+            while creating the record.
         SQLAlchemyError: If there is a database error.
 
     Returns:
         new_meeting_user (MeetingUser): MeetingUser object.
     """
     try:
-        get_meeting_by_id(meeting_user.meeting_id, db)
-        get_user_by_id(meeting_user.user_id, db)
         new_meeting_user = MeetingUser(
             meeting_id=meeting_user.meeting_id,
             user_id=meeting_user.user_id,
@@ -38,7 +35,7 @@ def create_new_meeting_user(
         db.refresh(new_meeting_user)
         return new_meeting_user
     except IntegrityError as exc:
-        raise DuplicateException(MeetingUser.__name__) from exc
+        raise MissingAssociationObjectException(MeetingUser.__name__) from exc
     except SQLAlchemyError as exc:
         raise exc
 

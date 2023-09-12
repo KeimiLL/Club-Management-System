@@ -8,6 +8,7 @@ from app.api.exception_handlers import (
     duplicate_exception_handler,
     invalid_credentials_exception_handler,
     jwt_tokens_exception_handler,
+    missing_association_object_exception_handler,
     missing_exception_handler,
     request_validation_exception_handler,
     sqlalchemyerror_handler,
@@ -18,6 +19,7 @@ from app.core.exceptions import (
     DuplicateException,
     InvalidCredentialsException,
     JWTTokensException,
+    MissingAssociationObjectException,
     MissingException,
 )
 from app.db import base  # pylint: disable=unused-import
@@ -36,6 +38,9 @@ def include_exception_handlers(application: FastAPI) -> None:
 
     application.add_exception_handler(MissingException, missing_exception_handler)
     application.add_exception_handler(DuplicateException, duplicate_exception_handler)
+    application.add_exception_handler(
+        MissingAssociationObjectException, missing_association_object_exception_handler
+    )
     application.add_exception_handler(SQLAlchemyError, sqlalchemyerror_handler)
     application.add_exception_handler(JWTTokensException, jwt_tokens_exception_handler)
     application.add_exception_handler(
