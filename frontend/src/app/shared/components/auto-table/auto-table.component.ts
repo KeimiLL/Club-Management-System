@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
-import { RouterModule } from "@angular/router";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 
 import { MaterialModule } from "../../modules/material.module";
 
@@ -18,6 +18,11 @@ export class AutoTableComponent<T> implements AfterViewInit {
     protected displayedColumns: string[] = [];
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
+    constructor(
+        private readonly router: Router,
+        private readonly activatedRoute: ActivatedRoute
+    ) {}
+
     @Input() set data(data: T[]) {
         this.dataSource.data = data;
         if (data.length > 0) {
@@ -31,5 +36,15 @@ export class AutoTableComponent<T> implements AfterViewInit {
 
     ngAfterViewInit(): void {
         this.dataSource.paginator = this.paginator;
+    }
+
+    protected addParamsToRouting(id: number): void {
+        this.router.navigate([], {
+            relativeTo: this.activatedRoute,
+            queryParams: {
+                id,
+            },
+            queryParamsHandling: "merge",
+        });
     }
 }

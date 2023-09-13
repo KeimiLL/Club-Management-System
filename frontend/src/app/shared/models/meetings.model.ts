@@ -1,7 +1,7 @@
 import { User } from "./user.model";
 
 export interface ShortMeeting {
-    id: string;
+    id: number;
     name: string;
     isYour: boolean;
 }

@@ -55,8 +55,8 @@ export class MeetingsRootService {
 
     private minimazeLongMeetings(): void {
         this.shortMeetings = this.longMeetings.map((meeting) => {
-            const { name, isYour } = meeting;
-            return { name, isYour } as ShortMeeting;
+            const { id, name, isYour } = meeting;
+            return { id, name, isYour } as ShortMeeting;
         });
     }
 }
