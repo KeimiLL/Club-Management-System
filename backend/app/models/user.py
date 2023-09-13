@@ -23,9 +23,9 @@ class User(Base):
 
     def __repr__(self):
         return (
-            f"Match(id={self.id}, full_name={self.full_name}, "
+            f"User(id={self.id}, full_name={self.full_name}, "
             f"email={self.email}, hashed_password={self.hashed_password}, "
-            f"notes={self.role})"
+            f"role={self.role})"
         )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)

@@ -16,7 +16,7 @@ from app.schemas.player import Player, PlayerInDBBase
 from app.schemas.team import Team, TeamInDBBase
 from app.schemas.training import Training, TrainingInDBBase
 from app.schemas.training_player import TrainingPlayer, TrainingPlayerInDBBase
-from app.schemas.user import User, UserInDBBase, UserInDBOnlyBaseInfo
+from app.schemas.user import User, UserInDBBase, UserOnlyBaseInfo
 
 Coach.model_rebuild()
 CoachInDBBase.model_rebuild()
@@ -39,4 +39,4 @@ TrainingPlayer.model_rebuild()
 TrainingPlayerInDBBase.model_rebuild()
 User.model_rebuild()
 UserInDBBase.model_rebuild()
-UserInDBOnlyBaseInfo.model_rebuild()
+UserOnlyBaseInfo.model_rebuild()

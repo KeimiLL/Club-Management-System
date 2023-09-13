@@ -90,10 +90,8 @@ class UserInDB(UserInDBBase):
     hashed_password: str
 
 
-class UserInDBOnlyBaseInfo(UserInDBBase):
-    """User schema for returning data from the database without the email."""
+class UserOnlyBaseInfo(BaseModel):
+    """User schema for returning data from the database."""
 
-    email: EmailStr = Field(exclude=True)
-    coach: "Coach" = Field(exclude=True)
-    player: "Player" = Field(exclude=True)
-    created_meetings: list["Meeting"] = Field(exclude=True)
+    id: int
+    full_name: str
