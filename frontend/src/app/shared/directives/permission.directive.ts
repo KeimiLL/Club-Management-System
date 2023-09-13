@@ -1,7 +1,6 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from "@angular/core";
 
 import { RoleDefinitions, SubPermissions } from "../models/permission.model";
-import { Roles } from "../models/user.model";
 import { UserService } from "../services/user.service";
 
 @Directive({
@@ -16,16 +15,17 @@ export class PermissionDirective {
     ) {}
 
     @Input() set appPermission(requiredPermission: SubPermissions) {
-        // const userRole = this.userService.currentUser.role
-        const userRole = Roles.Admin; // for now to test
+        if (this.userService.currentUser !== null) {
+            const userRole = this.userService.currentUser.role;
 
-        const rolePermissions = RoleDefinitions[userRole].permissions;
-        const hasPermission = rolePermissions.includes(requiredPermission);
+            const rolePermissions = RoleDefinitions[userRole].permissions;
+            const hasPermission = rolePermissions.includes(requiredPermission);
 
-        if (hasPermission) {
-            this.viewContainer.createEmbeddedView(this.templateRef);
-        } else {
-            this.viewContainer.clear();
+            if (hasPermission) {
+                this.viewContainer.createEmbeddedView(this.templateRef);
+            } else {
+                this.viewContainer.clear();
+            }
         }
     }
 }

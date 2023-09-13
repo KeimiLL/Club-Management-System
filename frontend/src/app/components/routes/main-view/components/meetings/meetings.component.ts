@@ -2,7 +2,6 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { AutoTableComponent } from "../../../../../shared/components/auto-table/auto-table.component";
 import {
     LongMeeting,
     ShortMeeting,
@@ -11,6 +10,7 @@ import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../shared/services/split-view-manager.service";
 import { LegendComponent } from "./components/legend/legend.component";
+import { MeetingTableComponent } from "./components/meeting-table/meeting-table.component";
 import { MeetingsHttpService } from "./services/meetings-http.service";
 import { MeetingsRootService } from "./services/meetings-root.service";
 
@@ -22,7 +22,7 @@ import { MeetingsRootService } from "./services/meetings-root.service";
         CardsModule,
         MaterialModule,
         LegendComponent,
-        AutoTableComponent,
+        MeetingTableComponent,
     ],
     templateUrl: "./meetings.component.html",
     styleUrls: ["./meetings.component.scss"],

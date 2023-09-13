@@ -32,6 +32,7 @@ export enum TeamPermission {
 }
 export enum MeetingsPermission {
     CreateMeeting = "createMeeting",
+    SeeAllMeetings = "seeAllMeeting",
 }
 
 export enum SettingsPermission {

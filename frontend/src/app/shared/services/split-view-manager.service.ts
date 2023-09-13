@@ -50,9 +50,15 @@ export class SplitViewManagerService {
         });
     }
 
-    // checking url and setting up state of detail
-
-    // functions to handle pagination
+    public addParamsToRouting(id: number): void {
+        this.router.navigate([], {
+            relativeTo: this.activatedRoute,
+            queryParams: {
+                id,
+            },
+            queryParamsHandling: "merge",
+        });
+    }
 
     // function to handle spliting records for paginations
 }
