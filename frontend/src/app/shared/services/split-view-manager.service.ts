@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, tap } from "rxjs";
 @Injectable()
 export class SplitViewManagerService {
     private readonly isDetailStore$ = new BehaviorSubject<boolean>(false);
+    private readonly currentIdStore$ = new BehaviorSubject<number | null>(null);
 
     constructor(
         private readonly activatedRoute: ActivatedRoute,
@@ -19,17 +20,23 @@ export class SplitViewManagerService {
                 tap((params) => {
                     if ("id" in params) {
                         this.isDetailStore$.next(true);
+                        const { id } = params;
+                        this.currentIdStore$.next(id);
                     } else {
                         this.isDetailStore$.next(false);
+                        this.currentIdStore$.next(null);
                     }
                 })
             )
             .subscribe();
     }
 
-    public changeDetailState(): void {
-        this.isDetailStore$.next(!this.isDetail);
-        if (!this.isDetail) this.deleteQueryParams();
+    public get currentId(): number | null {
+        return this.currentIdStore$.value;
+    }
+
+    public get currentId$(): Observable<number | null> {
+        return this.currentIdStore$.asObservable();
     }
 
     public get isDetail(): boolean {
@@ -38,6 +45,11 @@ export class SplitViewManagerService {
 
     public get isDetail$(): Observable<boolean> {
         return this.isDetailStore$.asObservable();
+    }
+
+    public changeDetailState(): void {
+        this.isDetailStore$.next(!this.isDetail);
+        if (!this.isDetail) this.deleteQueryParams();
     }
 
     private deleteQueryParams(): void {
@@ -59,6 +71,4 @@ export class SplitViewManagerService {
             queryParamsHandling: "merge",
         });
     }
-
-    // function to handle spliting records for paginations
 }
