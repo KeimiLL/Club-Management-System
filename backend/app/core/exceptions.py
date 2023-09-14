@@ -2,24 +2,31 @@
 
 
 class MissingException(Exception):
-    """Class for raising a Missing exception from db calls."""
+    """Class for raising a Missing exception from DB calls."""
 
     def __init__(self, item_name: str):
         self.item_name = item_name
 
 
 class DuplicateException(Exception):
-    """Class for raising a Duplicate exception from db calls."""
+    """Class for raising a Duplicate exception from DB calls."""
 
     def __init__(self, item_name: str):
         self.item_name = item_name
 
 
 class MissingAssociationObjectException(Exception):
-    """Class for raising a MissingRelationshipObject exception from db calls."""
+    """Class for raising a MissingRelationshipObject exception from DB calls."""
 
     def __init__(self, item_name: str):
         self.item_name = item_name
+
+
+class GenericException(Exception):
+    """Class for raising a Generic exception from API calls."""
+
+    def __init__(self, message: str):
+        self.message = message
 
 
 class InvalidCredentialsException(Exception):

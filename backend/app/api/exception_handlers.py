@@ -5,6 +5,7 @@ import logging
 
 from app.core.exceptions import (
     DuplicateException,
+    GenericException,
     InvalidCredentialsException,
     JWTTokensException,
     MissingAssociationObjectException,
@@ -72,6 +73,22 @@ async def missing_association_object_exception_handler(
                 f"of type {exc.item_name}."
             )
         },
+    )
+
+
+async def generic_exception_handler(_: Request, exc: GenericException) -> JSONResponse:
+    """App-wide GenericException handler.
+
+    Args:
+        exc (GenericException): The raised GenericException.
+
+    Returns:
+        JSONResponse: The response with an appropriate status code and message.
+    """
+    logging.getLogger("uvicorn").info(msg=exc, exc_info=True)
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        content={"message": exc.message},
     )
 
 

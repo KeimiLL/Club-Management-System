@@ -6,6 +6,7 @@ import uvicorn
 from app.api.base import api_router
 from app.api.exception_handlers import (
     duplicate_exception_handler,
+    generic_exception_handler,
     invalid_credentials_exception_handler,
     jwt_tokens_exception_handler,
     missing_association_object_exception_handler,
@@ -17,6 +18,7 @@ from app.api.middlewares import LogRequestMiddleware
 from app.core.config import get_settings
 from app.core.exceptions import (
     DuplicateException,
+    GenericException,
     InvalidCredentialsException,
     JWTTokensException,
     MissingAssociationObjectException,
@@ -41,6 +43,7 @@ def include_exception_handlers(application: FastAPI) -> None:
     application.add_exception_handler(
         MissingAssociationObjectException, missing_association_object_exception_handler
     )
+    application.add_exception_handler(GenericException, generic_exception_handler)
     application.add_exception_handler(SQLAlchemyError, sqlalchemyerror_handler)
     application.add_exception_handler(JWTTokensException, jwt_tokens_exception_handler)
     application.add_exception_handler(
