@@ -12,6 +12,7 @@ export class MeetingsPopupService {
         const dialogRef = this.dialog.open(AddMeetingPopupComponent, {
             height: "80vh",
             width: "80vw",
+            disableClose: true,
         });
 
         dialogRef.afterClosed().subscribe((result) => {
