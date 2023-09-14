@@ -4,7 +4,11 @@
     <app-content-card>
         <app-wide-card-header header [name]="'Meetings'" [subName]="'team1'">
             <app-button-container buttons>
-                <button mat-raised-button class="button--light">
+                <button
+                    mat-raised-button
+                    class="button--light"
+                    (click)="openAddMeetingPopup()"
+                >
                     Add Meeting
                 </button>
             </app-button-container>

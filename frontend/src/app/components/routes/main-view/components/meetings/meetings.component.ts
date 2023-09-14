@@ -12,6 +12,7 @@ import { SplitViewManagerService } from "../../../../../shared/services/split-vi
 import { LegendComponent } from "./components/legend/legend.component";
 import { MeetingTableComponent } from "./components/meeting-table/meeting-table.component";
 import { MeetingsHttpService } from "./services/meetings-http.service";
+import { MeetingsPopupService } from "./services/meetings-popup.service";
 import { MeetingsRootService } from "./services/meetings-root.service";
 
 @Component({
@@ -30,6 +31,7 @@ import { MeetingsRootService } from "./services/meetings-root.service";
         SplitViewManagerService,
         MeetingsHttpService,
         MeetingsRootService,
+        MeetingsPopupService,
     ],
 })
 export class MeetingsComponent implements OnInit {
@@ -39,7 +41,8 @@ export class MeetingsComponent implements OnInit {
 
     constructor(
         private readonly splitService: SplitViewManagerService,
-        private readonly root: MeetingsRootService
+        private readonly root: MeetingsRootService,
+        private readonly popup: MeetingsPopupService
     ) {}
 
     ngOnInit(): void {
@@ -50,5 +53,9 @@ export class MeetingsComponent implements OnInit {
 
     protected switchDetail(): void {
         this.splitService.changeDetailState();
+    }
+
+    protected openAddMeetingPopup(): void {
+        this.popup.openPopup();
     }
 }
