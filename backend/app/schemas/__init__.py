@@ -6,7 +6,12 @@ from app.schemas.coach import Coach, CoachInDBBase
 from app.schemas.injury import Injury, InjuryInDBBase
 from app.schemas.match import Match, MatchInDBBase
 from app.schemas.match_player import MatchPlayer, MatchPlayerInDBBase
-from app.schemas.meeting import Meeting, MeetingCreateNoUserId, MeetingInDBBase
+from app.schemas.meeting import (
+    Meeting,
+    MeetingCreateNoUserId,
+    MeetingInDBBase,
+    MeetingOnlyBaseUserInfo,
+)
 from app.schemas.meeting_user import (
     MeetingUser,
     MeetingUserCreateUserIdList,
@@ -26,6 +31,7 @@ MatchPlayer.model_rebuild()
 MatchPlayerInDBBase.model_rebuild()
 Meeting.model_rebuild()
 MeetingInDBBase.model_rebuild()
+MeetingOnlyBaseUserInfo.model_rebuild()
 MeetingUser.model_rebuild()
 MeetingUserCreateUserIdList.model_rebuild()
 MeetingUserInDBBase.model_rebuild()

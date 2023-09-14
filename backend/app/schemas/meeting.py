@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
-    from app.schemas.user import User
+    from app.schemas.user import User, UserOnlyBaseInfo
 
 
 class MeetingBase(BaseModel):
@@ -55,3 +55,11 @@ class MeetingInDBBase(MeetingBase):
     user_id: int | None = None
     created_by_user: "User"
     users: list["User"]
+
+
+class MeetingOnlyBaseUserInfo(MeetingBase):
+    """Base Meeting schema for returning filtered data from DB."""
+
+    id: int
+    created_by_user: "UserOnlyBaseInfo"
+    users: list["UserOnlyBaseInfo"]
