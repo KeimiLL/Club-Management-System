@@ -4,7 +4,8 @@
 import datetime
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, ConfigDict, Field
+from app.schemas.misc import DBIndexInt
+from pydantic import BaseModel, ConfigDict, Field, NonNegativeInt
 
 if TYPE_CHECKING:
     from app.schemas.player import Player
@@ -14,10 +15,10 @@ if TYPE_CHECKING:
 class MatchBase(BaseModel):
     """Base Match schema."""
 
-    opponent: str | None = None
+    opponent: str | None = Field(None, min_length=3)
     is_home: bool | None = None
-    goals_scored: int | None = None
-    goals_conceded: int | None = None
+    goals_scored: NonNegativeInt | None = None
+    goals_conceded: NonNegativeInt | None = None
     notes: str | None = None
     date: datetime.date | None = None
 
@@ -25,11 +26,11 @@ class MatchBase(BaseModel):
 class MatchCreate(MatchBase):
     """Match schema for creation."""
 
-    team_id: int = Field(..., ge=1)
-    opponent: str
+    team_id: DBIndexInt
+    opponent: str = Field(..., min_length=3)
     is_home: bool = True
-    goals_scored: int
-    goals_conceded: int
+    goals_scored: NonNegativeInt
+    goals_conceded: NonNegativeInt
     notes: str
     date: datetime.date
 
@@ -37,10 +38,10 @@ class MatchCreate(MatchBase):
 class Match(MatchBase):
     """Match schema for returning data from DB."""
 
-    opponent: str
+    opponent: str = Field(..., min_length=3)
     is_home: bool
-    goals_scored: int
-    goals_conceded: int
+    goals_scored: NonNegativeInt
+    goals_conceded: NonNegativeInt
     notes: str
     date: datetime.date
     team: "Team"
@@ -56,7 +57,7 @@ class MatchInDBBase(MatchBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: int | None = None
-    team_id: int | None = None
+    id: DBIndexInt | None = None
+    team_id: DBIndexInt | None = None
     team: "Team"
     players: list["Player"]

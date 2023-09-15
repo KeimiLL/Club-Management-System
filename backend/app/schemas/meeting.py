@@ -4,6 +4,7 @@
 import datetime
 from typing import TYPE_CHECKING
 
+from app.schemas.misc import DBIndexInt
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
@@ -14,30 +15,28 @@ class MeetingBase(BaseModel):
     """Base Meeting schema."""
 
     notes: str | None = None
-    name: str | None = None
+    name: str | None = Field(None, min_length=4)
     date: datetime.date | None = None
 
 
 class MeetingCreate(MeetingBase):
     """Meeting schema for creation."""
 
-    user_id: int = Field(..., ge=1)
-    name: str
+    user_id: DBIndexInt
+    name: str = Field(..., min_length=4)
     date: datetime.date
 
 
 class MeetingCreateNoUserId(MeetingBase):
     """Meeting schema for creation with no user id."""
 
-    name: str
+    name: str = Field(..., min_length=4)
     date: datetime.date
 
 
-class Meeting(MeetingBase):
+class Meeting(MeetingCreateNoUserId):
     """Meeting schema for returning data from DB."""
 
-    name: str
-    date: datetime.date
     created_by_user: "User"
     users: list["User"]
 
@@ -51,8 +50,8 @@ class MeetingInDBBase(MeetingBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: int | None = None
-    user_id: int | None = None
+    id: DBIndexInt | None = None
+    user_id: DBIndexInt | None = None
     created_by_user: "User"
     users: list["User"]
 
@@ -60,6 +59,6 @@ class MeetingInDBBase(MeetingBase):
 class MeetingOnlyBaseUserInfo(MeetingBase):
     """Base Meeting schema for returning filtered data from DB."""
 
-    id: int
+    id: DBIndexInt
     created_by_user: "UserOnlyBaseInfo"
     users: list["UserOnlyBaseInfo"]

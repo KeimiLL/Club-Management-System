@@ -3,8 +3,8 @@
 
 from typing import TYPE_CHECKING
 
-from app.schemas.misc import NonEmptyIntList
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from app.schemas.misc import DBIndexInt, NonEmptyUniqueDBIndexIntSet
+from pydantic import BaseModel, ConfigDict
 
 if TYPE_CHECKING:
     from app.schemas.meeting import Meeting, MeetingCreateNoUserId
@@ -18,33 +18,15 @@ class MeetingUserBase(BaseModel):
 class MeetingUserCreate(MeetingUserBase):
     """MeetingUser schema for creation."""
 
-    meeting_id: int = Field(..., ge=1)
-    user_id: int = Field(..., ge=1)
+    meeting_id: DBIndexInt
+    user_id: DBIndexInt
 
 
 class MeetingUserCreateUserIdList(MeetingUserBase):
-    """MeetingUser schema for creation with a list of users ids."""
+    """MeetingUser schema for creation with a set of users ids."""
 
     meeting: "MeetingCreateNoUserId"
-    user_ids: NonEmptyIntList
-
-    @field_validator("user_ids")
-    @classmethod
-    def check_unique_user_ids(cls, user_ids: NonEmptyIntList) -> NonEmptyIntList:
-        """Check if the provided user ids are unique.
-
-        Args:
-            user_ids (NonEmptyList): A list of user ids.
-
-        Raises:
-            ValueError: If there are duplicates.
-
-        Returns:
-            NonEmptyList: The provided list of user ids.
-        """
-        if len(user_ids) != len(set(user_ids)):
-            raise ValueError("Duplicate user ids are not allowed.")
-        return user_ids
+    user_ids: NonEmptyUniqueDBIndexIntSet
 
 
 class MeetingUser(MeetingUserBase):
@@ -63,8 +45,8 @@ class MeetingUserInDBBase(MeetingUserBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: int | None = None
-    meeting_id: int | None = None
-    user_id: int | None = None
+    id: DBIndexInt | None = None
+    meeting_id: DBIndexInt | None = None
+    user_id: DBIndexInt | None = None
     meeting: "Meeting"
     user: "User"
