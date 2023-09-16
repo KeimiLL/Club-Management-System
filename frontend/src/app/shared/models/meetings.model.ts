@@ -21,8 +21,3 @@ export interface addMeeting {
     date: Date;
     user_ids: number[];
 }
-
-export interface Time {
-    hours: number;
-    minutes: number;
-}

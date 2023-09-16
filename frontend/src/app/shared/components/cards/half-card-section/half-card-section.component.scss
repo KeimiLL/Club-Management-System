@@ -10,5 +10,10 @@
         margin: 0 auto;
         height: auto;
         margin: 1rem auto;
+
+        &__content {
+            padding: $small-spacing;
+            width: 100%;
+        }
     }
 }

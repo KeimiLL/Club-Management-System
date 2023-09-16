@@ -16,28 +16,37 @@
                         </app-section-header>
 
                         <ng-container sectionContent>
-                            <mat-form-field appearance="outline">
-                                <input
-                                    matInput
-                                    formControlName="name"
-                                    placeholder="Meeting Name"
-                                    required
-                                />
-                            </mat-form-field>
-                            <mat-form-field appearance="outline" required>
-                                <input
-                                    formControlName="date"
-                                    matInput
-                                    [min]="minDate"
-                                    [matDatepicker]="picker"
-                                    placeholder="Choose a date"
-                                />
-                                <mat-datepicker-toggle
-                                    matSuffix
-                                    [for]="picker"
-                                ></mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
-                            </mat-form-field>
+                            <div class="popup__basic">
+                                <mat-form-field
+                                    appearance="fill"
+                                    class="popup__basic--name"
+                                >
+                                    <input
+                                        matInput
+                                        formControlName="name"
+                                        placeholder="Meeting Name"
+                                        required
+                                    />
+                                </mat-form-field>
+                                <mat-form-field
+                                    appearance="fill"
+                                    class="popup__basic--name"
+                                >
+                                    <input
+                                        formControlName="date"
+                                        required
+                                        matInput
+                                        [min]="minDate"
+                                        [matDatepicker]="picker"
+                                        placeholder="Choose a date"
+                                    />
+                                    <mat-datepicker-toggle
+                                        matSuffix
+                                        [for]="picker"
+                                    ></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
                         </ng-container>
                     </app-half-card-section>
 
@@ -49,45 +58,56 @@
                         </app-section-header>
 
                         <ng-container sectionContent>
-                            <mat-form-field appearance="outline">
-                                <input
-                                    matInput
-                                    [formControl]="attendeeInputControl"
-                                    placeholder="Add Attendee..."
-                                    [matAutocomplete]="auto"
-                                    (input)="onInput($event)"
-                                    (click)="onInput($event)"
-                                    (keyup.enter)="onEnter()"
-                                />
-                                <mat-autocomplete
-                                    #auto="matAutocomplete"
-                                    (optionSelected)="onOptionSelected($event)"
-                                >
-                                    <mat-option
-                                        *ngFor="
-                                            let attendee of filteredAttendees
+                            <div class="popup__selectedAttendees">
+                                <mat-form-field appearance="fill" class="">
+                                    <input
+                                        matInput
+                                        [formControl]="attendeeInputControl"
+                                        placeholder="Add Attendee..."
+                                        [matAutocomplete]="auto"
+                                        (input)="onInput($event)"
+                                        (click)="onInput($event)"
+                                        (keyup.enter)="onEnter()"
+                                    />
+                                    <mat-autocomplete
+                                        #auto="matAutocomplete"
+                                        (optionSelected)="
+                                            onOptionSelected($event)
                                         "
-                                        [value]="attendee"
                                     >
-                                        {{ attendee.full_name }},
-                                        <span
-                                            [appPermissionColor]="attendee.role"
+                                        <mat-option
+                                            *ngFor="
+                                                let attendee of filteredAttendees
+                                            "
+                                            [value]="attendee"
                                         >
-                                            {{ attendee.role }}</span
-                                        >
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
-                            <mat-chip-listbox>
-                                <mat-chip
-                                    *ngFor="let attendee of attendees"
-                                    [removable]="true"
-                                    (removed)="removeAttendee(attendee)"
-                                >
-                                    {{ attendee.full_name }}
-                                    <mat-icon matChipRemove>cancel</mat-icon>
-                                </mat-chip>
-                            </mat-chip-listbox>
+                                            {{ attendee.full_name }},
+                                            <span
+                                                [appPermissionColor]="
+                                                    attendee.role
+                                                "
+                                            >
+                                                {{ attendee.role }}
+                                            </span>
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+                                <mat-chip-listbox>
+                                    <mat-chip
+                                        *ngFor="
+                                            let attendee of selectedAttendees
+                                        "
+                                        [removable]="true"
+                                        (removed)="removeAttendee(attendee)"
+                                    >
+                                        {{ attendee.full_name }}
+                                        <mat-icon matChipRemove>
+                                            cancel
+                                        </mat-icon>
+                                    </mat-chip>
+                                </mat-chip-listbox>
+                            </div>
                         </ng-container>
                     </app-half-card-section>
 
@@ -96,7 +116,10 @@
                         </app-section-header>
 
                         <ng-container sectionContent>
-                            <mat-form-field>
+                            <mat-form-field
+                                class="popup__notes"
+                                appearance="fill"
+                            >
                                 <mat-label>Notes</mat-label>
                                 <textarea
                                     formControlName="notes"

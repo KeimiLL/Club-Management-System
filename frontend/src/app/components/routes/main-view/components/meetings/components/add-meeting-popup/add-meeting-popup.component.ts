@@ -9,6 +9,7 @@ import {
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
+import { DateAndTimeFormComponent } from "../../../../../../../shared/components/date-and-time-form/date-and-time-form.component";
 import { PermissionColorDirective } from "../../../../../../../shared/directives/permission-color.directive";
 import { attendees } from "../../../../../../../shared/mock/meetings.mock";
 import { User } from "../../../../../../../shared/models/user.model";
@@ -26,6 +27,7 @@ import { newMeetingDataFormBuilder } from "./newMeetingFormBuilder";
         ReactiveFormsModule,
         FormsModule,
         PermissionColorDirective,
+        DateAndTimeFormComponent,
     ],
     templateUrl: "./add-meeting-popup.component.html",
     styleUrls: ["./add-meeting-popup.component.scss"],
@@ -36,7 +38,7 @@ export class AddMeetingPopupComponent {
 
     protected attendeeInputControl = new FormControl();
     protected allAttendees: User[] = attendees;
-    protected attendees: User[] = [];
+    protected selectedAttendees: User[] = [];
     protected filteredAttendees: User[] = [];
 
     constructor(
@@ -60,32 +62,43 @@ export class AddMeetingPopupComponent {
                     attendee.full_name
                         .toLowerCase()
                         .indexOf(value.toLowerCase()) === 0 &&
-                    !this.attendees.some((a) => a.id === attendee.id)
+                    !this.selectedAttendees.some((a) => a.id === attendee.id)
             );
         } else {
             this.filteredAttendees = this.allAttendees.filter(
-                (attendee) => !this.attendees.some((a) => a.id === attendee.id)
+                (attendee) =>
+                    !this.selectedAttendees.some((a) => a.id === attendee.id)
             );
         }
     }
 
     protected onOptionSelected(event: MatAutocompleteSelectedEvent): void {
-        this.attendees.push(event.option.value);
-        this.attendeeInputControl.setValue("");
+        this.addAttendeeToList(event.option.value);
     }
 
     protected onEnter(): void {
         if (this.filteredAttendees.length === 1) {
-            this.attendees.push(this.filteredAttendees[0]);
+            this.addAttendeeToList(this.filteredAttendees[0]);
             this.attendeeInputControl.setValue("");
         }
     }
 
     protected removeAttendee(attendee: User): void {
-        const index = this.attendees.indexOf(attendee);
+        const index = this.selectedAttendees.indexOf(attendee);
 
         if (index >= 0) {
-            this.attendees.splice(index, 1);
+            this.selectedAttendees.splice(index, 1);
         }
+        this.meetingForm
+            .get("attendees")
+            ?.setValue(this.selectedAttendees.map((attendee) => attendee.id));
+    }
+
+    private addAttendeeToList(attendee: User): void {
+        this.selectedAttendees.push(attendee);
+        this.attendeeInputControl.setValue("");
+        this.meetingForm
+            .get("attendees")
+            ?.setValue(this.selectedAttendees.map((attendee) => attendee.id));
     }
 }

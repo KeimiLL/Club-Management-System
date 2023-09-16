@@ -8,8 +8,8 @@ export class MeetingsPopupService {
     constructor(private readonly dialog: MatDialog) {}
 
     openPopup(): void {
-        const dialogRef = this.dialog.open(AddMeetingPopupComponent, {
-            width: "80vw",
+        this.dialog.open(AddMeetingPopupComponent, {
+            width: "50vw",
             disableClose: true,
         });
 

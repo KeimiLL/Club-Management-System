@@ -1,5 +1,36 @@
 @import "../../../../../../../../styles/component-styles/components";
 
-.card__content {
-    padding: 1rem 0;
+.popup {
+    .card__content {
+        padding: 1rem 0;
+    }
+
+    &__basic {
+        display: flex;
+        justify-content: space-between;
+        width: calc(100% - 1rem);
+
+        &--name {
+            width: 40%;
+        }
+        &--date {
+            width: 40%;
+        }
+    }
+
+    &__attendees {
+        display: flex;
+        flex-direction: row;
+        align-items: start;
+        justify-content: start;
+        width: calc(100% - 1rem);
+        gap: 0.5rem;
+    }
+
+    &__notes {
+        width: calc(100% - 1rem);
+        textarea {
+            resize: none;
+        }
+    }
 }
