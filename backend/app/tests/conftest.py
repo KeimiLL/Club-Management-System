@@ -1,6 +1,7 @@
 """File for tests configuration."""
 
 
+import datetime
 import os
 import sys
 from typing import Iterator
@@ -12,6 +13,8 @@ from app.db.base import Base
 from app.db.session import get_db
 from app.main import include_exception_handlers, include_middleware
 from app.schemas.enums import Roles
+from app.schemas.meeting import MeetingCreate
+from app.schemas.user import UserCreate, UserCreateWithRole
 from fastapi import FastAPI
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
@@ -139,3 +142,30 @@ def fixture_incorrect_user_data() -> dict[str, str]:
         "password": get_settings().TEST_USER_PASSWORD + "m",
         "role": Roles.VIEWER,
     }
+
+
+user_create_unique_1 = UserCreate(
+    full_name=get_settings().TEST_USER_FULL_NAME,
+    email=get_settings().TEST_USER_EMAIL,
+    password=get_settings().TEST_USER_PASSWORD,
+)
+
+user_create_unique_2 = UserCreate(
+    full_name=get_settings().TEST_USER_FULL_NAME,
+    email=get_settings().TEST_USER_EMAIL + "m",
+    password=get_settings().TEST_USER_PASSWORD,
+)
+
+user_create_with_role = UserCreateWithRole(
+    full_name=get_settings().TEST_USER_FULL_NAME,
+    email=get_settings().TEST_USER_EMAIL,
+    password=get_settings().TEST_USER_PASSWORD,
+    role=Roles.ADMIN,
+)
+
+meeting_create = MeetingCreate(
+    user_id=1,
+    name="test_name",
+    notes="test_note",
+    date=datetime.date.today(),
+)
