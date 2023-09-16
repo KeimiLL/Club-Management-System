@@ -1,4 +1,4 @@
-"""File responsible for implementing meeting_useres related CRUD operations."""
+"""File responsible for implementing meeting_users related CRUD operations."""
 
 
 from app.core.exceptions import (
