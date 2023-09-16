@@ -7,6 +7,7 @@ import {
     ReactiveFormsModule,
 } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 import { DateAndTimeFormComponent } from "../../../../../../../shared/components/date-and-time-form/date-and-time-form.component";
@@ -34,7 +35,12 @@ import { newMeetingDataFormBuilder } from "./newMeetingFormBuilder";
 })
 export class AddMeetingPopupComponent {
     protected meetingForm: FormGroup;
+
     protected readonly minDate = new Date();
+    protected dateInputControl = new FormControl({
+        value: new Date(),
+        disabled: true,
+    });
 
     protected attendeeInputControl = new FormControl();
     protected allAttendees: User[] = attendees;
@@ -46,6 +52,14 @@ export class AddMeetingPopupComponent {
         @Inject(MAT_DIALOG_DATA) public data: unknown
     ) {
         this.meetingForm = newMeetingDataFormBuilder.buildFormGroup();
+        this.meetingForm.valueChanges.subscribe((data) => {
+            console.log(data);
+        });
+    }
+
+    protected onDateChange(event: MatDatepickerInputEvent<Date>): void {
+        const selectedDate = event.value as Date;
+        this.meetingForm.get("date")?.setValue(selectedDate.toISOString());
     }
 
     protected onCloseClick(): void {
