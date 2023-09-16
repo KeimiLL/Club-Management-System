@@ -8,15 +8,11 @@ export class MeetingsPopupService {
     constructor(private readonly dialog: MatDialog) {}
 
     openPopup(): void {
-        console.log("start");
         const dialogRef = this.dialog.open(AddMeetingPopupComponent, {
-            height: "80vh",
             width: "80vw",
             disableClose: true,
         });
 
-        dialogRef.afterClosed().subscribe((result) => {
-            console.log("The popup was closed");
-        });
+        // dialogRef.afterClosed().subscribe((result) => );
     }
 }

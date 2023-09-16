@@ -6536,6 +6536,8 @@ __metadata:
     karma-jasmine: ~5.1.0
     karma-jasmine-html-reporter: ~2.1.0
     lint-staged: ^13.2.2
+    luxon: ^3.4.3
+    ngx-material-timepicker: ^13.1.1
     prettier: ^2.8.8
     rxjs: ~7.8.0
     tslib: ^2.3.0
@@ -8280,6 +8282,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"luxon@npm:^3.4.3":
+  version: 3.4.3
+  resolution: "luxon@npm:3.4.3"
+  checksum: 3eade81506224d038ed24035a0cd0dd4887848d7eba9361dce9ad8ef81380596a68153240be3988721f9690c624fb449fcf8fd8c3fc0681a6a8496faf48e92a3
+  languageName: node
+  linkType: hard
+
 "magic-string@npm:0.30.0":
   version: 0.30.0
   resolution: "magic-string@npm:0.30.0"
@@ -8702,6 +8711,18 @@ __metadata:
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
+  languageName: node
+  linkType: hard
+
+"ngx-material-timepicker@npm:^13.1.1":
+  version: 13.1.1
+  resolution: "ngx-material-timepicker@npm:13.1.1"
+  dependencies:
+    tslib: ^2.0.0
+  peerDependencies:
+    "@types/luxon": ">= 1.11.1"
+    luxon: ">= 1.24.0"
+  checksum: 79c9c2c42605380667866dd54f5857a0f1f9d86a691ae891e817b1e4a2662190e657a67026a218975fa4847030cd6cb5a03a0b06b7cc0d836cf3ec626b49f754
   languageName: node
   linkType: hard
 
@@ -10991,6 +11012,13 @@ __metadata:
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.0.0":
+  version: 2.6.2
+  resolution: "tslib@npm:2.6.2"
+  checksum: 329ea56123005922f39642318e3d1f0f8265d1e7fcb92c633e0809521da75eeaca28d2cf96d7248229deb40e5c19adf408259f4b9640afd20d13aecc1430f3ad
   languageName: node
   linkType: hard
 

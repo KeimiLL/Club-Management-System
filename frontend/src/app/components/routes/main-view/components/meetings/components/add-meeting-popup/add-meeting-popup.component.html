@@ -1,43 +1,113 @@
-<form>
-    <app-content-card>
-        <app-half-card-right-header
-            header
-            [name]="'New Meeting Name'"
-            (closedClicked)="onCloseClick()"
-        >
-            <app-button-container buttons> </app-button-container>
-        </app-half-card-right-header>
+<div class="popup">
+    <mat-card class="card">
+        <mat-card-header class="card__header">
+            <app-half-card-right-header
+                [name]="'New Meeting Creator'"
+                (closedClicked)="onCloseClick()"
+            >
+                <app-button-container buttons> </app-button-container>
+            </app-half-card-right-header>
+        </mat-card-header>
+        <div class="card__content">
+            <form [formGroup]="meetingForm">
+                <ng-container content>
+                    <app-half-card-section>
+                        <app-section-header [name]="'Basic Data'" sectionHeader>
+                        </app-section-header>
 
-        <ng-container content>
-            <!-- add Date and name -->
-            <app-half-card-section>
-                <app-section-header [name]="'Basic Data'" sectionHeader>
-                </app-section-header>
+                        <ng-container sectionContent>
+                            <mat-form-field appearance="outline">
+                                <input
+                                    matInput
+                                    formControlName="name"
+                                    placeholder="Meeting Name"
+                                    required
+                                />
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" required>
+                                <input
+                                    formControlName="date"
+                                    matInput
+                                    [min]="minDate"
+                                    [matDatepicker]="picker"
+                                    placeholder="Choose a date"
+                                />
+                                <mat-datepicker-toggle
+                                    matSuffix
+                                    [for]="picker"
+                                ></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </ng-container>
+                    </app-half-card-section>
 
-                <ng-container sectionContent> </ng-container>
-            </app-half-card-section>
+                    <app-half-card-section>
+                        <app-section-header
+                            [name]="'Add Attendees'"
+                            sectionHeader
+                        >
+                        </app-section-header>
 
-            <app-half-card-section>
-                <app-section-header [name]="'Add Attendees'" sectionHeader>
-                </app-section-header>
+                        <ng-container sectionContent>
+                            <mat-form-field appearance="outline">
+                                <input
+                                    matInput
+                                    [formControl]="attendeeInputControl"
+                                    placeholder="Add Attendee..."
+                                    [matAutocomplete]="auto"
+                                    (input)="onInput($event)"
+                                    (click)="onInput($event)"
+                                    (keyup.enter)="onEnter()"
+                                />
+                                <mat-autocomplete
+                                    #auto="matAutocomplete"
+                                    (optionSelected)="onOptionSelected($event)"
+                                >
+                                    <mat-option
+                                        *ngFor="
+                                            let attendee of filteredAttendees
+                                        "
+                                        [value]="attendee"
+                                    >
+                                        {{ attendee.full_name }},
+                                        <span
+                                            [appPermissionColor]="attendee.role"
+                                        >
+                                            {{ attendee.role }}</span
+                                        >
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            <mat-chip-listbox>
+                                <mat-chip
+                                    *ngFor="let attendee of attendees"
+                                    [removable]="true"
+                                    (removed)="removeAttendee(attendee)"
+                                >
+                                    {{ attendee.full_name }}
+                                    <mat-icon matChipRemove>cancel</mat-icon>
+                                </mat-chip>
+                            </mat-chip-listbox>
+                        </ng-container>
+                    </app-half-card-section>
 
-                <ng-container sectionContent>
-                    <div>Person1</div>
-                    <div>Person2</div>
-                    <div>Person3</div>
+                    <app-half-card-section>
+                        <app-section-header [name]="'Add Notes'" sectionHeader>
+                        </app-section-header>
+
+                        <ng-container sectionContent>
+                            <mat-form-field>
+                                <mat-label>Notes</mat-label>
+                                <textarea
+                                    formControlName="notes"
+                                    matInput
+                                    placeholder="notes..."
+                                ></textarea>
+                            </mat-form-field>
+                        </ng-container>
+                    </app-half-card-section>
                 </ng-container>
-            </app-half-card-section>
-
-            <app-half-card-section>
-                <app-section-header [name]="'Add Notes'" sectionHeader>
-                </app-section-header>
-
-                <ng-container sectionContent>
-                    <div>Person1</div>
-                    <div>Person2</div>
-                    <div>Person3</div>
-                </ng-container>
-            </app-half-card-section>
-        </ng-container>
-    </app-content-card>
-</form>
+            </form>
+        </div>
+    </mat-card>
+</div>

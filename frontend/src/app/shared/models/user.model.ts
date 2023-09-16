@@ -1,6 +1,7 @@
 export interface UserBase {
     full_name: string;
     email: string;
+    id?: number;
 }
 
 export interface UserLogin {
