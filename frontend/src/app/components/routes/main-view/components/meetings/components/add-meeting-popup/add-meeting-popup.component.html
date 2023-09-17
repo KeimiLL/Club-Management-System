@@ -66,12 +66,9 @@
                                 <mat-form-field appearance="fill" class="">
                                     <input
                                         matInput
-                                        [formControl]="attendeeInputControl"
                                         placeholder="Add Attendee..."
+                                        [formControl]="attendeeInputControl"
                                         [matAutocomplete]="auto"
-                                        (input)="onInput($event)"
-                                        (click)="onInput($event)"
-                                        (keyup.enter)="onEnter()"
                                     />
                                     <mat-autocomplete
                                         #auto="matAutocomplete"
@@ -81,7 +78,8 @@
                                     >
                                         <mat-option
                                             *ngFor="
-                                                let attendee of filteredAttendees
+                                                let attendee of filteredAttendees$
+                                                    | async
                                             "
                                             [value]="attendee"
                                         >
@@ -100,9 +98,9 @@
                                 <mat-chip-listbox>
                                     <mat-chip
                                         *ngFor="
-                                            let attendee of selectedAttendees
+                                            let attendee of selectedAttendees$
+                                                | async
                                         "
-                                        [removable]="true"
                                         (removed)="removeAttendee(attendee)"
                                     >
                                         {{ attendee.full_name }}
