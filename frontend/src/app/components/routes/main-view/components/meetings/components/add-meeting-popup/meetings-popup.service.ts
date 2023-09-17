@@ -88,4 +88,8 @@ export class MeetingsPopupService {
             .get("attendees")
             ?.setValue(this.selectedAttendees.map((a) => a.id));
     }
+
+    public setDateInMeetingForm(selectedDate: Date): void {
+        this.meetingForm.get("date")?.setValue(selectedDate.toISOString());
+    }
 }

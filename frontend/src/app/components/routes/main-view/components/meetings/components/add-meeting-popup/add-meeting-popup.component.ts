@@ -66,8 +66,7 @@ export class AddMeetingPopupComponent implements OnInit {
     }
 
     protected onDateChange(event: MatDatepickerInputEvent<Date>): void {
-        const selectedDate = event.value as Date;
-        this.meetingForm.get("date")?.setValue(selectedDate.toISOString());
+        this.popupService.setDateInMeetingForm(event.value as Date);
     }
 
     protected onOptionSelected(event: MatAutocompleteSelectedEvent): void {
