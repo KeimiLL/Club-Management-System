@@ -1,0 +1,58 @@
+import { Routes } from "@angular/router";
+
+import { PermissionGuard } from "../../../../../shared/guards/permission.guard";
+import {
+    ModulesPermissions,
+    SettingsPermission,
+} from "../../../../../shared/models/permission.model";
+import { SettingsComponent } from "./settings.component";
+
+export default [
+    {
+        path: "",
+        component: SettingsComponent,
+        children: [
+            {
+                path: "",
+                redirectTo: "general",
+                pathMatch: "full",
+            },
+            {
+                path: "general",
+                loadComponent: () =>
+                    import("./components/general/general.component").then(
+                        (c) => c.GeneralComponent
+                    ),
+                data: {
+                    modulesPermission: ModulesPermissions.Settings,
+                    requiredPermission: null,
+                },
+                canActivate: [PermissionGuard],
+            },
+            {
+                path: "help",
+                loadComponent: () =>
+                    import("./components/help/help.component").then(
+                        (c) => c.HelpComponent
+                    ),
+                data: {
+                    modulesPermission: ModulesPermissions.Settings,
+                    requiredPermission: null,
+                },
+                canActivate: [PermissionGuard],
+            },
+            {
+                path: "modify",
+                loadComponent: () =>
+                    import("./components/modify/modify.component").then(
+                        (c) => c.ModifyComponent
+                    ),
+                data: {
+                    modulesPermission: ModulesPermissions.Settings,
+                    requiredPermission: SettingsPermission.Modifyusers,
+                },
+                canActivate: [PermissionGuard],
+            },
+        ],
+    },
+] as Routes;
