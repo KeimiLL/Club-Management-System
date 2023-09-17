@@ -4,13 +4,6 @@
     <app-content-card>
         <app-wide-card-header header [name]="'Meetings'" [subName]="'team1'">
             <app-button-container buttons>
-                <button
-                    mat-raised-button
-                    class="button--light"
-                    (click)="switchDetail()"
-                >
-                    Test Switch State
-                </button>
                 <button mat-raised-button class="button--light">
                     Add Meeting
                 </button>
@@ -18,7 +11,9 @@
         </app-wide-card-header>
 
         <ng-container content>
-            <app-legend></app-legend>
+            <app-meeting-table
+                [data]="(longMeetings$ | async) ?? []"
+            ></app-meeting-table>
         </ng-container>
     </app-content-card>
 </ng-template>
@@ -33,7 +28,9 @@
         </app-half-card-left-header>
 
         <ng-container content>
-            <app-legend></app-legend>
+            <app-meeting-table
+                [data]="(shortMeetings$ | async) ?? []"
+            ></app-meeting-table>
         </ng-container>
     </app-content-card>
 
