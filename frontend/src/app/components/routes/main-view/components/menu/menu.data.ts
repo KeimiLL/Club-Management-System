@@ -22,7 +22,7 @@ export const menuItems: MainMenuItem[] = [
     { name: "finances", icon: "savings", route: "/app" },
     { name: "medic", icon: "local_hospital", route: "/app" },
     {
-        name: ModulesPermissions.Schedule,
+        name: ModulesPermissions.Settings,
         icon: "settings",
         route: "/app/settings",
     },
