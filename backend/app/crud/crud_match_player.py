@@ -1,9 +1,7 @@
 """File responsible for implementing match_playeres related CRUD operations."""
 
 
-from app.core.exceptions import DuplicateException, MissingException
-from app.crud.crud_match import get_match_by_id
-from app.crud.crud_player import get_player_by_user_id
+from app.core.exceptions import MissingAssociationObjectException, MissingException
 from app.models.match_player import MatchPlayer
 from app.schemas.match_player import MatchPlayerCreate
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
@@ -20,15 +18,14 @@ def create_new_match_player(
         db (Session): Database session.
 
     Raises:
-        DuplicateException: If there is already a match_player with the given user id.
-        SQLAlchemyError: If there is a different exception.
+        MissingAssociationObjectException: If there is an IntegrityError
+            while creating the record.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         new_match_player (MatchPlayer): MatchPlayer object.
     """
     try:
-        get_match_by_id(match_player.match_id, db)
-        get_player_by_user_id(match_player.player_id, db)
         new_match_player = MatchPlayer(
             match_id=match_player.match_id,
             player_id=match_player.player_id,
@@ -41,7 +38,7 @@ def create_new_match_player(
         db.refresh(new_match_player)
         return new_match_player
     except IntegrityError as exc:
-        raise DuplicateException(MatchPlayer.__name__) from exc
+        raise MissingAssociationObjectException(MatchPlayer.__name__) from exc
     except SQLAlchemyError as exc:
         raise exc
 
@@ -55,7 +52,7 @@ def get_match_player_by_id(match_player_id: int, db: Session) -> MatchPlayer:
 
     Raises:
         MissingException: If no match_player matches the given match_player id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         MatchPlayer: MatchPlayer object.

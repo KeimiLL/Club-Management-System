@@ -3,6 +3,7 @@
 
 from typing import TYPE_CHECKING
 
+from app.schemas.misc import DBIndexInt
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
@@ -15,20 +16,20 @@ if TYPE_CHECKING:
 class TeamBase(BaseModel):
     """Base Team schema."""
 
-    name: str | None = None
+    name: str | None = Field(None, min_length=3)
 
 
 class TeamCreate(TeamBase):
     """Team schema for creation."""
 
-    coach_id: int = Field(..., ge=1)
-    name: str
+    coach_id: DBIndexInt
+    name: str = Field(..., min_length=3)
 
 
 class Team(TeamBase):
     """Team schema for returning data from DB."""
 
-    name: str
+    name: str = Field(..., min_length=3)
     coach: "Coach"
     players: list["Player"]
     matches: list["Match"]
@@ -44,8 +45,8 @@ class TeamInDBBase(TeamBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: int | None = None
-    coach_id: int | None = None
+    id: DBIndexInt | None = None
+    coach_id: DBIndexInt | None = None
     coach: "Coach"
     players: list["Player"]
     matches: list["Match"]

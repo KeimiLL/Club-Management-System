@@ -2,10 +2,14 @@
 
 
 import datetime
+from typing import TYPE_CHECKING
 
-from app.models.player import Player
-from app.schemas.team import Team
-from pydantic import BaseModel, ConfigDict, Field
+from app.schemas.misc import DBIndexInt
+from pydantic import BaseModel, ConfigDict
+
+if TYPE_CHECKING:
+    from app.schemas.player import Player
+    from app.schemas.team import Team
 
 
 class TrainingBase(BaseModel):
@@ -18,7 +22,7 @@ class TrainingBase(BaseModel):
 class TrainingCreate(TrainingBase):
     """Training schema for creation."""
 
-    team_id: int = Field(..., ge=1)
+    team_id: DBIndexInt
     notes: str
     date: datetime.date
 
@@ -41,7 +45,7 @@ class TrainingInDBBase(TrainingBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: int | None = None
-    team_id: int | None = None
+    id: DBIndexInt | None = None
+    team_id: DBIndexInt | None = None
     team: "Team"
     players: list["Player"]

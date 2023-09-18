@@ -25,13 +25,13 @@ class Meeting(Base):
 
     def __repr__(self):
         return (
-            f"Meeting(id={self.id}, user_id={self.user_id}, desc={self.description}, "
+            f"Meeting(id={self.id}, user_id={self.user_id}, desc={self.name}, "
             f"notes={self.notes}, date={self.date})"
         )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
-    description: Mapped[str] = mapped_column(String, nullable=False)
+    name: Mapped[str] = mapped_column(String, nullable=False)
     notes: Mapped[str | None] = mapped_column(String, nullable=True)
     date: Mapped[datetime.date] = mapped_column(Date, nullable=False)
 

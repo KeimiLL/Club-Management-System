@@ -2,7 +2,8 @@
 
 
 from app.schemas.enums import Injuries
-from pydantic import BaseModel, ConfigDict, Field
+from app.schemas.misc import DBIndexInt
+from pydantic import BaseModel, ConfigDict
 
 
 class InjuryBase(BaseModel):
@@ -15,7 +16,7 @@ class InjuryBase(BaseModel):
 class InjuryCreate(InjuryBase):
     """Injury schema for creation."""
 
-    player_id: int = Field(..., ge=1)
+    player_id: DBIndexInt
     injury_type: Injuries
 
 
@@ -34,5 +35,5 @@ class InjuryInDBBase(InjuryBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: int | None = None
-    player_id: int | None = None
+    id: DBIndexInt | None = None
+    player_id: DBIndexInt | None = None

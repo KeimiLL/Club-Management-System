@@ -18,7 +18,7 @@ def create_new_training(training: TrainingCreate, db: Session) -> Training:
 
     Raises:
         DuplicateException: If there is already a training with the given id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         new_training (Training): Training object.
@@ -49,7 +49,7 @@ def get_training_by_id(training_id: int, db: Session) -> Training:
 
     Raises:
         MissingException: If no training matches the given training id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         Training: Training object.

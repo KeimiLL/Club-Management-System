@@ -18,7 +18,7 @@ def create_new_team(team: TeamCreate, db: Session) -> Team:
 
     Raises:
         DuplicateException: If there is already a team with the given coach id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         new_team (Team): Team object.
@@ -48,7 +48,7 @@ def get_team_by_id(team_id: int, db: Session) -> Team:
 
     Raises:
         MissingException: If no team matches the given team id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         Team: Team object.

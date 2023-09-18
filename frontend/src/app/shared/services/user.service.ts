@@ -31,4 +31,8 @@ export class UserService {
     public getCurrentUser(): Observable<User> {
         return this.http.get<User>("api/v1/users/current");
     }
+
+    public getAllUsers(): Observable<object> {
+        return this.http.get<object>("api/v1/users/");
+    }
 }

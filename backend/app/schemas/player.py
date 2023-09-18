@@ -4,13 +4,14 @@
 import datetime
 from typing import TYPE_CHECKING
 
-from app.schemas.injury import Injury
-from pydantic import BaseModel, ConfigDict, Field
+from app.schemas.misc import DBIndexInt
+from pydantic import BaseModel, ConfigDict, PositiveInt
 
 if TYPE_CHECKING:
-    from app.models.training import Training
+    from app.schemas.injury import Injury
     from app.schemas.match import Match
     from app.schemas.team import Team
+    from app.schemas.training import Training
     from app.schemas.user import User
 
 
@@ -19,8 +20,8 @@ class PlayerBase(BaseModel):
 
     date_of_joining: datetime.date | None = None
     date_of_birth: datetime.date | None = None
-    height: int | None = None
-    weight: int | None = None
+    height: PositiveInt | None = None
+    weight: PositiveInt | None = None
     notes: str | None = None
     is_injured: bool | None = None
     diet: str | None = None
@@ -29,12 +30,12 @@ class PlayerBase(BaseModel):
 class PlayerCreate(PlayerBase):
     """Player schema for creation."""
 
-    user_id: int = Field(..., ge=1)
-    team_id: int = Field(..., ge=1)
+    user_id: DBIndexInt
+    team_id: DBIndexInt
     date_of_joining: datetime.date
     date_of_birth: datetime.date
-    height: int
-    weight: int
+    height: PositiveInt
+    weight: PositiveInt
     notes: str
     is_injured: bool = False
 
@@ -44,8 +45,8 @@ class Player(PlayerBase):
 
     date_of_joining: datetime.date
     date_of_birth: datetime.date
-    height: int
-    weight: int
+    height: PositiveInt
+    weight: PositiveInt
     notes: str
     is_injured: bool
     user: "User"
@@ -64,8 +65,8 @@ class PlayerInDBBase(PlayerBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    user_id: int | None = None
-    team_id: int | None = None
+    user_id: DBIndexInt | None = None
+    team_id: DBIndexInt | None = None
     user: "User"
     team: "Team"
     injuries: list["Injury"]

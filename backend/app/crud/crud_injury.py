@@ -18,7 +18,7 @@ def create_new_injury(injury: InjuryCreate, db: Session) -> Injury:
 
     Raises:
         DuplicateException: If there is already an injury with the given id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         new_injury (Injury): Injury object.
@@ -49,7 +49,7 @@ def get_injury_by_id(injury_id: int, db: Session) -> Injury:
 
     Raises:
         MissingException: If no injury matches the given injury id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         Injury: Injury object.

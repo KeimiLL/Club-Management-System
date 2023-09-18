@@ -8,9 +8,11 @@ class Roles(str, Enum):
     """Enum for users roles."""
 
     ADMIN = "admin"
+    BOARD = "board"
     COACH = "coach"
     PLAYER = "player"
     VIEWER = "viewer"
+    NONE = "none"
 
 
 class HTTPResponseMessage(str, Enum):

@@ -18,7 +18,7 @@ def create_new_coach(coach: CoachCreate, db: Session) -> Coach:
 
     Raises:
         DuplicateException: If there is already a coach with the given user id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         new_coach (Coach): Coach object.
@@ -49,7 +49,7 @@ def get_coach_by_user_id(user_id: int, db: Session) -> Coach:
 
     Raises:
         MissingException: If no coach matches the given user id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         Coach: Coach object.

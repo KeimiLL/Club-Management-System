@@ -1,8 +1,16 @@
 """File for User schemas."""
 
 
+from typing import TYPE_CHECKING
+
 from app.schemas.enums import Roles
+from app.schemas.misc import DBIndexInt
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+
+if TYPE_CHECKING:
+    from app.schemas.coach import Coach
+    from app.schemas.meeting import Meeting
+    from app.schemas.player import Player
 
 
 class UserBase(BaseModel):
@@ -69,12 +77,22 @@ class UserInDBBase(UserBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: int | None = None
+    id: DBIndexInt | None = None
     full_name: str | None = Field(None, min_length=4)
     role: Roles | None = None
+    coach: "Coach"
+    player: "Player"
+    created_meetings: list["Meeting"]
 
 
 class UserInDB(UserInDBBase):
     """User schema for storing in DB."""
 
     hashed_password: str
+
+
+class UserOnlyBaseInfo(BaseModel):
+    """User schema for returning data from the database."""
+
+    id: DBIndexInt
+    full_name: str = Field(..., min_length=4)

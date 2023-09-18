@@ -18,7 +18,7 @@ def create_new_match(match: MatchCreate, db: Session) -> Match:
 
     Raises:
         DuplicateException: If there is already a match with the given user id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         new_match (Match): Match object.
@@ -53,7 +53,7 @@ def get_match_by_id(match_id: int, db: Session) -> Match:
 
     Raises:
         MissingException: If no match matches the given match id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         Match: Match object.

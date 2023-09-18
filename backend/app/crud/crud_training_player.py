@@ -1,9 +1,7 @@
 """File responsible for implementing training_playeres related CRUD operations."""
 
 
-from app.core.exceptions import DuplicateException, MissingException
-from app.crud.crud_player import get_player_by_user_id
-from app.crud.crud_training import get_training_by_id
+from app.core.exceptions import MissingAssociationObjectException, MissingException
 from app.models.training_player import TrainingPlayer
 from app.schemas.training_player import TrainingPlayerCreate
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
@@ -20,15 +18,14 @@ def create_new_training_player(
         db (Session): Database session.
 
     Raises:
-        DuplicateException: If there is already a training_player with the given user id.
-        SQLAlchemyError: If there is a different exception.
+        MissingAssociationObjectException: If there is an IntegrityError
+            while creating the record.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         new_training_player (TrainingPlayer): TrainingPlayer object.
     """
     try:
-        get_training_by_id(training_player.training_id, db)
-        get_player_by_user_id(training_player.player_id, db)
         new_training_player = TrainingPlayer(
             training_id=training_player.training_id,
             player_id=training_player.player_id,
@@ -39,7 +36,7 @@ def create_new_training_player(
         db.refresh(new_training_player)
         return new_training_player
     except IntegrityError as exc:
-        raise DuplicateException(TrainingPlayer.__name__) from exc
+        raise MissingAssociationObjectException(TrainingPlayer.__name__) from exc
     except SQLAlchemyError as exc:
         raise exc
 
@@ -53,7 +50,7 @@ def get_training_player_by_id(training_player_id: int, db: Session) -> TrainingP
 
     Raises:
         MissingException: If no training_player matches the given training_player id.
-        SQLAlchemyError: If there is a different exception.
+        SQLAlchemyError: If there is a database error.
 
     Returns:
         TrainingPlayer: TrainingPlayer object.
