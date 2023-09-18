@@ -27,7 +27,7 @@ def app_schema(client: TestClient) -> BaseOpenAPISchema:
 schema = from_pytest_fixture("app_schema")
 
 
-@pytest.fixture(scope="function", name="auth_cookies")
+@pytest.fixture(scope="module", name="auth_cookies")
 def fixture_auth_cookies(
     client: TestClient,
     correct_user_data: dict[str, str],
