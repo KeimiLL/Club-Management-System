@@ -16,7 +16,8 @@ import { PermissionColorDirective } from "../../../../../../../shared/directives
 import { User } from "../../../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
-import { MeetingsPopupService } from "./meetings-popup.service";
+import { MeetingsPopupService } from "./services/meetings-popup.service";
+import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service";
 
 @Component({
     selector: "app-add-meeting-popup",
@@ -46,19 +47,20 @@ export class AddMeetingPopupComponent implements OnInit {
     protected filteredAttendees$: Observable<User[]>;
 
     constructor(
-        private readonly popupService: MeetingsPopupService,
+        private readonly root: MeetingsPopupService,
+        private readonly http: MeetingsPopupHttpService,
         private readonly dialogRef: MatDialogRef<AddMeetingPopupComponent>,
         @Inject(MAT_DIALOG_DATA) public data: unknown
     ) {
-        this.meetingForm = this.popupService.meetingForm;
-        this.attendeeInputControl = this.popupService.attendeeInputControl;
-        this.dateInputControl = this.popupService.dateInputControl;
+        this.meetingForm = this.root.meetingForm;
+        this.attendeeInputControl = this.root.attendeeInputControl;
+        this.dateInputControl = this.root.dateInputControl;
     }
 
     ngOnInit(): void {
-        this.allAttendees$ = this.popupService.allAttendees$;
-        this.filteredAttendees$ = this.popupService.filtredAttendees$;
-        this.selectedAttendees$ = this.popupService.selectedAttendees$;
+        this.allAttendees$ = this.root.allAttendees$;
+        this.filteredAttendees$ = this.root.filtredAttendees$;
+        this.selectedAttendees$ = this.root.selectedAttendees$;
     }
 
     protected onCloseClick(): void {
@@ -66,14 +68,14 @@ export class AddMeetingPopupComponent implements OnInit {
     }
 
     protected onDateChange(event: MatDatepickerInputEvent<Date>): void {
-        this.popupService.setDateInMeetingForm(event.value as Date);
+        this.root.setDateInMeetingForm(event.value as Date);
     }
 
     protected onOptionSelected(event: MatAutocompleteSelectedEvent): void {
-        this.popupService.addAttendeeToSelectedList(event.option.value);
+        this.root.addAttendeeToSelectedList(event.option.value);
     }
 
     protected removeAttendee(attendee: User): void {
-        this.popupService.removeAttendeeFromSelectedList(attendee);
+        this.root.removeAttendeeFromSelectedList(attendee);
     }
 }

@@ -8,9 +8,9 @@ import {
     startWith,
 } from "rxjs";
 
-import { attendees } from "../../../../../../../shared/mock/meetings.mock";
-import { User } from "../../../../../../../shared/models/user.model";
-import { newMeetingDataFormBuilder } from "../../components/add-meeting-popup/newMeetingFormBuilder";
+import { attendees } from "../../../../../../../../shared/mock/meetings.mock";
+import { User } from "../../../../../../../../shared/models/user.model";
+import { newMeetingDataFormBuilder } from "../newMeetingFormBuilder";
 
 @Injectable()
 export class MeetingsPopupService {
