@@ -1,16 +1,21 @@
 import { Injectable } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
+import { MatDialogRef } from "@angular/material/dialog";
 import {
     BehaviorSubject,
     combineLatest,
     map,
     Observable,
     startWith,
+    tap,
 } from "rxjs";
 
 import { attendees } from "../../../../../../../../shared/mock/meetings.mock";
+import { AddMeeting } from "../../../../../../../../shared/models/meetings.model";
 import { User } from "../../../../../../../../shared/models/user.model";
+import { AddMeetingPopupComponent } from "../add-meeting-popup.component";
 import { newMeetingDataFormBuilder } from "../newMeetingFormBuilder";
+import { MeetingsPopupHttpService } from "./meetings-popup-http.service";
 
 @Injectable()
 export class MeetingsPopupService {
@@ -24,7 +29,10 @@ export class MeetingsPopupService {
     private readonly selectedAttendeesStore$ = new BehaviorSubject<User[]>([]);
     private readonly allAttendeesStore$ = new BehaviorSubject<User[]>([]);
 
-    constructor() {
+    constructor(
+        private readonly http: MeetingsPopupHttpService,
+        private readonly dialogRef: MatDialogRef<AddMeetingPopupComponent>
+    ) {
         this.meetingForm = newMeetingDataFormBuilder.buildFormGroup();
         this.allAttendees = attendees;
     }
@@ -91,5 +99,18 @@ export class MeetingsPopupService {
 
     public setDateInMeetingForm(selectedDate: Date): void {
         this.meetingForm.get("date")?.setValue(selectedDate.toISOString());
+    }
+
+    public createNewMeeting(): void {
+        this.http
+            .postNewMeeting(this.meetingForm.value as AddMeeting)
+            .pipe(
+                tap((value) => {
+                    console.log(value);
+                })
+            )
+            .subscribe(() => {
+                this.dialogRef.close();
+            });
     }
 }

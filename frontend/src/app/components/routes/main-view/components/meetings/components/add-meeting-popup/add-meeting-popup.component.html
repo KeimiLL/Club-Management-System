@@ -9,7 +9,7 @@
             </app-half-card-right-header>
         </mat-card-header>
         <div class="card__content">
-            <form [formGroup]="meetingForm">
+            <form [formGroup]="meetingForm" (ngSubmit)="onSubmit()">
                 <ng-container content>
                     <app-half-card-section>
                         <app-section-header [name]="'Basic Data'" sectionHeader>
@@ -33,7 +33,7 @@
                                     class="popup__basic--name"
                                 >
                                     <input
-                                        [formControl]="dateInputControl"
+                                        formControlName="date"
                                         required
                                         matInput
                                         [min]="minDate"
@@ -132,6 +132,16 @@
                         </ng-container>
                     </app-half-card-section>
                 </ng-container>
+                <div class="button-container">
+                    <button
+                        type="submit"
+                        mat-raised-button
+                        class="button--light"
+                        buttons
+                    >
+                        Create
+                    </button>
+                </div>
             </form>
         </div>
     </mat-card>

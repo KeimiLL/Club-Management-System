@@ -7,9 +7,7 @@ import {
     MeetingResponse,
 } from "../../../../../../../../shared/models/meetings.model";
 
-@Injectable({
-    providedIn: "root",
-})
+@Injectable()
 export class MeetingsPopupHttpService {
     constructor(private readonly http: HttpClient) {}
 

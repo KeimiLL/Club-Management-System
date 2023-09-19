@@ -33,7 +33,7 @@ import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service
     ],
     templateUrl: "./add-meeting-popup.component.html",
     styleUrls: ["./add-meeting-popup.component.scss"],
-    providers: [MeetingsPopupService],
+    providers: [MeetingsPopupService, MeetingsPopupHttpService],
 })
 export class AddMeetingPopupComponent implements OnInit {
     protected meetingForm: FormGroup;
@@ -48,7 +48,6 @@ export class AddMeetingPopupComponent implements OnInit {
 
     constructor(
         private readonly root: MeetingsPopupService,
-        private readonly http: MeetingsPopupHttpService,
         private readonly dialogRef: MatDialogRef<AddMeetingPopupComponent>,
         @Inject(MAT_DIALOG_DATA) public data: unknown
     ) {
@@ -77,5 +76,9 @@ export class AddMeetingPopupComponent implements OnInit {
 
     protected removeAttendee(attendee: User): void {
         this.root.removeAttendeeFromSelectedList(attendee);
+    }
+
+    protected onSubmit(): void {
+        this.root.createNewMeeting();
     }
 }
