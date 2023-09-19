@@ -3,11 +3,13 @@
 
 from typing import Annotated
 
-from app.api.dependencies import get_user_from_token
+from app.api.dependencies import get_user_from_token, paginate
+from app.crud.crud_meeting import get_all_meetings, get_meetings_by_user_id
 from app.crud.crud_meeting_user import create_meeting_user_from_user_id_list
 from app.db.session import get_db
 from app.models.user import User
-from app.schemas.meeting import MeetingCreate, MeetingOnlyBaseUserInfo
+from app.schemas.enums import Roles
+from app.schemas.meeting import MeetingCreate, MeetingOnlyBaseUserInfo, MeetingTableView
 from app.schemas.meeting_user import MeetingUserCreateUserIdList
 from app.schemas.misc import Message, MessageFromEnum
 from fastapi import APIRouter, Depends, status
@@ -28,16 +30,16 @@ router = APIRouter()
 )
 def create_meeting(
     meeting: MeetingUserCreateUserIdList,
-    db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_user_from_token)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     """Creates a new meeting and its attendance based on data from a POST request.
 
     Args:
         meeting (MeetingCreate): Meeting data from POST request.
-        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
         current_user (Annotated[User, Depends]): Current user read from access token.
             Defaults to Depends(get_user_from_token).
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Returns:
         MeetingInDBOnlyBaseUserInfo: Created meeting.
@@ -47,3 +49,59 @@ def create_meeting(
         user_ids=meeting.user_ids,
         db=db,
     )
+
+
+@router.get(
+    "",
+    response_model=list[MeetingTableView],
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def get_meetings(
+    pagination: Annotated[dict[str, int], Depends(paginate)],
+    current_user: Annotated[User, Depends(get_user_from_token)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Creates a new meeting and its attendance based on data from a POST request.
+
+    Args:
+        pagination (Annotated[dict[str, int], Depends]): Pagination read from the query params.
+            Defaults to Depends(paginate).
+        current_user (Annotated[User, Depends]): Current user read from access token.
+            Defaults to Depends(get_user_from_token).
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+    Returns:
+        list[MeetingTableView]: The list of meetings.
+    """
+    if current_user.role in (Roles.ADMIN, Roles.BOARD):
+        meetings = get_all_meetings(
+            page=pagination["page"], per_page=pagination["per_page"], db=db
+        )
+        return [
+            MeetingTableView(
+                **meeting.__dict__,
+                user_name=meeting.created_by_user.full_name,
+                is_yours=(
+                    current_user.id
+                    in (meeting.user_id, *map(lambda u: u.id, meeting.users))
+                )
+            )
+            for meeting in meetings
+        ]
+    meetings = get_meetings_by_user_id(
+        page=pagination["page"],
+        per_page=pagination["per_page"],
+        user_id=current_user.id,
+        db=db,
+    )
+    return [
+        MeetingTableView(
+            **meeting.__dict__, user_name=meeting.created_by_user.full_name
+        )
+        for meeting in meetings
+    ]

@@ -62,3 +62,13 @@ class MeetingOnlyBaseUserInfo(MeetingBase):
     id: DBIndexInt
     created_by_user: "UserOnlyBaseInfo"
     users: list["UserOnlyBaseInfo"]
+
+
+class MeetingTableView(BaseModel):
+    """Meeting schema for returning data to be shown in the meetings' table."""
+
+    id: DBIndexInt
+    name: str = Field(..., min_length=4)
+    date: datetime.date
+    user_name: str = Field(..., min_length=4)
+    is_yours: bool | None = None
