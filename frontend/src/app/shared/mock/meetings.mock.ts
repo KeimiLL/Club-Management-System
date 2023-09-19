@@ -1,4 +1,5 @@
 import { LongMeeting } from "../models/meetings.model";
+import { Roles, User } from "../models/user.model";
 
 export const longMeetingsMockup: LongMeeting[] = [
     {
@@ -36,5 +37,44 @@ export const longMeetingsMockup: LongMeeting[] = [
         name: "Meeting 6",
         isYour: false,
         date: new Date(Date.now()),
+    },
+];
+
+export const attendees: User[] = [
+    {
+        id: 0,
+        full_name: "test1",
+        email: "test@example.com",
+        role: Roles.Admin,
+    },
+    {
+        id: 1,
+        full_name: "viewer",
+        email: "test@example.com",
+        role: Roles.Viewer,
+    },
+    {
+        id: 2,
+        full_name: "board",
+        email: "test@example.com",
+        role: Roles.Board,
+    },
+    {
+        id: 3,
+        full_name: "medic",
+        email: "test@example.com",
+        role: Roles.Medic,
+    },
+    {
+        id: 4,
+        full_name: "coach",
+        email: "test@example.com",
+        role: Roles.Coach,
+    },
+    {
+        id: 5,
+        full_name: "player",
+        email: "test@example.com",
+        role: Roles.Player,
     },
 ];

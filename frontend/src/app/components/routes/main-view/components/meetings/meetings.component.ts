@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 
 import {
@@ -9,6 +10,7 @@ import {
 import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../shared/services/split-view-manager.service";
+import { AddMeetingPopupComponent } from "./components/add-meeting-popup/add-meeting-popup.component";
 import { LegendComponent } from "./components/legend/legend.component";
 import { MeetingTableComponent } from "./components/meeting-table/meeting-table.component";
 import { MeetingsHttpService } from "./services/meetings-http.service";
@@ -39,7 +41,8 @@ export class MeetingsComponent implements OnInit {
 
     constructor(
         private readonly splitService: SplitViewManagerService,
-        private readonly root: MeetingsRootService
+        private readonly root: MeetingsRootService,
+        private readonly dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
@@ -50,5 +53,12 @@ export class MeetingsComponent implements OnInit {
 
     protected switchDetail(): void {
         this.splitService.changeDetailState();
+    }
+
+    protected openAddMeetingPopup(): void {
+        this.dialog.open(AddMeetingPopupComponent, {
+            width: "50vw",
+            disableClose: true,
+        });
     }
 }

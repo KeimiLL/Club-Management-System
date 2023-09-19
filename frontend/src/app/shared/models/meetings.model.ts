@@ -14,3 +14,10 @@ export interface Meeting extends LongMeeting {
     attendees: User[];
     description: string;
 }
+
+export interface addMeeting {
+    notes: string;
+    name: string;
+    date: Date;
+    user_ids: number[];
+}

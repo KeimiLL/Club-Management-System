@@ -1,7 +1,7 @@
 @import "../../../../../styles/component-styles/components";
 
 :host {
-    margin: 0;
+    margin: 1rem auto;
     padding: 0;
 
     .card {
@@ -9,5 +9,11 @@
         width: 95%;
         margin: 0 auto;
         height: auto;
+        margin: 1rem auto;
+
+        &__content {
+            padding: $small-spacing;
+            width: 100%;
+        }
     }
 }
