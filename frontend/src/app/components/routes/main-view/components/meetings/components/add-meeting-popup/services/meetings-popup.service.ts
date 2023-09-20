@@ -80,6 +80,7 @@ export class MeetingsPopupService {
                 const filterValue = inputValue ?? "";
                 return allAttendees.filter(
                     (attendee) =>
+                        attendee.id !== this.userService.currentUser?.id &&
                         !selectedAttendees.some((a) => a.id === attendee.id) &&
                         attendee.full_name.toLowerCase().includes(filterValue)
                 );

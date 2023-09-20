@@ -11,11 +11,12 @@ import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 
-import { DateAndTimeFormComponent } from "../../../../../../../shared/components/date-and-time-form/date-and-time-form.component";
+import { PermissionBackgroundColorDirective } from "../../../../../../../shared/directives/permission-background-color.directive";
 import { PermissionColorDirective } from "../../../../../../../shared/directives/permission-color.directive";
 import { ShortUser } from "../../../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
+import { UserService } from "../../../../../../../shared/services/user.service";
 import { NewMeetingFormGroup } from "./newMeetingFormBuilder";
 import { MeetingsPopupService } from "./services/meetings-popup.service";
 import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service";
@@ -30,7 +31,7 @@ import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service
         ReactiveFormsModule,
         FormsModule,
         PermissionColorDirective,
-        DateAndTimeFormComponent,
+        PermissionBackgroundColorDirective,
     ],
     templateUrl: "./add-meeting-popup.component.html",
     styleUrls: ["./add-meeting-popup.component.scss"],
@@ -40,6 +41,8 @@ export class AddMeetingPopupComponent implements OnInit {
     protected meetingForm: FormGroup<NewMeetingFormGroup>;
     protected attendeeInputControl: FormControl<string | null>;
 
+    protected currentUser: ShortUser;
+
     protected readonly minDate = new Date();
 
     protected allAttendees$: Observable<ShortUser[]>;
@@ -48,6 +51,7 @@ export class AddMeetingPopupComponent implements OnInit {
 
     constructor(
         private readonly root: MeetingsPopupService,
+        private readonly userService: UserService,
         @Inject(MAT_DIALOG_DATA) public data: unknown
     ) {
         this.meetingForm = this.root.meetingForm;
@@ -55,6 +59,7 @@ export class AddMeetingPopupComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.currentUser = this.userService.currentUser as ShortUser;
         this.allAttendees$ = this.root.allAttendees$;
         this.filteredAttendees$ = this.root.filtredAttendees$;
         this.selectedAttendees$ = this.root.selectedAttendees$;

@@ -13,7 +13,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTableModule } from "@angular/material/table";
 import { MatToolbarModule } from "@angular/material/toolbar";
-import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
     exports: [
@@ -31,7 +31,7 @@ import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
         MatChipsModule,
         MatAutocompleteModule,
         MatFormFieldModule,
-        NgxMaterialTimepickerModule,
+        MatTooltipModule,
     ],
 })
 export class MaterialModule {}
