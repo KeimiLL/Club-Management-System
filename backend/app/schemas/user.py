@@ -96,3 +96,4 @@ class UserOnlyBaseInfo(BaseModel):
 
     id: DBIndexInt
     full_name: str = Field(..., min_length=4)
+    role: Roles

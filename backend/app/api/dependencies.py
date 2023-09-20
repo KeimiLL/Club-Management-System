@@ -8,7 +8,7 @@ from app.core.jwt_utils import create_access_token, decode_token
 from app.crud.crud_user import get_user_by_email
 from app.db.session import get_db
 from app.models.user import User
-from fastapi import Cookie, Depends, Header, Response
+from fastapi import Cookie, Depends, Header, Query, Response
 from jose import ExpiredSignatureError, JWTError
 from sqlalchemy.orm import Session
 
@@ -107,3 +107,20 @@ def get_user_from_token(
         raise JWTTokensException("Expired tokens") from exc
     except JWTError as exc:
         raise JWTTokensException("Invalid tokens") from exc
+
+
+def paginate(
+    page: Annotated[int, Query(ge=0)], per_page: Annotated[int, Query(gt=0)]
+) -> dict[str, int]:
+    """Common dependency for getting pagination parameters from a GET request.
+
+    Args:
+        page (Annotated[int, Query]): The page number, has to be greater than
+            or equal to 0.
+        per_page (Annotated[int, Query]): The number of items per page,
+            has to be greater than 0.
+
+    Returns:
+        dict[str, int]: The extracted query values.
+    """
+    return {"page": page, "per_page": per_page}

@@ -15,8 +15,8 @@ class MatchPlayerBase(BaseModel):
     """Base MatchPlayer schema."""
 
     is_starter: bool | None = None
-    minutes_played: DBIndexInt | None = None
-    rating: DBIndexInt | None = None
+    minutes_played: NonNegativeInt | None = None
+    rating: RatingInt | None = None
 
 
 class MatchPlayerCreate(MatchPlayerBase):

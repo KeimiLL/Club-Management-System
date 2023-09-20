@@ -33,6 +33,6 @@ export class UserService {
     }
 
     public getAllUsers(): Observable<object> {
-        return this.http.get<object>("api/v1/users/");
+        return this.http.get<object>("api/v1/users");
     }
 }
