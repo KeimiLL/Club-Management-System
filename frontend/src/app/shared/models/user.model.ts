@@ -18,6 +18,7 @@ export interface UserCreateWithRole extends UserCreate {
 export interface ShortUser {
     full_name: string;
     id: number;
+    role: Roles;
 }
 
 export interface User extends UserBase {

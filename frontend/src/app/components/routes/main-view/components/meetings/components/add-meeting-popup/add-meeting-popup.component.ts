@@ -8,14 +8,15 @@ import {
 } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 
 import { DateAndTimeFormComponent } from "../../../../../../../shared/components/date-and-time-form/date-and-time-form.component";
 import { PermissionColorDirective } from "../../../../../../../shared/directives/permission-color.directive";
-import { User } from "../../../../../../../shared/models/user.model";
+import { ShortUser } from "../../../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
+import { NewMeetingFormGroup } from "./newMeetingFormBuilder";
 import { MeetingsPopupService } from "./services/meetings-popup.service";
 import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service";
 
@@ -36,24 +37,21 @@ import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service
     providers: [MeetingsPopupService, MeetingsPopupHttpService],
 })
 export class AddMeetingPopupComponent implements OnInit {
-    protected meetingForm: FormGroup;
-    protected dateInputControl: FormControl<Date | null>;
+    protected meetingForm: FormGroup<NewMeetingFormGroup>;
     protected attendeeInputControl: FormControl<string | null>;
 
     protected readonly minDate = new Date();
 
-    protected allAttendees$: Observable<User[]>;
-    protected selectedAttendees$: Observable<User[]>;
-    protected filteredAttendees$: Observable<User[]>;
+    protected allAttendees$: Observable<ShortUser[]>;
+    protected selectedAttendees$: Observable<ShortUser[]>;
+    protected filteredAttendees$: Observable<ShortUser[]>;
 
     constructor(
         private readonly root: MeetingsPopupService,
-        private readonly dialogRef: MatDialogRef<AddMeetingPopupComponent>,
         @Inject(MAT_DIALOG_DATA) public data: unknown
     ) {
         this.meetingForm = this.root.meetingForm;
         this.attendeeInputControl = this.root.attendeeInputControl;
-        this.dateInputControl = this.root.dateInputControl;
     }
 
     ngOnInit(): void {
@@ -63,7 +61,7 @@ export class AddMeetingPopupComponent implements OnInit {
     }
 
     protected onCloseClick(): void {
-        this.dialogRef.close();
+        this.root.closePopup();
     }
 
     protected onDateChange(event: MatDatepickerInputEvent<Date>): void {
@@ -74,8 +72,12 @@ export class AddMeetingPopupComponent implements OnInit {
         this.root.addAttendeeToSelectedList(event.option.value);
     }
 
-    protected removeAttendee(attendee: User): void {
+    protected removeAttendee(attendee: ShortUser): void {
         this.root.removeAttendeeFromSelectedList(attendee);
+    }
+
+    protected isButtonDisabled(): boolean {
+        return this.meetingForm.invalid;
     }
 
     protected onSubmit(): void {

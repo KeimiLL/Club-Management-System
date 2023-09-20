@@ -10,46 +10,65 @@ import {
     tap,
 } from "rxjs";
 
-import { attendees } from "../../../../../../../../shared/mock/meetings.mock";
 import { AddMeeting } from "../../../../../../../../shared/models/meetings.model";
-import { User } from "../../../../../../../../shared/models/user.model";
+import { ShortUser } from "../../../../../../../../shared/models/user.model";
+import { UserService } from "../../../../../../../../shared/services/user.service";
+import { formatDateFromInputForBackend } from "../../../../../../../../shared/utils/dateHelpers";
 import { AddMeetingPopupComponent } from "../add-meeting-popup.component";
-import { newMeetingDataFormBuilder } from "../newMeetingFormBuilder";
+import {
+    newMeetingDataFormBuilder,
+    NewMeetingFormGroup,
+} from "../newMeetingFormBuilder";
 import { MeetingsPopupHttpService } from "./meetings-popup-http.service";
 
 @Injectable()
 export class MeetingsPopupService {
-    public meetingForm: FormGroup;
+    public meetingForm: FormGroup<NewMeetingFormGroup>;
     public attendeeInputControl = new FormControl<string>("");
-    public dateInputControl = new FormControl<Date>({
-        value: new Date(),
-        disabled: true,
-    });
 
-    private readonly selectedAttendeesStore$ = new BehaviorSubject<User[]>([]);
-    private readonly allAttendeesStore$ = new BehaviorSubject<User[]>([]);
+    private readonly selectedAttendeesStore$ = new BehaviorSubject<ShortUser[]>(
+        []
+    );
+
+    private readonly allAttendeesStore$ = new BehaviorSubject<ShortUser[]>([]);
 
     constructor(
         private readonly http: MeetingsPopupHttpService,
-        private readonly dialogRef: MatDialogRef<AddMeetingPopupComponent>
+        private readonly dialogRef: MatDialogRef<AddMeetingPopupComponent>,
+        private readonly userService: UserService
     ) {
         this.meetingForm = newMeetingDataFormBuilder.buildFormGroup();
-        this.allAttendees = attendees;
+        this.userService
+            .getAllUsers()
+            .pipe(
+                tap((users) => {
+                    this.allAttendees = users;
+                })
+            )
+            .subscribe();
     }
 
-    private set allAttendees(allAttendees: User[]) {
+    private set allAttendees(allAttendees: ShortUser[]) {
         this.allAttendeesStore$.next(allAttendees);
     }
 
-    public get allAttendees(): User[] {
-        return this.allAttendeesStore$.value;
-    }
-
-    public get allAttendees$(): Observable<User[]> {
+    public get allAttendees$(): Observable<ShortUser[]> {
         return this.allAttendeesStore$.asObservable();
     }
 
-    public get filtredAttendees$(): Observable<User[]> {
+    private set selectedAttendees(selectedAttendees: ShortUser[]) {
+        this.selectedAttendeesStore$.next(selectedAttendees);
+    }
+
+    public get selectedAttendees(): ShortUser[] {
+        return this.selectedAttendeesStore$.value;
+    }
+
+    public get selectedAttendees$(): Observable<ShortUser[]> {
+        return this.selectedAttendeesStore$.asObservable();
+    }
+
+    public get filtredAttendees$(): Observable<ShortUser[]> {
         return combineLatest([
             this.allAttendees$,
             this.selectedAttendees$,
@@ -68,49 +87,38 @@ export class MeetingsPopupService {
         );
     }
 
-    private set selectedAttendees(selectedAttendees: User[]) {
-        this.selectedAttendeesStore$.next(selectedAttendees);
-    }
-
-    public get selectedAttendees(): User[] {
-        return this.selectedAttendeesStore$.value;
-    }
-
-    public get selectedAttendees$(): Observable<User[]> {
-        return this.selectedAttendeesStore$.asObservable();
-    }
-
-    public addAttendeeToSelectedList(attendee: User): void {
+    public addAttendeeToSelectedList(attendee: ShortUser): void {
         this.selectedAttendees = [...this.selectedAttendees, attendee];
         this.attendeeInputControl.setValue("");
         this.meetingForm
-            .get("attendees")
+            .get("user_ids")
             ?.setValue(this.selectedAttendees.map((a) => a.id));
     }
 
-    public removeAttendeeFromSelectedList(attendee: User): void {
+    public removeAttendeeFromSelectedList(attendee: ShortUser): void {
         this.selectedAttendees = this.selectedAttendees.filter(
             (a) => a.id !== attendee.id
         );
         this.meetingForm
-            .get("attendees")
+            .get("user_ids")
             ?.setValue(this.selectedAttendees.map((a) => a.id));
     }
 
     public setDateInMeetingForm(selectedDate: Date): void {
-        this.meetingForm.get("date")?.setValue(selectedDate.toISOString());
+        this.meetingForm.controls.meeting.controls.date.setValue(
+            formatDateFromInputForBackend(selectedDate)
+        );
     }
 
     public createNewMeeting(): void {
-        this.http
-            .postNewMeeting(this.meetingForm.value as AddMeeting)
-            .pipe(
-                tap((value) => {
-                    console.log(value);
-                })
-            )
-            .subscribe(() => {
-                this.dialogRef.close();
-            });
+        const newMeeting = this.meetingForm.value as AddMeeting;
+
+        this.http.postNewMeeting(newMeeting).subscribe(() => {
+            this.closePopup();
+        });
+    }
+
+    public closePopup(): void {
+        this.dialogRef.close();
     }
 }

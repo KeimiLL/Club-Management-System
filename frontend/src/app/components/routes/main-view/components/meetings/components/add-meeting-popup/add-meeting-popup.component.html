@@ -9,7 +9,10 @@
             </app-half-card-right-header>
         </mat-card-header>
         <div class="card__content">
-            <form [formGroup]="meetingForm" (ngSubmit)="onSubmit()">
+            <form
+                [formGroup]="meetingForm.controls.meeting"
+                (ngSubmit)="onSubmit()"
+            >
                 <ng-container content>
                     <app-half-card-section>
                         <app-section-header [name]="'Basic Data'" sectionHeader>
@@ -35,6 +38,7 @@
                                     <input
                                         formControlName="date"
                                         required
+                                        readonly
                                         matInput
                                         [min]="minDate"
                                         [matDatepicker]="picker"
@@ -84,11 +88,7 @@
                                             [value]="attendee"
                                         >
                                             {{ attendee.full_name }},
-                                            <span
-                                                [appPermissionColor]="
-                                                    attendee.role
-                                                "
-                                            >
+                                            <span>
                                                 {{ attendee.role }}
                                             </span>
                                         </mat-option>
@@ -127,13 +127,16 @@
                                     formControlName="notes"
                                     matInput
                                     placeholder="notes..."
-                                ></textarea>
+                                    maxlength="300"
+                                >
+                                </textarea>
                             </mat-form-field>
                         </ng-container>
                     </app-half-card-section>
                 </ng-container>
                 <div class="button-container">
                     <button
+                        [disabled]="isButtonDisabled()"
                         type="submit"
                         mat-raised-button
                         class="button--light"

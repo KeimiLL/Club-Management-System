@@ -13,7 +13,7 @@ export interface LongMeeting extends ShortMeeting {
 export interface PrimaryDataMeeting {
     notes: string;
     name: string;
-    date: Date;
+    date: string;
 }
 
 export interface AddMeeting {
