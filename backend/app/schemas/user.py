@@ -58,6 +58,7 @@ class UserCreateWithRole(UserCreate):
 class User(UserBase):
     """User schema for returning data from DB."""
 
+    id: DBIndexInt
     full_name: str = Field(..., min_length=4)
     email: EmailStr
     role: Roles
