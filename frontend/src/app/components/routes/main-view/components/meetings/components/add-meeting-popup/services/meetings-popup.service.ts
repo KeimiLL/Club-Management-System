@@ -125,7 +125,7 @@ export class MeetingsPopupService {
         this.http
             .postNewMeeting(newMeeting)
             .pipe(
-                tap((meeting) => {
+                tap(() => {
                     this.snack.showSnackBar(
                         SnackbarMessages.MEETING_CREATE,
                         "normal"
