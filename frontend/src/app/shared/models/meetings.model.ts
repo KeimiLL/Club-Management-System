@@ -16,12 +16,12 @@ export interface PrimaryDataMeeting {
     date: string;
 }
 
-export interface AddMeeting {
+export interface NewMeeting {
     meeting: PrimaryDataMeeting;
     user_ids: number[];
 }
 
-export interface MeetingResponse extends PrimaryDataMeeting {
+export interface Meeting extends PrimaryDataMeeting {
     id: number;
     created_by_user: ShortUser;
     users: ShortUser[];

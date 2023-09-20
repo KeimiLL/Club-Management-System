@@ -3,15 +3,19 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
 import {
     BehaviorSubject,
+    catchError,
     combineLatest,
     map,
     Observable,
+    of,
     startWith,
     tap,
 } from "rxjs";
 
-import { AddMeeting } from "../../../../../../../../shared/models/meetings.model";
+import { NewMeeting } from "../../../../../../../../shared/models/meetings.model";
+import { SnackbarMessages } from "../../../../../../../../shared/models/messages.model";
 import { ShortUser } from "../../../../../../../../shared/models/user.model";
+import { SnackbarService } from "../../../../../../../../shared/services/snackbar.service";
 import { UserService } from "../../../../../../../../shared/services/user.service";
 import { formatDateFromInputForBackend } from "../../../../../../../../shared/utils/dateHelpers";
 import { AddMeetingPopupComponent } from "../add-meeting-popup.component";
@@ -26,17 +30,21 @@ export class MeetingsPopupService {
     public meetingForm: FormGroup<NewMeetingFormGroup>;
     public attendeeInputControl = new FormControl<string>("");
 
+    private readonly allAttendeesStore$ = new BehaviorSubject<ShortUser[]>([]);
     private readonly selectedAttendeesStore$ = new BehaviorSubject<ShortUser[]>(
         []
     );
 
-    private readonly allAttendeesStore$ = new BehaviorSubject<ShortUser[]>([]);
-
     constructor(
         private readonly http: MeetingsPopupHttpService,
         private readonly dialogRef: MatDialogRef<AddMeetingPopupComponent>,
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private readonly snack: SnackbarService
     ) {
+        this.initData();
+    }
+
+    private initData(): void {
         this.meetingForm = newMeetingDataFormBuilder.buildFormGroup();
         this.userService
             .getAllUsers()
@@ -112,11 +120,22 @@ export class MeetingsPopupService {
     }
 
     public createNewMeeting(): void {
-        const newMeeting = this.meetingForm.value as AddMeeting;
+        const newMeeting = this.meetingForm.value as NewMeeting;
 
-        this.http.postNewMeeting(newMeeting).subscribe(() => {
-            this.closePopup();
-        });
+        this.http
+            .postNewMeeting(newMeeting)
+            .pipe(
+                tap((meeting) => {
+                    this.snack.showSnackBar(
+                        SnackbarMessages.MEETING_CREATE,
+                        "normal"
+                    );
+                }),
+                catchError(() => of(null))
+            )
+            .subscribe(() => {
+                this.closePopup();
+            });
     }
 
     public closePopup(): void {
