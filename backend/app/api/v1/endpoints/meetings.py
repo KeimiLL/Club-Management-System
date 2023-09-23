@@ -11,7 +11,7 @@ from app.models.user import User
 from app.schemas.enums import Roles
 from app.schemas.meeting import MeetingCreate, MeetingOnlyBaseUserInfo, MeetingTableView
 from app.schemas.meeting_user import MeetingUserCreateUserIdList
-from app.schemas.misc import Message, MessageFromEnum
+from app.schemas.misc import ItemsListWithTotal, Message, MessageFromEnum
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
@@ -53,7 +53,7 @@ def create_meeting(
 
 @router.get(
     "",
-    response_model=list[MeetingTableView],
+    response_model=ItemsListWithTotal,
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
@@ -76,32 +76,38 @@ def get_meetings(
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Returns:
-        list[MeetingTableView]: The list of meetings.
+        ItemsListWithTotal: A list of meetings alongside their total number.
     """
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
-        meetings = get_all_meetings(
+        meetings, total = get_all_meetings(
             page=pagination["page"], per_page=pagination["per_page"], db=db
         )
-        return [
-            MeetingTableView(
-                **meeting.__dict__,
-                user_name=meeting.created_by_user.full_name,
-                is_yours=(
-                    current_user.id
-                    in (meeting.user_id, *map(lambda u: u.id, meeting.users))
+        return ItemsListWithTotal(
+            items=[
+                MeetingTableView(
+                    **meeting.__dict__,
+                    user_name=meeting.created_by_user.full_name,
+                    is_yours=(
+                        current_user.id
+                        in (meeting.user_id, *map(lambda u: u.id, meeting.users))
+                    )
                 )
-            )
-            for meeting in meetings
-        ]
-    meetings = get_meetings_by_user_id(
+                for meeting in meetings
+            ],
+            total=total,
+        )
+    meetings, total = get_meetings_by_user_id(
         page=pagination["page"],
         per_page=pagination["per_page"],
         user_id=current_user.id,
         db=db,
     )
-    return [
-        MeetingTableView(
-            **meeting.__dict__, user_name=meeting.created_by_user.full_name
-        )
-        for meeting in meetings
-    ]
+    return ItemsListWithTotal(
+        items=[
+            MeetingTableView(
+                **meeting.__dict__, user_name=meeting.created_by_user.full_name
+            )
+            for meeting in meetings
+        ],
+        total=total,
+    )
