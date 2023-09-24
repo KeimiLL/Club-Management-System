@@ -4,6 +4,7 @@
 from app.core.exceptions import MissingAssociationObjectException, MissingException
 from app.models.training_player import TrainingPlayer
 from app.schemas.training_player import TrainingPlayerCreate
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -56,11 +57,9 @@ def get_training_player_by_id(training_player_id: int, db: Session) -> TrainingP
         TrainingPlayer: TrainingPlayer object.
     """
     try:
-        return (
-            db.query(TrainingPlayer)
-            .filter(TrainingPlayer.id == training_player_id)
-            .one()
-        )
+        return db.execute(
+            select(TrainingPlayer).where(TrainingPlayer.id == training_player_id)
+        ).scalar_one()
     except NoResultFound as exc:
         raise MissingException(TrainingPlayer.__name__) from exc
     except SQLAlchemyError as exc:

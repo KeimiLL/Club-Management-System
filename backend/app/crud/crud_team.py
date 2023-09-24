@@ -5,6 +5,7 @@ from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_coach import get_coach_by_user_id
 from app.models.team import Team
 from app.schemas.team import TeamCreate
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -54,7 +55,7 @@ def get_team_by_id(team_id: int, db: Session) -> Team:
         Team: Team object.
     """
     try:
-        return db.query(Team).filter(Team.id == team_id).one()
+        return db.execute(select(Team).where(Team.id == team_id)).scalar_one()
     except NoResultFound as exc:
         raise MissingException(Team.__name__) from exc
     except SQLAlchemyError as exc:

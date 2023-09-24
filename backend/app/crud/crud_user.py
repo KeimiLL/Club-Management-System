@@ -1,11 +1,14 @@
 """File responsible for implementing users related CRUD operations."""
 
 
+from typing import Sequence
+
 from app.core.exceptions import DuplicateException, MissingException
 from app.core.security import Hasher
 from app.models.user import User
 from app.schemas.enums import Roles
 from app.schemas.user import UserCreate, UserCreateWithRole
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -56,7 +59,7 @@ def get_user_by_email(email: str, db: Session) -> User:
         User: User object.
     """
     try:
-        return db.query(User).filter(User.email == email).one()
+        return db.execute(select(User).where(User.email == email)).scalar_one()
     except NoResultFound as exc:
         raise MissingException(User.__name__) from exc
     except SQLAlchemyError as exc:
@@ -78,14 +81,14 @@ def get_user_by_id(user_id: int, db: Session) -> User:
         User: User object.
     """
     try:
-        return db.query(User).filter(User.id == user_id).one()
+        return db.execute(select(User).where(User.id == user_id)).scalar_one()
     except NoResultFound as exc:
         raise MissingException(User.__name__) from exc
     except SQLAlchemyError as exc:
         raise exc
 
 
-def get_all_users(db: Session) -> list[User]:
+def get_all_users(db: Session) -> Sequence[User]:
     """Gets all users.
 
     Args:
@@ -95,9 +98,9 @@ def get_all_users(db: Session) -> list[User]:
         SQLAlchemyError: If there is a database error.
 
     Returns:
-        list[User]: A list of all User objects.
+        Sequence[User]: A list of all User objects.
     """
     try:
-        return db.query(User).all()
+        return db.scalars(select(User)).all()
     except SQLAlchemyError as exc:
         raise exc

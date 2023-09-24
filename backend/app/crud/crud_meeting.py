@@ -62,7 +62,7 @@ def get_meeting_by_id(meeting_id: int, db: Session) -> Meeting:
         Meeting: Meeting object.
     """
     try:
-        return db.query(Meeting).filter(Meeting.id == meeting_id).one()
+        return db.execute(select(Meeting).where(Meeting.id == meeting_id)).scalar_one()
     except NoResultFound as exc:
         raise MissingException(Meeting.__name__) from exc
     except SQLAlchemyError as exc:
@@ -126,7 +126,7 @@ def get_meetings_by_user_id(
             select(Meeting)
             .outerjoin(MeetingUser)
             .group_by(Meeting.id)
-            .filter(or_(MeetingUser.user_id == user_id, Meeting.user_id == user_id))
+            .where(or_(MeetingUser.user_id == user_id, Meeting.user_id == user_id))
         )
         total = db.scalar(select(func.count()).select_from(query))
         return (

@@ -6,6 +6,7 @@ from app.crud.crud_team import get_team_by_id
 from app.crud.crud_user import get_user_by_id
 from app.models.player import Player
 from app.schemas.player import PlayerCreate
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -63,7 +64,7 @@ def get_player_by_user_id(user_id: int, db: Session) -> Player:
         Player: Player object.
     """
     try:
-        return db.query(Player).filter(Player.user_id == user_id).one()
+        return db.execute(select(Player).where(Player.user_id == user_id)).scalar_one()
     except NoResultFound as exc:
         raise MissingException(Player.__name__) from exc
     except SQLAlchemyError as exc:
