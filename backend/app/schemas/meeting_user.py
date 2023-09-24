@@ -3,8 +3,8 @@
 
 from typing import TYPE_CHECKING
 
-from app.schemas.misc import DBIndexInt, NonEmptyUniqueDBIndexIntSet
-from pydantic import BaseModel, ConfigDict
+from app.schemas.misc import NonEmptyUniqueDBIndexIntSet
+from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
     from app.schemas.meeting import Meeting, MeetingCreateNoUserId
@@ -18,8 +18,8 @@ class MeetingUserBase(BaseModel):
 class MeetingUserCreate(MeetingUserBase):
     """MeetingUser schema for creation."""
 
-    meeting_id: DBIndexInt
-    user_id: DBIndexInt
+    meeting_id: int = Field(..., ge=1, le=10**7)
+    user_id: int = Field(..., ge=1, le=10**7)
 
 
 class MeetingUserCreateUserIdList(MeetingUserBase):
@@ -45,8 +45,8 @@ class MeetingUserInDBBase(MeetingUserBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: DBIndexInt | None = None
-    meeting_id: DBIndexInt | None = None
-    user_id: DBIndexInt | None = None
+    id: int | None = Field(None, ge=1, le=10**7)
+    meeting_id: int | None = Field(None, ge=1, le=10**7)
+    user_id: int | None = Field(None, ge=1, le=10**7)
     meeting: "Meeting"
     user: "User"

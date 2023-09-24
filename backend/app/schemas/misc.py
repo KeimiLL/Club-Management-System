@@ -26,9 +26,6 @@ class ItemsListWithTotal(BaseModel):
     total: NonNegativeInt
 
 
-DBIndexInt = NewType("DBIndexInt", conint(ge=1, lt=10**7))
-RatingInt = NewType("RatingInt", conint(ge=1, le=10))
-
 NonEmptyUniqueDBIndexIntSet = NewType(
-    "NonEmptyUniqueDBIndexIntSet", conset(DBIndexInt, min_length=1)
+    "NonEmptyUniqueDBIndexIntSet", conset(conint(ge=1, lt=10**7), min_length=1)
 )

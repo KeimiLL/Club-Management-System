@@ -3,8 +3,7 @@
 
 from typing import TYPE_CHECKING
 
-from app.schemas.misc import DBIndexInt, RatingInt
-from pydantic import BaseModel, ConfigDict, NonNegativeInt
+from pydantic import BaseModel, ConfigDict, Field, NonNegativeInt
 
 if TYPE_CHECKING:
     from app.schemas.match import Match
@@ -16,17 +15,17 @@ class MatchPlayerBase(BaseModel):
 
     is_starter: bool | None = None
     minutes_played: NonNegativeInt | None = None
-    rating: RatingInt | None = None
+    rating: int | None = Field(None, ge=1, le=10)
 
 
 class MatchPlayerCreate(MatchPlayerBase):
     """MatchPlayer schema for creation."""
 
-    match_id: DBIndexInt
-    player_id: DBIndexInt
+    match_id: int = Field(..., ge=1, le=10**7)
+    player_id: int = Field(..., ge=1, le=10**7)
     is_starter: bool = True
     minutes_played: NonNegativeInt
-    rating: RatingInt
+    rating: int = Field(..., ge=1, le=10)
 
 
 class MatchPlayer(MatchPlayerBase):
@@ -34,7 +33,7 @@ class MatchPlayer(MatchPlayerBase):
 
     is_starter: bool
     minutes_played: NonNegativeInt
-    rating: RatingInt
+    rating: int = Field(..., ge=1, le=10)
     match: "Match"
     player: "Player"
 
@@ -48,8 +47,8 @@ class MatchPlayerInDBBase(MatchPlayerBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: DBIndexInt | None = None
-    match_id: DBIndexInt | None = None
-    player_id: DBIndexInt | None = None
+    id: int | None = Field(None, ge=1, le=10**7)
+    match_id: int | None = Field(None, ge=1, le=10**7)
+    player_id: int | None = Field(None, ge=1, le=10**7)
     match: "Match"
     player: "Player"

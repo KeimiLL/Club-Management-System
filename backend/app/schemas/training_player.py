@@ -4,8 +4,7 @@
 from typing import TYPE_CHECKING
 
 from app.schemas.enums import TrainingPresence
-from app.schemas.misc import DBIndexInt
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
     from app.schemas.player import Player
@@ -21,8 +20,8 @@ class TrainingPlayerBase(BaseModel):
 class TrainingPlayerCreate(TrainingPlayerBase):
     """TrainingPlayer schema for creation."""
 
-    training_id: DBIndexInt
-    player_id: DBIndexInt
+    training_id: int = Field(..., ge=1, le=10**7)
+    player_id: int = Field(..., ge=1, le=10**7)
     presence: TrainingPresence
 
 
@@ -43,8 +42,8 @@ class TrainingPlayerInDBBase(TrainingPlayerBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: DBIndexInt | None = None
-    training_id: DBIndexInt | None = None
-    player_id: DBIndexInt | None = None
+    id: int | None = Field(None, ge=1, le=10**7)
+    training_id: int | None = Field(None, ge=1, le=10**7)
+    player_id: int | None = Field(None, ge=1, le=10**7)
     training: "Training"
     player: "Player"

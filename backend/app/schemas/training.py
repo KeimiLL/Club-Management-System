@@ -4,8 +4,7 @@
 import datetime
 from typing import TYPE_CHECKING
 
-from app.schemas.misc import DBIndexInt
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
     from app.schemas.player import Player
@@ -22,7 +21,7 @@ class TrainingBase(BaseModel):
 class TrainingCreate(TrainingBase):
     """Training schema for creation."""
 
-    team_id: DBIndexInt
+    team_id: int = Field(..., ge=1, le=10**7)
     notes: str
     date: datetime.date
 
@@ -45,7 +44,7 @@ class TrainingInDBBase(TrainingBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: DBIndexInt | None = None
-    team_id: DBIndexInt | None = None
+    id: int | None = Field(None, ge=1, le=10**7)
+    team_id: int | None = Field(None, ge=1, le=10**7)
     team: "Team"
     players: list["Player"]

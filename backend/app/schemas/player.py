@@ -4,8 +4,7 @@
 import datetime
 from typing import TYPE_CHECKING
 
-from app.schemas.misc import DBIndexInt
-from pydantic import BaseModel, ConfigDict, PositiveInt
+from pydantic import BaseModel, ConfigDict, Field, PositiveInt
 
 if TYPE_CHECKING:
     from app.schemas.injury import Injury
@@ -30,8 +29,8 @@ class PlayerBase(BaseModel):
 class PlayerCreate(PlayerBase):
     """Player schema for creation."""
 
-    user_id: DBIndexInt
-    team_id: DBIndexInt
+    user_id: int = Field(..., ge=1, le=10**7)
+    team_id: int = Field(..., ge=1, le=10**7)
     date_of_joining: datetime.date
     date_of_birth: datetime.date
     height: PositiveInt
@@ -65,8 +64,8 @@ class PlayerInDBBase(PlayerBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    user_id: DBIndexInt | None = None
-    team_id: DBIndexInt | None = None
+    user_id: int | None = Field(None, ge=1, le=10**7)
+    team_id: int | None = Field(None, ge=1, le=10**7)
     user: "User"
     team: "Team"
     injuries: list["Injury"]
