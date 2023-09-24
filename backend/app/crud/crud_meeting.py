@@ -1,14 +1,18 @@
 """File responsible for implementing meetinges related CRUD operations."""
 
 
+from typing import Callable, Sequence
+
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_user import get_user_by_id
 from app.models.meeting import Meeting
 from app.models.meeting_user import MeetingUser
 from app.schemas.meeting import MeetingCreate
-from sqlalchemy import or_
+from sqlalchemy import func, or_, select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
+
+func: Callable
 
 
 def create_new_meeting(meeting: MeetingCreate, db: Session) -> Meeting:
@@ -58,7 +62,7 @@ def get_meeting_by_id(meeting_id: int, db: Session) -> Meeting:
         Meeting: Meeting object.
     """
     try:
-        return db.query(Meeting).filter(Meeting.id == meeting_id).one()
+        return db.execute(select(Meeting).where(Meeting.id == meeting_id)).scalar_one()
     except NoResultFound as exc:
         raise MissingException(Meeting.__name__) from exc
     except SQLAlchemyError as exc:
@@ -69,7 +73,7 @@ def get_all_meetings(
     page: int,
     per_page: int,
     db: Session,
-) -> list[Meeting]:
+) -> tuple[Sequence[Meeting], int]:
     """Gets all meetings with pagination.
 
     Args:
@@ -81,15 +85,18 @@ def get_all_meetings(
         SQLAlchemyError: If there is a database error.
 
     Returns:
-        list[Meeting]: _description_
+        tuple[Sequence[Meeting], int]: The list of all meetings alongside the total number of them.
     """
     try:
+        query = select(Meeting)
+        total = db.scalar(select(func.count()).select_from(query))
         return (
-            db.query(Meeting)
-            .order_by(Meeting.date)
-            .offset(page * per_page)
-            .limit(per_page)
-            .all()
+            db.scalars(
+                query.order_by(Meeting.date.desc())
+                .offset(page * per_page)
+                .limit(per_page)
+            ).all(),
+            total,
         )
     except SQLAlchemyError as exc:
         raise exc
@@ -97,7 +104,7 @@ def get_all_meetings(
 
 def get_meetings_by_user_id(
     page: int, per_page: int, user_id: int, db: Session
-) -> list[Meeting]:
+) -> tuple[Sequence[Meeting], int]:
     """Gets all meetings that were either created by the current user or the current user
         is part of their attendance.
 
@@ -111,17 +118,24 @@ def get_meetings_by_user_id(
         SQLAlchemyError: If there is a database error.
 
     Returns:
-        list[Meeting]: The filtered list of meetings.
+        tuple[Sequence[Meeting], int]: The filtered list of meetings alongside the total number of
+            meetings that meet the criteria.
     """
     try:
+        query = (
+            select(Meeting)
+            .outerjoin(MeetingUser)
+            .group_by(Meeting.id)
+            .where(or_(MeetingUser.user_id == user_id, Meeting.user_id == user_id))
+        )
+        total = db.scalar(select(func.count()).select_from(query))
         return (
-            db.query(Meeting)
-            .join(MeetingUser)
-            .filter(or_(MeetingUser.user_id == user_id, Meeting.user_id == user_id))
-            .order_by(Meeting.date)
-            .offset(page * per_page)
-            .limit(per_page)
-            .all()
+            db.scalars(
+                query.order_by(Meeting.date.desc())
+                .offset(page * per_page)
+                .limit(per_page)
+            ).all(),
+            total,
         )
     except SQLAlchemyError as exc:
         raise exc

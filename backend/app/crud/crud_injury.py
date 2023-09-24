@@ -5,6 +5,7 @@ from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_user import get_user_by_id
 from app.models.injury import Injury
 from app.schemas.injury import InjuryCreate
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -55,7 +56,7 @@ def get_injury_by_id(injury_id: int, db: Session) -> Injury:
         Injury: Injury object.
     """
     try:
-        return db.query(Injury).filter(Injury.id == injury_id).one()
+        return db.execute(select(Injury).where(Injury.id == injury_id)).scalar_one()
     except NoResultFound as exc:
         raise MissingException(Injury.__name__) from exc
     except SQLAlchemyError as exc:

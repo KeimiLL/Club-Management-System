@@ -13,6 +13,7 @@ from app.models.user import User
 from app.schemas.meeting import MeetingCreate
 from app.schemas.meeting_user import MeetingUserCreate
 from app.schemas.misc import NonEmptyUniqueDBIndexIntSet
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -64,7 +65,9 @@ def get_meeting_user_by_id(meeting_user_id: int, db: Session) -> MeetingUser:
         MeetingUser: MeetingUser object.
     """
     try:
-        return db.query(MeetingUser).filter(MeetingUser.id == meeting_user_id).one()
+        return db.execute(
+            select(MeetingUser).where(MeetingUser.id == meeting_user_id)
+        ).scalar_one()
     except NoResultFound as exc:
         raise MissingException(MeetingUser.__name__) from exc
     except SQLAlchemyError as exc:
@@ -94,7 +97,7 @@ def create_meeting_user_from_user_id_list(
             raise GenericException(
                 "The list of user ids cannot contain the creator's id."
             )
-        users = db.query(User).filter(User.id.in_(user_ids)).all()
+        users = db.scalars(select(User).where(User.id.in_(user_ids))).all()
         if not users or len(users) != len(user_ids):
             raise MissingException(User.__name__)
         new_meeting = create_new_meeting(

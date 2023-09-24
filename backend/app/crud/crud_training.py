@@ -5,6 +5,7 @@ from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_team import get_team_by_id
 from app.models.training import Training
 from app.schemas.training import TrainingCreate
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -55,7 +56,9 @@ def get_training_by_id(training_id: int, db: Session) -> Training:
         Training: Training object.
     """
     try:
-        return db.query(Training).filter(Training.id == training_id).one()
+        return db.execute(
+            select(Training).where(Training.id == training_id)
+        ).scalar_one()
     except NoResultFound as exc:
         raise MissingException(Training.__name__) from exc
     except SQLAlchemyError as exc:

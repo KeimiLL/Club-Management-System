@@ -5,6 +5,7 @@ from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_user import get_user_by_id
 from app.models.coach import Coach
 from app.schemas.coach import CoachCreate
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -55,7 +56,7 @@ def get_coach_by_user_id(user_id: int, db: Session) -> Coach:
         Coach: Coach object.
     """
     try:
-        return db.query(Coach).filter(Coach.user_id == user_id).one()
+        return db.execute(select(Coach).where(Coach.user_id == user_id)).scalar_one()
     except NoResultFound as exc:
         raise MissingException(Coach.__name__) from exc
     except SQLAlchemyError as exc:

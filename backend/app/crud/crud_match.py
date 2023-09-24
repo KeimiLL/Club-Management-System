@@ -5,6 +5,7 @@ from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_team import get_team_by_id
 from app.models.match import Match
 from app.schemas.match import MatchCreate
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -59,7 +60,7 @@ def get_match_by_id(match_id: int, db: Session) -> Match:
         Match: Match object.
     """
     try:
-        return db.query(Match).filter(Match.id == match_id).one()
+        return db.execute(select(Match).where(Match.id == match_id)).scalar_one()
     except NoResultFound as exc:
         raise MissingException(Match.__name__) from exc
     except SQLAlchemyError as exc:

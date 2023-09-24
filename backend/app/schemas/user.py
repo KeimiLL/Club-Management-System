@@ -4,7 +4,6 @@
 from typing import TYPE_CHECKING
 
 from app.schemas.enums import Roles
-from app.schemas.misc import DBIndexInt
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 if TYPE_CHECKING:
@@ -77,7 +76,7 @@ class UserInDBBase(UserBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-    id: DBIndexInt | None = None
+    id: int | None = Field(None, ge=1, le=10**7)
     full_name: str | None = Field(None, min_length=4)
     role: Roles | None = None
     coach: "Coach"
@@ -94,6 +93,6 @@ class UserInDB(UserInDBBase):
 class UserOnlyBaseInfo(BaseModel):
     """User schema for returning data from the database."""
 
-    id: DBIndexInt
+    id: int = Field(..., ge=1, le=10**7)
     full_name: str = Field(..., min_length=4)
     role: Roles

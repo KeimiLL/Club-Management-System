@@ -110,15 +110,16 @@ def get_user_from_token(
 
 
 def paginate(
-    page: Annotated[int, Query(ge=0)], per_page: Annotated[int, Query(gt=0)]
+    page: Annotated[int, Query(ge=0, lt=10000)],
+    per_page: Annotated[int, Query(gt=0, lt=100)],
 ) -> dict[str, int]:
     """Common dependency for getting pagination parameters from a GET request.
 
     Args:
         page (Annotated[int, Query]): The page number, has to be greater than
-            or equal to 0.
+            or equal to 0 and less than 100.
         per_page (Annotated[int, Query]): The number of items per page,
-            has to be greater than 0.
+            has to be greater than 0 and less than 100.
 
     Returns:
         dict[str, int]: The extracted query values.

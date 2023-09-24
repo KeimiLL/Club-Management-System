@@ -4,6 +4,7 @@
 from app.core.exceptions import MissingAssociationObjectException, MissingException
 from app.models.match_player import MatchPlayer
 from app.schemas.match_player import MatchPlayerCreate
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -58,7 +59,9 @@ def get_match_player_by_id(match_player_id: int, db: Session) -> MatchPlayer:
         MatchPlayer: MatchPlayer object.
     """
     try:
-        return db.query(MatchPlayer).filter(MatchPlayer.id == match_player_id).one()
+        return db.execute(
+            select(MatchPlayer).where(MatchPlayer.id == match_player_id)
+        ).scalar_one()
     except NoResultFound as exc:
         raise MissingException(MatchPlayer.__name__) from exc
     except SQLAlchemyError as exc:
