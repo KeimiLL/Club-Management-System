@@ -41,3 +41,10 @@ class JWTTokensException(Exception):
 
     def __init__(self, message: str):
         self.message = message
+
+
+class ForbiddenException(Exception):
+    """Class for raising a Forbidden exception from API calls."""
+
+    def __init__(self, item_name: str):
+        self.item_name = item_name
