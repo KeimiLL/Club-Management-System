@@ -6,6 +6,7 @@ import uvicorn
 from app.api.base import api_router
 from app.api.exception_handlers import (
     duplicate_exception_handler,
+    forbidden_exception_handler,
     generic_exception_handler,
     invalid_credentials_exception_handler,
     jwt_tokens_exception_handler,
@@ -18,6 +19,7 @@ from app.api.middlewares import LogRequestMiddleware
 from app.core.config import get_settings
 from app.core.exceptions import (
     DuplicateException,
+    ForbiddenException,
     GenericException,
     InvalidCredentialsException,
     JWTTokensException,
@@ -49,6 +51,7 @@ def include_exception_handlers(application: FastAPI) -> None:
     application.add_exception_handler(
         InvalidCredentialsException, invalid_credentials_exception_handler
     )
+    application.add_exception_handler(ForbiddenException, forbidden_exception_handler)
     application.add_exception_handler(
         RequestValidationError, request_validation_exception_handler
     )

@@ -5,6 +5,7 @@ import logging
 
 from app.core.exceptions import (
     DuplicateException,
+    ForbiddenException,
     GenericException,
     InvalidCredentialsException,
     JWTTokensException,
@@ -166,4 +167,22 @@ async def request_validation_exception_handler(
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content=jsonable_encoder(details),
+    )
+
+
+async def forbidden_exception_handler(
+    _: Request, exc: ForbiddenException
+) -> JSONResponse:
+    """App-wide ForbiddenException handler.
+
+    Args:
+        exc (ForbiddenException): The raised ForbiddenException.
+
+    Returns:
+        JSONResponse: The response with an appropriate status code and message.
+    """
+    logging.getLogger("uvicorn").info(msg=exc, exc_info=True)
+    return JSONResponse(
+        status_code=status.HTTP_403_FORBIDDEN,
+        content={"message": f"You cannot access {exc.item_name}."},
     )
