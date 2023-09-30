@@ -12,8 +12,4 @@ export class MeetingsHttpService {
     public getMeetingsList(): Observable<LongMeeting[]> {
         return of(longMeetingsMockup);
     }
-
-    public addMeeting(): Observable<null> {
-        return of(null);
-    }
 }

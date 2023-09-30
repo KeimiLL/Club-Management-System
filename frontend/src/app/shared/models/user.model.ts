@@ -1,7 +1,6 @@
 export interface UserBase {
     full_name: string;
     email: string;
-    id?: number;
 }
 
 export interface UserLogin {
@@ -15,8 +14,15 @@ export interface UserCreateWithRole extends UserCreate {
     role: Roles;
 }
 
-export interface User extends UserBase {
+export interface ShortUser {
+    full_name: string;
+    id: number;
     role: Roles;
+}
+
+export interface User extends UserBase, ShortUser {
+    role: Roles;
+    id: number;
 }
 
 export interface UserUpdate {

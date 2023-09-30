@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { BackendResponse } from "../models/misc.model";
-import { User, UserCreate, UserLogin } from "../models/user.model";
+import { ShortUser, User, UserCreate, UserLogin } from "../models/user.model";
 
 @Injectable({
     providedIn: "root",
@@ -32,7 +32,7 @@ export class UserService {
         return this.http.get<User>("api/v1/users/current");
     }
 
-    public getAllUsers(): Observable<object> {
-        return this.http.get<object>("api/v1/users");
+    public getAllUsers(): Observable<ShortUser[]> {
+        return this.http.get<ShortUser[]>("api/v1/users");
     }
 }

@@ -1,1 +1,7 @@
 @import "../../../../../../../../styles/component-styles/components";
+
+:host {
+    mat-row {
+        cursor: pointer;
+    }
+}

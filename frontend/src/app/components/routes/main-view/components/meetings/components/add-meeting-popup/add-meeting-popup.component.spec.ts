@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { AddMeetingPopupComponent } from "./add-meeting-popup.component";
+import { NewMeetingPopupComponent } from "./add-meeting-popup.component";
 
-describe("AddMeetingPopupComponent", () => {
-    let component: AddMeetingPopupComponent;
-    let fixture: ComponentFixture<AddMeetingPopupComponent>;
+describe("NewMeetingPopupComponent", () => {
+    let component: NewMeetingPopupComponent;
+    let fixture: ComponentFixture<NewMeetingPopupComponent>;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [AddMeetingPopupComponent],
+            imports: [NewMeetingPopupComponent],
         });
-        fixture = TestBed.createComponent(AddMeetingPopupComponent);
+        fixture = TestBed.createComponent(NewMeetingPopupComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

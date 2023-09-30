@@ -1,4 +1,4 @@
-import { User } from "./user.model";
+import { ShortUser } from "./user.model";
 
 export interface ShortMeeting {
     id: number;
@@ -10,14 +10,19 @@ export interface LongMeeting extends ShortMeeting {
     date: Date;
 }
 
-export interface Meeting extends LongMeeting {
-    attendees: User[];
-    description: string;
-}
-
-export interface addMeeting {
+export interface PrimaryDataMeeting {
     notes: string;
     name: string;
-    date: Date;
+    date: string;
+}
+
+export interface NewMeeting {
+    meeting: PrimaryDataMeeting;
     user_ids: number[];
+}
+
+export interface Meeting extends PrimaryDataMeeting {
+    id: number;
+    created_by_user: ShortUser;
+    users: ShortUser[];
 }
