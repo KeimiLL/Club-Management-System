@@ -1,15 +1,19 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 
-import { longMeetingsMockup } from "../../../../../../shared/mock/meetings.mock";
-import { LongMeeting } from "../../../../../../shared/models/meetings.model";
+import { MeetingResponse } from "../../../../../../shared/models/meetings.model";
 
 @Injectable()
 export class MeetingsHttpService {
     constructor(private readonly http: HttpClient) {}
 
-    public getMeetingsList(): Observable<LongMeeting[]> {
-        return of(longMeetingsMockup);
+    public getMeetingsList(
+        pageIndex: number,
+        pageCapacity: number
+    ): Observable<MeetingResponse> {
+        return this.http.get<MeetingResponse>(
+            `api/v1/meetings?page=${pageIndex}&per_page=${pageCapacity}`
+        );
     }
 }

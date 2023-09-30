@@ -2,10 +2,12 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 
+import { longMeetingsMockup } from "../../../../../../shared/mock/meetings.mock";
 import {
     LongMeeting,
     ShortMeeting,
 } from "../../../../../../shared/models/meetings.model";
+import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { MeetingsHttpService } from "./meetings-http.service";
 
 @Injectable()
@@ -18,12 +20,19 @@ export class MeetingsRootService {
         []
     );
 
-    constructor(private readonly http: MeetingsHttpService) {
-        http.getMeetingsList()
+    constructor(
+        private readonly http: MeetingsHttpService,
+        private readonly splitView: SplitViewManagerService
+    ) {
+        this.longMeetings = longMeetingsMockup;
+        http.getMeetingsList(
+            this.splitView.PAGE_INDEX,
+            this.splitView.PAGE_CAPACITY
+        )
             .pipe(
-                tap((meetings: LongMeeting[]) => {
-                    this.longMeetings = meetings;
-                    this.minimazeLongMeetings();
+                tap((meetings) => {
+                    console.log(this.splitView.TOTAL_ITEMS);
+                    console.log(meetings);
                 })
             )
             .subscribe();

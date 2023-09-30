@@ -49,6 +49,7 @@ export class MeetingsComponent implements OnInit {
         this.isDetail$ = this.splitService.isDetail$;
         this.longMeetings$ = this.root.longMeetings$;
         this.shortMeetings$ = this.root.shortMeetings$;
+        this.splitService.TOTAL_ITEMS = 2000;
     }
 
     protected switchDetail(): void {

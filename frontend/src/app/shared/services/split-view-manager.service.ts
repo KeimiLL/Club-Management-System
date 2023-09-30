@@ -7,6 +7,10 @@ export class SplitViewManagerService {
     private readonly isDetailStore$ = new BehaviorSubject<boolean>(false);
     private readonly currentIdStore$ = new BehaviorSubject<number | null>(null);
 
+    public readonly PAGE_CAPACITY = 7;
+    public readonly PAGE_INDEX = 0;
+    public TOTAL_ITEMS: number;
+
     constructor(
         private readonly activatedRoute: ActivatedRoute,
         private readonly router: Router
