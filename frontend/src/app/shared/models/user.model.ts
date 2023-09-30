@@ -14,15 +14,15 @@ export interface UserCreateWithRole extends UserCreate {
     role: Roles;
 }
 
-export interface User extends UserBase {
-    role: Roles;
-    id: number;
-}
-
 export interface ShortUser {
     full_name: string;
     id: number;
     role: Roles;
+}
+
+export interface User extends UserBase, ShortUser {
+    role: Roles;
+    id: number;
 }
 
 export interface UserUpdate {

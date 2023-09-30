@@ -76,7 +76,7 @@ export class MeetingsPopupService {
         return this.selectedAttendeesStore$.asObservable();
     }
 
-    public get filtredAttendees$(): Observable<ShortUser[]> {
+    public get filteredAttendees$(): Observable<ShortUser[]> {
         return combineLatest([
             this.allAttendees$,
             this.selectedAttendees$,

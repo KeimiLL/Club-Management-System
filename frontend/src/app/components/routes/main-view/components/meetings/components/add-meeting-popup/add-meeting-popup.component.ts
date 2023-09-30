@@ -61,7 +61,7 @@ export class AddMeetingPopupComponent implements OnInit {
     ngOnInit(): void {
         this.currentUser = this.userService.currentUser as ShortUser;
         this.allAttendees$ = this.root.allAttendees$;
-        this.filteredAttendees$ = this.root.filtredAttendees$;
+        this.filteredAttendees$ = this.root.filteredAttendees$;
         this.selectedAttendees$ = this.root.selectedAttendees$;
     }
 
