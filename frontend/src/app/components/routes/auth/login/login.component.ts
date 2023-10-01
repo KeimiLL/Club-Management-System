@@ -9,8 +9,6 @@ import {
 import { Router, RouterModule } from "@angular/router";
 import { catchError, of } from "rxjs";
 
-import { PermissionDirective } from "../../../../shared/directives/permission.directive";
-import { TeamPermission } from "../../../../shared/models/permission.model";
 import { User } from "../../../../shared/models/user.model";
 import { MaterialModule } from "../../../../shared/modules/material.module";
 import { UserService } from "../../../../shared/services/user.service";
