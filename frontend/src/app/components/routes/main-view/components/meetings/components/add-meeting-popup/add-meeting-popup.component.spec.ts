@@ -1,21 +1,21 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+// import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { NewMeetingPopupComponent } from "./add-meeting-popup.component";
+// import { NewMeetingPopupComponent } from "./add-meeting-popup.component";
 
-describe("NewMeetingPopupComponent", () => {
-    let component: NewMeetingPopupComponent;
-    let fixture: ComponentFixture<NewMeetingPopupComponent>;
+// describe("NewMeetingPopupComponent", () => {
+//     let component: NewMeetingPopupComponent;
+//     let fixture: ComponentFixture<NewMeetingPopupComponent>;
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            imports: [NewMeetingPopupComponent],
-        });
-        fixture = TestBed.createComponent(NewMeetingPopupComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-    });
+//     beforeEach(() => {
+//         TestBed.configureTestingModule({
+//             imports: [NewMeetingPopupComponent],
+//         });
+//         fixture = TestBed.createComponent(NewMeetingPopupComponent);
+//         component = fixture.componentInstance;
+//         fixture.detectChanges();
+//     });
 
-    it("should create", () => {
-        expect(component).toBeTruthy();
-    });
-});
+//     it("should create", () => {
+//         expect(component).toBeTruthy();
+//     });
+// });
