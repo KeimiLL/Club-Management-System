@@ -1,13 +1,12 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
-import { tap } from "rxjs/operators";
+import { switchMap } from "rxjs/operators";
 
-import { longMeetingsMockup } from "../../../../../../shared/mock/meetings.mock";
 import {
     LongMeeting,
     ShortMeeting,
 } from "../../../../../../shared/models/meetings.model";
-import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
+import { TableService } from "../../../../../../shared/services/table.service";
 import { MeetingsHttpService } from "./meetings-http.service";
 
 @Injectable()
@@ -22,20 +21,22 @@ export class MeetingsRootService {
 
     constructor(
         private readonly http: MeetingsHttpService,
-        private readonly splitView: SplitViewManagerService
+        private readonly table: TableService<LongMeeting>
     ) {
-        this.longMeetings = longMeetingsMockup;
-        http.getMeetingsList(
-            this.splitView.PAGE_INDEX,
-            this.splitView.PAGE_CAPACITY
-        )
+        this.table.currentPageIndex$
             .pipe(
-                tap((meetings) => {
-                    console.log(this.splitView.TOTAL_ITEMS);
-                    console.log(meetings);
-                })
+                switchMap(() =>
+                    this.table.getCurrentPage(
+                        this.http.getMeetingsList(
+                            this.table.currentPageIndex,
+                            this.table.capacity
+                        )
+                    )
+                )
             )
-            .subscribe();
+            .subscribe((meetings) => {
+                this.longMeetings = meetings;
+            });
     }
 
     private set longMeetings(longMeetings: LongMeeting[]) {

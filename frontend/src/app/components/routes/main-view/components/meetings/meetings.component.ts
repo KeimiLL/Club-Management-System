@@ -10,6 +10,7 @@ import {
 import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../shared/services/split-view-manager.service";
+import { TableService } from "../../../../../shared/services/table.service";
 import { AddMeetingPopupComponent } from "./components/add-meeting-popup/add-meeting-popup.component";
 import { LegendComponent } from "./components/legend/legend.component";
 import { MeetingTableComponent } from "./components/meeting-table/meeting-table.component";
@@ -32,6 +33,7 @@ import { MeetingsRootService } from "./services/meetings-root.service";
         SplitViewManagerService,
         MeetingsHttpService,
         MeetingsRootService,
+        TableService,
     ],
 })
 export class MeetingsComponent implements OnInit {
@@ -49,7 +51,6 @@ export class MeetingsComponent implements OnInit {
         this.isDetail$ = this.splitService.isDetail$;
         this.longMeetings$ = this.root.longMeetings$;
         this.shortMeetings$ = this.root.shortMeetings$;
-        this.splitService.TOTAL_ITEMS = 2000;
     }
 
     protected switchDetail(): void {
