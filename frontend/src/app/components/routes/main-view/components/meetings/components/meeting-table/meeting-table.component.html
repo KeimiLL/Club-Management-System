@@ -38,8 +38,10 @@
 </mat-table>
 
 <mat-paginator
+    *ngIf="totalItems$ | async"
     #paginator
-    [pageSize]="7"
-    [showFirstLastButtons]="true"
+    [pageSize]="itemsPerPage"
+    [length]="totalItems$ | async"
+    (page)="changePage($event)"
     class="paginator"
 ></mat-paginator>

@@ -7,7 +7,7 @@ import { TableResponse } from "../models/misc.model";
 export class TableService<T> {
     public readonly capacity = 7;
     private readonly currentPageIndexStore$ = new BehaviorSubject<number>(0);
-    public totalItems: number;
+    private readonly totalItemsStore$ = new BehaviorSubject<number>(0);
 
     public get currentPageIndex(): number {
         return this.currentPageIndexStore$.value;
@@ -17,27 +17,26 @@ export class TableService<T> {
         return this.currentPageIndexStore$.asObservable();
     }
 
-    public prevPage(): void {
-        if (this.currentPageIndex > 0) {
-            this.currentPageIndexStore$.next(this.currentPageIndex - 1);
-        }
+    public set totalItems(totalItems: number) {
+        this.totalItemsStore$.next(totalItems);
     }
 
-    public nextPage(): void {
-        if (this.totalItems > (this.currentPageIndex + 1) * this.capacity) {
-            this.currentPageIndexStore$.next(this.currentPageIndex + 1);
-        }
+    public get totalItems$(): Observable<number> {
+        return this.totalItemsStore$.asObservable();
+    }
+
+    public changePage(newPage: number): void {
+        this.currentPageIndexStore$.next(newPage);
     }
 
     public getCurrentPage(
         request: Observable<TableResponse<T>>
     ): Observable<T[]> {
         return request.pipe(
-            tap(
-                (response: TableResponse<T>) =>
-                    (this.totalItems = response.total)
-            ),
-            map((response: TableResponse<T>) => response.items)
+            tap((response) => {
+                this.totalItems = response.total;
+            }),
+            map((response) => response.items)
         );
     }
 }

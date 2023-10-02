@@ -36,6 +36,7 @@ export class MeetingsRootService {
             )
             .subscribe((meetings) => {
                 this.longMeetings = meetings;
+                this.minimazeLongMeetings();
             });
     }
 
