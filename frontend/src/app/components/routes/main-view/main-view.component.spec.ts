@@ -1,21 +1,13 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-
 import { MainViewComponent } from "./main-view.component";
 
-describe("MainViewComponentComponent", () => {
+describe("MainViewComponent", () => {
     let component: MainViewComponent;
-    let fixture: ComponentFixture<MainViewComponent>;
 
     beforeEach(() => {
-        TestBed.configureTestingModule({
-            declarations: [MainViewComponent],
-        });
-        fixture = TestBed.createComponent(MainViewComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
+        component = new MainViewComponent();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });
