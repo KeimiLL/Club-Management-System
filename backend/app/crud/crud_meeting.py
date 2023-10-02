@@ -92,7 +92,7 @@ def get_all_meetings(
         total = db.scalar(select(func.count()).select_from(query))
         return (
             db.scalars(
-                query.order_by(Meeting.date.desc())
+                query.order_by(Meeting.date.desc(), Meeting.id.desc())
                 .offset(page * per_page)
                 .limit(per_page)
             ).all(),
@@ -131,7 +131,7 @@ def get_meetings_by_user_id(
         total = db.scalar(select(func.count()).select_from(query))
         return (
             db.scalars(
-                query.order_by(Meeting.date.desc())
+                query.order_by(Meeting.date.desc(), Meeting.id.desc())
                 .offset(page * per_page)
                 .limit(per_page)
             ).all(),
