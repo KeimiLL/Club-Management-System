@@ -54,14 +54,14 @@ class Player(Base):
     injuries: Mapped[list["Injury"]] = relationship(cascade="all, delete-orphan")
 
     match_association: Mapped[list["MatchPlayer"]] = relationship(
-        back_populates="player"
+        back_populates="player", cascade="all, delete-orphan"
     )
     matches: AssociationProxy[list["Match"]] = association_proxy(
         "match_association", "match"
     )
 
     training_association: Mapped[list["TrainingPlayer"]] = relationship(
-        back_populates="player"
+        back_populates="player", cascade="all, delete-orphan"
     )
     trainings: AssociationProxy[list["Training"]] = association_proxy(
         "training_association", "training"

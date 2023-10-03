@@ -41,7 +41,7 @@ class Match(Base):
     team: Mapped["Team"] = relationship(back_populates="matches")
 
     player_association: Mapped[list["MatchPlayer"]] = relationship(
-        back_populates="match"
+        back_populates="match", cascade="all, delete-orphan"
     )
     players: AssociationProxy[list["Player"]] = association_proxy(
         "player_association", "player"
