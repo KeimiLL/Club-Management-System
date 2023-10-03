@@ -1,0 +1,8 @@
+@import "../../../../../../../../styles/variables";
+
+:host {
+    .date {
+        padding: $small-spacing;
+        font-size: $very-large-font;
+    }
+}

@@ -50,10 +50,6 @@ export class MeetingsRootService {
                 })
             )
             .subscribe();
-
-        this.currentMeeting$.subscribe((value) => {
-            console.log(value);
-        });
     }
 
     private set longMeetings(longMeetings: LongMeeting[]) {
