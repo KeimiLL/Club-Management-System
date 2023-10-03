@@ -1,12 +1,14 @@
 import { Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
 import { switchMap, tap } from "rxjs/operators";
 
 import {
     LongMeeting,
+    Meeting,
     ShortMeeting,
 } from "../../../../../../shared/models/meetings.model";
+import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
 import { AddMeetingPopupComponent } from "../components/add-meeting-popup/add-meeting-popup.component";
 import { MeetingsHttpService } from "./meetings-http.service";
@@ -21,14 +23,37 @@ export class MeetingsRootService {
         []
     );
 
+    private readonly currentMeetingStore$ = new BehaviorSubject<Meeting | null>(
+        null
+    );
+
     constructor(
         private readonly http: MeetingsHttpService,
         private readonly dialog: MatDialog,
-        private readonly table: TableService<LongMeeting>
+        private readonly table: TableService<LongMeeting>,
+        private readonly splitView: SplitViewManagerService
     ) {
         this.table.currentPageIndex$
             .pipe(switchMap(() => this.refreshMeetings()))
             .subscribe();
+
+        this.splitView.currentId$
+            .pipe(
+                switchMap((id: number | null) => {
+                    if (id !== null) {
+                        return this.getCurrentMeetingById(id);
+                    }
+                    return of(null);
+                }),
+                tap((meeting) => {
+                    this.currentMeeting = meeting;
+                })
+            )
+            .subscribe();
+
+        this.currentMeeting$.subscribe((value) => {
+            console.log(value);
+        });
     }
 
     private set longMeetings(longMeetings: LongMeeting[]) {
@@ -53,6 +78,18 @@ export class MeetingsRootService {
 
     public get shortMeetings$(): Observable<ShortMeeting[]> {
         return this.shortMeetingsStore$.asObservable();
+    }
+
+    public set currentMeeting(meeting: Meeting | null) {
+        this.currentMeetingStore$.next(meeting);
+    }
+
+    public get currentMeeting(): Meeting | null {
+        return this.currentMeetingStore$.value;
+    }
+
+    public get currentMeeting$(): Observable<Meeting | null> {
+        return this.currentMeetingStore$.asObservable();
     }
 
     public openDialog(): void {
@@ -88,5 +125,9 @@ export class MeetingsRootService {
             const { id, name, isYour } = meeting;
             return { id, name, isYour } as ShortMeeting;
         });
+    }
+
+    private getCurrentMeetingById(id: number): Observable<Meeting> {
+        return this.http.getMeetingsById(id);
     }
 }
