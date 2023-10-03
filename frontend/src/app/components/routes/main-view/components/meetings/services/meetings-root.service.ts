@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { BehaviorSubject, Observable, of } from "rxjs";
-import { switchMap, tap } from "rxjs/operators";
+import { catchError, switchMap, tap } from "rxjs/operators";
 
 import {
     LongMeeting,
@@ -41,7 +41,15 @@ export class MeetingsRootService {
             .pipe(
                 switchMap((id: number | null) => {
                     if (id !== null) {
-                        return this.getCurrentMeetingById(id);
+                        return this.getCurrentMeetingById(id).pipe(
+                            catchError((error) => {
+                                if (error.status === 404) {
+                                    this.splitView.changeDetailState();
+                                    return of(null);
+                                }
+                                return of(null);
+                            })
+                        );
                     }
                     return of(null);
                 }),

@@ -34,6 +34,8 @@
     ></mat-row>
 </mat-table>
 
+<div *ngIf="(totalItems$ | async) === 0" class="no-records">No Records</div>
+
 <mat-paginator
     *ngIf="totalItems$ | async"
     #paginator
