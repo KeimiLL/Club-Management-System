@@ -14,14 +14,11 @@
     <ng-container matColumnDef="Date">
         <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
         <mat-cell *matCellDef="let element">
-            {{ element.date | date : "dd/MM/yyyy" }}
+            {{ element.date | date : "dd-MM-yyyy" }}
         </mat-cell>
     </ng-container>
 
-    <ng-container
-        matColumnDef="Your meeting"
-        *appPermission="permissions.SeeAllMeetings"
-    >
+    <ng-container matColumnDef="Your meeting">
         <mat-header-cell *matHeaderCellDef> Your meeting </mat-header-cell>
         <mat-cell *matCellDef="let element" class="">
             <mat-icon>
