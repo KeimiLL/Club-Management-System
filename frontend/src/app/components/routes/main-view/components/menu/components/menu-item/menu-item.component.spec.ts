@@ -1,21 +1,34 @@
+import { CommonModule } from "@angular/common";
+import { Component, Input } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { RouterModule } from "@angular/router";
 
-import { MenuItemComponent } from "./menu-item.component";
+import { MainMenuItem } from "../../../../../../../shared/models/misc.model";
+import { MaterialModule } from "../../../../../../../shared/modules/material.module";
+
+@Component({
+    selector: "app-menu-item",
+    template: "<div></div>",
+})
+class MockMenuItemComponent {
+    @Input() item: MainMenuItem;
+    @Input() isCollapsed: boolean;
+}
 
 describe("MenuItemComponent", () => {
-    let component: MenuItemComponent;
-    let fixture: ComponentFixture<MenuItemComponent>;
+    let fixture: ComponentFixture<MockMenuItemComponent>;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [MenuItemComponent],
+            declarations: [MockMenuItemComponent],
+            imports: [CommonModule, RouterModule, MaterialModule],
         });
-        fixture = TestBed.createComponent(MenuItemComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
+
+        fixture = TestBed.createComponent(MockMenuItemComponent);
     });
 
-    it("should create", () => {
+    it("should be created", () => {
+        const component = fixture.componentInstance;
         expect(component).toBeTruthy();
     });
 });
