@@ -3,7 +3,7 @@ import { ShortUser } from "./user.model";
 export interface ShortMeeting {
     id: number;
     name: string;
-    isYour: boolean;
+    is_yours: boolean;
 }
 
 export interface LongMeeting extends ShortMeeting {

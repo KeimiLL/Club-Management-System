@@ -146,8 +146,8 @@ export class MeetingsRootService extends DestoryClass {
 
     private minimizeLongMeetings(): void {
         this.shortMeetings = this.longMeetings.map((meeting) => {
-            const { id, name, isYour } = meeting;
-            return { id, name, isYour } as ShortMeeting;
+            const { id, name, is_yours } = meeting;
+            return { id, name, is_yours } as ShortMeeting;
         });
     }
 

@@ -22,7 +22,7 @@
         <mat-header-cell *matHeaderCellDef> Your meeting </mat-header-cell>
         <mat-cell *matCellDef="let element" class="">
             <mat-icon>
-                {{ element.isYour ? "flag" : "not_interested" }}
+                {{ element.is_yours ? "flag" : "not_interested" }}
             </mat-icon>
         </mat-cell>
     </ng-container>
