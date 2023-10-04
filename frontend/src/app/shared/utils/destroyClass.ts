@@ -11,7 +11,7 @@ export class DestroyClass implements OnDestroy {
         this.destroy$.complete();
     }
 
-    protected untilDestroyed(): MonoTypeOperatorFunction<unknown> {
+    protected untilDestroyed<T>(): MonoTypeOperatorFunction<T> {
         return takeUntil(this.destroy$);
     }
 }

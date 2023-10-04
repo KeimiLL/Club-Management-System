@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
         if (this.registerForm.valid) {
             this.auth.register();
         } else {
-            this.auth.registerForm.markAllAsTouched();
+            this.registerForm.markAllAsTouched();
         }
     }
 }

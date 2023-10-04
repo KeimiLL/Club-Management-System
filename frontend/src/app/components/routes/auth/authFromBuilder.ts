@@ -28,8 +28,8 @@ export const authFormBuilder = {
             }),
         }),
 
-    buildRegisterFormGroup: (): FormGroup => {
-        const registerForm = new FormGroup({
+    buildRegisterFormGroup: (): FormGroup<RegisterFormGroup> => {
+        const registerForm = new FormGroup<RegisterFormGroup>({
             firstName: new FormControl("", {
                 nonNullable: true,
                 validators: [Validators.required],

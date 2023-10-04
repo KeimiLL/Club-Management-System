@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
-import { catchError, of, tap } from "rxjs";
+import { catchError, of } from "rxjs";
 
 import { BackendResponse } from "../../../shared/models/misc.model";
 import { User, UserCreate, UserLogin } from "../../../shared/models/user.model";
@@ -42,17 +42,16 @@ export class AuthService extends DestoryClass {
             .login(loginData)
             .pipe(
                 catchError(() => of(null)),
-                tap((user: User | null) => {
-                    if (user !== null) {
-                        this.userService.currentUser = user;
-                        this.router.navigate(["/app"]);
-                    } else {
-                        this.loginForm.markAllAsTouched();
-                    }
-                }),
                 this.untilDestroyed()
             )
-            .subscribe();
+            .subscribe((user: User | null) => {
+                if (user !== null) {
+                    this.userService.currentUser = user;
+                    this.router.navigate(["/app"]);
+                } else {
+                    this.loginForm.markAllAsTouched();
+                }
+            });
     }
 
     public register(): void {
@@ -65,18 +64,18 @@ export class AuthService extends DestoryClass {
             .register(registerData)
             .pipe(
                 catchError(() => of(null)),
-                tap((response: BackendResponse | null) => {
-                    if (response !== null) {
-                        this.router.navigate(["/auth/login"]);
-                        // some info about a correct register, can be extracted from the response
-                    } else {
-                        this.registerForm =
-                            authFormBuilder.buildRegisterFormGroup();
-                        // dialog about an incorrect register
-                    }
-                }),
                 this.untilDestroyed()
             )
-            .subscribe();
+            .subscribe((response: BackendResponse | null) => {
+                if (response !== null) {
+                    this.router.navigate(["/auth/login"]);
+                    // some info about a correct register, can be extracted from the response
+                } else {
+                    this.registerForm.reset();
+                    this.registerForm.markAllAsTouched();
+
+                    // dialog about an incorrect register
+                }
+            });
     }
 }
