@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { BehaviorSubject, Observable, of } from "rxjs";
-import { catchError, switchMap, tap } from "rxjs/operators";
+import { catchError, map, switchMap, tap } from "rxjs/operators";
 
 import {
     LongMeeting,
@@ -11,6 +11,7 @@ import {
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
 import { AddMeetingPopupComponent } from "../components/add-meeting-popup/add-meeting-popup.component";
+import { longMeetingColumns, shortMeetingColumns } from "../meeting-table.data";
 import { MeetingsHttpService } from "./meetings-http.service";
 
 @Injectable()
@@ -27,12 +28,18 @@ export class MeetingsRootService {
         null
     );
 
+    public displayedColumns$: Observable<string[]>;
+
     constructor(
         private readonly http: MeetingsHttpService,
         private readonly dialog: MatDialog,
         private readonly table: TableService<LongMeeting>,
         private readonly splitView: SplitViewManagerService
     ) {
+        this.initData();
+    }
+
+    private initData(): void {
         this.table.currentPageIndex$
             .pipe(switchMap(() => this.refreshMeetings()))
             .subscribe();
@@ -58,6 +65,10 @@ export class MeetingsRootService {
                 })
             )
             .subscribe();
+
+        this.displayedColumns$ = this.splitView.isDetail$.pipe(
+            map((value) => (value ? shortMeetingColumns : longMeetingColumns))
+        );
     }
 
     private set longMeetings(longMeetings: LongMeeting[]) {
