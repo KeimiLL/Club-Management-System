@@ -10,13 +10,13 @@ import {
 } from "../../../../../../shared/models/meetings.model";
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
-import { DestoryClass } from "../../../../../../shared/utils/destroyClass";
+import { DestroyClass } from "../../../../../../shared/utils/destroyClass";
 import { AddMeetingPopupComponent } from "../components/add-meeting-popup/add-meeting-popup.component";
 import { longMeetingColumns, shortMeetingColumns } from "../meeting-table.data";
 import { MeetingsHttpService } from "./meetings-http.service";
 
 @Injectable()
-export class MeetingsRootService extends DestoryClass {
+export class MeetingsRootService extends DestroyClass {
     private readonly longMeetingsStore$ = new BehaviorSubject<LongMeeting[]>(
         []
     );

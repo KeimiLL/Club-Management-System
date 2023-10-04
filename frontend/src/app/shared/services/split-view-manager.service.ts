@@ -2,10 +2,10 @@ import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BehaviorSubject, Observable, tap } from "rxjs";
 
-import { DestoryClass } from "../utils/destroyClass";
+import { DestroyClass } from "../utils/destroyClass";
 
 @Injectable()
-export class SplitViewManagerService extends DestoryClass {
+export class SplitViewManagerService extends DestroyClass {
     private readonly isDetailStore$ = new BehaviorSubject<boolean>(false);
     private readonly currentIdStore$ = new BehaviorSubject<number | null>(null);
 

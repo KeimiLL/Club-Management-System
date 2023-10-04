@@ -18,7 +18,7 @@ import { ShortUser } from "../../../../../../../../shared/models/user.model";
 import { SnackbarService } from "../../../../../../../../shared/services/snackbar.service";
 import { UserService } from "../../../../../../../../shared/services/user.service";
 import { formatDateFromInputForBackend } from "../../../../../../../../shared/utils/dateHelpers";
-import { DestoryClass } from "../../../../../../../../shared/utils/destroyClass";
+import { DestroyClass } from "../../../../../../../../shared/utils/destroyClass";
 import { AddMeetingPopupComponent } from "../add-meeting-popup.component";
 import {
     newMeetingDataFormBuilder,
@@ -27,7 +27,7 @@ import {
 import { MeetingsPopupHttpService } from "./meetings-popup-http.service";
 
 @Injectable()
-export class MeetingsPopupService extends DestoryClass {
+export class MeetingsPopupService extends DestroyClass {
     public meetingForm: FormGroup<NewMeetingFormGroup>;
     public attendeeInputControl = new FormControl<string>("");
 
