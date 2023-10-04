@@ -3,16 +3,19 @@ import { Router } from "@angular/router";
 import { catchError, of, tap } from "rxjs";
 
 import { SnackbarMessages } from "../../../../../shared/models/messages.model";
+import { DestoryClass } from "../../../../../shared/utils/destroyClass";
 import { SnackbarService } from "./../../../../../shared/services/snackbar.service";
 import { UserService } from "./../../../../../shared/services/user.service";
 
 @Injectable()
-export class MenuRootService {
+export class MenuRootService extends DestoryClass {
     constructor(
         private readonly userService: UserService,
         private readonly router: Router,
         private readonly snack: SnackbarService
-    ) {}
+    ) {
+        super();
+    }
 
     public logout(): void {
         this.userService
@@ -21,7 +24,8 @@ export class MenuRootService {
                 tap(() => {
                     this.snack.showSnackBar(SnackbarMessages.LOGOUT, "normal");
                 }),
-                catchError(() => of(null))
+                catchError(() => of(null)),
+                this.untilDestroyed()
             )
             .subscribe(() => {
                 this.userService.currentUser = null;

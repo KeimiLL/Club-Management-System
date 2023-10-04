@@ -18,6 +18,7 @@ import { ShortUser } from "../../../../../../../../shared/models/user.model";
 import { SnackbarService } from "../../../../../../../../shared/services/snackbar.service";
 import { UserService } from "../../../../../../../../shared/services/user.service";
 import { formatDateFromInputForBackend } from "../../../../../../../../shared/utils/dateHelpers";
+import { DestoryClass } from "../../../../../../../../shared/utils/destroyClass";
 import { AddMeetingPopupComponent } from "../add-meeting-popup.component";
 import {
     newMeetingDataFormBuilder,
@@ -26,7 +27,7 @@ import {
 import { MeetingsPopupHttpService } from "./meetings-popup-http.service";
 
 @Injectable()
-export class MeetingsPopupService {
+export class MeetingsPopupService extends DestoryClass {
     public meetingForm: FormGroup<NewMeetingFormGroup>;
     public attendeeInputControl = new FormControl<string>("");
 
@@ -41,6 +42,7 @@ export class MeetingsPopupService {
         private readonly userService: UserService,
         private readonly snack: SnackbarService
     ) {
+        super();
         this.initData();
     }
 
@@ -51,7 +53,8 @@ export class MeetingsPopupService {
             .pipe(
                 tap((users) => {
                     this.allAttendees = users;
-                })
+                }),
+                this.untilDestroyed()
             )
             .subscribe();
     }
@@ -131,7 +134,8 @@ export class MeetingsPopupService {
                         "normal"
                     );
                 }),
-                catchError(() => of(null))
+                catchError(() => of(null)),
+                this.untilDestroyed()
             )
             .subscribe(() => {
                 this.closePopup();

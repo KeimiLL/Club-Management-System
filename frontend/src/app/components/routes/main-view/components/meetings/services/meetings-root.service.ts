@@ -10,12 +10,13 @@ import {
 } from "../../../../../../shared/models/meetings.model";
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
+import { DestoryClass } from "../../../../../../shared/utils/destroyClass";
 import { AddMeetingPopupComponent } from "../components/add-meeting-popup/add-meeting-popup.component";
 import { longMeetingColumns, shortMeetingColumns } from "../meeting-table.data";
 import { MeetingsHttpService } from "./meetings-http.service";
 
 @Injectable()
-export class MeetingsRootService {
+export class MeetingsRootService extends DestoryClass {
     private readonly longMeetingsStore$ = new BehaviorSubject<LongMeeting[]>(
         []
     );
@@ -36,12 +37,16 @@ export class MeetingsRootService {
         private readonly table: TableService<LongMeeting>,
         private readonly splitView: SplitViewManagerService
     ) {
+        super();
         this.initData();
     }
 
     private initData(): void {
         this.table.currentPageIndex$
-            .pipe(switchMap(() => this.refreshMeetings()))
+            .pipe(
+                switchMap(() => this.refreshMeetings()),
+                this.untilDestroyed()
+            )
             .subscribe();
 
         this.splitView.currentId$
@@ -62,7 +67,8 @@ export class MeetingsRootService {
                 }),
                 tap((meeting) => {
                     this.currentMeeting = meeting;
-                })
+                }),
+                this.untilDestroyed()
             )
             .subscribe();
 
@@ -115,7 +121,10 @@ export class MeetingsRootService {
 
         dialog
             .afterClosed()
-            .pipe(switchMap(() => this.refreshMeetings()))
+            .pipe(
+                switchMap(() => this.refreshMeetings()),
+                this.untilDestroyed()
+            )
             .subscribe();
     }
 

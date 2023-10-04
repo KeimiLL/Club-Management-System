@@ -2,8 +2,10 @@ import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BehaviorSubject, Observable, tap } from "rxjs";
 
+import { DestoryClass } from "../utils/destroyClass";
+
 @Injectable()
-export class SplitViewManagerService {
+export class SplitViewManagerService extends DestoryClass {
     private readonly isDetailStore$ = new BehaviorSubject<boolean>(false);
     private readonly currentIdStore$ = new BehaviorSubject<number | null>(null);
 
@@ -11,6 +13,7 @@ export class SplitViewManagerService {
         private readonly activatedRoute: ActivatedRoute,
         private readonly router: Router
     ) {
+        super();
         this.urlChecker();
     }
 
@@ -26,7 +29,8 @@ export class SplitViewManagerService {
                         this.isDetailStore$.next(false);
                         this.currentIdStore$.next(null);
                     }
-                })
+                }),
+                this.untilDestroyed()
             )
             .subscribe();
     }
