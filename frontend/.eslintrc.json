@@ -51,6 +51,18 @@
                 "@angular-eslint/use-lifecycle-interface": "warn",
                 "@angular-eslint/use-pipe-transform-interface": "error",
 
+                "@typescript-eslint/naming-convention": [
+                    "error",
+                    {
+                        "selector": "variable",
+                        "format": [
+                            "camelCase",
+                            "UPPER_CASE",
+                            "snake_case",
+                            "PascalCase"
+                        ]
+                    }
+                ],
                 "@typescript-eslint/array-type": "error",
                 "@typescript-eslint/ban-types": "error",
                 "@typescript-eslint/consistent-type-definitions": "error",
@@ -86,7 +98,6 @@
                 "arrow-body-style": ["error", "as-needed"],
                 "arrow-parens": "error",
                 "arrow-spacing": "error",
-                "camelcase": "error",
                 "consistent-return": "error",
                 "curly": "error",
                 "default-case": "error",

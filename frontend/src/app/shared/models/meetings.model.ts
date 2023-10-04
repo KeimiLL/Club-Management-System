@@ -3,7 +3,7 @@ import { ShortUser } from "./user.model";
 export interface ShortMeeting {
     id: number;
     name: string;
-    isYour: boolean;
+    is_yours: boolean;
 }
 
 export interface LongMeeting extends ShortMeeting {
@@ -11,7 +11,7 @@ export interface LongMeeting extends ShortMeeting {
 }
 
 export interface PrimaryDataMeeting {
-    notes: string;
+    notes: string | null;
     name: string;
     date: string;
 }
@@ -25,9 +25,4 @@ export interface Meeting extends PrimaryDataMeeting {
     id: number;
     created_by_user: ShortUser;
     users: ShortUser[];
-}
-
-export interface MeetingResponse {
-    items: LongMeeting[];
-    total: number;
 }

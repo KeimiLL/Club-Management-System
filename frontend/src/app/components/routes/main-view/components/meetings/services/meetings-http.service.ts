@@ -2,7 +2,10 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { LongMeeting } from "../../../../../../shared/models/meetings.model";
+import {
+    LongMeeting,
+    Meeting,
+} from "../../../../../../shared/models/meetings.model";
 import { TableResponse } from "../../../../../../shared/models/misc.model";
 
 @Injectable()
@@ -16,5 +19,9 @@ export class MeetingsHttpService {
         return this.http.get<TableResponse<LongMeeting>>(
             `api/v1/meetings?page=${page}&per_page=${capacity}`
         );
+    }
+
+    public getMeetingsById(id: number): Observable<Meeting> {
+        return this.http.get<Meeting>(`api/v1/meetings/${id}`);
     }
 }

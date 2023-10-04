@@ -10,7 +10,6 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
 
 import { PermissionDirective } from "../../../../../../../shared/directives/permission.directive";
 import {
@@ -21,7 +20,7 @@ import { MeetingsPermission } from "../../../../../../../shared/models/permissio
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../../shared/services/table.service";
-import { longMeetingColumns, shortMeetingColumns } from "./meeting-table.data";
+import { MeetingsRootService } from "../../services/meetings-root.service";
 
 @Component({
     selector: "app-meeting-table",
@@ -36,32 +35,25 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
         this.dataSource.data = data;
     }
 
-    protected itemsPerPage: number;
+    protected displayedColumns$: Observable<string[]>;
     protected totalItems$: Observable<number>;
 
+    protected itemsPerPage: number;
+
     protected readonly permissions = MeetingsPermission;
-    protected displayedColumns: string[];
     protected dataSource: MatTableDataSource<LongMeeting | ShortMeeting> =
         new MatTableDataSource<LongMeeting | ShortMeeting>();
 
     constructor(
         private readonly splitManager: SplitViewManagerService,
-        private readonly table: TableService<LongMeeting>
+        private readonly table: TableService<LongMeeting>,
+        private readonly root: MeetingsRootService
     ) {}
 
     ngOnInit(): void {
         this.itemsPerPage = this.table.capacity;
         this.totalItems$ = this.table.totalItems$;
-        this.splitManager.isDetail$
-            .pipe(
-                tap(
-                    (value) =>
-                        (this.displayedColumns = value
-                            ? shortMeetingColumns
-                            : longMeetingColumns)
-                )
-            )
-            .subscribe();
+        this.displayedColumns$ = this.root.displayedColumns$;
     }
 
     ngAfterViewInit(): void {

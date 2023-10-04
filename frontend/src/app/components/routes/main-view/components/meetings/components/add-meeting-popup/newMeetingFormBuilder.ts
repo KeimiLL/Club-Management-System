@@ -10,7 +10,7 @@ export interface NewMeetingFormGroup {
 interface MeetingControls {
     name: FormControl<string>;
     date: FormControl<string>;
-    notes: FormControl<string>;
+    notes: FormControl<string | null>;
 }
 
 export const newMeetingDataFormBuilder = {
@@ -29,10 +29,7 @@ export const newMeetingDataFormBuilder = {
                     formatDateFromInputForBackend(new Date()),
                     { nonNullable: true, validators: Validators.required }
                 ),
-                notes: new FormControl<string>("", {
-                    nonNullable: true,
-                    validators: Validators.required,
-                }),
+                notes: new FormControl<string | null>(null),
             }),
             user_ids: new FormControl<number[]>([], {
                 nonNullable: true,

@@ -14,28 +14,29 @@
     <ng-container matColumnDef="Date">
         <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
         <mat-cell *matCellDef="let element">
-            {{ element.date | date : "dd/MM/yyyy" }}
+            {{ element.date | date : "dd-MM-yyyy" }}
         </mat-cell>
     </ng-container>
 
-    <ng-container
-        matColumnDef="Your meeting"
-        *appPermission="permissions.SeeAllMeetings"
-    >
+    <ng-container matColumnDef="Your meeting">
         <mat-header-cell *matHeaderCellDef> Your meeting </mat-header-cell>
         <mat-cell *matCellDef="let element" class="">
             <mat-icon>
-                {{ element.isYour ? "flag" : "not_interested" }}
+                {{ element.is_yours ? "flag" : "not_interested" }}
             </mat-icon>
         </mat-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-header-row
+        *matHeaderRowDef="displayedColumns$ | async"
+    ></mat-header-row>
     <mat-row
-        *matRowDef="let row; columns: displayedColumns"
+        *matRowDef="let row; columns: displayedColumns$ | async"
         (click)="addParamsToURL(row.id)"
     ></mat-row>
 </mat-table>
+
+<div *ngIf="(totalItems$ | async) === 0" class="no-records">No Records</div>
 
 <mat-paginator
     *ngIf="totalItems$ | async"

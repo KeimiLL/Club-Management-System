@@ -2,11 +2,12 @@
     *ngIf="{
         isDetail: isDetail$ | async,
         longMeetings: longMeetings$ | async,
-        shortMeetings: shortMeetings$ | async
+        shortMeetings: shortMeetings$ | async,
+        currentMeeting: currentMeeting$ | async
     } as vm"
 >
     <app-content-card>
-        <app-wide-card-header header [name]="'Meetings'">
+        <app-wide-card-header header name="Meetings">
             <app-button-container buttons>
                 <button
                     mat-raised-button
@@ -29,7 +30,7 @@
     <app-content-card *ngIf="vm.isDetail">
         <app-half-card-right-header
             header
-            [name]="'Exact Meeting Name'"
+            name="{{ vm.currentMeeting?.name }}"
             (closedClicked)="switchDetail()"
         >
             <app-button-container buttons>
@@ -40,21 +41,10 @@
         </app-half-card-right-header>
 
         <ng-container content>
-            <app-half-card-section>
-                <app-section-header [name]="'Attendees'" sectionHeader>
-                    <app-button-container>
-                        <button mat-raised-button class="button--light" buttons>
-                            Modify Attendees
-                        </button></app-button-container
-                    >
-                </app-section-header>
-
-                <ng-container sectionContent>
-                    <div>Person1</div>
-                    <div>Person2</div>
-                    <div>Person3</div>
-                </ng-container>
-            </app-half-card-section>
+            <app-current-meeting-content
+                *ngIf="vm.currentMeeting"
+                [meeting]="vm.currentMeeting"
+            ></app-current-meeting-content>
         </ng-container>
     </app-content-card>
 </ng-container>

@@ -2,7 +2,7 @@
     <mat-card class="card">
         <mat-card-header class="card__header">
             <app-half-card-right-header
-                [name]="'New Meeting Creator'"
+                name="New Meeting Creator"
                 (closedClicked)="onCloseClick()"
             >
                 <app-button-container buttons> </app-button-container>
@@ -15,7 +15,7 @@
             >
                 <ng-container content>
                     <app-half-card-section>
-                        <app-section-header [name]="'Basic Data'" sectionHeader>
+                        <app-section-header name="Basic Data" sectionHeader>
                         </app-section-header>
 
                         <ng-container sectionContent>
@@ -59,10 +59,7 @@
                     </app-half-card-section>
 
                     <app-half-card-section>
-                        <app-section-header
-                            [name]="'Add Attendees'"
-                            sectionHeader
-                        >
+                        <app-section-header name="Add Attendees" sectionHeader>
                         </app-section-header>
 
                         <ng-container sectionContent>
@@ -101,7 +98,7 @@
 
                                 <mat-chip-listbox>
                                     <mat-chip
-                                        appPermissionBackgroundColor
+                                        [appPermissionBackgroundColor]
                                         [matTooltip]="'Creator'"
                                     >
                                         {{ currentUser.full_name }}
@@ -124,7 +121,7 @@
                     </app-half-card-section>
 
                     <app-half-card-section>
-                        <app-section-header [name]="'Add Notes'" sectionHeader>
+                        <app-section-header name="Add Notes" sectionHeader>
                         </app-section-header>
 
                         <ng-container sectionContent>
