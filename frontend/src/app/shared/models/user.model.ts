@@ -20,10 +20,7 @@ export interface ShortUser {
     role: Roles;
 }
 
-export interface User extends UserBase, ShortUser {
-    role: Roles;
-    id: number;
-}
+export interface User extends UserBase, ShortUser {}
 
 export interface UserUpdate {
     full_name?: string;
