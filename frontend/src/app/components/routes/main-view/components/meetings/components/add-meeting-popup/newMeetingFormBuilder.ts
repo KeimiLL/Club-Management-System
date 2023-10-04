@@ -22,7 +22,7 @@ export const newMeetingDataFormBuilder = {
                     validators: [
                         Validators.required,
                         Validators.minLength(4),
-                        Validators.maxLength(12),
+                        Validators.maxLength(20),
                     ],
                 }),
                 date: new FormControl<string>(

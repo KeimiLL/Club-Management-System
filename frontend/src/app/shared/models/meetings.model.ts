@@ -26,3 +26,8 @@ export interface Meeting extends PrimaryDataMeeting {
     created_by_user: ShortUser;
     users: ShortUser[];
 }
+
+export interface MeetingResponse {
+    items: LongMeeting[];
+    total: number;
+}

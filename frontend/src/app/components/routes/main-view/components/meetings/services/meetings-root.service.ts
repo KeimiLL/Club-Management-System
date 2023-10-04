@@ -1,11 +1,14 @@
 import { Injectable } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { BehaviorSubject, Observable } from "rxjs";
-import { tap } from "rxjs/operators";
+import { switchMap, tap } from "rxjs/operators";
 
 import {
     LongMeeting,
     ShortMeeting,
 } from "../../../../../../shared/models/meetings.model";
+import { TableService } from "../../../../../../shared/services/table.service";
+import { AddMeetingPopupComponent } from "../components/add-meeting-popup/add-meeting-popup.component";
 import { MeetingsHttpService } from "./meetings-http.service";
 
 @Injectable()
@@ -18,14 +21,13 @@ export class MeetingsRootService {
         []
     );
 
-    constructor(private readonly http: MeetingsHttpService) {
-        http.getMeetingsList()
-            .pipe(
-                tap((meetings: LongMeeting[]) => {
-                    this.longMeetings = meetings;
-                    this.minimazeLongMeetings();
-                })
-            )
+    constructor(
+        private readonly http: MeetingsHttpService,
+        private readonly dialog: MatDialog,
+        private readonly table: TableService<LongMeeting>
+    ) {
+        this.table.currentPageIndex$
+            .pipe(switchMap(() => this.refreshMeetings()))
             .subscribe();
     }
 
@@ -53,7 +55,35 @@ export class MeetingsRootService {
         return this.shortMeetingsStore$.asObservable();
     }
 
-    private minimazeLongMeetings(): void {
+    public openDialog(): void {
+        const dialog = this.dialog.open(AddMeetingPopupComponent, {
+            width: "50vw",
+            disableClose: true,
+        });
+
+        dialog
+            .afterClosed()
+            .pipe(switchMap(() => this.refreshMeetings()))
+            .subscribe();
+    }
+
+    private refreshMeetings(): Observable<LongMeeting[]> {
+        return this.table
+            .getCurrentPage(
+                this.http.getMeetingsList(
+                    this.table.currentPageIndex,
+                    this.table.capacity
+                )
+            )
+            .pipe(
+                tap((meetings) => {
+                    this.longMeetings = meetings;
+                    this.minimizeLongMeetings();
+                })
+            );
+    }
+
+    private minimizeLongMeetings(): void {
         this.shortMeetings = this.longMeetings.map((meeting) => {
             const { id, name, isYour } = meeting;
             return { id, name, isYour } as ShortMeeting;

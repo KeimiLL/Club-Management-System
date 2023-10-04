@@ -14,7 +14,7 @@
     <ng-container matColumnDef="Date">
         <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
         <mat-cell *matCellDef="let element">
-            {{ element.date | date : "dd/MM/yyyy HH:mm" }}
+            {{ element.date | date : "dd/MM/yyyy" }}
         </mat-cell>
     </ng-container>
 
@@ -38,8 +38,10 @@
 </mat-table>
 
 <mat-paginator
+    *ngIf="totalItems$ | async"
     #paginator
-    [pageSize]="7"
-    [showFirstLastButtons]="true"
+    [pageSize]="itemsPerPage"
+    [length]="totalItems$ | async"
+    (page)="changePage($event)"
     class="paginator"
 ></mat-paginator>

@@ -1,6 +1,10 @@
-<ng-container *ngIf="isDetail$ | async; then detail; else wide"></ng-container>
-
-<ng-template #wide>
+<ng-container
+    *ngIf="{
+        isDetail: isDetail$ | async,
+        longMeetings: longMeetings$ | async,
+        shortMeetings: shortMeetings$ | async
+    } as vm"
+>
     <app-content-card>
         <app-wide-card-header header [name]="'Meetings'">
             <app-button-container buttons>
@@ -16,25 +20,13 @@
 
         <ng-container content>
             <app-meeting-table
-                [data]="(longMeetings$ | async) ?? []"
-            ></app-meeting-table>
-        </ng-container>
-    </app-content-card>
-</ng-template>
-
-<ng-template #detail>
-    <app-content-card>
-        <app-half-card-left-header header [name]="'Meetings'">
-        </app-half-card-left-header>
-
-        <ng-container content>
-            <app-meeting-table
-                [data]="(shortMeetings$ | async) ?? []"
+                *ngIf="vm.longMeetings && vm.shortMeetings"
+                [data]="vm.isDetail ? vm.shortMeetings : vm.longMeetings"
             ></app-meeting-table>
         </ng-container>
     </app-content-card>
 
-    <app-content-card>
+    <app-content-card *ngIf="vm.isDetail">
         <app-half-card-right-header
             header
             [name]="'Exact Meeting Name'"
@@ -65,4 +57,4 @@
             </app-half-card-section>
         </ng-container>
     </app-content-card>
-</ng-template>
+</ng-container>
