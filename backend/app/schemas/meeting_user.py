@@ -3,8 +3,7 @@
 
 from typing import TYPE_CHECKING
 
-from app.schemas.misc import NonEmptyUniqueDBIndexIntSet
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, conint, conset
 
 if TYPE_CHECKING:
     from app.schemas.meeting import Meeting, MeetingCreateNoUserId
@@ -26,7 +25,7 @@ class MeetingUserCreateUserIdList(MeetingUserBase):
     """MeetingUser schema for creation with a set of users ids."""
 
     meeting: "MeetingCreateNoUserId"
-    user_ids: NonEmptyUniqueDBIndexIntSet
+    user_ids: conset(conint(ge=1, lt=10**7), min_length=1)
 
 
 class MeetingUser(MeetingUserBase):
