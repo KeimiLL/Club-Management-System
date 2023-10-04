@@ -37,6 +37,6 @@
     <app-section-header name="Description" sectionHeader> </app-section-header>
 
     <ng-container sectionContent>
-        <div>{{ meeting.notes }}</div>
+        <div>{{ meeting.notes ?? "No notes" }}</div>
     </ng-container>
 </app-half-card-section>
