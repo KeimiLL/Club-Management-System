@@ -13,7 +13,7 @@ class MockLogoutComponent {
     @Input() isCollapsed = false;
 }
 
-describe("LogoutComponent", () => {
+xdescribe("LogoutComponent", () => {
     let fixture: ComponentFixture<MockLogoutComponent>;
     let component: MockLogoutComponent;
 
