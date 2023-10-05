@@ -11,11 +11,13 @@ from app.schemas.meeting import (
     MeetingCreateNoUserId,
     MeetingInDBBase,
     MeetingOnlyBaseUserInfo,
+    MeetingUpdate,
 )
 from app.schemas.meeting_user import (
     MeetingUser,
     MeetingUserCreateUserIdList,
     MeetingUserInDBBase,
+    MeetingUserUpdate,
 )
 from app.schemas.player import Player, PlayerInDBBase
 from app.schemas.team import Team, TeamInDBBase
@@ -35,6 +37,7 @@ MeetingOnlyBaseUserInfo.model_rebuild()
 MeetingUser.model_rebuild()
 MeetingUserCreateUserIdList.model_rebuild()
 MeetingUserInDBBase.model_rebuild()
+MeetingUserUpdate.model_rebuild()
 Player.model_rebuild()
 PlayerInDBBase.model_rebuild()
 Team.model_rebuild()

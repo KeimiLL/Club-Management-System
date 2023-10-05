@@ -41,5 +41,5 @@ class Meeting(Base):
         back_populates="meeting", cascade="all, delete-orphan"
     )
     users: AssociationProxy[list["User"]] = association_proxy(
-        "user_association", "user"
+        "user_association", "user", creator=lambda user: MeetingUser(user=user)
     )

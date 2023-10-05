@@ -189,7 +189,7 @@ def test_correct__get_meetings_by_user_id(
         )
         assert new_total == sum(u == user_id for u in user_ids)
         for index, new_meeting in enumerate(
-            [m for m in new_meetings if m.user_id == user_id]
+            reversed([m for m in new_meetings if m.user_id == user_id])
         ):
             if page * per_page <= index < page * per_page + per_page:
                 assert all_meetings[index - page * per_page] == new_meeting

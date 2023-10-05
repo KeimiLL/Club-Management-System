@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict, Field, conint, conset
 
 if TYPE_CHECKING:
-    from app.schemas.meeting import Meeting, MeetingCreateNoUserId
+    from app.schemas.meeting import Meeting, MeetingCreateNoUserId, MeetingUpdate
     from app.schemas.user import User
 
 
@@ -37,6 +37,9 @@ class MeetingUser(MeetingUserBase):
 
 class MeetingUserUpdate(MeetingUserBase):
     """MeetingUser schema for updating."""
+
+    meeting: "MeetingUpdate"
+    user_ids: conset(conint(ge=1, lt=10**7), min_length=1)
 
 
 class MeetingUserInDBBase(MeetingUserBase):
