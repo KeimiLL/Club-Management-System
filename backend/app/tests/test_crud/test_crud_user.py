@@ -138,7 +138,7 @@ def test_correct__get_user_by_id(
     "user_id",
     [0, 1000000],
 )
-def test_missing__get_user_by_id(
+def test_incorrect__get_user_by_id(
     user_id: int,
     db_session: Session,
 ) -> None:

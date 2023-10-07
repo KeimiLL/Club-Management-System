@@ -13,7 +13,7 @@ from app.db.base import Base
 from app.db.session import get_db
 from app.main import include_exception_handlers, include_middleware
 from app.schemas.enums import Roles
-from app.schemas.meeting import MeetingCreate
+from app.schemas.meeting import MeetingCreate, MeetingUpdate
 from app.schemas.user import UserCreate, UserCreateWithRole
 from fastapi import FastAPI
 from sqlalchemy import create_engine
@@ -158,7 +158,7 @@ user_create_unique_2 = UserCreate(
 
 user_create_with_role = UserCreateWithRole(
     full_name=get_settings().TEST_USER_FULL_NAME,
-    email=get_settings().TEST_USER_EMAIL,
+    email=get_settings().TEST_USER_EMAIL + "n",
     password=get_settings().TEST_USER_PASSWORD,
     role=Roles.ADMIN,
 )
@@ -169,3 +169,5 @@ meeting_create = MeetingCreate(
     notes="test_note",
     date=datetime.date.today(),
 )
+
+meeting_update = MeetingUpdate(id=1, **meeting_create.__dict__)

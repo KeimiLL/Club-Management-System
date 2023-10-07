@@ -76,7 +76,7 @@ def test_correct__get_meeting_user_by_id(
     "meeting_user_id",
     [0, 1000000],
 )
-def test_missing__get_meeting_user_by_id(
+def test_incorrect__get_meeting_user_by_id(
     meeting_user_id: int,
     db_session: Session,
 ) -> None:
