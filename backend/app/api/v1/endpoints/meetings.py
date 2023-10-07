@@ -9,13 +9,14 @@ from app.crud.crud_meeting import (
     get_all_meetings,
     get_meeting_by_id,
     get_meetings_by_user_id,
+    update_meeting_with_user_ids,
 )
 from app.crud.crud_meeting_user import create_meeting_user_from_user_id_list
 from app.db.session import get_db
 from app.models.user import User
 from app.schemas.enums import Roles
 from app.schemas.meeting import MeetingCreate, MeetingOnlyBaseUserInfo, MeetingTableView
-from app.schemas.meeting_user import MeetingUserCreateUserIdList
+from app.schemas.meeting_user import MeetingUserCreateUserIdList, MeetingUserUpdate
 from app.schemas.misc import ItemsListWithTotal, Message, MessageFromEnum
 from fastapi import APIRouter, Depends, Path, status
 from sqlalchemy.orm import Session
@@ -144,7 +145,7 @@ def get_meeting(
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
      Raises:
-        ForbiddenException: If the current user does not have the sufficient permission.
+        ForbiddenException: If the current user does not have sufficient permissions.
 
     Returns:
         MeetingInDBOnlyBaseUserInfo: The requested meeting.
@@ -154,4 +155,44 @@ def get_meeting(
         return meeting
     if current_user.id in (meeting.user_id, *[user.id for user in meeting.users]):
         return meeting
+    raise ForbiddenException("meeting")
+
+
+@router.put(
+    "",
+    response_model=MeetingOnlyBaseUserInfo,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def update_meeting(
+    meeting_user: MeetingUserUpdate,
+    current_user: Annotated[User, Depends(get_user_from_token)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Updates meeting data with the given data.
+
+    Args:
+        meeting_user (MeetingUserUpdate): Meeting data to update..
+        current_user (Annotated[User, Depends]): Current user read from access token.
+            Defaults to Depends(get_user_from_token).
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+     Raises:
+        ForbiddenException: If the current user does not have sufficient permissions.
+
+    Returns:
+        MeetingInDBOnlyBaseUserInfo: The requested meeting.
+    """
+    if (
+        current_user.role in (Roles.ADMIN, Roles.BOARD)
+        or current_user.id == meeting_user.meeting.user_id
+    ):
+        return update_meeting_with_user_ids(
+            meeting_update=meeting_user.meeting, user_ids=meeting_user.user_ids, db=db
+        )
     raise ForbiddenException("meeting")

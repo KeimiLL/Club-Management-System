@@ -3,7 +3,7 @@ import { MonoTypeOperatorFunction, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
 @Injectable()
-export class DestoryClass implements OnDestroy {
+export class DestroyClass implements OnDestroy {
     protected destroy$ = new Subject<void>();
 
     ngOnDestroy(): void {

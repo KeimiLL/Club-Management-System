@@ -76,7 +76,7 @@ def test_correct__get_meeting_user_by_id(
     "meeting_user_id",
     [0, 1000000],
 )
-def test_missing__get_meeting_user_by_id(
+def test_incorrect__get_meeting_user_by_id(
     meeting_user_id: int,
     db_session: Session,
 ) -> None:
@@ -99,7 +99,7 @@ def test_correct__create_meeting_user_from_user_id_list(
     created_by: UserCreate,
     user: UserCreate,
     meeting: MeetingCreate,
-    user_ids: set[int],
+    user_ids: list[int],
     db_session: Session,
 ) -> None:
     """Tests creating a meeting_user with a list of user ids.
@@ -108,7 +108,7 @@ def test_correct__create_meeting_user_from_user_id_list(
         created_by (UserCreate): User to be created that will be the creator of the meeting.
         user (UserCreate): User to be created.
         meeting (MeetingCreate): Meeting to be created.
-        user_ids (list[int]): The set of user_ids to be added to the meeting.
+        user_ids (list[int]): A list of user_ids to be added to the meeting.
         db_session (Session): Database session.
     """
     create_new_user(created_by, db_session)
@@ -159,7 +159,7 @@ def test_incorrect__create_meeting_user_from_user_id_list(
         created_by (UserCreate): User to be created that will be the creator of the meeting.
         user (UserCreate): User to be created.
         meeting (MeetingCreate): Meeting to be created.
-        user_ids (list[int]): The list of user_ids to be added to the meeting.
+        user_ids (list[int]): A list of user_ids to be added to the meeting.
         exception (Exception): The exception that is going to be raised.
         db_session (Session): Database session.
     """

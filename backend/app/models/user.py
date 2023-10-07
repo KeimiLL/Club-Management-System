@@ -41,7 +41,7 @@ class User(Base):
     )
 
     meeting_association: Mapped[list["MeetingUser"]] = relationship(
-        back_populates="user"
+        back_populates="user", cascade="all, delete-orphan"
     )
     meetings: AssociationProxy[list["Meeting"]] = association_proxy(
         "meeting_association", "meeting"

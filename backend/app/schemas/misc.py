@@ -1,10 +1,8 @@
 """File for miscellaneous schemas."""
 
 
-from typing import NewType
-
 from app.schemas.enums import HTTPResponseMessage
-from pydantic import BaseModel, NonNegativeInt, conint, conset
+from pydantic import BaseModel, NonNegativeInt
 
 
 class Message(BaseModel):
@@ -24,8 +22,3 @@ class ItemsListWithTotal(BaseModel):
 
     items: list
     total: NonNegativeInt
-
-
-NonEmptyUniqueDBIndexIntSet = NewType(
-    "NonEmptyUniqueDBIndexIntSet", conset(conint(ge=1, lt=10**7), min_length=1)
-)

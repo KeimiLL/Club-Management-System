@@ -12,7 +12,6 @@ from app.models.meeting_user import MeetingUser
 from app.models.user import User
 from app.schemas.meeting import MeetingCreate
 from app.schemas.meeting_user import MeetingUserCreate
-from app.schemas.misc import NonEmptyUniqueDBIndexIntSet
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -75,13 +74,15 @@ def get_meeting_user_by_id(meeting_user_id: int, db: Session) -> MeetingUser:
 
 
 def create_meeting_user_from_user_id_list(
-    meeting: MeetingCreate, user_ids: NonEmptyUniqueDBIndexIntSet, db: Session
+    meeting: MeetingCreate,
+    user_ids: set[int],
+    db: Session,
 ) -> Meeting:
     """Creates a new meeting_user based on meeting data and a list of user ids.
 
     Args:
         meeting (MeetingCreate): Meeting based on Meeting schema.
-        user_ids (NonEmptyUniqueDBIndexIntSet): User ids to be added.
+        user_ids (set[int]): User ids to be added.
         db (Session): Database session.
 
     Raises:

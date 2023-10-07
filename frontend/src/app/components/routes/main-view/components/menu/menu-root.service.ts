@@ -3,12 +3,12 @@ import { Router } from "@angular/router";
 import { catchError, of, tap } from "rxjs";
 
 import { SnackbarMessages } from "../../../../../shared/models/messages.model";
-import { DestoryClass } from "../../../../../shared/utils/destroyClass";
+import { DestroyClass } from "../../../../../shared/utils/destroyClass";
 import { SnackbarService } from "./../../../../../shared/services/snackbar.service";
 import { UserService } from "./../../../../../shared/services/user.service";
 
 @Injectable()
-export class MenuRootService extends DestoryClass {
+export class MenuRootService extends DestroyClass {
     constructor(
         private readonly userService: UserService,
         private readonly router: Router,
