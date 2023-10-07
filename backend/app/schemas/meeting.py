@@ -43,7 +43,6 @@ class Meeting(MeetingCreateNoUserId):
 class MeetingUpdate(MeetingBase):
     """Meeting schema for updating."""
 
-    id: int | None = Field(None, ge=1, le=10**7)
     user_id: int | None = Field(None, ge=1, le=10**7)
 
 

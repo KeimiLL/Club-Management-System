@@ -170,4 +170,4 @@ meeting_create = MeetingCreate(
     date=datetime.date.today(),
 )
 
-meeting_update = MeetingUpdate(id=1, **meeting_create.__dict__)
+meeting_update = MeetingUpdate(**meeting_create.__dict__)
