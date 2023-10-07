@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 
@@ -9,5 +10,14 @@ import { MaterialModule } from "../../modules/material.module";
     imports: [CommonModule, MaterialModule],
     templateUrl: "./spinner.component.html",
     styleUrls: ["./spinner.component.scss"],
+    animations: [
+        trigger("fadeInOut", [
+            transition("void => *", [
+                style({ opacity: 0 }),
+                animate("250ms 100ms", style({ opacity: 1 })),
+            ]),
+            transition("* => void", [animate(250, style({ opacity: 0 }))]),
+        ]),
+    ],
 })
 export class SpinnerComponent {}
