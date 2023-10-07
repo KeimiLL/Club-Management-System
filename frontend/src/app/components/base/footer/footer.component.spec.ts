@@ -1,21 +1,18 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 
+import { MaterialModule } from "../../../shared/modules/material.module";
 import { FooterComponent } from "./footer.component";
 
 describe("FooterComponent", () => {
-    let component: FooterComponent;
-    let fixture: ComponentFixture<FooterComponent>;
-
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [FooterComponent],
+            imports: [MaterialModule],
         });
-        fixture = TestBed.createComponent(FooterComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
+        const fixture = TestBed.createComponent(FooterComponent);
+        const component = fixture.componentInstance;
         expect(component).toBeTruthy();
     });
 });

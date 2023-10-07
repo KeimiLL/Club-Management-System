@@ -1,21 +1,24 @@
+import { CommonModule } from "@angular/common";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { RouterModule } from "@angular/router";
 
 import { AuthComponent } from "./auth.component";
 
 describe("AuthComponent", () => {
-    let component: AuthComponent;
     let fixture: ComponentFixture<AuthComponent>;
+    let component: AuthComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [AuthComponent],
+            imports: [CommonModule, RouterModule],
+            declarations: [],
         });
+
         fixture = TestBed.createComponent(AuthComponent);
         component = fixture.componentInstance;
-        fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });

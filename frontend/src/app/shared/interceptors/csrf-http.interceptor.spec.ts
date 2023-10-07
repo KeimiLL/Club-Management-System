@@ -1,17 +1,28 @@
+import { HttpXsrfTokenExtractor } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
 
 import { CsrfHttpInterceptor } from "./csrf-http.interceptor";
 
 describe("CsrfHttpInterceptor", () => {
-    beforeEach(() =>
+    let interceptor: CsrfHttpInterceptor;
+
+    beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [CsrfHttpInterceptor],
-        })
-    );
+            providers: [
+                CsrfHttpInterceptor,
+                {
+                    provide: HttpXsrfTokenExtractor,
+                    useValue: {
+                        getToken: jasmine.createSpy("getToken"),
+                    },
+                },
+            ],
+        });
+
+        interceptor = TestBed.inject(CsrfHttpInterceptor);
+    });
 
     it("should be created", () => {
-        const interceptor: CsrfHttpInterceptor =
-            TestBed.inject(CsrfHttpInterceptor);
         expect(interceptor).toBeTruthy();
     });
 });
