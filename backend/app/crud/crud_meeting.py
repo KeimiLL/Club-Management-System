@@ -144,6 +144,7 @@ def get_meetings_by_user_id(
 
 def update_meeting_with_user_ids(
     meeting_update: MeetingUpdate,
+    meeting_id: int,
     user_ids: set[int],
     db: Session,
 ) -> Meeting:
@@ -151,6 +152,7 @@ def update_meeting_with_user_ids(
 
     Args:
         meeting_update (MeetingUpdate): Meeting data to update.
+        meeting_id (int): Meeting's id.
         user_ids (set[int]): User ids to be added.
         db (Session): Database session.
 
@@ -164,7 +166,7 @@ def update_meeting_with_user_ids(
         Meeting: The updated Meeting object.
     """
     try:
-        query = select(Meeting).where(Meeting.id == meeting_update.id)
+        query = select(Meeting).where(Meeting.id == meeting_id)
         meeting = db.execute(query).scalar_one()
 
         if meeting_update.user_id in user_ids:
@@ -181,7 +183,7 @@ def update_meeting_with_user_ids(
         meeting.users = users_to_update
         db.execute(
             update(Meeting)
-            .where(Meeting.id == meeting_update.id)
+            .where(Meeting.id == meeting_id)
             .values(**meeting_update.__dict__)
         )
         db.commit()

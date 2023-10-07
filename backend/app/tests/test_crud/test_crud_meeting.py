@@ -199,23 +199,26 @@ def test_correct__get_meetings_by_user_id(
 
 
 @pytest.mark.parametrize(
-    "users,meeting,meeting_data,user_ids",
+    "users,meeting,meeting_id,meeting_data,user_ids",
     [
         (
             [user_create_unique_1, user_create_unique_2],
             meeting_create,
+            1,
             meeting_update,
             [2],
         ),
         (
             [user_create_unique_1, user_create_unique_2, user_create_with_role],
             meeting_create,
+            1,
             meeting_update,
             [3],
         ),
         (
             [user_create_unique_1, user_create_unique_2, user_create_with_role],
             meeting_create,
+            1,
             meeting_update,
             [2, 3],
         ),
@@ -224,6 +227,7 @@ def test_correct__get_meetings_by_user_id(
 def test_correct__update_meeting_with_user_ids(
     users: list[UserCreate],
     meeting: MeetingCreate,
+    meeting_id: int,
     meeting_data: MeetingUpdate,
     user_ids: list[int],
     db_session: Session,
@@ -233,14 +237,17 @@ def test_correct__update_meeting_with_user_ids(
     Args:
         users (list[UserCreate]): Users to be created.
         meeting (MeetingCreate): Meeting to be created.
-        meeting_data (MeetingCreate): Meeting data to be updated.
+        meeting_id (int): Meeting id to be updated.
+        meeting_data (MeetingUpdate): Meeting data to be updated.
         user_ids (list[int]): User ids to be added to the meeting.
         db_session (Session): Database session.
     """
     for user in users:
         create_new_user(user, db_session)
     create_new_meeting(meeting, db_session)
-    updated_meeting = update_meeting_with_user_ids(meeting_data, user_ids, db_session)
+    updated_meeting = update_meeting_with_user_ids(
+        meeting_data, meeting_id, user_ids, db_session
+    )
     assert updated_meeting.user_id == meeting_data.user_id
     assert updated_meeting.name == meeting_data.name
     assert updated_meeting.notes == meeting_data.notes
@@ -251,15 +258,16 @@ def test_correct__update_meeting_with_user_ids(
 
 
 @pytest.mark.parametrize(
-    "user,meeting,meeting_data,user_ids",
+    "user,meeting,meeting_id,meeting_data,user_ids",
     [
-        (user_create_unique_1, meeting_create, meeting_update, [1]),
-        (user_create_unique_1, meeting_create, meeting_update, [1, 1]),
+        (user_create_unique_1, meeting_create, 1, meeting_update, [1]),
+        (user_create_unique_1, meeting_create, 1, meeting_update, [1, 1]),
     ],
 )
 def test_incorrect_generic__update_meeting_with_user_ids(
     user: UserCreate,
     meeting: MeetingCreate,
+    meeting_id: int,
     meeting_data: MeetingUpdate,
     user_ids: list[int],
     db_session: Session,
@@ -269,22 +277,24 @@ def test_incorrect_generic__update_meeting_with_user_ids(
     Args:
         user (UserCreate): User to be created.
         meeting (MeetingCreate): Meeting to be created.
-        meeting_data (MeetingCreate): Meeting data to be updated.
+        meeting_id (int): Meeting id to be updated.
+        meeting_data (MeetingUpdate): Meeting data to be updated.
         user_ids (list[int]): User ids to be added to the meeting.
         db_session (Session): Database session.
     """
     create_new_user(user, db_session)
     create_new_meeting(meeting, db_session)
     with pytest.raises(GenericException):
-        update_meeting_with_user_ids(meeting_data, user_ids, db_session)
+        update_meeting_with_user_ids(meeting_data, meeting_id, user_ids, db_session)
 
 
 @pytest.mark.parametrize(
-    "users,meeting,meeting_data,user_ids,should_create_meeting",
+    "users,meeting,meeting_id,meeting_data,user_ids,should_create_meeting",
     [
         (
             [user_create_unique_1, user_create_unique_2],
             meeting_create,
+            1,
             meeting_update,
             [2],
             False,
@@ -292,6 +302,15 @@ def test_incorrect_generic__update_meeting_with_user_ids(
         (
             [user_create_unique_1, user_create_unique_2],
             meeting_create,
+            2,
+            meeting_update,
+            [2],
+            False,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            meeting_create,
+            1,
             meeting_update,
             [3],
             True,
@@ -299,6 +318,15 @@ def test_incorrect_generic__update_meeting_with_user_ids(
         (
             [user_create_unique_1, user_create_unique_2],
             meeting_create,
+            2,
+            meeting_update,
+            [3],
+            True,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            meeting_create,
+            1,
             meeting_update,
             [3],
             False,
@@ -306,6 +334,15 @@ def test_incorrect_generic__update_meeting_with_user_ids(
         (
             [user_create_unique_1, user_create_unique_2],
             meeting_create,
+            2,
+            meeting_update,
+            [3],
+            False,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            meeting_create,
+            1,
             meeting_update,
             [],
             True,
@@ -313,6 +350,15 @@ def test_incorrect_generic__update_meeting_with_user_ids(
         (
             [user_create_unique_1, user_create_unique_2],
             meeting_create,
+            2,
+            meeting_update,
+            [],
+            True,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            meeting_create,
+            1,
             meeting_update,
             [],
             False,
@@ -320,6 +366,15 @@ def test_incorrect_generic__update_meeting_with_user_ids(
         (
             [user_create_unique_1, user_create_unique_2],
             meeting_create,
+            2,
+            meeting_update,
+            [],
+            False,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            meeting_create,
+            1,
             meeting_update,
             [3, 3],
             True,
@@ -327,6 +382,23 @@ def test_incorrect_generic__update_meeting_with_user_ids(
         (
             [user_create_unique_1, user_create_unique_2],
             meeting_create,
+            2,
+            meeting_update,
+            [3, 3],
+            True,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            meeting_create,
+            1,
+            meeting_update,
+            [3, 3],
+            False,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            meeting_create,
+            2,
             meeting_update,
             [3, 3],
             False,
@@ -336,6 +408,7 @@ def test_incorrect_generic__update_meeting_with_user_ids(
 def test_incorrect_missing__update_meeting_with_user_ids(
     users: list[UserCreate],
     meeting: MeetingCreate,
+    meeting_id: int,
     meeting_data: MeetingUpdate,
     user_ids: list[int],
     should_create_meeting: bool,
@@ -346,7 +419,8 @@ def test_incorrect_missing__update_meeting_with_user_ids(
     Args:
         users (list[UserCreate]): Users to be created.
         meeting (MeetingCreate): Meeting to be created.
-        meeting_data (MeetingCreate): Meeting data to be updated.
+        meeting_id (int): Meeting id to be updated.
+        meeting_data (MeetingUpdate): Meeting data to be updated.
         user_ids (list[int]): User ids to be added to the meeting.
         should_create_meeting (bool): Whether the provided meeting should be created.
         db_session (Session): Database session.
@@ -357,4 +431,4 @@ def test_incorrect_missing__update_meeting_with_user_ids(
         create_new_meeting(meeting, db_session)
 
     with pytest.raises(MissingException):
-        update_meeting_with_user_ids(meeting_data, user_ids, db_session)
+        update_meeting_with_user_ids(meeting_data, meeting_id, user_ids, db_session)

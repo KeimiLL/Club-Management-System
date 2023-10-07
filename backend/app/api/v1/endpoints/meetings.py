@@ -159,7 +159,7 @@ def get_meeting(
 
 
 @router.put(
-    "",
+    "/{meeting_id}",
     response_model=MeetingOnlyBaseUserInfo,
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
@@ -170,6 +170,7 @@ def get_meeting(
     },
 )
 def update_meeting(
+    meeting_id: Annotated[int, Path(ge=1, le=10**7)],
     meeting_user: MeetingUserUpdate,
     current_user: Annotated[User, Depends(get_user_from_token)],
     db: Annotated[Session, Depends(get_db)],
@@ -177,7 +178,9 @@ def update_meeting(
     """Updates meeting data with the given data.
 
     Args:
-        meeting_user (MeetingUserUpdate): Meeting data to update..
+        meeting_id (Annotated[int, Path]): The requested meeting's id. Has to be greater than
+            or equal to 1 and less than or equal to 10**7.
+        meeting_user (MeetingUserUpdate): Meeting data to update.
         current_user (Annotated[User, Depends]): Current user read from access token.
             Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
@@ -193,6 +196,9 @@ def update_meeting(
         or current_user.id == meeting_user.meeting.user_id
     ):
         return update_meeting_with_user_ids(
-            meeting_update=meeting_user.meeting, user_ids=meeting_user.user_ids, db=db
+            meeting_update=meeting_user.meeting,
+            meeting_id=meeting_id,
+            user_ids=meeting_user.user_ids,
+            db=db,
         )
     raise ForbiddenException("meeting")
