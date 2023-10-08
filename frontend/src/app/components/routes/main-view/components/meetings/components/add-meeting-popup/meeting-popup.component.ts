@@ -20,7 +20,9 @@ import { MaterialModule } from "../../../../../../../shared/modules/material.mod
 import { UserService } from "../../../../../../../shared/services/user.service";
 import { NewMeetingFormGroup } from "./newMeetingFormBuilder";
 import { MeetingsPopupService } from "./services/meetings-popup.service";
+import { MeetingsPopupFormService } from "./services/meetings-popup-form.service";
 import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service";
+import { MeetingsPopupRootService } from "./services/meetings-popup-root.service";
 
 @Component({
     selector: "app-meeting-popup",
@@ -36,7 +38,11 @@ import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service
     ],
     templateUrl: "./meeting-popup.component.html",
     styleUrls: ["./meeting-popup.component.scss"],
-    providers: [MeetingsPopupService, MeetingsPopupHttpService],
+    providers: [
+        MeetingsPopupRootService,
+        MeetingsPopupFormService,
+        MeetingsPopupHttpService,
+    ],
 })
 export class MeetingPopupComponent implements OnInit {
     protected isEditMode = false;
