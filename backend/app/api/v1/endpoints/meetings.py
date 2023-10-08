@@ -6,12 +6,12 @@ from typing import Annotated
 from app.api.dependencies import get_user_from_token, paginate
 from app.core.exceptions import ForbiddenException
 from app.crud.crud_meeting import (
+    create_meeting_with_user_ids,
     get_all_meetings,
     get_meeting_by_id,
     get_meetings_by_user_id,
     update_meeting_with_user_ids,
 )
-from app.crud.crud_meeting_user import create_meeting_user_from_user_id_list
 from app.db.session import get_db
 from app.models.user import User
 from app.schemas.enums import Roles
@@ -50,7 +50,7 @@ def create_meeting(
     Returns:
         MeetingInDBOnlyBaseUserInfo: Created meeting.
     """
-    return create_meeting_user_from_user_id_list(
+    return create_meeting_with_user_ids(
         meeting=MeetingCreate(user_id=current_user.id, **meeting.meeting.__dict__),
         user_ids=meeting.user_ids,
         db=db,

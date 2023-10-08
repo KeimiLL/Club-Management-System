@@ -1,16 +1,8 @@
 """File responsible for implementing meeting_users related CRUD operations."""
 
 
-from app.core.exceptions import (
-    GenericException,
-    MissingAssociationObjectException,
-    MissingException,
-)
-from app.crud.crud_meeting import create_new_meeting
-from app.models.meeting import Meeting
+from app.core.exceptions import MissingAssociationObjectException, MissingException
 from app.models.meeting_user import MeetingUser
-from app.models.user import User
-from app.schemas.meeting import MeetingCreate
 from app.schemas.meeting_user import MeetingUserCreate
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
@@ -69,51 +61,5 @@ def get_meeting_user_by_id(meeting_user_id: int, db: Session) -> MeetingUser:
         ).scalar_one()
     except NoResultFound as exc:
         raise MissingException(MeetingUser.__name__) from exc
-    except SQLAlchemyError as exc:
-        raise exc
-
-
-def create_meeting_user_from_user_id_list(
-    meeting: MeetingCreate,
-    user_ids: set[int],
-    db: Session,
-) -> Meeting:
-    """Creates a new meeting_user based on meeting data and a list of user ids.
-
-    Args:
-        meeting (MeetingCreate): Meeting based on Meeting schema.
-        user_ids (set[int]): User ids to be added.
-        db (Session): Database session.
-
-    Raises:
-        GenericException: If any of the provided user ids matches the current user id.
-        MissingException: If any of the provided user ids does not match an existing user.
-        SQLAlchemyError: If there is a database error.
-
-    Returns:
-        Meeting: The created meeting.
-    """
-    try:
-        if meeting.user_id in user_ids:
-            raise GenericException(
-                "The list of user ids cannot contain the creator's id."
-            )
-        users = db.scalars(select(User).where(User.id.in_(user_ids))).all()
-        if not users or len(users) != len(user_ids):
-            raise MissingException(User.__name__)
-        new_meeting = create_new_meeting(
-            meeting=meeting,
-            db=db,
-        )
-        meetings_users = []
-        for user in users:
-            new_meeting_user = MeetingUser()
-            new_meeting_user.user = user
-            new_meeting_user.meeting = new_meeting
-            meetings_users.append(new_meeting_user)
-        db.add_all(meetings_users)
-        db.commit()
-        db.refresh(new_meeting)
-        return new_meeting
     except SQLAlchemyError as exc:
         raise exc

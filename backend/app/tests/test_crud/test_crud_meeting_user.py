@@ -2,22 +2,14 @@
 
 
 import pytest
-from app.core.exceptions import GenericException, MissingException
+from app.core.exceptions import MissingException
 from app.crud.crud_meeting import create_new_meeting
-from app.crud.crud_meeting_user import (
-    create_meeting_user_from_user_id_list,
-    create_new_meeting_user,
-    get_meeting_user_by_id,
-)
+from app.crud.crud_meeting_user import create_new_meeting_user, get_meeting_user_by_id
 from app.crud.crud_user import create_new_user
 from app.schemas.meeting import MeetingCreate
 from app.schemas.meeting_user import MeetingUserCreate
 from app.schemas.user import UserCreate
-from app.tests.conftest import (
-    meeting_create,
-    user_create_unique_1,
-    user_create_unique_2,
-)
+from app.tests.conftest import meeting_create, user_create_unique_1
 from sqlalchemy.orm import Session
 
 
@@ -89,81 +81,3 @@ def test_incorrect__get_meeting_user_by_id(
     with pytest.raises(MissingException) as excinfo:
         get_meeting_user_by_id(meeting_user_id, db_session)
     assert "MeetingUser" == str(excinfo.value)
-
-
-@pytest.mark.parametrize(
-    "created_by,user,meeting,user_ids",
-    [(user_create_unique_1, user_create_unique_2, meeting_create, [2])],
-)
-def test_correct__create_meeting_user_from_user_id_list(
-    created_by: UserCreate,
-    user: UserCreate,
-    meeting: MeetingCreate,
-    user_ids: list[int],
-    db_session: Session,
-) -> None:
-    """Tests creating a meeting_user with a list of user ids.
-
-    Args:
-        created_by (UserCreate): User to be created that will be the creator of the meeting.
-        user (UserCreate): User to be created.
-        meeting (MeetingCreate): Meeting to be created.
-        user_ids (list[int]): A list of user_ids to be added to the meeting.
-        db_session (Session): Database session.
-    """
-    create_new_user(created_by, db_session)
-    create_new_user(user, db_session)
-    new_meeting = create_meeting_user_from_user_id_list(meeting, user_ids, db_session)
-    assert new_meeting.created_by_user.full_name == created_by.full_name
-    assert new_meeting.users[0].full_name == user.full_name
-    assert new_meeting.users[0].meetings[0].name == meeting.name
-
-
-@pytest.mark.parametrize(
-    "created_by,user,meeting,user_ids,exception",
-    [
-        (
-            user_create_unique_1,
-            user_create_unique_2,
-            meeting_create,
-            [1],
-            GenericException,
-        ),
-        (
-            user_create_unique_1,
-            user_create_unique_2,
-            meeting_create,
-            [2, 2],
-            MissingException,
-        ),
-        (
-            user_create_unique_1,
-            user_create_unique_2,
-            meeting_create,
-            [2, 3],
-            MissingException,
-        ),
-    ],
-)
-def test_incorrect__create_meeting_user_from_user_id_list(
-    created_by: UserCreate,
-    user: UserCreate,
-    meeting: MeetingCreate,
-    user_ids: list[int],
-    exception: Exception,
-    db_session: Session,
-) -> None:
-    """Tests creating a meeting_user with a set of user ids.
-
-    Args:
-        created_by (UserCreate): User to be created that will be the creator of the meeting.
-        user (UserCreate): User to be created.
-        meeting (MeetingCreate): Meeting to be created.
-        user_ids (list[int]): A list of user_ids to be added to the meeting.
-        exception (Exception): The exception that is going to be raised.
-        db_session (Session): Database session.
-    """
-    create_new_user(created_by, db_session)
-    create_new_user(user, db_session)
-    with pytest.raises(exception):
-        create_meeting_user_from_user_id_list(meeting, user_ids, db_session)
