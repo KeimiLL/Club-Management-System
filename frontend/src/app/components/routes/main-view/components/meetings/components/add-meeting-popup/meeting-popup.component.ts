@@ -57,15 +57,13 @@ export class MeetingPopupComponent implements OnInit {
         private readonly userService: UserService,
         @Inject(MAT_DIALOG_DATA) public data: Meeting | null
     ) {
-        if (data !== null) {
-            this.isEditMode = true;
-        }
         this.root.initData(data);
         this.meetingForm = this.root.meetingForm;
         this.attendeeInputControl = this.root.attendeeInputControl;
     }
 
     ngOnInit(): void {
+        this.isEditMode = this.root.isEditMode;
         this.currentUser = this.userService.currentUser as ShortUser;
         this.allAttendees$ = this.root.allAttendees$;
         this.filteredAttendees$ = this.root.filteredAttendees$;

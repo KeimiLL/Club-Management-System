@@ -101,7 +101,12 @@
                                         [appPermissionBackgroundColor]
                                         [matTooltip]="'Creator'"
                                     >
-                                        {{ currentUser.full_name }}
+                                        {{
+                                            isEditMode
+                                                ? data?.created_by_user
+                                                      ?.full_name
+                                                : currentUser.full_name
+                                        }}
                                     </mat-chip>
                                     <mat-chip
                                         *ngFor="

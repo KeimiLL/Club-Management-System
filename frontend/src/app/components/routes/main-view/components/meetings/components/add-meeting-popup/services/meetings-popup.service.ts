@@ -33,7 +33,8 @@ import { MeetingsPopupHttpService } from "./meetings-popup-http.service";
 export class MeetingsPopupService extends DestroyClass {
     public meetingForm: FormGroup<NewMeetingFormGroup>;
     public attendeeInputControl = new FormControl<string>("");
-    private _id: number;
+    private _meeting: Meeting;
+    public isEditMode = false;
 
     private readonly allAttendeesStore$ = new BehaviorSubject<ShortUser[]>([]);
     private readonly selectedAttendeesStore$ = new BehaviorSubject<ShortUser[]>(
@@ -53,7 +54,10 @@ export class MeetingsPopupService extends DestroyClass {
         this.meetingForm =
             newMeetingDataFormBuilder.buildFormGroup(meetingData);
 
-        if (meetingData !== null) this._id = meetingData.id;
+        if (meetingData !== null) {
+            this.isEditMode = true;
+            this._meeting = meetingData;
+        }
 
         this.userService
             .getAllUsers()
@@ -103,12 +107,24 @@ export class MeetingsPopupService extends DestroyClass {
         ]).pipe(
             map(([allAttendees, selectedAttendees, inputValue]) => {
                 const filterValue = inputValue ?? "";
-                return allAttendees.filter(
-                    (attendee) =>
+                return allAttendees.filter((attendee) => {
+                    if (this.isEditMode) {
+                        return (
+                            attendee.id !== this._meeting.created_by_user.id &&
+                            !selectedAttendees.some(
+                                (a) => a.id === attendee.id
+                            ) &&
+                            attendee.full_name
+                                .toLowerCase()
+                                .includes(filterValue)
+                        );
+                    }
+                    return (
                         attendee.id !== this.userService.currentUser?.id &&
                         !selectedAttendees.some((a) => a.id === attendee.id) &&
                         attendee.full_name.toLowerCase().includes(filterValue)
-                );
+                    );
+                });
             })
         );
     }
@@ -160,7 +176,7 @@ export class MeetingsPopupService extends DestroyClass {
         const editedMeeting = this.meetingForm.value as NewMeeting;
 
         this.http
-            .editMeeting(editedMeeting, this._id)
+            .editMeeting(editedMeeting, this._meeting.id)
             .pipe(
                 tap(() => {
                     this.snack.showSnackBar(
