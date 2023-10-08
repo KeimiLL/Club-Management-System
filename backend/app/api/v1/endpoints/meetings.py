@@ -191,9 +191,10 @@ def update_meeting(
     Returns:
         MeetingInDBOnlyBaseUserInfo: The requested meeting.
     """
+    meeting = get_meeting_by_id(meeting_id=meeting_id, db=db)
     if (
         current_user.role in (Roles.ADMIN, Roles.BOARD)
-        or current_user.id == meeting_user.meeting.user_id
+        or current_user.id == meeting.user_id
     ):
         return update_meeting_with_user_ids(
             meeting_update=meeting_user.meeting,

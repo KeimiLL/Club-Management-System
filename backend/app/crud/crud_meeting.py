@@ -208,7 +208,7 @@ def update_meeting_with_user_ids(
         query = select(Meeting).where(Meeting.id == meeting_id)
         meeting = db.execute(query).scalar_one()
 
-        if meeting_update.user_id in user_ids:
+        if meeting.user_id in user_ids:
             raise GenericException(
                 "The list of user ids cannot contain the creator's id."
             )

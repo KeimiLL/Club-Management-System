@@ -327,7 +327,7 @@ def test_correct__update_meeting_with_user_ids(
     updated_meeting = update_meeting_with_user_ids(
         meeting_data, meeting_id, user_ids, db_session
     )
-    assert updated_meeting.user_id == meeting_data.user_id
+    assert updated_meeting.user_id == meeting.user_id
     assert updated_meeting.name == meeting_data.name
     assert updated_meeting.notes == meeting_data.notes
     assert updated_meeting.date == meeting_data.date
