@@ -1,17 +1,11 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
-import {
-    FormBuilder,
-    FormGroup,
-    ReactiveFormsModule,
-    Validators,
-} from "@angular/forms";
-import { Router, RouterModule } from "@angular/router";
-import { catchError, of } from "rxjs";
+import { FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
 
-import { User } from "../../../../shared/models/user.model";
 import { MaterialModule } from "../../../../shared/modules/material.module";
-import { UserService } from "../../../../shared/services/user.service";
+import { AuthService } from "../auth.service";
+import { LoginFormGroup } from "../authFromBuilder";
 
 @Component({
     selector: "app-login",
@@ -21,45 +15,19 @@ import { UserService } from "../../../../shared/services/user.service";
     imports: [CommonModule, ReactiveFormsModule, MaterialModule, RouterModule],
 })
 export class LoginComponent implements OnInit {
-    public loginForm: FormGroup;
+    public loginForm: FormGroup<LoginFormGroup>;
 
-    constructor(
-        private readonly formBuilder: FormBuilder,
-        private readonly userService: UserService,
-        private readonly router: Router
-    ) {}
-
-    ngOnInit(): void {
-        this.buildForm();
+    constructor(private readonly auth: AuthService) {
+        this.auth.initLoginFormGroup();
     }
 
-    private buildForm(): void {
-        this.loginForm = this.formBuilder.group({
-            email: ["", [Validators.required, Validators.email]],
-            password: ["", [Validators.required, Validators.minLength(8)]],
-        });
+    ngOnInit(): void {
+        this.loginForm = this.auth.loginForm;
     }
 
     public onSubmit(): void {
         if (this.loginForm.valid) {
-            this.userService
-                .login(this.loginForm.value)
-                .pipe(catchError(() => of(null)))
-                .subscribe((user: User | null) => {
-                    if (user !== null) {
-                        this.userService.currentUser = user;
-                        this.router.navigate(["/app"]);
-                    } else {
-                        Object.keys(this.loginForm.controls).forEach(
-                            (controlName) => {
-                                this.loginForm.controls[
-                                    controlName
-                                ].markAsTouched();
-                            }
-                        );
-                        // dialog about an incorrect login
-                    }
-                });
+            this.auth.login();
         }
     }
 }
