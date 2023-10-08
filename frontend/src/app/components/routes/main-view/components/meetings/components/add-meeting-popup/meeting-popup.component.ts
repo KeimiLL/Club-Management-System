@@ -22,7 +22,7 @@ import { MeetingsPopupService } from "./services/meetings-popup.service";
 import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service";
 
 @Component({
-    selector: "app-add-meeting-popup",
+    selector: "app-meeting-popup",
     standalone: true,
     imports: [
         CommonModule,
@@ -33,11 +33,11 @@ import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service
         PermissionColorDirective,
         PermissionBackgroundColorDirective,
     ],
-    templateUrl: "./add-meeting-popup.component.html",
-    styleUrls: ["./add-meeting-popup.component.scss"],
+    templateUrl: "./meeting-popup.component.html",
+    styleUrls: ["./meeting-popup.component.scss"],
     providers: [MeetingsPopupService, MeetingsPopupHttpService],
 })
-export class AddMeetingPopupComponent implements OnInit {
+export class MeetingPopupComponent implements OnInit {
     protected meetingForm: FormGroup<NewMeetingFormGroup>;
     protected attendeeInputControl: FormControl<string | null>;
 

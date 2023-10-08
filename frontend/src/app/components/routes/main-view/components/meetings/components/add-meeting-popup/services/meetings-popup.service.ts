@@ -19,7 +19,7 @@ import { SnackbarService } from "../../../../../../../../shared/services/snackba
 import { UserService } from "../../../../../../../../shared/services/user.service";
 import { formatDateFromInputForBackend } from "../../../../../../../../shared/utils/dateHelpers";
 import { DestroyClass } from "../../../../../../../../shared/utils/destroyClass";
-import { AddMeetingPopupComponent } from "../add-meeting-popup.component";
+import { MeetingPopupComponent } from "../meeting-popup.component";
 import {
     newMeetingDataFormBuilder,
     NewMeetingFormGroup,
@@ -38,7 +38,7 @@ export class MeetingsPopupService extends DestroyClass {
 
     constructor(
         private readonly http: MeetingsPopupHttpService,
-        private readonly dialogRef: MatDialogRef<AddMeetingPopupComponent>,
+        private readonly dialogRef: MatDialogRef<MeetingPopupComponent>,
         private readonly userService: UserService,
         private readonly snack: SnackbarService
     ) {

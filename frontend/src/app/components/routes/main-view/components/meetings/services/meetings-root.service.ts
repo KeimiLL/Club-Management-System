@@ -11,7 +11,7 @@ import {
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
 import { DestroyClass } from "../../../../../../shared/utils/destroyClass";
-import { AddMeetingPopupComponent } from "../components/add-meeting-popup/add-meeting-popup.component";
+import { MeetingPopupComponent } from "../components/add-meeting-popup/meeting-popup.component";
 import { longMeetingColumns, shortMeetingColumns } from "../meeting-table.data";
 import { MeetingsHttpService } from "./meetings-http.service";
 
@@ -114,7 +114,7 @@ export class MeetingsRootService extends DestroyClass {
     }
 
     public openDialog(): void {
-        const dialog = this.dialog.open(AddMeetingPopupComponent, {
+        const dialog = this.dialog.open(MeetingPopupComponent, {
             width: "50vw",
             disableClose: true,
         });
