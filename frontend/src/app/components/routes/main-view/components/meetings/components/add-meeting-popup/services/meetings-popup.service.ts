@@ -153,6 +153,26 @@ export class MeetingsPopupService extends DestroyClass {
             });
     }
 
+    public editMeeting(): void {
+        const newMeeting = this.meetingForm.value as NewMeeting;
+
+        this.http
+            .postNewMeeting(newMeeting)
+            .pipe(
+                tap(() => {
+                    this.snack.showSnackBar(
+                        SnackbarMessages.MEETING_EDITED,
+                        "normal"
+                    );
+                }),
+                catchError(() => of(null)),
+                this.untilDestroyed()
+            )
+            .subscribe(() => {
+                this.closePopup();
+            });
+    }
+
     public closePopup(): void {
         this.dialogRef.close();
     }

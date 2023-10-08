@@ -39,6 +39,8 @@ import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service
     providers: [MeetingsPopupService, MeetingsPopupHttpService],
 })
 export class MeetingPopupComponent implements OnInit {
+    protected isEditMode = false;
+
     protected meetingForm: FormGroup<NewMeetingFormGroup>;
     protected attendeeInputControl: FormControl<string | null>;
 
@@ -55,6 +57,9 @@ export class MeetingPopupComponent implements OnInit {
         private readonly userService: UserService,
         @Inject(MAT_DIALOG_DATA) public data: Meeting | null
     ) {
+        if (data !== null) {
+            this.isEditMode = true;
+        }
         this.root.initData(data);
         this.meetingForm = this.root.meetingForm;
         this.attendeeInputControl = this.root.attendeeInputControl;
