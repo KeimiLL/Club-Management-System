@@ -1,0 +1,6 @@
+.pytest_cache
+
+.coverage
+.gitignore
+.pre-commit-config.yaml
+test_db.db

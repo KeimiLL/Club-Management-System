@@ -142,6 +142,45 @@ def get_meetings_by_user_id(
         raise exc
 
 
+def create_meeting_with_user_ids(
+    meeting: MeetingCreate,
+    user_ids: set[int],
+    db: Session,
+) -> Meeting:
+    """Creates a new meeting_user based on meeting data and a list of user ids.
+
+    Args:
+        meeting (MeetingCreate): Meeting based on Meeting schema.
+        user_ids (set[int]): User ids to be added.
+        db (Session): Database session.
+
+    Raises:
+        GenericException: If any of the provided user ids matches the current user id.
+        MissingException: If any of the provided user ids does not match an existing user.
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        Meeting: The created meeting.
+    """
+    try:
+        if meeting.user_id in user_ids:
+            raise GenericException(
+                "The list of user ids cannot contain the creator's id."
+            )
+        users = list(db.scalars(select(User).where(User.id.in_(user_ids))).all())
+        if not users or len(users) != len(user_ids):
+            raise MissingException(User.__name__)
+        new_meeting = create_new_meeting(
+            meeting=meeting,
+            db=db,
+        )
+        new_meeting.users = users
+        db.commit()
+        return new_meeting
+    except SQLAlchemyError as exc:
+        raise exc
+
+
 def update_meeting_with_user_ids(
     meeting_update: MeetingUpdate,
     meeting_id: int,
@@ -169,7 +208,7 @@ def update_meeting_with_user_ids(
         query = select(Meeting).where(Meeting.id == meeting_id)
         meeting = db.execute(query).scalar_one()
 
-        if meeting_update.user_id in user_ids:
+        if meeting.user_id in user_ids:
             raise GenericException(
                 "The list of user ids cannot contain the creator's id."
             )

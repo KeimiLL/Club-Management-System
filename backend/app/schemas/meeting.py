@@ -40,10 +40,8 @@ class Meeting(MeetingCreateNoUserId):
     users: list["User"]
 
 
-class MeetingUpdate(MeetingBase):
+class MeetingUpdate(MeetingCreateNoUserId):
     """Meeting schema for updating."""
-
-    user_id: int | None = Field(None, ge=1, le=10**7)
 
 
 class MeetingInDBBase(MeetingBase):
