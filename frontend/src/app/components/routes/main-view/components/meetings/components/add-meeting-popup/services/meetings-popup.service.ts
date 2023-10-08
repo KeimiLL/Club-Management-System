@@ -33,6 +33,7 @@ import { MeetingsPopupHttpService } from "./meetings-popup-http.service";
 export class MeetingsPopupService extends DestroyClass {
     public meetingForm: FormGroup<NewMeetingFormGroup>;
     public attendeeInputControl = new FormControl<string>("");
+    private _id: number;
 
     private readonly allAttendeesStore$ = new BehaviorSubject<ShortUser[]>([]);
     private readonly selectedAttendeesStore$ = new BehaviorSubject<ShortUser[]>(
@@ -51,6 +52,8 @@ export class MeetingsPopupService extends DestroyClass {
     public initData(meetingData: Meeting | null): void {
         this.meetingForm =
             newMeetingDataFormBuilder.buildFormGroup(meetingData);
+
+        if (meetingData !== null) this._id = meetingData.id;
 
         this.userService
             .getAllUsers()
@@ -154,10 +157,10 @@ export class MeetingsPopupService extends DestroyClass {
     }
 
     public editMeeting(): void {
-        const newMeeting = this.meetingForm.value as NewMeeting;
+        const editedMeeting = this.meetingForm.value as NewMeeting;
 
         this.http
-            .postNewMeeting(newMeeting)
+            .editMeeting(editedMeeting, this._id)
             .pipe(
                 tap(() => {
                     this.snack.showSnackBar(

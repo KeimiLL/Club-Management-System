@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { BehaviorSubject, Observable, of } from "rxjs";
+import { BehaviorSubject, forkJoin, Observable, of } from "rxjs";
 import { catchError, map, switchMap, tap } from "rxjs/operators";
 
 import {
@@ -51,23 +51,13 @@ export class MeetingsRootService extends DestroyClass {
 
         this.splitView.currentId$
             .pipe(
-                switchMap((id: number | null) => {
-                    if (id !== null) {
-                        return this.getCurrentMeetingById(id).pipe(
-                            catchError((error) => {
-                                if (error.status === 404) {
-                                    this.splitView.changeDetailState();
-                                    return of(null);
-                                }
-                                return of(null);
-                            })
-                        );
-                    }
-                    return of(null);
-                }),
-                tap((meeting) => {
-                    this.currentMeeting = meeting;
-                }),
+                switchMap((id: number | null) =>
+                    this.refreshCurrentMeeting(id).pipe(
+                        tap((meeting) => {
+                            this.currentMeeting = meeting;
+                        })
+                    )
+                ),
                 this.untilDestroyed()
             )
             .subscribe();
@@ -139,7 +129,12 @@ export class MeetingsRootService extends DestroyClass {
         dialog
             .afterClosed()
             .pipe(
-                switchMap(() => this.refreshMeetings()),
+                switchMap(() =>
+                    forkJoin([
+                        this.refreshMeetings(),
+                        this.refreshCurrentMeeting(this.splitView.currentId),
+                    ]).pipe(catchError(() => of(null)))
+                ),
                 this.untilDestroyed()
             )
             .subscribe();
@@ -161,14 +156,27 @@ export class MeetingsRootService extends DestroyClass {
             );
     }
 
+    private refreshCurrentMeeting(
+        id: number | null
+    ): Observable<Meeting | null> {
+        if (id !== null) {
+            return this.http.getMeetingsById(id).pipe(
+                catchError((error) => {
+                    if (error.status === 404) {
+                        this.splitView.changeDetailState();
+                        return of(null);
+                    }
+                    return of(null);
+                })
+            );
+        }
+        return of(null);
+    }
+
     private minimizeLongMeetings(): void {
         this.shortMeetings = this.longMeetings.map((meeting) => {
             const { id, name, is_yours } = meeting;
             return { id, name, is_yours } as ShortMeeting;
         });
-    }
-
-    private getCurrentMeetingById(id: number): Observable<Meeting> {
-        return this.http.getMeetingsById(id);
     }
 }
