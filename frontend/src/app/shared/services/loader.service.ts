@@ -5,7 +5,18 @@ import { BehaviorSubject } from "rxjs";
     providedIn: "root",
 })
 export class LoaderService {
-    public isLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    spinnerMessage = "";
+    public isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
         false
     );
+
+    enableSpinner(message?: string): void {
+        this.spinnerMessage = message ?? "Loading";
+        this.isLoading$.next(true);
+    }
+
+    disableSpinner(): void {
+        this.spinnerMessage = "";
+        this.isLoading$.next(false);
+    }
 }
