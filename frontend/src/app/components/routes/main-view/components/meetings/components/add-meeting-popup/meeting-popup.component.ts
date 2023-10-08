@@ -19,10 +19,9 @@ import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { UserService } from "../../../../../../../shared/services/user.service";
 import { NewMeetingFormGroup } from "./newMeetingFormBuilder";
-import { MeetingsPopupService } from "./services/meetings-popup.service";
+import { MeetingsPopupActionsService } from "./services/meetings-popup-actions.service";
 import { MeetingsPopupFormService } from "./services/meetings-popup-form.service";
 import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service";
-import { MeetingsPopupRootService } from "./services/meetings-popup-root.service";
 
 @Component({
     selector: "app-meeting-popup",
@@ -39,7 +38,7 @@ import { MeetingsPopupRootService } from "./services/meetings-popup-root.service
     templateUrl: "./meeting-popup.component.html",
     styleUrls: ["./meeting-popup.component.scss"],
     providers: [
-        MeetingsPopupRootService,
+        MeetingsPopupActionsService,
         MeetingsPopupFormService,
         MeetingsPopupHttpService,
     ],
@@ -59,45 +58,47 @@ export class MeetingPopupComponent implements OnInit {
     protected filteredAttendees$: Observable<ShortUser[]>;
 
     constructor(
-        private readonly root: MeetingsPopupService,
+        private readonly actions: MeetingsPopupActionsService,
+        private readonly forms: MeetingsPopupFormService,
         private readonly userService: UserService,
         @Inject(MAT_DIALOG_DATA) public data: Meeting | null
     ) {
-        this.root.initData(data);
-        this.meetingForm = this.root.meetingForm;
-        this.attendeeInputControl = this.root.attendeeInputControl;
+        this.forms.initData(data);
+        this.meetingForm = this.forms.meetingForm;
+        this.attendeeInputControl = this.forms.attendeeInputControl;
     }
 
     ngOnInit(): void {
-        this.isEditMode = this.root.isEditMode;
+        this.isEditMode = this.forms.isEditMode;
         this.currentUser = this.userService.currentUser as ShortUser;
-        this.allAttendees$ = this.root.allAttendees$;
-        this.filteredAttendees$ = this.root.filteredAttendees$;
-        this.selectedAttendees$ = this.root.selectedAttendees$;
+        this.allAttendees$ = this.forms.allAttendees$;
+        this.filteredAttendees$ = this.forms.filteredAttendees$;
+        this.selectedAttendees$ = this.forms.selectedAttendees$;
     }
 
     protected onCloseClick(): void {
-        this.root.closePopup();
+        this.actions.closePopup(false);
     }
 
     protected onDateChange(event: MatDatepickerInputEvent<Date>): void {
-        this.root.setDateInMeetingForm(event.value as Date);
+        this.forms.setDateInMeetingForm(event.value as Date);
     }
 
     protected onOptionSelected(event: MatAutocompleteSelectedEvent): void {
-        this.root.addAttendeeToSelectedList(event.option.value);
+        this.forms.addAttendeeToSelectedList(event.option.value);
     }
 
     protected removeAttendee(attendee: ShortUser): void {
-        this.root.removeAttendeeFromSelectedList(attendee);
+        this.forms.removeAttendeeFromSelectedList(attendee);
     }
 
     protected isButtonDisabled(): boolean {
+        if (this.isEditMode) return !this.meetingForm.dirty;
         return this.meetingForm.invalid;
     }
 
     protected onSubmit(): void {
-        if (this.isEditMode) this.root.editMeeting();
-        else this.root.createNewMeeting();
+        if (this.isEditMode) this.actions.editMeeting();
+        else this.actions.createNewMeeting();
     }
 }
