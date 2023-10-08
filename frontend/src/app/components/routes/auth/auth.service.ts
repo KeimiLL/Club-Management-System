@@ -6,7 +6,7 @@ import { catchError, of } from "rxjs";
 import { BackendResponse } from "../../../shared/models/misc.model";
 import { User, UserCreate, UserLogin } from "../../../shared/models/user.model";
 import { UserService } from "../../../shared/services/user.service";
-import { DestoryClass } from "../../../shared/utils/destroyClass";
+import { DestroyClass } from "../../../shared/utils/destroyClass";
 import {
     authFormBuilder,
     LoginFormGroup,
@@ -14,7 +14,7 @@ import {
 } from "./authFromBuilder";
 
 @Injectable()
-export class AuthService extends DestoryClass {
+export class AuthService extends DestroyClass {
     public registerForm: FormGroup<RegisterFormGroup>;
     public loginForm: FormGroup<LoginFormGroup>;
 
