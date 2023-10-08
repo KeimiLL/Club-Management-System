@@ -49,7 +49,7 @@ export class TableService<T> extends DestroyClass {
     public refreshTableItems$(
         request: Observable<TableResponse<T>>
     ): Observable<T[]> {
-        this.loaderService.enableSpinner("Loading...");
+        this.loaderService.enableSpinner("Loading meetings");
 
         return request.pipe(
             tap((response) => {

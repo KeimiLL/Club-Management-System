@@ -96,6 +96,13 @@ $huge-font: 34px;
             background-color: $light-btn-back-on-hover;
         }
     }
+
+    &--disabled {
+        background-color: #ccc;
+        color: #666;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
 }
 
 .mat-mdc-form-field-subscript-wrapper {

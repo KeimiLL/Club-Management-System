@@ -1,8 +1,7 @@
 <div class="preloader" [@fade]>
     <mat-progress-spinner class="preloader__spinner" mode="indeterminate">
     </mat-progress-spinner>
-    <div
-        class="preloader__message"
-        *ngIf="!!loaderService.spinnerMessage"
-    ></div>
+    <div class="preloader__message">
+        {{ loaderService.spinnerMessage }}
+    </div>
 </div>

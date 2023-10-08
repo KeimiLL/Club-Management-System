@@ -12,6 +12,7 @@
                     mat-raised-button
                     class="button--light"
                     (click)="onNewMeetingClick()"
+                    [ngClass]="{ 'button--disabled': isLoading$ | async }"
                 >
                     Add Meeting
                 </button>
