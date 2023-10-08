@@ -30,7 +30,9 @@ export const newMeetingDataFormBuilder = {
                     meeting?.date ?? formatDateFromInputForBackend(new Date()),
                     { nonNullable: true, validators: Validators.required }
                 ),
-                notes: new FormControl<string | null>(meeting?.notes ?? null),
+                notes: new FormControl<string | null>(meeting?.notes ?? null, {
+                    nonNullable: false,
+                }),
             }),
             user_ids: new FormControl<number[]>(
                 meeting?.users.map((user) => user.id) ?? [],

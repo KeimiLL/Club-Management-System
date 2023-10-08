@@ -93,6 +93,10 @@ export class MeetingPopupComponent implements OnInit {
     }
 
     protected onSubmit(): void {
+        if (this.isEditMode) {
+            this.root.editMeeting();
+            return;
+        }
         this.root.createNewMeeting();
     }
 }
