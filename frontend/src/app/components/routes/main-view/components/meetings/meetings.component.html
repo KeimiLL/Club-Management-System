@@ -23,6 +23,7 @@
                 *ngIf="vm.tableMeetings"
                 [data]="vm.tableMeetings"
             ></app-meeting-table>
+            <app-spinner *ngIf="isLoading$ | async"></app-spinner>
         </ng-container>
     </app-content-card>
 

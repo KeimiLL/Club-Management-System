@@ -2,12 +2,14 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 
+import { SpinnerComponent } from "../../../../../shared/components/spinner/spinner.component";
 import {
     Meeting,
     TableMeeting,
 } from "../../../../../shared/models/meeting.model";
 import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
+import { LoaderService } from "../../../../../shared/services/loader.service";
 import { SplitViewManagerService } from "../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../shared/services/table.service";
 import { CurrentMeetingContentComponent } from "./components/current-meeting-content/current-meeting-content.component";
@@ -25,20 +27,28 @@ import { MeetingsRootService } from "./services/meetings-root.service";
         LegendComponent,
         MeetingTableComponent,
         CurrentMeetingContentComponent,
+        SpinnerComponent,
     ],
     templateUrl: "./meetings.component.html",
     styleUrls: ["./meetings.component.scss"],
-    providers: [SplitViewManagerService, MeetingsRootService, TableService],
+    providers: [
+        SplitViewManagerService,
+        // MeetingsHttpService,
+        MeetingsRootService,
+        // TableService,
+    ],
 })
 export class MeetingsComponent implements OnInit {
     protected isDetail$: Observable<boolean>;
     protected tableMeetings$: Observable<TableMeeting[]>;
     protected currentMeeting$: Observable<Meeting | null>;
+    isLoading$ = this.loaderService.isLoading$;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Meeting>,
         private readonly root: MeetingsRootService,
-        private readonly table: TableService<TableMeeting>
+        private readonly table: TableService<TableMeeting>,
+        public loaderService: LoaderService
     ) {}
 
     ngOnInit(): void {

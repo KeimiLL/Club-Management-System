@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 
 import { MaterialModule } from "../../modules/material.module";
+import { LoaderService } from "../../services/loader.service";
 
 @Component({
     selector: "app-spinner",
@@ -20,4 +21,6 @@ import { MaterialModule } from "../../modules/material.module";
         ]),
     ],
 })
-export class SpinnerComponent {}
+export class SpinnerComponent {
+    constructor(readonly loaderService: LoaderService) {}
+}

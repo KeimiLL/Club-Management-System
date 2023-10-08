@@ -3,6 +3,7 @@ import { BehaviorSubject, map, Observable, tap } from "rxjs";
 
 import { TableResponse } from "../models/misc.model";
 import { DestroyClass } from "../utils/destroyClass";
+import { LoaderService } from "./loader.service";
 
 @Injectable()
 export class TableService<T> extends DestroyClass {
@@ -22,6 +23,8 @@ export class TableService<T> extends DestroyClass {
     public get tableItems$(): Observable<T[]> {
         return this.tableItemsStore$.asObservable();
     }
+
+    constructor(private readonly loaderService: LoaderService) {}
 
     public get currentPageIndex(): number {
         return this.currentPageIndexStore$.value;
@@ -46,13 +49,17 @@ export class TableService<T> extends DestroyClass {
     public refreshTableItems$(
         request: Observable<TableResponse<T>>
     ): Observable<T[]> {
+        this.loaderService.enableSpinner("Loading...");
+
         return request.pipe(
             tap((response) => {
                 this.totalItems = response.total;
                 this.tableItems = response.items;
             }),
-            this.untilDestroyed(),
-            map((items) => items.items)
+            map((response) => response.items),
+            tap(() => {
+                this.loaderService.disableSpinner();
+            })
         );
     }
 }

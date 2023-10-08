@@ -13,10 +13,12 @@ export class LoaderService {
     enableSpinner(message?: string): void {
         this.spinnerMessage = message ?? "Loading";
         this.isLoading$.next(true);
+        console.log("Start spinner");
     }
 
     disableSpinner(): void {
         this.spinnerMessage = "";
         this.isLoading$.next(false);
+        console.log("end spinner");
     }
 }
