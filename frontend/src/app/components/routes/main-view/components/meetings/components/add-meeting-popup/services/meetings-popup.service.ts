@@ -12,7 +12,10 @@ import {
     tap,
 } from "rxjs";
 
-import { NewMeeting } from "../../../../../../../../shared/models/meetings.model";
+import {
+    Meeting,
+    NewMeeting,
+} from "../../../../../../../../shared/models/meetings.model";
 import { SnackbarMessages } from "../../../../../../../../shared/models/messages.model";
 import { ShortUser } from "../../../../../../../../shared/models/user.model";
 import { SnackbarService } from "../../../../../../../../shared/services/snackbar.service";
@@ -43,16 +46,24 @@ export class MeetingsPopupService extends DestroyClass {
         private readonly snack: SnackbarService
     ) {
         super();
-        this.initData();
     }
 
-    private initData(): void {
-        this.meetingForm = newMeetingDataFormBuilder.buildFormGroup();
+    public initData(meetingData: Meeting | null): void {
+        this.meetingForm =
+            newMeetingDataFormBuilder.buildFormGroup(meetingData);
+
         this.userService
             .getAllUsers()
             .pipe(
                 tap((users) => {
                     this.allAttendees = users;
+                    if (meetingData !== null) {
+                        this.selectedAttendees = users.filter((user) =>
+                            meetingData.users.some(
+                                (dataUser) => dataUser.id === user.id
+                            )
+                        );
+                    }
                 }),
                 this.untilDestroyed()
             )

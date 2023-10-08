@@ -59,7 +59,11 @@ export class MeetingsComponent implements OnInit {
         this.splitService.changeDetailState();
     }
 
-    protected openAddMeetingPopup(): void {
-        this.root.openDialog();
+    protected onNewMeetingClick(): void {
+        this.root.openNewMeetingDialog();
+    }
+
+    protected onModifyMeetingClick(): void {
+        this.root.openEditMeetingDialog();
     }
 }

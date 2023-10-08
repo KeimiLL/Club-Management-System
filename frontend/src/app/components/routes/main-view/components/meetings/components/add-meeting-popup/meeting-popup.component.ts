@@ -13,6 +13,7 @@ import { Observable } from "rxjs";
 
 import { PermissionBackgroundColorDirective } from "../../../../../../../shared/directives/permission-background-color.directive";
 import { PermissionColorDirective } from "../../../../../../../shared/directives/permission-color.directive";
+import { Meeting } from "../../../../../../../shared/models/meetings.model";
 import { ShortUser } from "../../../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
@@ -52,8 +53,9 @@ export class MeetingPopupComponent implements OnInit {
     constructor(
         private readonly root: MeetingsPopupService,
         private readonly userService: UserService,
-        @Inject(MAT_DIALOG_DATA) public data: unknown
+        @Inject(MAT_DIALOG_DATA) public data: Meeting | null
     ) {
+        this.root.initData(data);
         this.meetingForm = this.root.meetingForm;
         this.attendeeInputControl = this.root.attendeeInputControl;
     }

@@ -113,10 +113,27 @@ export class MeetingsRootService extends DestroyClass {
         return this.currentMeetingStore$.asObservable();
     }
 
-    public openDialog(): void {
+    public openNewMeetingDialog(): void {
         const dialog = this.dialog.open(MeetingPopupComponent, {
             width: "50vw",
             disableClose: true,
+            data: null,
+        });
+
+        dialog
+            .afterClosed()
+            .pipe(
+                switchMap(() => this.refreshMeetings()),
+                this.untilDestroyed()
+            )
+            .subscribe();
+    }
+
+    public openEditMeetingDialog(): void {
+        const dialog = this.dialog.open(MeetingPopupComponent, {
+            width: "50vw",
+            disableClose: true,
+            data: this.currentMeeting,
         });
 
         dialog
