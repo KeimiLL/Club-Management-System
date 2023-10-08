@@ -1,9 +1,10 @@
-<div class="preloader">
-    <mat-progress-spinner class="preloader__spinner"> </mat-progress-spinner>
-    <ng-template>
+<div class="preloader" [@fade]>
+    <mat-progress-spinner class="preloader__spinner" mode="indeterminate">
+    </mat-progress-spinner>
+    <!-- <ng-template>
         <mat-progress-spinner class="preloader__spinner">
         </mat-progress-spinner>
-    </ng-template>
+    </ng-template> -->
 
-    <div class="preloader__message"></div>
+    <div class="preloader__message">Ładowanie w toku</div>
 </div>

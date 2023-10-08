@@ -11,7 +11,7 @@ import { MaterialModule } from "../../modules/material.module";
     templateUrl: "./spinner.component.html",
     styleUrls: ["./spinner.component.scss"],
     animations: [
-        trigger("fadeInOut", [
+        trigger("fade", [
             transition("void => *", [
                 style({ opacity: 0 }),
                 animate("250ms 100ms", style({ opacity: 1 })),
