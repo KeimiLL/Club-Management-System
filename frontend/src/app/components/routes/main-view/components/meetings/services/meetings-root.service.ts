@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { BehaviorSubject, forkJoin, Observable, of } from "rxjs";
-import { catchError, map, switchMap, tap } from "rxjs/operators";
+import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
 
 import {
     LongMeeting,
@@ -44,7 +44,7 @@ export class MeetingsRootService extends DestroyClass {
     private initData(): void {
         this.table.currentPageIndex$
             .pipe(
-                switchMap(() => this.refreshMeetings()),
+                switchMap(() => this.refreshMeetings$()),
                 this.untilDestroyed()
             )
             .subscribe();
@@ -52,7 +52,7 @@ export class MeetingsRootService extends DestroyClass {
         this.splitView.currentId$
             .pipe(
                 switchMap((id: number | null) =>
-                    this.refreshCurrentMeeting(id).pipe(
+                    this.refreshCurrentMeeting$(id).pipe(
                         tap((meeting) => {
                             this.currentMeeting = meeting;
                         })
@@ -104,43 +104,50 @@ export class MeetingsRootService extends DestroyClass {
     }
 
     public openNewMeetingDialog(): void {
-        const dialog = this.dialog.open(MeetingPopupComponent, {
-            width: "50vw",
-            disableClose: true,
-            data: null,
-        });
-
-        dialog
+        this.openDialog(null)
             .afterClosed()
             .pipe(
-                switchMap(() => this.refreshMeetings()),
+                switchMap((result: boolean) => {
+                    if (result) return this.refreshMeetings$();
+                    return of(null);
+                }),
                 this.untilDestroyed()
             )
             .subscribe();
     }
 
     public openEditMeetingDialog(): void {
-        const dialog = this.dialog.open(MeetingPopupComponent, {
-            width: "50vw",
-            disableClose: true,
-            data: this.currentMeeting,
-        });
-
-        dialog
+        this.openDialog(this.currentMeeting)
             .afterClosed()
             .pipe(
-                switchMap(() =>
-                    forkJoin([
-                        this.refreshMeetings(),
-                        this.refreshCurrentMeeting(this.splitView.currentId),
-                    ]).pipe(catchError(() => of(null)))
-                ),
+                filter((result) => result === true),
+                switchMap((result: boolean) => {
+                    if (result) {
+                        return forkJoin([
+                            this.refreshMeetings$(),
+                            this.refreshCurrentMeeting$(
+                                this.splitView.currentId
+                            ),
+                        ]).pipe(catchError(() => of(null)));
+                    }
+                    return of(null);
+                }),
                 this.untilDestroyed()
             )
             .subscribe();
     }
 
-    private refreshMeetings(): Observable<LongMeeting[]> {
+    private openDialog(
+        dialogData: Meeting | null
+    ): MatDialogRef<MeetingPopupComponent> {
+        return this.dialog.open(MeetingPopupComponent, {
+            width: "50vw",
+            disableClose: true,
+            data: dialogData,
+        });
+    }
+
+    private refreshMeetings$(): Observable<LongMeeting[]> {
         return this.table
             .getCurrentPage(
                 this.http.getMeetingsList(
@@ -156,7 +163,7 @@ export class MeetingsRootService extends DestroyClass {
             );
     }
 
-    private refreshCurrentMeeting(
+    private refreshCurrentMeeting$(
         id: number | null
     ): Observable<Meeting | null> {
         if (id !== null) {

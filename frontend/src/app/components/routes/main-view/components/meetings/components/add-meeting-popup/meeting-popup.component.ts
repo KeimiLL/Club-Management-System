@@ -51,8 +51,6 @@ export class MeetingPopupComponent implements OnInit {
 
     protected currentUser: ShortUser;
 
-    protected readonly minDate = new Date();
-
     protected allAttendees$: Observable<ShortUser[]>;
     protected selectedAttendees$: Observable<ShortUser[]>;
     protected filteredAttendees$: Observable<ShortUser[]>;
@@ -93,8 +91,8 @@ export class MeetingPopupComponent implements OnInit {
     }
 
     protected isButtonDisabled(): boolean {
-        if (this.isEditMode) return !this.meetingForm.dirty;
-        return this.meetingForm.invalid;
+        if (!this.isEditMode) return this.meetingForm.invalid;
+        return false;
     }
 
     protected onSubmit(): void {
