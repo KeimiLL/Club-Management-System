@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 
+import { MarkupComponent } from "../../../../../shared/components/markup/markup.component";
 import {
     LongMeeting,
     Meeting,
@@ -27,6 +28,7 @@ import { MeetingsRootService } from "./services/meetings-root.service";
         LegendComponent,
         MeetingTableComponent,
         CurrentMeetingContentComponent,
+        MarkupComponent,
     ],
     templateUrl: "./meetings.component.html",
     styleUrls: ["./meetings.component.scss"],

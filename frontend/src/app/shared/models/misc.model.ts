@@ -21,3 +21,7 @@ export enum MainRoutes {
     Auth = "auth",
     Error = "error",
 }
+
+export interface CustomToolbar {
+    items: string[];
+}

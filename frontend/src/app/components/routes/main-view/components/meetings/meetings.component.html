@@ -25,6 +25,8 @@
                 [data]="vm.isDetail ? vm.shortMeetings : vm.longMeetings"
             ></app-meeting-table>
         </ng-container>
+
+        <app-markup></app-markup>
     </app-content-card>
 
     <app-content-card *ngIf="vm.isDetail">

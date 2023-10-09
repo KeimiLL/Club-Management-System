@@ -1,0 +1,25 @@
+<div class="editor">
+    <ejs-richtexteditor #textEditor [toolbarSettings]="customToolbar">
+        <ng-template #valueTemplate>
+            <p>
+                Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+                Lorem ipsum Lorem ipsum
+            </p>
+            <p>
+                <b
+                    >Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem
+                    ipsum</b
+                >
+            </p>
+            <p>
+                Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+                Lorem ipsum Lorem ipsum
+            </p>
+            <p>
+                Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
+                Lorem ipsum Lorem ipsum
+            </p>
+        </ng-template>
+    </ejs-richtexteditor>
+    <button class="editor__save-button" (click)="getContent()">Save</button>
+</div>
