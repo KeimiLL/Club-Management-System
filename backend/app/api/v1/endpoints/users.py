@@ -15,12 +15,19 @@ from app.crud.crud_user import (
     create_new_user,
     get_all_users,
     get_user_by_email,
+    update_user_password,
     update_user_role,
 )
 from app.db.session import get_db
 from app.schemas.enums import HTTPResponseMessage, Roles
 from app.schemas.misc import Message, MessageFromEnum
-from app.schemas.user import User, UserCreate, UserLogin, UserOnlyBaseInfo
+from app.schemas.user import (
+    User,
+    UserCreate,
+    UserLogin,
+    UserOnlyBaseInfo,
+    UserUpdatePassword,
+)
 from fastapi import APIRouter, Depends, Path, Response, status
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -182,7 +189,7 @@ def get_users(
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def update_meeting(
+def change_user_role(
     user_id: Annotated[int, Path(ge=1, le=10**7)],
     role: Roles,
     current_user: Annotated[User, Depends(get_user_from_token)],
@@ -206,5 +213,62 @@ def update_meeting(
     """
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
         update_user_role(user_id=user_id, role=role, db=db)
+        return Message(message=HTTPResponseMessage.SUCCESS)
+    raise ForbiddenException("user")
+
+
+@router.put(
+    "/{user_id}/password",
+    response_model=MessageFromEnum,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def change_user_password(
+    user_id: Annotated[int, Path(ge=1, le=10**7)],
+    password_data: UserUpdatePassword,
+    current_user: Annotated[User, Depends(get_user_from_token)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Updates meeting data with the given data.
+
+    Args:
+        user_id (Annotated[int, Path]): The requested user id. Has to be greater than
+            or equal to 1 and less than or equal to 10**7.
+        password_data (UserUpdatePassword): User password data to be validated and set.
+        current_user (Annotated[User, Depends]): Current user read from access token.
+            Defaults to Depends(get_user_from_token).
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+     Raises:
+        ForbiddenException: If the current user does not have sufficient permissions.
+
+    Returns:
+        Message: The response signalling a successful operation.
+    """
+    if current_user.role == Roles.ADMIN and current_user.id != user_id:
+        update_user_password(
+            user_id=user_id,
+            new_hashed_password=Hasher.get_password_hash(password_data.new_password),
+            db=db,
+        )
+        return Message(message=HTTPResponseMessage.SUCCESS)
+    if (
+        current_user.id == user_id
+        and password_data.old_password
+        and Hasher.verify_password(
+            password_data.old_password,
+            new_hashed_password := Hasher.get_password_hash(password_data.new_password),
+        )
+    ):
+        update_user_password(
+            user_id=user_id,
+            new_hashed_password=new_hashed_password,
+            db=db,
+        )
         return Message(message=HTTPResponseMessage.SUCCESS)
     raise ForbiddenException("user")

@@ -8,6 +8,7 @@ from app.crud.crud_user import (
     get_all_users,
     get_user_by_email,
     get_user_by_id,
+    update_user_password,
     update_user_role,
 )
 from app.schemas.enums import Roles
@@ -189,7 +190,7 @@ def test_correct__update_user_role(
     roles: list[Roles],
     db_session: Session,
 ) -> None:
-    """Tests getting all users.
+    """Tests updating user role.
 
     Args:
         users (list[UserCreate | UserCreateWithRole]): Users to be created and read.
@@ -201,3 +202,32 @@ def test_correct__update_user_role(
         updated_user = update_user_role(index + 1, role, db_session)
         assert updated_user.full_name == user.full_name
         assert updated_user.role == role
+
+
+@pytest.mark.parametrize(
+    "users,passwords",
+    [
+        ([user_create_unique_1], ["CZ!T7WA9zWY8Wq2@"]),
+        (
+            [user_create_unique_2, user_create_with_role],
+            ["Pqc3utP*L4i@V89j", "8rwuwKz9%AX%7zzA"],
+        ),
+    ],
+)
+def test_correct__update_user_password(
+    users: list[UserCreate | UserCreateWithRole],
+    passwords: list[str],
+    db_session: Session,
+) -> None:
+    """Tests updating user password.
+
+    Args:
+        users (list[UserCreate | UserCreateWithRole]): Users to be created and read.
+        passwords (list[str]): Users' passwords to be set.
+        db_session (Session): Database session.
+    """
+    for index, (user, password) in enumerate(zip(users, passwords)):
+        create_new_user(user, db_session)
+        updated_user = update_user_password(index + 1, password, db_session)
+        assert updated_user.full_name == user.full_name
+        assert updated_user.hashed_password == password
