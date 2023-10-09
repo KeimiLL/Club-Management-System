@@ -8,6 +8,7 @@ from app.crud.crud_user import (
     get_all_users,
     get_user_by_email,
     get_user_by_id,
+    update_user_role,
 )
 from app.schemas.enums import Roles
 from app.schemas.user import UserCreate, UserCreateWithRole
@@ -174,3 +175,29 @@ def test_correct__get_all_users(
     assert all(
         (user.email == new_user.email for user, new_user in zip(users, new_users))
     )
+
+
+@pytest.mark.parametrize(
+    "users,roles",
+    [
+        ([user_create_unique_1], [Roles.ADMIN]),
+        ([user_create_unique_2, user_create_with_role], [Roles.BOARD, Roles.COACH]),
+    ],
+)
+def test_correct__update_user_role(
+    users: list[UserCreate | UserCreateWithRole],
+    roles: list[Roles],
+    db_session: Session,
+) -> None:
+    """Tests getting all users.
+
+    Args:
+        users (list[UserCreate | UserCreateWithRole]): Users to be created and read.
+        roles (list[Roles]): Users' roles to be set.
+        db_session (Session): Database session.
+    """
+    for index, (user, role) in enumerate(zip(users, roles)):
+        create_new_user(user, db_session)
+        updated_user = update_user_role(index + 1, role, db_session)
+        assert updated_user.full_name == user.full_name
+        assert updated_user.role == role
