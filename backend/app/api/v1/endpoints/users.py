@@ -4,15 +4,24 @@
 from typing import Annotated
 
 from app.api.dependencies import get_user_from_token, refresh_token_dependency
-from app.core.exceptions import InvalidCredentialsException, MissingException
+from app.core.exceptions import (
+    ForbiddenException,
+    InvalidCredentialsException,
+    MissingException,
+)
 from app.core.jwt_utils import create_access_token, create_refresh_token
 from app.core.security import Hasher
-from app.crud.crud_user import create_new_user, get_all_users, get_user_by_email
+from app.crud.crud_user import (
+    create_new_user,
+    get_all_users,
+    get_user_by_email,
+    update_user_role,
+)
 from app.db.session import get_db
-from app.schemas.enums import HTTPResponseMessage
+from app.schemas.enums import HTTPResponseMessage, Roles
 from app.schemas.misc import Message, MessageFromEnum
 from app.schemas.user import User, UserCreate, UserLogin, UserOnlyBaseInfo
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, Depends, Path, Response, status
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -21,7 +30,7 @@ router = APIRouter()
 
 @router.post(
     "/register",
-    response_model=Message,
+    response_model=MessageFromEnum,
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
@@ -93,7 +102,7 @@ def login(
 
 @router.post(
     "/logout",
-    response_model=Message,
+    response_model=MessageFromEnum,
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
     },
@@ -160,3 +169,42 @@ def get_users(
         list[UserOnlyBaseInfo]: The list of all users.
     """
     return get_all_users(db=db)
+
+
+@router.put(
+    "/{user_id}/role",
+    response_model=MessageFromEnum,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def update_meeting(
+    user_id: Annotated[int, Path(ge=1, le=10**7)],
+    role: Roles,
+    current_user: Annotated[User, Depends(get_user_from_token)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Updates meeting data with the given data.
+
+    Args:
+        user_id (Annotated[int, Path]): The requested user id. Has to be greater than
+            or equal to 1 and less than or equal to 10**7.
+        role (Roles): User role to be set.
+        current_user (Annotated[User, Depends]): Current user read from access token.
+            Defaults to Depends(get_user_from_token).
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+     Raises:
+        ForbiddenException: If the current user does not have sufficient permissions.
+
+    Returns:
+        Message: The response signalling a successful operation.
+    """
+    if current_user.role in (Roles.ADMIN, Roles.BOARD):
+        update_user_role(user_id=user_id, role=role, db=db)
+        return Message(message=HTTPResponseMessage.SUCCESS)
+    raise ForbiddenException("user")
