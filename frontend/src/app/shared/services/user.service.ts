@@ -3,7 +3,13 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { BackendResponse } from "../models/misc.model";
-import { ShortUser, User, UserCreate, UserLogin } from "../models/user.model";
+import {
+    Roles,
+    ShortUser,
+    User,
+    UserCreate,
+    UserLogin,
+} from "../models/user.model";
 
 @Injectable({
     providedIn: "root",
@@ -34,5 +40,15 @@ export class UserService {
 
     public getAllUsers(): Observable<ShortUser[]> {
         return this.http.get<ShortUser[]>("api/v1/users/filtered");
+    }
+
+    public updateRole(
+        userId: number,
+        role: Roles
+    ): Observable<BackendResponse> {
+        return this.http.put<BackendResponse>(
+            `api/v1/users/${userId}?roler=${role}`,
+            {}
+        );
     }
 }
