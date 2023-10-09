@@ -97,3 +97,28 @@ class UserOnlyBaseInfo(BaseModel):
     id: int = Field(..., ge=1, le=10**7)
     full_name: str = Field(..., min_length=4)
     role: Roles
+
+
+class UserUpdatePassword(BaseModel):
+    """User schema for updating user's password."""
+
+    old_password: str | None = Field(None, min_length=8)
+    new_password: str = Field(..., min_length=8)
+
+    @field_validator("old_password", "new_password")
+    @classmethod
+    def cannot_contain_null_bytes(cls, value: str) -> str:
+        """Password field validator to check for NULL bytes.
+
+        Args:
+            value (str): The field value.
+
+        Raises:
+            ValueError: If the password string contains NULL bytes.
+
+        Returns:
+            str: The field value
+        """
+        if "\x00" in value:
+            raise ValueError("The password cannot contain NULL bytes.")
+        return value
