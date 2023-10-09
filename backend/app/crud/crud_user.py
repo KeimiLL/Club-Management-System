@@ -131,3 +131,30 @@ def update_user_role(user_id: int, role: Roles, db: Session) -> User:
         raise MissingException(User.__name__) from exc
     except SQLAlchemyError as exc:
         raise exc
+
+
+def update_user_password(user_id: int, new_hashed_password: str, db: Session) -> User:
+    """Selects the user with the given id and update its role.
+
+    Args:
+        user_id (int): User id.
+        new_hashed_password (str): User hashed password to be set.
+        db (Session): Database session.
+
+    Raises:
+        MissingException: If no user matches the given id.
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        User: The updated user.
+    """
+    try:
+        query = select(User).where(User.id == user_id)
+        user = db.execute(query).scalar_one()
+        user.hashed_password = new_hashed_password
+        db.commit()
+        return user
+    except NoResultFound as exc:
+        raise MissingException(User.__name__) from exc
+    except SQLAlchemyError as exc:
+        raise exc
