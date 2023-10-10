@@ -52,11 +52,7 @@ export class MeetingsRootService extends DestroyClass {
         this.splitView.currentId$
             .pipe(
                 switchMap((id: number | null) =>
-                    this.refreshCurrentMeeting$(id).pipe(
-                        tap((meeting) => {
-                            this.currentMeeting = meeting;
-                        })
-                    )
+                    this.refreshCurrentMeeting$(id)
                 ),
                 this.untilDestroyed()
             )
@@ -168,6 +164,9 @@ export class MeetingsRootService extends DestroyClass {
     ): Observable<Meeting | null> {
         if (id !== null) {
             return this.http.getMeetingsById(id).pipe(
+                tap((meeting) => {
+                    this.currentMeeting = meeting;
+                }),
                 catchError((error) => {
                     if (error.status === 404) {
                         this.splitView.changeDetailState();
