@@ -2,10 +2,12 @@ import { Injectable } from "@angular/core";
 import { FormArray, FormControl, Validators } from "@angular/forms";
 import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
 
+import { SnackbarMessages } from "../../../../../../../shared/models/messages.model";
 import {
     Roles,
     UserForAdmin,
 } from "../../../../../../../shared/models/user.model";
+import { SnackbarService } from "../../../../../../../shared/services/snackbar.service";
 import { TableService } from "../../../../../../../shared/services/table.service";
 import { UserService } from "../../../../../../../shared/services/user.service";
 import { DestroyClass } from "../../../../../../../shared/utils/destroyClass";
@@ -20,7 +22,8 @@ export class SettingsModifyRootService extends DestroyClass {
 
     constructor(
         private readonly userService: UserService,
-        private readonly table: TableService<UserForAdmin>
+        private readonly table: TableService<UserForAdmin>,
+        private readonly snack: SnackbarService
     ) {
         super();
         this.initData();
@@ -39,6 +42,9 @@ export class SettingsModifyRootService extends DestroyClass {
             .updateRole(id, role)
             .pipe(
                 switchMap(() => this.refreshUsers$()),
+                tap(() => {
+                    this.snack.showSnackBar(SnackbarMessages.ROLE_CHANGED);
+                }),
                 this.untilDestroyed()
             )
             .subscribe();
