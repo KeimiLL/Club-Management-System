@@ -1,0 +1,10 @@
+@import "../../../../../../../../../../styles/component-styles/components";
+@import "../../../../../../../../../../styles/variables";
+
+:host {
+    width: 100%;
+    .no-records {
+        font-size: $large-font;
+        margin: $medium-spacing auto;
+    }
+}
