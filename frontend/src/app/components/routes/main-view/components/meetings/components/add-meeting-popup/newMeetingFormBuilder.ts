@@ -1,5 +1,6 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
+import { Meeting } from "../../../../../../../shared/models/meetings.model";
 import { formatDateFromInputForBackend } from "../../../../../../../shared/utils/dateHelpers";
 
 export interface NewMeetingFormGroup {
@@ -14,10 +15,10 @@ interface MeetingControls {
 }
 
 export const newMeetingDataFormBuilder = {
-    buildFormGroup: (): FormGroup<NewMeetingFormGroup> =>
+    buildFormGroup: (meeting: Meeting | null): FormGroup<NewMeetingFormGroup> =>
         new FormGroup<NewMeetingFormGroup>({
             meeting: new FormGroup<MeetingControls>({
-                name: new FormControl<string>("", {
+                name: new FormControl<string>(meeting?.name ?? "", {
                     nonNullable: true,
                     validators: [
                         Validators.required,
@@ -26,14 +27,19 @@ export const newMeetingDataFormBuilder = {
                     ],
                 }),
                 date: new FormControl<string>(
-                    formatDateFromInputForBackend(new Date()),
+                    meeting?.date ?? formatDateFromInputForBackend(new Date()),
                     { nonNullable: true, validators: Validators.required }
                 ),
-                notes: new FormControl<string | null>(null),
+                notes: new FormControl<string | null>(meeting?.notes ?? null, {
+                    nonNullable: false,
+                }),
             }),
-            user_ids: new FormControl<number[]>([], {
-                nonNullable: true,
-                validators: Validators.required,
-            }),
+            user_ids: new FormControl<number[]>(
+                meeting?.users.map((user) => user.id) ?? [],
+                {
+                    nonNullable: true,
+                    validators: Validators.required,
+                }
+            ),
         }),
 };

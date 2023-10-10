@@ -14,4 +14,8 @@ export class MeetingsPopupHttpService {
     public postNewMeeting(meeting: NewMeeting): Observable<Meeting> {
         return this.http.post<Meeting>("api/v1/meetings", meeting);
     }
+
+    public editMeeting(meeting: NewMeeting, id: number): Observable<Meeting> {
+        return this.http.put<Meeting>(`api/v1/meetings/${id}`, meeting);
+    }
 }

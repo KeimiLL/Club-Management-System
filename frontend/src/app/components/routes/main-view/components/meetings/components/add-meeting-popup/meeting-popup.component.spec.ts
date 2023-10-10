@@ -6,11 +6,11 @@ import { of } from "rxjs";
 
 import { Roles } from "../../../../../../../shared/models/user.model";
 import { UserService } from "../../../../../../../shared/services/user.service";
-import { AddMeetingPopupComponent } from "./add-meeting-popup.component";
+import { MeetingPopupComponent } from "./meeting-popup.component";
 
-describe("AddMeetingPopupComponent", () => {
-    let component: AddMeetingPopupComponent;
-    let fixture: ComponentFixture<AddMeetingPopupComponent>;
+describe("MeetingPopupComponent", () => {
+    let component: MeetingPopupComponent;
+    let fixture: ComponentFixture<MeetingPopupComponent>;
 
     const userServiceMock = {
         currentUser: {
@@ -26,7 +26,7 @@ describe("AddMeetingPopupComponent", () => {
         TestBed.configureTestingModule({
             imports: [
                 HttpClientTestingModule,
-                AddMeetingPopupComponent,
+                MeetingPopupComponent,
                 MatSnackBarModule,
             ],
             providers: [
@@ -35,7 +35,7 @@ describe("AddMeetingPopupComponent", () => {
                 { provide: MatDialogRef, useValue: {} },
             ],
         });
-        fixture = TestBed.createComponent(AddMeetingPopupComponent);
+        fixture = TestBed.createComponent(MeetingPopupComponent);
         component = fixture.componentInstance;
     });
 

@@ -13,16 +13,18 @@ import { Observable } from "rxjs";
 
 import { PermissionBackgroundColorDirective } from "../../../../../../../shared/directives/permission-background-color.directive";
 import { PermissionColorDirective } from "../../../../../../../shared/directives/permission-color.directive";
+import { Meeting } from "../../../../../../../shared/models/meetings.model";
 import { ShortUser } from "../../../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { UserService } from "../../../../../../../shared/services/user.service";
 import { NewMeetingFormGroup } from "./newMeetingFormBuilder";
-import { MeetingsPopupService } from "./services/meetings-popup.service";
+import { MeetingsPopupActionsService } from "./services/meetings-popup-actions.service";
+import { MeetingsPopupFormService } from "./services/meetings-popup-form.service";
 import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service";
 
 @Component({
-    selector: "app-add-meeting-popup",
+    selector: "app-meeting-popup",
     standalone: true,
     imports: [
         CommonModule,
@@ -33,59 +35,68 @@ import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service
         PermissionColorDirective,
         PermissionBackgroundColorDirective,
     ],
-    templateUrl: "./add-meeting-popup.component.html",
-    styleUrls: ["./add-meeting-popup.component.scss"],
-    providers: [MeetingsPopupService, MeetingsPopupHttpService],
+    templateUrl: "./meeting-popup.component.html",
+    styleUrls: ["./meeting-popup.component.scss"],
+    providers: [
+        MeetingsPopupActionsService,
+        MeetingsPopupFormService,
+        MeetingsPopupHttpService,
+    ],
 })
-export class AddMeetingPopupComponent implements OnInit {
+export class MeetingPopupComponent implements OnInit {
+    protected isEditMode = false;
+
     protected meetingForm: FormGroup<NewMeetingFormGroup>;
     protected attendeeInputControl: FormControl<string | null>;
 
     protected currentUser: ShortUser;
-
-    protected readonly minDate = new Date();
 
     protected allAttendees$: Observable<ShortUser[]>;
     protected selectedAttendees$: Observable<ShortUser[]>;
     protected filteredAttendees$: Observable<ShortUser[]>;
 
     constructor(
-        private readonly root: MeetingsPopupService,
+        private readonly actions: MeetingsPopupActionsService,
+        private readonly forms: MeetingsPopupFormService,
         private readonly userService: UserService,
-        @Inject(MAT_DIALOG_DATA) public data: unknown
+        @Inject(MAT_DIALOG_DATA) public data: Meeting | null
     ) {
-        this.meetingForm = this.root.meetingForm;
-        this.attendeeInputControl = this.root.attendeeInputControl;
+        this.forms.initData(data);
+        this.meetingForm = this.forms.meetingForm;
+        this.attendeeInputControl = this.forms.attendeeInputControl;
     }
 
     ngOnInit(): void {
+        this.isEditMode = this.forms.isEditMode;
         this.currentUser = this.userService.currentUser as ShortUser;
-        this.allAttendees$ = this.root.allAttendees$;
-        this.filteredAttendees$ = this.root.filteredAttendees$;
-        this.selectedAttendees$ = this.root.selectedAttendees$;
+        this.allAttendees$ = this.forms.allAttendees$;
+        this.filteredAttendees$ = this.forms.filteredAttendees$;
+        this.selectedAttendees$ = this.forms.selectedAttendees$;
     }
 
     protected onCloseClick(): void {
-        this.root.closePopup();
+        this.actions.closePopup(false);
     }
 
     protected onDateChange(event: MatDatepickerInputEvent<Date>): void {
-        this.root.setDateInMeetingForm(event.value as Date);
+        this.forms.setDateInMeetingForm(event.value as Date);
     }
 
     protected onOptionSelected(event: MatAutocompleteSelectedEvent): void {
-        this.root.addAttendeeToSelectedList(event.option.value);
+        this.forms.addAttendeeToSelectedList(event.option.value);
     }
 
     protected removeAttendee(attendee: ShortUser): void {
-        this.root.removeAttendeeFromSelectedList(attendee);
+        this.forms.removeAttendeeFromSelectedList(attendee);
     }
 
     protected isButtonDisabled(): boolean {
-        return this.meetingForm.invalid;
+        if (!this.isEditMode) return this.meetingForm.invalid;
+        return false;
     }
 
     protected onSubmit(): void {
-        this.root.createNewMeeting();
+        if (this.isEditMode) this.actions.editMeeting();
+        else this.actions.createNewMeeting();
     }
 }

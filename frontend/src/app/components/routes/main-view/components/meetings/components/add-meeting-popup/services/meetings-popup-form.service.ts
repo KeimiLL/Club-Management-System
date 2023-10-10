@@ -1,58 +1,65 @@
 import { Injectable } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { MatDialogRef } from "@angular/material/dialog";
 import {
     BehaviorSubject,
-    catchError,
     combineLatest,
     map,
     Observable,
-    of,
     startWith,
     tap,
 } from "rxjs";
 
-import { NewMeeting } from "../../../../../../../../shared/models/meetings.model";
-import { SnackbarMessages } from "../../../../../../../../shared/models/messages.model";
 import { ShortUser } from "../../../../../../../../shared/models/user.model";
-import { SnackbarService } from "../../../../../../../../shared/services/snackbar.service";
 import { UserService } from "../../../../../../../../shared/services/user.service";
 import { formatDateFromInputForBackend } from "../../../../../../../../shared/utils/dateHelpers";
 import { DestroyClass } from "../../../../../../../../shared/utils/destroyClass";
-import { AddMeetingPopupComponent } from "../add-meeting-popup.component";
 import {
     newMeetingDataFormBuilder,
     NewMeetingFormGroup,
 } from "../newMeetingFormBuilder";
-import { MeetingsPopupHttpService } from "./meetings-popup-http.service";
+import {
+    Meeting,
+    NewMeeting,
+} from "./../../../../../../../../shared/models/meetings.model";
 
 @Injectable()
-export class MeetingsPopupService extends DestroyClass {
+export class MeetingsPopupFormService extends DestroyClass {
     public meetingForm: FormGroup<NewMeetingFormGroup>;
     public attendeeInputControl = new FormControl<string>("");
+
+    public meetingData: Meeting;
+    public isEditMode = false;
 
     private readonly allAttendeesStore$ = new BehaviorSubject<ShortUser[]>([]);
     private readonly selectedAttendeesStore$ = new BehaviorSubject<ShortUser[]>(
         []
     );
 
-    constructor(
-        private readonly http: MeetingsPopupHttpService,
-        private readonly dialogRef: MatDialogRef<AddMeetingPopupComponent>,
-        private readonly userService: UserService,
-        private readonly snack: SnackbarService
-    ) {
+    constructor(private readonly userService: UserService) {
         super();
-        this.initData();
     }
 
-    private initData(): void {
-        this.meetingForm = newMeetingDataFormBuilder.buildFormGroup();
+    public initData(meetingData: Meeting | null): void {
+        this.meetingForm =
+            newMeetingDataFormBuilder.buildFormGroup(meetingData);
+
+        if (meetingData !== null) {
+            this.isEditMode = true;
+            this.meetingData = meetingData;
+        }
+
         this.userService
             .getAllUsers()
             .pipe(
                 tap((users) => {
                     this.allAttendees = users;
+                    if (meetingData !== null) {
+                        this.selectedAttendees = users.filter((user) =>
+                            meetingData.users.some(
+                                (dataUser) => dataUser.id === user.id
+                            )
+                        );
+                    }
                 }),
                 this.untilDestroyed()
             )
@@ -89,12 +96,25 @@ export class MeetingsPopupService extends DestroyClass {
         ]).pipe(
             map(([allAttendees, selectedAttendees, inputValue]) => {
                 const filterValue = inputValue ?? "";
-                return allAttendees.filter(
-                    (attendee) =>
+                return allAttendees.filter((attendee) => {
+                    if (this.isEditMode) {
+                        return (
+                            attendee.id !==
+                                this.meetingData.created_by_user.id &&
+                            !selectedAttendees.some(
+                                (a) => a.id === attendee.id
+                            ) &&
+                            attendee.full_name
+                                .toLowerCase()
+                                .includes(filterValue)
+                        );
+                    }
+                    return (
                         attendee.id !== this.userService.currentUser?.id &&
                         !selectedAttendees.some((a) => a.id === attendee.id) &&
                         attendee.full_name.toLowerCase().includes(filterValue)
-                );
+                    );
+                });
             })
         );
     }
@@ -122,27 +142,7 @@ export class MeetingsPopupService extends DestroyClass {
         );
     }
 
-    public createNewMeeting(): void {
-        const newMeeting = this.meetingForm.value as NewMeeting;
-
-        this.http
-            .postNewMeeting(newMeeting)
-            .pipe(
-                tap(() => {
-                    this.snack.showSnackBar(
-                        SnackbarMessages.MEETING_CREATE,
-                        "normal"
-                    );
-                }),
-                catchError(() => of(null)),
-                this.untilDestroyed()
-            )
-            .subscribe(() => {
-                this.closePopup();
-            });
-    }
-
-    public closePopup(): void {
-        this.dialogRef.close();
+    public getFormData(): NewMeeting {
+        return this.meetingForm.value as NewMeeting;
     }
 }

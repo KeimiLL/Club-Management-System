@@ -12,7 +12,7 @@
                 <button
                     mat-raised-button
                     class="button--light"
-                    (click)="openAddMeetingPopup()"
+                    (click)="onNewMeetingClick()"
                 >
                     Add Meeting
                 </button>
@@ -34,7 +34,11 @@
             (closedClicked)="switchDetail()"
         >
             <app-button-container buttons>
-                <button mat-raised-button class="button--light">
+                <button
+                    mat-raised-button
+                    class="button--light"
+                    (click)="onModifyMeetingClick()"
+                >
                     Modify Meeting
                 </button>
             </app-button-container>

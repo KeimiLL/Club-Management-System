@@ -2,7 +2,7 @@
     <mat-card class="card">
         <mat-card-header class="card__header">
             <app-half-card-right-header
-                name="New Meeting Creator"
+                [name]="isEditMode ? 'Edit Meeting' : 'Create new Meeting'"
                 (closedClicked)="onCloseClick()"
             >
                 <app-button-container buttons> </app-button-container>
@@ -40,7 +40,6 @@
                                         required
                                         readonly
                                         matInput
-                                        [min]="minDate"
                                         [matDatepicker]="picker"
                                         placeholder="Choose a date"
                                         (dateChange)="onDateChange($event)"
@@ -101,7 +100,12 @@
                                         [appPermissionBackgroundColor]
                                         [matTooltip]="'Creator'"
                                     >
-                                        {{ currentUser.full_name }}
+                                        {{
+                                            isEditMode
+                                                ? data?.created_by_user
+                                                      ?.full_name
+                                                : currentUser.full_name
+                                        }}
                                     </mat-chip>
                                     <mat-chip
                                         *ngFor="
@@ -149,7 +153,7 @@
                         class="button--light"
                         buttons
                     >
-                        Create
+                        {{ isEditMode ? "Edit Meeting" : "Create new Meeting" }}
                     </button>
                 </div>
             </form>

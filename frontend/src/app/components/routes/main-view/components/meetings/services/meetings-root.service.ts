@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { BehaviorSubject, Observable, of } from "rxjs";
-import { catchError, map, switchMap, tap } from "rxjs/operators";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { BehaviorSubject, forkJoin, Observable, of } from "rxjs";
+import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
 
 import {
     LongMeeting,
@@ -11,7 +11,7 @@ import {
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
 import { DestroyClass } from "../../../../../../shared/utils/destroyClass";
-import { AddMeetingPopupComponent } from "../components/add-meeting-popup/add-meeting-popup.component";
+import { MeetingPopupComponent } from "../components/add-meeting-popup/meeting-popup.component";
 import { longMeetingColumns, shortMeetingColumns } from "../meeting-table.data";
 import { MeetingsHttpService } from "./meetings-http.service";
 
@@ -44,30 +44,16 @@ export class MeetingsRootService extends DestroyClass {
     private initData(): void {
         this.table.currentPageIndex$
             .pipe(
-                switchMap(() => this.refreshMeetings()),
+                switchMap(() => this.refreshMeetings$()),
                 this.untilDestroyed()
             )
             .subscribe();
 
         this.splitView.currentId$
             .pipe(
-                switchMap((id: number | null) => {
-                    if (id !== null) {
-                        return this.getCurrentMeetingById(id).pipe(
-                            catchError((error) => {
-                                if (error.status === 404) {
-                                    this.splitView.changeDetailState();
-                                    return of(null);
-                                }
-                                return of(null);
-                            })
-                        );
-                    }
-                    return of(null);
-                }),
-                tap((meeting) => {
-                    this.currentMeeting = meeting;
-                }),
+                switchMap((id: number | null) =>
+                    this.refreshCurrentMeeting$(id)
+                ),
                 this.untilDestroyed()
             )
             .subscribe();
@@ -113,22 +99,51 @@ export class MeetingsRootService extends DestroyClass {
         return this.currentMeetingStore$.asObservable();
     }
 
-    public openDialog(): void {
-        const dialog = this.dialog.open(AddMeetingPopupComponent, {
-            width: "50vw",
-            disableClose: true,
-        });
-
-        dialog
+    public openNewMeetingDialog(): void {
+        this.openDialog(null)
             .afterClosed()
             .pipe(
-                switchMap(() => this.refreshMeetings()),
+                switchMap((result: boolean) => {
+                    if (result) return this.refreshMeetings$();
+                    return of(null);
+                }),
                 this.untilDestroyed()
             )
             .subscribe();
     }
 
-    private refreshMeetings(): Observable<LongMeeting[]> {
+    public openEditMeetingDialog(): void {
+        this.openDialog(this.currentMeeting)
+            .afterClosed()
+            .pipe(
+                filter((result) => result === true),
+                switchMap((result: boolean) => {
+                    if (result) {
+                        return forkJoin([
+                            this.refreshMeetings$(),
+                            this.refreshCurrentMeeting$(
+                                this.splitView.currentId
+                            ),
+                        ]).pipe(catchError(() => of(null)));
+                    }
+                    return of(null);
+                }),
+                this.untilDestroyed()
+            )
+            .subscribe();
+    }
+
+    private openDialog(
+        dialogData: Meeting | null
+    ): MatDialogRef<MeetingPopupComponent> {
+        return this.dialog.open(MeetingPopupComponent, {
+            width: "50vw",
+            disableClose: true,
+            data: dialogData,
+        });
+    }
+
+    private refreshMeetings$(): Observable<LongMeeting[]> {
         return this.table
             .getCurrentPage(
                 this.http.getMeetingsList(
@@ -144,14 +159,30 @@ export class MeetingsRootService extends DestroyClass {
             );
     }
 
+    private refreshCurrentMeeting$(
+        id: number | null
+    ): Observable<Meeting | null> {
+        if (id !== null) {
+            return this.http.getMeetingsById(id).pipe(
+                tap((meeting) => {
+                    this.currentMeeting = meeting;
+                }),
+                catchError((error) => {
+                    if (error.status === 404) {
+                        this.splitView.changeDetailState();
+                        return of(null);
+                    }
+                    return of(null);
+                })
+            );
+        }
+        return of(null);
+    }
+
     private minimizeLongMeetings(): void {
         this.shortMeetings = this.longMeetings.map((meeting) => {
             const { id, name, is_yours } = meeting;
             return { id, name, is_yours } as ShortMeeting;
         });
-    }
-
-    private getCurrentMeetingById(id: number): Observable<Meeting> {
-        return this.http.getMeetingsById(id);
     }
 }
