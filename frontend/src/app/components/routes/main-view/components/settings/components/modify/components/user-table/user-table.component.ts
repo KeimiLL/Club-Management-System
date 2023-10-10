@@ -9,6 +9,7 @@ import {
 import { FormArray, FormControl, ReactiveFormsModule } from "@angular/forms";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
+import { RouterModule } from "@angular/router";
 import { Observable } from "rxjs";
 
 import { PermissionBackgroundColorDirective } from "../../../../../../../../../shared/directives/permission-background-color.directive";
@@ -22,6 +23,7 @@ import { TableService } from "../../../../../../../../../shared/services/table.s
 import { SettingsRootService } from "../../../../services/settings-root.service";
 import { usersColumns } from "../../meeting-table.data";
 import { SettingsModifyRootService } from "../../settings-modify-root.service";
+import { UserService } from "./../../../../../../../../../shared/services/user.service";
 
 @Component({
     selector: "app-user-table",
@@ -32,6 +34,7 @@ import { SettingsModifyRootService } from "../../settings-modify-root.service";
         CardsModule,
         ReactiveFormsModule,
         PermissionBackgroundColorDirective,
+        RouterModule,
     ],
     templateUrl: "./user-table.component.html",
     styleUrls: ["./user-table.component.scss"],
@@ -41,6 +44,8 @@ export class UserTableComponent implements OnInit, AfterViewInit {
     @Input() set data(data: UserForAdmin[]) {
         this.dataSource.data = data;
     }
+
+    protected currentUserEmail: string;
 
     protected passwordFormArray: FormArray<FormControl<string>>;
     protected roles: string[];
@@ -53,7 +58,8 @@ export class UserTableComponent implements OnInit, AfterViewInit {
     constructor(
         private readonly table: TableService<UserForAdmin>,
         private readonly modifyRoot: SettingsModifyRootService,
-        private readonly root: SettingsRootService
+        private readonly root: SettingsRootService,
+        private readonly userService: UserService
     ) {
         this.passwordFormArray = this.modifyRoot.passwordFormArray;
     }
@@ -63,6 +69,9 @@ export class UserTableComponent implements OnInit, AfterViewInit {
         this.itemsPerPage = this.table.capacity;
         this.totalItems$ = this.table.totalItems$;
         this.displayedColumns = usersColumns;
+        if (this.userService.currentUser !== null) {
+            this.currentUserEmail = this.userService.currentUser.email;
+        }
     }
 
     ngAfterViewInit(): void {

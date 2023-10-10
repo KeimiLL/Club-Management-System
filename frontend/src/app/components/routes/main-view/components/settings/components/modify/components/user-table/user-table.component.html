@@ -16,6 +16,7 @@
         <mat-cell *matCellDef="let element">
             <button
                 mat-button
+                [disabled]="element.email === currentUserEmail"
                 [matMenuTriggerFor]="roleMenu"
                 [appPermissionBackgroundColor]="element.role"
             >
@@ -37,21 +38,33 @@
     <ng-container matColumnDef="Password">
         <mat-header-cell *matHeaderCellDef> Password </mat-header-cell>
         <mat-cell *matCellDef="let element; let i = index" class="cell">
-            <mat-form-field>
-                <input
-                    matInput
-                    [formControl]="passwordFormArray.at(i)"
-                    placeholder="New Password"
-                />
-            </mat-form-field>
-            <button
-                class="button--light button--table"
-                mat-raised-button
-                (click)="changePassword(element.id, i)"
-                [disabled]="passwordFormArray.at(i).invalid"
-            >
-                Change Password
-            </button>
+            <ng-container *ngIf="element.email !== currentUserEmail; else you">
+                <mat-form-field>
+                    <input
+                        matInput
+                        [disabled]="element.email === currentUserEmail"
+                        [formControl]="passwordFormArray.at(i)"
+                        placeholder="New Password"
+                    />
+                </mat-form-field>
+                <button
+                    class="button--light button--table"
+                    mat-raised-button
+                    (click)="changePassword(element.id, i)"
+                    [disabled]="passwordFormArray.at(i).invalid"
+                >
+                    Change Password
+                </button>
+            </ng-container>
+            <ng-template #you>
+                <a
+                    class="link"
+                    routerLinkActive="active"
+                    [routerLink]="['./../general']"
+                >
+                    <span class="link-text"> Go to General </span>
+                </a>
+            </ng-template>
         </mat-cell>
     </ng-container>
 

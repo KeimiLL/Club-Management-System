@@ -15,4 +15,18 @@
     .button--table {
         width: 40%;
     }
+
+    .link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        text-decoration: none;
+        font-size: $normal-font;
+        font-weight: $bold-weight;
+        &-text {
+            cursor: pointer;
+            color: $black;
+        }
+    }
 }
