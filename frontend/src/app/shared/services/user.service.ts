@@ -57,10 +57,9 @@ export class UserService {
         userId: number,
         role: Roles
     ): Observable<BackendResponse> {
-        return this.http.put<BackendResponse>(
-            `api/v1/users/${userId}/role?role=${role}`,
-            {}
-        );
+        return this.http.put<BackendResponse>(`api/v1/users/${userId}/role`, {
+            role,
+        });
     }
 
     public changePassword(

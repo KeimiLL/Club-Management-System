@@ -11,8 +11,8 @@ class Roles(str, Enum):
     BOARD = "board"
     COACH = "coach"
     PLAYER = "player"
+    MEDIC = "medic"
     VIEWER = "viewer"
-    NONE = "none"
 
 
 class HTTPResponseMessage(str, Enum):
