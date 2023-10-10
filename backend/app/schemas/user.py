@@ -100,7 +100,7 @@ class UserOnlyBaseInfo(BaseModel):
 
 
 class UserUpdateRole(BaseModel):
-    """User schema for updating user's password."""
+    """User schema for updating user's role."""
 
     role: Roles
 

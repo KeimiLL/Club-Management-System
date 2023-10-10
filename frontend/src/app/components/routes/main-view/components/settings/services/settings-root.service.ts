@@ -26,10 +26,7 @@ export class SettingsRootService {
             .subscribe();
     }
 
-    public changeSelfPassword(
-        old_password: string,
-        new_password: string
-    ): void {
+    public changeOwnPassword(old_password: string, new_password: string): void {
         if (this.userService.currentUser !== null) {
             this.userService
                 .changePassword(this.userService.currentUser.id, {
