@@ -37,8 +37,8 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
 
     protected displayedColumns$: Observable<string[]>;
     protected totalItems$: Observable<number>;
-
     protected itemsPerPage: number;
+    protected index$: Observable<number>;
 
     protected readonly permissions = MeetingsPermission;
     protected dataSource: MatTableDataSource<LongMeeting | ShortMeeting> =
@@ -52,6 +52,7 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.itemsPerPage = this.table.capacity;
+        this.index$ = this.table.currentPageIndex$;
         this.totalItems$ = this.table.totalItems$;
         this.displayedColumns$ = this.root.displayedColumns$;
     }
