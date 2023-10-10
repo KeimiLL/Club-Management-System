@@ -157,7 +157,7 @@ def get_current_user(
 
 
 @router.get(
-    "",
+    "/all",
     response_model=list[UserOnlyBaseInfo],
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
