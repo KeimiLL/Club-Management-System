@@ -14,7 +14,7 @@ import { Observable } from "rxjs";
 import { PermissionBackgroundColorDirective } from "../../../../../../../../../shared/directives/permission-background-color.directive";
 import {
     Roles,
-    ShortUser,
+    UserForAdmin,
 } from "../../../../../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../../../shared/modules/material.module";
@@ -38,7 +38,7 @@ import { SettingsModifyRootService } from "../../settings-modify-root.service";
 })
 export class UserTableComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
-    @Input() set data(data: ShortUser[]) {
+    @Input() set data(data: UserForAdmin[]) {
         this.dataSource.data = data;
     }
 
@@ -47,11 +47,11 @@ export class UserTableComponent implements OnInit, AfterViewInit {
     protected displayedColumns: string[];
     protected totalItems$: Observable<number>;
     protected itemsPerPage: number;
-    protected dataSource: MatTableDataSource<ShortUser> =
-        new MatTableDataSource<ShortUser>();
+    protected dataSource: MatTableDataSource<UserForAdmin> =
+        new MatTableDataSource<UserForAdmin>();
 
     constructor(
-        private readonly table: TableService<ShortUser>,
+        private readonly table: TableService<UserForAdmin>,
         private readonly modifyRoot: SettingsModifyRootService,
         private readonly root: SettingsRootService
     ) {

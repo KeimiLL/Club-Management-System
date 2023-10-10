@@ -20,6 +20,10 @@ export interface ShortUser {
     role: Roles;
 }
 
+export interface UserForAdmin extends ShortUser {
+    email: string;
+}
+
 export interface ChangePassword {
     new_password: string;
     old_password: string | null;

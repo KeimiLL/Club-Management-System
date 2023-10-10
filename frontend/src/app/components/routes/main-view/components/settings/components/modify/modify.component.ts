@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { ShortUser } from "../../../../../../../shared/models/user.model";
+import { UserForAdmin } from "../../../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { TableService } from "../../../../../../../shared/services/table.service";
@@ -18,7 +18,7 @@ import { SettingsModifyRootService } from "./settings-modify-root.service";
     providers: [TableService, SettingsModifyRootService],
 })
 export class ModifyComponent implements OnInit {
-    protected users$: Observable<ShortUser[]>;
+    protected users$: Observable<UserForAdmin[]>;
 
     constructor(private readonly root: SettingsModifyRootService) {}
 

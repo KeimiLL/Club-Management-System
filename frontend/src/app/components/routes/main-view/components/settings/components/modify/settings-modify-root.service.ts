@@ -1,17 +1,18 @@
 import { Injectable } from "@angular/core";
 import { FormArray, FormControl, Validators } from "@angular/forms";
-import { BehaviorSubject, Observable, tap } from "rxjs";
+import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
 
 import {
     Roles,
-    ShortUser,
+    UserForAdmin,
 } from "../../../../../../../shared/models/user.model";
 import { TableService } from "../../../../../../../shared/services/table.service";
 import { UserService } from "../../../../../../../shared/services/user.service";
+import { DestroyClass } from "../../../../../../../shared/utils/destroyClass";
 
 @Injectable()
-export class SettingsModifyRootService {
-    private readonly usersStore$ = new BehaviorSubject<ShortUser[]>([]);
+export class SettingsModifyRootService extends DestroyClass {
+    private readonly usersStore$ = new BehaviorSubject<UserForAdmin[]>([]);
 
     public passwordFormArray: FormArray<FormControl<string>> = new FormArray<
         FormControl<string>
@@ -19,10 +20,47 @@ export class SettingsModifyRootService {
 
     constructor(
         private readonly userService: UserService,
-        private readonly table: TableService<ShortUser>
+        private readonly table: TableService<UserForAdmin>
     ) {
+        super();
+        this.initData();
+    }
+
+    public set users(users: UserForAdmin[]) {
+        this.usersStore$.next(users);
+    }
+
+    public get users$(): Observable<UserForAdmin[]> {
+        return this.usersStore$.asObservable();
+    }
+
+    public changeUserRole(id: number, role: Roles): void {
         this.userService
-            .getAllUsers()
+            .updateRole(id, role)
+            .pipe(
+                switchMap(() => this.refreshUsers$()),
+                this.untilDestroyed()
+            )
+            .subscribe();
+    }
+
+    private initData(): void {
+        this.table.currentPageIndex$
+            .pipe(
+                switchMap(() => this.refreshUsers$()),
+                this.untilDestroyed()
+            )
+            .subscribe();
+    }
+
+    private refreshUsers$(): Observable<UserForAdmin[]> {
+        return this.table
+            .getCurrentPage(
+                this.userService.getUsersWithPagination(
+                    this.table.currentPageIndex,
+                    this.table.capacity
+                )
+            )
             .pipe(
                 tap((users) => {
                     this.users = users;
@@ -39,35 +77,6 @@ export class SettingsModifyRootService {
                         );
                     });
                 })
-            )
-            .subscribe();
+            );
     }
-
-    public set users(users: ShortUser[]) {
-        this.usersStore$.next(users);
-    }
-
-    public get users$(): Observable<ShortUser[]> {
-        return this.usersStore$.asObservable();
-    }
-
-    public changeUserRole(id: number, role: Roles): void {
-        this.userService.updateRole(id, role).subscribe();
-    }
-
-    //   private refreshUsers$(): Observable<ShortUser[]> {
-    //     return this.table
-    //         .getCurrentPage(
-    //             this.http.getMeetingsList(
-    //                 this.table.currentPageIndex,
-    //                 this.table.capacity
-    //             )
-    //         )
-    //         .pipe(
-    //             tap((meetings) => {
-    //                 this.longMeetings = meetings;
-    //                 this.minimizeLongMeetings();
-    //             })
-    //         );
-    // }
 }

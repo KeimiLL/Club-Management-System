@@ -1,1 +1,1 @@
-export const usersColumns = ["Name", "Role", "Password"]; // Email
+export const usersColumns = ["Name", "Email", "Role", "Password"];

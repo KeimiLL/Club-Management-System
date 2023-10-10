@@ -2,13 +2,14 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { BackendResponse } from "../models/misc.model";
+import { BackendResponse, TableResponse } from "../models/misc.model";
 import {
     ChangePassword,
     Roles,
     ShortUser,
     User,
     UserCreate,
+    UserForAdmin,
     UserLogin,
 } from "../models/user.model";
 
@@ -40,7 +41,16 @@ export class UserService {
     }
 
     public getAllUsers(): Observable<ShortUser[]> {
-        return this.http.get<ShortUser[]>("api/v1/users/filtered");
+        return this.http.get<ShortUser[]>("api/v1/users/all");
+    }
+
+    public getUsersWithPagination(
+        page: number,
+        capacity: number
+    ): Observable<TableResponse<UserForAdmin>> {
+        return this.http.get<TableResponse<UserForAdmin>>(
+            `api/v1/users?page=${page}&per_page=${capacity}`
+        );
     }
 
     public updateRole(
