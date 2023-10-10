@@ -3,7 +3,7 @@
 
 from typing import Annotated
 
-from app.api.dependencies import get_user_from_token, refresh_token_dependency
+from app.api.dependencies import get_user_from_token, paginate, refresh_token_dependency
 from app.core.exceptions import (
     ForbiddenException,
     InvalidCredentialsException,
@@ -14,13 +14,14 @@ from app.core.security import Hasher
 from app.crud.crud_user import (
     create_new_user,
     get_all_users,
+    get_all_users_with_pagination,
     get_user_by_email,
     update_user_password,
     update_user_role,
 )
 from app.db.session import get_db
 from app.schemas.enums import HTTPResponseMessage, Roles
-from app.schemas.misc import Message, MessageFromEnum
+from app.schemas.misc import ItemsListWithTotal, Message, MessageFromEnum
 from app.schemas.user import (
     User,
     UserCreate,
@@ -272,3 +273,44 @@ def change_user_password(
         )
         return Message(message=HTTPResponseMessage.SUCCESS)
     raise ForbiddenException("user")
+
+
+@router.get(
+    "",
+    response_model=ItemsListWithTotal[User],
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def get_users_with_pagination(
+    pagination: Annotated[dict[str, int], Depends(paginate)],
+    current_user: Annotated[User, Depends(get_user_from_token)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Gets the list of all registered users.
+
+    Args:
+        pagination (Annotated[dict[str, int], Depends]): Pagination read from the query params.
+            Defaults to Depends(paginate).
+        current_user (Annotated[User, Depends]): Current user read from access token.
+            Defaults to Depends(get_user_from_token).
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+    Raises:
+        ForbiddenException: If the current user does not have sufficient permissions.
+
+    Returns:
+        ItemsListWithTotal[User]: A list of users alongside their total number.
+    """
+    if current_user.role == Roles.ADMIN:
+        users, total = get_all_users_with_pagination(
+            **pagination,
+            db=db,
+        )
+        return ItemsListWithTotal[User](
+            items=[User(**user.__dict__) for user in users], total=total
+        )
+    raise ForbiddenException("meeting")
