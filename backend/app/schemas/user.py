@@ -36,7 +36,7 @@ class UserLogin(UserBase):
             ValueError: If the password string contains NULL bytes.
 
         Returns:
-            str: The field value
+            str: The field value.
         """
         if "\x00" in value:
             raise ValueError("The password cannot contain NULL bytes.")
@@ -105,10 +105,30 @@ class UserUpdatePassword(BaseModel):
     old_password: str | None = Field(None, min_length=8)
     new_password: str = Field(..., min_length=8)
 
-    @field_validator("old_password", "new_password")
+    @field_validator("old_password")
     @classmethod
-    def cannot_contain_null_bytes(cls, value: str) -> str:
-        """Password field validator to check for NULL bytes.
+    def cannot_contain_null_bytes_old(cls, value: str | None) -> str | None:
+        """Old_password field validator to check for NULL bytes.
+
+        Args:
+            value (str | None): The field value.
+
+        Raises:
+            ValueError: If the password string contains NULL bytes.
+
+        Returns:
+            str | None: The field value.
+        """
+        if value is None:
+            return value
+        if "\x00" in value:
+            raise ValueError("The password cannot contain NULL bytes.")
+        return value
+
+    @field_validator("new_password")
+    @classmethod
+    def cannot_contain_null_bytes_new(cls, value: str) -> str:
+        """New_password field validator to check for NULL bytes.
 
         Args:
             value (str): The field value.
@@ -117,7 +137,7 @@ class UserUpdatePassword(BaseModel):
             ValueError: If the password string contains NULL bytes.
 
         Returns:
-            str: The field value
+            str: The field value.
         """
         if "\x00" in value:
             raise ValueError("The password cannot contain NULL bytes.")
