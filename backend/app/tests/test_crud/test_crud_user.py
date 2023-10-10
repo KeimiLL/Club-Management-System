@@ -6,6 +6,7 @@ from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_user import (
     create_new_user,
     get_all_users,
+    get_all_users_with_pagination,
     get_user_by_email,
     get_user_by_id,
     update_user_password,
@@ -231,3 +232,38 @@ def test_correct__update_user_password(
         updated_user = update_user_password(index + 1, password, db_session)
         assert updated_user.full_name == user.full_name
         assert updated_user.hashed_password == password
+
+
+@pytest.mark.parametrize(
+    "users,page,per_page,total",
+    [
+        ([user_create_with_role], 0, 1, 1),
+        ([user_create_with_role], 0, 1, 1),
+        ([user_create_with_role, user_create_unique_1], 0, 2, 2),
+        ([user_create_with_role, user_create_unique_1, user_create_unique_2], 1, 1, 3),
+        ([user_create_with_role, user_create_unique_1, user_create_unique_2], 1, 2, 3),
+        ([user_create_with_role, user_create_unique_1, user_create_unique_2], 2, 1, 3),
+    ],
+)
+def test_correct__get_all_users_with_pagination(
+    users: list[UserCreateWithRole | UserCreate],
+    page: int,
+    per_page: int,
+    total: int,
+    db_session: Session,
+) -> None:
+    """Tests getting all users with pagination.
+
+    Args:
+        users (list[UserCreateWithRole | UserCreate]): Users to be created.
+        page (int): The page index to be retrieved.
+        per_page (int): The number of items per page.
+        total (int): The total number of items.
+        db_session (Session): Database session.
+    """
+    new_users = [create_new_user(user, db_session) for user in users]
+    all_users, created_total = get_all_users_with_pagination(page, per_page, db_session)
+    assert total == created_total
+    for index, new_user in enumerate(reversed(new_users)):
+        if page * per_page <= index < page * per_page + per_page:
+            assert all_users[index - page * per_page] == new_user

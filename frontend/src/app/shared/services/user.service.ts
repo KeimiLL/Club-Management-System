@@ -33,6 +33,6 @@ export class UserService {
     }
 
     public getAllUsers(): Observable<ShortUser[]> {
-        return this.http.get<ShortUser[]>("api/v1/users");
+        return this.http.get<ShortUser[]>("api/v1/users/filtered");
     }
 }

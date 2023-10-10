@@ -1,16 +1,18 @@
 """File responsible for implementing users related CRUD operations."""
 
 
-from typing import Sequence
+from typing import Callable, Sequence
 
 from app.core.exceptions import DuplicateException, MissingException
 from app.core.security import Hasher
 from app.models.user import User
 from app.schemas.enums import Roles
 from app.schemas.user import UserCreate, UserCreateWithRole
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
+
+func: Callable
 
 
 def create_new_user(user: UserCreate | UserCreateWithRole, db: Session) -> User:
@@ -156,5 +158,36 @@ def update_user_password(user_id: int, new_hashed_password: str, db: Session) ->
         return user
     except NoResultFound as exc:
         raise MissingException(User.__name__) from exc
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def get_all_users_with_pagination(
+    page: int,
+    per_page: int,
+    db: Session,
+) -> tuple[Sequence[User], int]:
+    """Gets and optionally paginates all users.
+
+    Args:
+        page (int): The current page number.
+        per_page (int): The number of items per page.
+        db (Session): Database session.
+
+    Raises:
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        tuple[Sequence[User], int: The list of all meetings alongside the total number of them.
+    """
+    try:
+        query = select(User)
+        total = db.scalar(select(func.count()).select_from(query))
+        return (
+            db.scalars(
+                query.order_by(User.id.desc()).offset(page * per_page).limit(per_page)
+            ).all(),
+            total,
+        )
     except SQLAlchemyError as exc:
         raise exc
