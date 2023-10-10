@@ -85,9 +85,7 @@ def get_meetings(
         ItemsListWithTotal[MeetingTableView]: A list of meetings alongside their total number.
     """
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
-        meetings, total = get_all_meetings(
-            page=pagination["page"], per_page=pagination["per_page"], db=db
-        )
+        meetings, total = get_all_meetings(**pagination, db=db)
         return ItemsListWithTotal[MeetingTableView](
             items=[
                 MeetingTableView(
@@ -96,15 +94,14 @@ def get_meetings(
                     is_yours=(
                         current_user.id
                         in (meeting.user_id, *[user.id for user in meeting.users])
-                    )
+                    ),
                 )
                 for meeting in meetings
             ],
             total=total,
         )
     meetings, total = get_meetings_by_user_id(
-        page=pagination["page"],
-        per_page=pagination["per_page"],
+        **pagination,
         user_id=current_user.id,
         db=db,
     )
