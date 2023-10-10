@@ -1,7 +1,7 @@
 <mat-table #table [dataSource]="dataSource" class="table">
     <ng-container matColumnDef="Name">
         <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{ element.name }} </mat-cell>
+        <mat-cell *matCellDef="let element"> {{ element.full_name }} </mat-cell>
     </ng-container>
 
     <!-- <ng-container matColumnDef="Email">
@@ -14,22 +14,26 @@
     <ng-container matColumnDef="Role">
         <mat-header-cell *matHeaderCellDef> Role </mat-header-cell>
         <mat-cell *matCellDef="let element">
-            <mat-select
-                (selectionChange)="setSelectedRole(element.id, $event.value)"
-            >
-                <mat-option *ngFor="let role of roles" [value]="role">{{
-                    role
-                }}</mat-option>
-            </mat-select>
+            <button mat-button [matMenuTriggerFor]="roleMenu">
+                {{ element.role }}
+            </button>
+
+            <mat-menu #roleMenu="matMenu">
+                <button
+                    mat-menu-item
+                    *ngFor="let role of roles"
+                    (click)="setSelectedRole(element.id, role)"
+                >
+                    {{ role }}
+                </button>
+            </mat-menu>
         </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="Password">
         <mat-header-cell *matHeaderCellDef> Password </mat-header-cell>
         <mat-cell *matCellDef="let element" class="">
-            <mat-icon>
-                {{ element.password }}
-            </mat-icon>
+            <button>Change Password</button>
         </mat-cell>
     </ng-container>
 

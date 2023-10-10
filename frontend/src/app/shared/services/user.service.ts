@@ -47,7 +47,7 @@ export class UserService {
         role: Roles
     ): Observable<BackendResponse> {
         return this.http.put<BackendResponse>(
-            `api/v1/users/${userId}?roler=${role}`,
+            `api/v1/users/${userId}/role?role=${role}`,
             {}
         );
     }

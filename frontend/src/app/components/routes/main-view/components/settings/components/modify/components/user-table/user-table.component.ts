@@ -63,7 +63,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
         this.table.changePage(event.pageIndex);
     }
 
-    protected setSelectedRole(id: number, event: MatSelectChange): void {
-        this.root.changeUserRole(id, event.value);
+    protected setSelectedRole(id: number, role: string): void {
+        this.root.changeUserRole(id, role as Roles);
     }
 }
