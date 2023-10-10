@@ -1,6 +1,8 @@
 """File for miscellaneous schemas."""
 
 
+from typing import Generic, TypeVar
+
 from app.schemas.enums import HTTPResponseMessage
 from pydantic import BaseModel, NonNegativeInt
 
@@ -17,8 +19,11 @@ class MessageFromEnum(BaseModel):
     message: HTTPResponseMessage
 
 
-class ItemsListWithTotal(BaseModel):
+T = TypeVar("T")
+
+
+class ItemsListWithTotal(BaseModel, Generic[T]):
     """Class for returning a list of items alongside the total number of them."""
 
-    items: list
+    items: list[T]
     total: NonNegativeInt

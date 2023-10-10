@@ -108,7 +108,7 @@ def test_correct__get_all_meetings(
     total: int,
     db_session: Session,
 ) -> None:
-    """Tests getting all meetings.
+    """Tests getting all meetings with pagination.
 
     Args:
         user (UserCreate): User to be created.

@@ -59,7 +59,7 @@ def create_meeting(
 
 @router.get(
     "",
-    response_model=ItemsListWithTotal,
+    response_model=ItemsListWithTotal[MeetingTableView],
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
@@ -82,13 +82,13 @@ def get_meetings(
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Returns:
-        ItemsListWithTotal: A list of meetings alongside their total number.
+        ItemsListWithTotal[MeetingTableView]: A list of meetings alongside their total number.
     """
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
         meetings, total = get_all_meetings(
             page=pagination["page"], per_page=pagination["per_page"], db=db
         )
-        return ItemsListWithTotal(
+        return ItemsListWithTotal[MeetingTableView](
             items=[
                 MeetingTableView(
                     **meeting.__dict__,
