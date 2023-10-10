@@ -14,7 +14,11 @@
     <ng-container matColumnDef="Role">
         <mat-header-cell *matHeaderCellDef> Role </mat-header-cell>
         <mat-cell *matCellDef="let element">
-            <button mat-button [matMenuTriggerFor]="roleMenu">
+            <button
+                mat-button
+                [matMenuTriggerFor]="roleMenu"
+                [appPermissionBackgroundColor]="element.role"
+            >
                 {{ element.role }}
             </button>
 
@@ -32,8 +36,22 @@
 
     <ng-container matColumnDef="Password">
         <mat-header-cell *matHeaderCellDef> Password </mat-header-cell>
-        <mat-cell *matCellDef="let element" class="">
-            <button>Change Password</button>
+        <mat-cell *matCellDef="let element; let i = index" class="cell">
+            <mat-form-field>
+                <input
+                    matInput
+                    [formControl]="passwordFormArray.at(i)"
+                    placeholder="New Password"
+                />
+            </mat-form-field>
+            <button
+                class="button--light button--table"
+                mat-raised-button
+                (click)="changePassword(element.id, i)"
+                [disabled]="passwordFormArray.at(i).invalid"
+            >
+                Change Password
+            </button>
         </mat-cell>
     </ng-container>
 

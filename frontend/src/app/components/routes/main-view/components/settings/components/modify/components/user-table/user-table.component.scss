@@ -7,4 +7,12 @@
         font-size: $large-font;
         margin: $medium-spacing auto;
     }
+
+    .cell {
+        padding: 1px;
+    }
+
+    .button--table {
+        width: 40%;
+    }
 }

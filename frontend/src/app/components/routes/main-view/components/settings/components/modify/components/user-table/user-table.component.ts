@@ -6,11 +6,12 @@ import {
     OnInit,
     ViewChild,
 } from "@angular/core";
+import { FormArray, FormControl, ReactiveFormsModule } from "@angular/forms";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { MatSelectChange } from "@angular/material/select";
 import { MatTableDataSource } from "@angular/material/table";
 import { Observable } from "rxjs";
 
+import { PermissionBackgroundColorDirective } from "../../../../../../../../../shared/directives/permission-background-color.directive";
 import {
     Roles,
     ShortUser,
@@ -20,11 +21,18 @@ import { MaterialModule } from "../../../../../../../../../shared/modules/materi
 import { TableService } from "../../../../../../../../../shared/services/table.service";
 import { SettingsRootService } from "../../../../services/settings-root.service";
 import { usersColumns } from "../../meeting-table.data";
+import { SettingsModifyRootService } from "../../settings-modify-root.service";
 
 @Component({
     selector: "app-user-table",
     standalone: true,
-    imports: [CommonModule, MaterialModule, CardsModule],
+    imports: [
+        CommonModule,
+        MaterialModule,
+        CardsModule,
+        ReactiveFormsModule,
+        PermissionBackgroundColorDirective,
+    ],
     templateUrl: "./user-table.component.html",
     styleUrls: ["./user-table.component.scss"],
 })
@@ -34,6 +42,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
         this.dataSource.data = data;
     }
 
+    protected passwordFormArray: FormArray<FormControl<string>>;
     protected roles: string[];
     protected displayedColumns: string[];
     protected totalItems$: Observable<number>;
@@ -43,8 +52,11 @@ export class UserTableComponent implements OnInit, AfterViewInit {
 
     constructor(
         private readonly table: TableService<ShortUser>,
+        private readonly modifyRoot: SettingsModifyRootService,
         private readonly root: SettingsRootService
-    ) {}
+    ) {
+        this.passwordFormArray = this.modifyRoot.passwordFormArray;
+    }
 
     ngOnInit(): void {
         this.roles = Object.values(Roles);
@@ -64,6 +76,14 @@ export class UserTableComponent implements OnInit, AfterViewInit {
     }
 
     protected setSelectedRole(id: number, role: string): void {
-        this.root.changeUserRole(id, role as Roles);
+        this.modifyRoot.changeUserRole(id, role as Roles);
+    }
+
+    protected changePassword(userId: number, controlId: number): void {
+        this.root.changeUsersPassword(
+            userId,
+            this.passwordFormArray.controls[controlId].value
+        );
+        this.passwordFormArray.at(controlId).reset();
     }
 }

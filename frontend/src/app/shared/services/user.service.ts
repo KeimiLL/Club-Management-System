@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 
 import { BackendResponse } from "../models/misc.model";
 import {
+    ChangePassword,
     Roles,
     ShortUser,
     User,
@@ -49,6 +50,16 @@ export class UserService {
         return this.http.put<BackendResponse>(
             `api/v1/users/${userId}/role?role=${role}`,
             {}
+        );
+    }
+
+    public changePassword(
+        userId: number,
+        password: ChangePassword
+    ): Observable<BackendResponse> {
+        return this.http.put<BackendResponse>(
+            `api/v1/users/${userId}/password`,
+            password
         );
     }
 }
