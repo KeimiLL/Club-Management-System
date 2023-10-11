@@ -12,7 +12,10 @@ import { MatTableDataSource } from "@angular/material/table";
 import { Observable } from "rxjs";
 
 import { PermissionDirective } from "../../../../../../../shared/directives/permission.directive";
-import { TableMeeting } from "../../../../../../../shared/models/meetings.model";
+import {
+    Meeting,
+    TableMeeting,
+} from "../../../../../../../shared/models/meetings.model";
 import { MeetingsPermission } from "../../../../../../../shared/models/permission.model";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
@@ -43,7 +46,7 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
     protected readonly permissions = MeetingsPermission;
 
     constructor(
-        private readonly splitManager: SplitViewManagerService,
+        private readonly splitView: SplitViewManagerService<Meeting>,
         private readonly table: TableService<TableMeeting>,
         private readonly root: MeetingsRootService
     ) {}
@@ -62,7 +65,7 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
     }
 
     protected addParamsToURL(id: number): void {
-        this.splitManager.addParamsToRouting(id);
+        this.splitView.addParamsToRouting(id);
     }
 
     protected changePage(event: PageEvent): void {

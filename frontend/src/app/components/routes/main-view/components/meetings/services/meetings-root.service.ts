@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { BehaviorSubject, Observable, of } from "rxjs";
-import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { filter, map, tap } from "rxjs/operators";
 
 import {
     Meeting,
@@ -16,32 +16,16 @@ import { MeetingsHttpService } from "./meetings-http.service";
 
 @Injectable()
 export class MeetingsRootService extends DestroyClass {
-    private readonly currentMeetingStore$ = new BehaviorSubject<Meeting | null>(
-        null
-    );
-
     public displayedColumns$: Observable<string[]>;
 
     constructor(
         private readonly http: MeetingsHttpService,
         private readonly dialog: MatDialog,
         private readonly table: TableService<TableMeeting>,
-        private readonly splitView: SplitViewManagerService
+        private readonly splitView: SplitViewManagerService<Meeting>
     ) {
         super();
         this.initData();
-    }
-
-    public set currentMeeting(meeting: Meeting | null) {
-        this.currentMeetingStore$.next(meeting);
-    }
-
-    public get currentMeeting(): Meeting | null {
-        return this.currentMeetingStore$.value;
-    }
-
-    public get currentMeeting$(): Observable<Meeting | null> {
-        return this.currentMeetingStore$.asObservable();
     }
 
     private initData(): void {
@@ -56,9 +40,9 @@ export class MeetingsRootService extends DestroyClass {
 
         this.splitView.currentId$
             .pipe(
-                switchMap((id: number | null) =>
-                    this.refreshCurrentMeeting$(id)
-                ),
+                tap((id: number | null) => {
+                    this.refreshCurrentMeeting(id);
+                }),
                 this.untilDestroyed()
             )
             .subscribe();
@@ -72,9 +56,8 @@ export class MeetingsRootService extends DestroyClass {
         this.openDialog(null)
             .afterClosed()
             .pipe(
-                switchMap((result: boolean) => {
+                tap((result: boolean) => {
                     if (result) this.refreshMeetings();
-                    return of(null);
                 }),
                 this.untilDestroyed()
             )
@@ -82,18 +65,15 @@ export class MeetingsRootService extends DestroyClass {
     }
 
     public openEditMeetingDialog(): void {
-        this.openDialog(this.currentMeeting)
+        this.openDialog(this.splitView.currentItem)
             .afterClosed()
             .pipe(
                 filter((result) => result === true),
-                switchMap((result: boolean) => {
+                tap((result: boolean) => {
                     if (result) {
                         this.refreshMeetings();
-                        return this.refreshCurrentMeeting$(
-                            this.splitView.currentId
-                        ).pipe(catchError(() => of(null)));
+                        this.refreshCurrentMeeting(this.splitView.currentId);
                     }
-                    return of(null);
                 }),
                 this.untilDestroyed()
             )
@@ -121,23 +101,10 @@ export class MeetingsRootService extends DestroyClass {
             .subscribe();
     }
 
-    private refreshCurrentMeeting$(
-        id: number | null
-    ): Observable<Meeting | null> {
-        if (id !== null) {
-            return this.http.getMeetingsById(id).pipe(
-                tap((meeting) => {
-                    this.currentMeeting = meeting;
-                }),
-                catchError((error) => {
-                    if (error.status === 404) {
-                        this.splitView.changeDetailState();
-                        return of(null);
-                    }
-                    return of(null);
-                })
-            );
-        }
-        return of(null);
+    private refreshCurrentMeeting(id: number | null): void {
+        if (id === null) return;
+        this.splitView
+            .refreshCurrentMeeting$(this.http.getMeetingsById(id))
+            .subscribe();
     }
 }

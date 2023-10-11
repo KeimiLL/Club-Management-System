@@ -1,13 +1,14 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { BehaviorSubject, Observable, tap } from "rxjs";
+import { BehaviorSubject, catchError, Observable, of, tap } from "rxjs";
 
 import { DestroyClass } from "../utils/destroyClass";
 
 @Injectable()
-export class SplitViewManagerService extends DestroyClass {
+export class SplitViewManagerService<T> extends DestroyClass {
     private readonly isDetailStore$ = new BehaviorSubject<boolean>(false);
     private readonly currentIdStore$ = new BehaviorSubject<number | null>(null);
+    private readonly currentItemStore$ = new BehaviorSubject<T | null>(null);
 
     constructor(
         private readonly activatedRoute: ActivatedRoute,
@@ -15,24 +16,6 @@ export class SplitViewManagerService extends DestroyClass {
     ) {
         super();
         this.urlChecker();
-    }
-
-    private urlChecker(): void {
-        this.activatedRoute.queryParams
-            .pipe(
-                tap((params) => {
-                    if ("id" in params) {
-                        this.isDetailStore$.next(true);
-                        const { id } = params;
-                        this.currentIdStore$.next(id);
-                    } else {
-                        this.isDetailStore$.next(false);
-                        this.currentIdStore$.next(null);
-                    }
-                }),
-                this.untilDestroyed()
-            )
-            .subscribe();
     }
 
     public get currentId(): number | null {
@@ -49,6 +32,33 @@ export class SplitViewManagerService extends DestroyClass {
 
     public get isDetail$(): Observable<boolean> {
         return this.isDetailStore$.asObservable();
+    }
+
+    public get currentItem(): T | null {
+        return this.currentItemStore$.value;
+    }
+
+    public get currentItem$(): Observable<T | null> {
+        return this.currentItemStore$.asObservable();
+    }
+
+    private urlChecker(): void {
+        this.activatedRoute.queryParams
+            .pipe(
+                tap((params) => {
+                    if ("id" in params) {
+                        this.isDetailStore$.next(true);
+                        const { id } = params;
+                        this.currentIdStore$.next(id);
+                    } else {
+                        this.isDetailStore$.next(false);
+                        this.currentIdStore$.next(null);
+                        this.currentItemStore$.next(null);
+                    }
+                }),
+                this.untilDestroyed()
+            )
+            .subscribe();
     }
 
     public changeDetailState(): void {
@@ -74,5 +84,26 @@ export class SplitViewManagerService extends DestroyClass {
             },
             queryParamsHandling: "merge",
         });
+    }
+
+    public refreshCurrentMeeting$(
+        request: Observable<T>
+    ): Observable<T | null> {
+        if (this.currentId !== null) {
+            return request.pipe(
+                tap((item) => {
+                    this.currentItemStore$.next(item);
+                }),
+                catchError((error) => {
+                    if (error.status === 404) {
+                        this.changeDetailState();
+                        return of(null);
+                    }
+                    return of(null);
+                }),
+                this.untilDestroyed()
+            );
+        }
+        return of(null);
     }
 }

@@ -38,23 +38,23 @@ import { MeetingsRootService } from "./services/meetings-root.service";
 })
 export class MeetingsComponent implements OnInit {
     protected isDetail$: Observable<boolean>;
-    protected TableMeetings$: Observable<TableMeeting[]>;
+    protected tableMeetings$: Observable<TableMeeting[]>;
     protected currentMeeting$: Observable<Meeting | null>;
 
     constructor(
-        private readonly splitService: SplitViewManagerService,
+        private readonly splitView: SplitViewManagerService<Meeting>,
         private readonly root: MeetingsRootService,
         private readonly table: TableService<TableMeeting>
     ) {}
 
     ngOnInit(): void {
-        this.isDetail$ = this.splitService.isDetail$;
-        this.TableMeetings$ = this.table.tableItems$;
-        this.currentMeeting$ = this.root.currentMeeting$;
+        this.isDetail$ = this.splitView.isDetail$;
+        this.tableMeetings$ = this.table.tableItems$;
+        this.currentMeeting$ = this.splitView.currentItem$;
     }
 
     protected switchDetail(): void {
-        this.splitService.changeDetailState();
+        this.splitView.changeDetailState();
     }
 
     protected onNewMeetingClick(): void {

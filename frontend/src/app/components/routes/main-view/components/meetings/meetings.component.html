@@ -1,7 +1,7 @@
 <ng-container
     *ngIf="{
         isDetail: isDetail$ | async,
-        TableMeetings: TableMeetings$ | async,
+        tableMeetings: tableMeetings$ | async,
         currentMeeting: currentMeeting$ | async
     } as vm"
 >
@@ -20,8 +20,8 @@
 
         <ng-container content>
             <app-meeting-table
-                *ngIf="vm.TableMeetings"
-                [data]="vm.TableMeetings"
+                *ngIf="vm.tableMeetings"
+                [data]="vm.tableMeetings"
             ></app-meeting-table>
         </ng-container>
     </app-content-card>
