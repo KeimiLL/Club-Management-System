@@ -12,7 +12,7 @@ import { MaterialModule } from "./../../../../../../../shared/modules/material.m
     styleUrls: ["./logout.component.scss"],
 })
 export class LogoutComponent {
-    @Input() isCollapsed = false;
+    @Input() public isCollapsed = false;
 
     constructor(private readonly menuRoot: MenuRootService) {}
 

@@ -14,7 +14,7 @@ export class PermissionDirective {
         private readonly userService: UserService
     ) {}
 
-    @Input() set appPermission(requiredPermission: SubPermissions) {
+    @Input() public set appPermission(requiredPermission: SubPermissions) {
         if (this.userService.currentUser !== null) {
             const userRole = this.userService.currentUser.role;
 

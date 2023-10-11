@@ -14,6 +14,6 @@ import { MenuItemPipe } from "../../../../../../../shared/pipes/menu-item.pipe";
     imports: [CommonModule, RouterModule, MaterialModule, MenuItemPipe],
 })
 export class MenuItemComponent {
-    @Input() item: MainMenuItem;
-    @Input() isCollapsed: boolean;
+    @Input() public item: MainMenuItem;
+    @Input() public isCollapsed: boolean;
 }

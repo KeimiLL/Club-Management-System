@@ -31,7 +31,7 @@ import { MeetingsRootService } from "../../services/meetings-root.service";
 })
 export class MeetingTableComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
-    @Input() set data(data: TableMeeting[]) {
+    @Input() public set data(data: TableMeeting[]) {
         this.dataSource.data = data;
     }
 

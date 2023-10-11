@@ -41,7 +41,7 @@ import { UserService } from "./../../../../../../../../../shared/services/user.s
 })
 export class UserTableComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
-    @Input() set data(data: UserForAdmin[]) {
+    @Input() public set data(data: UserForAdmin[]) {
         this.dataSource.data = data;
     }
 

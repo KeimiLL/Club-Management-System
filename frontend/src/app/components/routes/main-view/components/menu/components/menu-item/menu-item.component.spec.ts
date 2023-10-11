@@ -11,8 +11,8 @@ import { MaterialModule } from "../../../../../../../shared/modules/material.mod
     template: "<div></div>",
 })
 class MockMenuItemComponent {
-    @Input() item: MainMenuItem;
-    @Input() isCollapsed: boolean;
+    @Input() public item: MainMenuItem;
+    @Input() public isCollapsed: boolean;
 }
 
 xdescribe("MenuItemComponent", () => {

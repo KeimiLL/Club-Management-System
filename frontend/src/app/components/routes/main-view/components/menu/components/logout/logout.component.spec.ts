@@ -10,7 +10,7 @@ import { MenuRootService } from "../../menu-root.service";
     template: "",
 })
 class MockLogoutComponent {
-    @Input() isCollapsed = false;
+    @Input() public isCollapsed = false;
 }
 
 xdescribe("LogoutComponent", () => {
