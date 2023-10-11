@@ -41,6 +41,9 @@ def create_coach(
             Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
+    Raises:
+        ForbiddenException: If the current user does not have sufficient permissions.
+
     Returns:
         Message: The response signalling a successful operation.
     """

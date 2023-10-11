@@ -206,7 +206,7 @@ def change_user_role(
             Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
-     Raises:
+    Raises:
         ForbiddenException: If the current user does not have sufficient permissions.
 
     Returns:
@@ -245,7 +245,7 @@ def change_user_password(
             Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
-     Raises:
+    Raises:
         ForbiddenException: If the current user does not have sufficient permissions.
 
     Returns:
