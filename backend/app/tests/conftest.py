@@ -12,6 +12,7 @@ from app.core.config import get_settings
 from app.db.base import Base
 from app.db.session import get_db
 from app.main import include_exception_handlers, include_middleware
+from app.schemas.coach import CoachCreate
 from app.schemas.enums import Roles
 from app.schemas.meeting import MeetingCreate, MeetingUpdate
 from app.schemas.user import UserCreate, UserCreateWithRole
@@ -171,3 +172,9 @@ meeting_create = MeetingCreate(
 )
 
 meeting_update = MeetingUpdate(**meeting_create.__dict__)
+
+coach_create = CoachCreate(
+    user_id=1,
+    date_of_birth=datetime.date.today(),
+    date_of_joining=datetime.date.today(),
+)
