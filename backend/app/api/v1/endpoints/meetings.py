@@ -141,7 +141,7 @@ def get_meeting(
             Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
-     Raises:
+    Raises:
         ForbiddenException: If the current user does not have sufficient permissions.
 
     Returns:
@@ -182,7 +182,7 @@ def update_meeting(
             Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
-     Raises:
+    Raises:
         ForbiddenException: If the current user does not have sufficient permissions.
 
     Returns:

@@ -1,16 +1,16 @@
-"""Coaches related endpoints."""
+"""Teams related endpoints."""
 
 
 from typing import Annotated
 
 from app.api.dependencies import get_user_from_token
 from app.core.exceptions import ForbiddenException
-from app.crud.crud_coach import create_new_coach
+from app.crud.crud_team import create_new_team
 from app.db.session import get_db
 from app.models.user import User
-from app.schemas.coach import CoachCreate
 from app.schemas.enums import HTTPResponseMessage, Roles
 from app.schemas.misc import Message, MessageFromEnum
+from app.schemas.team import TeamCreate
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
@@ -28,15 +28,15 @@ router = APIRouter()
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def create_coach(
-    coach: CoachCreate,
+def create_team(
+    team: TeamCreate,
     current_user: Annotated[User, Depends(get_user_from_token)],
     db: Annotated[Session, Depends(get_db)],
 ):
-    """Creates a new coach based on data from a POST request.
+    """Creates a new team based on data from a POST request.
 
     Args:
-        coach (CoachCreate): Coach data from POST request.
+        team (TeamCreate): Team data from POST request.
         current_user (Annotated[User, Depends]): Current user read from access token.
             Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
@@ -47,10 +47,10 @@ def create_coach(
     Returns:
         Message: The response signalling a successful operation.
     """
-    if current_user.role == Roles.ADMIN:
-        create_new_coach(
-            coach=coach,
+    if current_user.role in (Roles.ADMIN, Roles.BOARD):
+        create_new_team(
+            team=team,
             db=db,
         )
         return Message(message=HTTPResponseMessage.SUCCESS)
-    raise ForbiddenException("coach")
+    raise ForbiddenException("team")
