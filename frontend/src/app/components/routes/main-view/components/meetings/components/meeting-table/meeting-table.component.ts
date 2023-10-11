@@ -1,7 +1,14 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, OnInit } from "@angular/core";
+import {
+    AfterViewInit,
+    Component,
+    Input,
+    OnInit,
+    ViewChild,
+} from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
-import { PageEvent } from "@angular/material/paginator";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { Observable } from "rxjs";
 
 import { PermissionDirective } from "../../../../../../../shared/directives/permission.directive";
@@ -13,7 +20,6 @@ import { MeetingsPermission } from "../../../../../../../shared/models/permissio
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../../shared/services/table.service";
-import { TableProperties } from "../../../../../../../shared/utils/tableProperties";
 import { MeetingsRootService } from "../../services/meetings-root.service";
 
 @Component({
@@ -23,20 +29,27 @@ import { MeetingsRootService } from "../../services/meetings-root.service";
     templateUrl: "./meeting-table.component.html",
     styleUrls: ["./meeting-table.component.scss"],
 })
-export class MeetingTableComponent
-    extends TableProperties<TableMeeting>
-    implements OnInit, AfterViewInit
-{
+export class MeetingTableComponent implements OnInit, AfterViewInit {
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    @Input() set data(data: TableMeeting[]) {
+        this.dataSource.data = data;
+    }
+
+    protected dataSource: MatTableDataSource<TableMeeting> =
+        new MatTableDataSource<TableMeeting>();
+
     protected displayedColumns$: Observable<string[]>;
+    protected totalItems$: Observable<number>;
+    protected itemsPerPage: number;
+    protected index$: Observable<number>;
+
     protected readonly permissions = MeetingsPermission;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Meeting>,
         private readonly table: TableService<TableMeeting>,
         private readonly root: MeetingsRootService
-    ) {
-        super();
-    }
+    ) {}
 
     ngOnInit(): void {
         this.itemsPerPage = this.table.capacity;
