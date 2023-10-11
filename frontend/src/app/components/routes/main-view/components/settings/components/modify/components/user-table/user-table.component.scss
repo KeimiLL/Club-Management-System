@@ -1,0 +1,32 @@
+@import "../../../../../../../../../../styles/component-styles/components";
+@import "../../../../../../../../../../styles/variables";
+
+:host {
+    width: 100%;
+    .no-records {
+        font-size: $large-font;
+        margin: $medium-spacing auto;
+    }
+
+    .cell {
+        padding: 1px;
+    }
+
+    .button--table {
+        width: 40%;
+    }
+
+    .link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        text-decoration: none;
+        font-size: $normal-font;
+        font-weight: $bold-weight;
+        &-text {
+            cursor: pointer;
+            color: $black;
+        }
+    }
+}

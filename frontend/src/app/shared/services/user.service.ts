@@ -2,8 +2,16 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { BackendResponse } from "../models/misc.model";
-import { ShortUser, User, UserCreate, UserLogin } from "../models/user.model";
+import { BackendResponse, TableResponse } from "../models/misc.model";
+import {
+    ChangePassword,
+    Roles,
+    ShortUser,
+    User,
+    UserCreate,
+    UserForAdmin,
+    UserLogin,
+} from "../models/user.model";
 
 @Injectable({
     providedIn: "root",
@@ -33,6 +41,34 @@ export class UserService {
     }
 
     public getAllUsers(): Observable<ShortUser[]> {
-        return this.http.get<ShortUser[]>("api/v1/users/filtered");
+        return this.http.get<ShortUser[]>("api/v1/users/all");
+    }
+
+    public getUsersWithPagination(
+        page: number,
+        capacity: number
+    ): Observable<TableResponse<UserForAdmin>> {
+        return this.http.get<TableResponse<UserForAdmin>>(
+            `api/v1/users?page=${page}&per_page=${capacity}`
+        );
+    }
+
+    public updateRole(
+        userId: number,
+        role: Roles
+    ): Observable<BackendResponse> {
+        return this.http.put<BackendResponse>(`api/v1/users/${userId}/role`, {
+            role,
+        });
+    }
+
+    public changePassword(
+        userId: number,
+        password: ChangePassword
+    ): Observable<BackendResponse> {
+        return this.http.put<BackendResponse>(
+            `api/v1/users/${userId}/password`,
+            password
+        );
     }
 }

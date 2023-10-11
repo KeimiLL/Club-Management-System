@@ -1,1 +1,13 @@
-<p>modify works!</p>
+<ng-container
+    *ngIf="{
+        users: users$ | async,
+    } as vm"
+>
+    <app-content-card>
+        <app-wide-card-header header name="Users"> </app-wide-card-header>
+
+        <ng-container content>
+            <app-user-table *ngIf="vm.users" [data]="vm.users"></app-user-table>
+        </ng-container>
+    </app-content-card>
+</ng-container>

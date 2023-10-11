@@ -35,7 +35,7 @@ $light-btn-text: #020b1b;
 
 // profile icons background colors
 $admin-icon-back: #ef436b;
-$player-icon-back: #26547d;
+$player-icon-back: #d281b5;
 $coach-icon-back: #ffce5c;
 $medic-icon-back: #ffb056;
 $board-icon-back: #06d6a0;
@@ -76,4 +76,8 @@ $huge-font: 34px;
         background-color: $light-btn-back;
         color: $light-btn-text;
     }
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+    display: none;
 }

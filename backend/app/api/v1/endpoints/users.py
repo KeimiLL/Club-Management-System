@@ -28,6 +28,7 @@ from app.schemas.user import (
     UserLogin,
     UserOnlyBaseInfo,
     UserUpdatePassword,
+    UserUpdateRole,
 )
 from fastapi import APIRouter, Depends, Path, Response, status
 from sqlalchemy.exc import SQLAlchemyError
@@ -192,7 +193,7 @@ def get_users(
 )
 def change_user_role(
     user_id: Annotated[int, Path(ge=1, le=10**7)],
-    role: Roles,
+    role_data: UserUpdateRole,
     current_user: Annotated[User, Depends(get_user_from_token)],
     db: Annotated[Session, Depends(get_db)],
 ):
@@ -201,7 +202,7 @@ def change_user_role(
     Args:
         user_id (Annotated[int, Path]): The requested user id. Has to be greater than
             or equal to 1 and less than or equal to 10**7.
-        role (Roles): User role to be set.
+        role_data (UserUpdateRole): User role to be set.
         current_user (Annotated[User, Depends]): Current user read from access token.
             Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
@@ -213,7 +214,7 @@ def change_user_role(
         Message: The response signalling a successful operation.
     """
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
-        update_user_role(user_id=user_id, role=role, db=db)
+        update_user_role(user_id=user_id, role=role_data.role, db=db)
         return Message(message=HTTPResponseMessage.SUCCESS)
     raise ForbiddenException("user")
 

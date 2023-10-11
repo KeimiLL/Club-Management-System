@@ -2,7 +2,11 @@
     <ng-container matColumnDef="Position">
         <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
         <mat-cell *matCellDef="let element; let i = index">
-            {{ i + 1 }}
+            <ng-container *ngIf="{ pageId: (index$ | async) } as vm">
+                <ng-container *ngIf="vm.pageId !== null">{{
+                    vm.pageId * itemsPerPage + i + 1
+                }}</ng-container>
+            </ng-container>
         </mat-cell>
     </ng-container>
 

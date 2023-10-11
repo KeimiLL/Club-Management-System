@@ -54,8 +54,8 @@ export const allPermissions: SubPermissions[] = [
 
 export const RoleColorsMapping: Record<Roles, string> = {
     [Roles.Admin]: "#ef436b",
-    [Roles.Coach]: "#26547d",
-    [Roles.Player]: "#ffce5c",
+    [Roles.Coach]: "#ffce5c",
+    [Roles.Player]: "#D281B5",
     [Roles.Viewer]: "#b4befe",
     [Roles.Medic]: "#ffb056",
     [Roles.Board]: "#06d6a0",
