@@ -1,16 +1,9 @@
 import { CommonModule } from "@angular/common";
-import {
-    AfterViewInit,
-    Component,
-    Input,
-    OnInit,
-    ViewChild,
-} from "@angular/core";
+import { AfterViewInit, Component, OnInit } from "@angular/core";
 import { FormArray, FormControl, ReactiveFormsModule } from "@angular/forms";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
+import { PageEvent } from "@angular/material/paginator";
+import {} from "@angular/material/table";
 import { RouterModule } from "@angular/router";
-import { Observable } from "rxjs";
 
 import { PermissionBackgroundColorDirective } from "../../../../../../../../../shared/directives/permission-background-color.directive";
 import {
@@ -20,6 +13,7 @@ import {
 import { CardsModule } from "../../../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../../../shared/modules/material.module";
 import { TableService } from "../../../../../../../../../shared/services/table.service";
+import { TableProperties } from "../../../../../../../../../shared/utils/tableProperties";
 import { SettingsRootService } from "../../../../services/settings-root.service";
 import { usersColumns } from "../../meeting-table.data";
 import { SettingsModifyRootService } from "../../settings-modify-root.service";
@@ -39,21 +33,15 @@ import { UserService } from "./../../../../../../../../../shared/services/user.s
     templateUrl: "./user-table.component.html",
     styleUrls: ["./user-table.component.scss"],
 })
-export class UserTableComponent implements OnInit, AfterViewInit {
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @Input() set data(data: UserForAdmin[]) {
-        this.dataSource.data = data;
-    }
-
+export class UserTableComponent
+    extends TableProperties<UserForAdmin>
+    implements OnInit, AfterViewInit
+{
     protected currentUserEmail: string;
 
     protected passwordFormArray: FormArray<FormControl<string>>;
     protected roles: string[];
     protected displayedColumns: string[];
-    protected totalItems$: Observable<number>;
-    protected itemsPerPage: number;
-    protected dataSource: MatTableDataSource<UserForAdmin> =
-        new MatTableDataSource<UserForAdmin>();
 
     constructor(
         private readonly table: TableService<UserForAdmin>,
@@ -61,6 +49,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
         private readonly root: SettingsRootService,
         private readonly userService: UserService
     ) {
+        super();
         this.passwordFormArray = this.modifyRoot.passwordFormArray;
     }
 
