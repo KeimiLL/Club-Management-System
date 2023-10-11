@@ -33,6 +33,13 @@ export class SettingsRootService {
                     old_password,
                     new_password,
                 })
+                .pipe(
+                    tap(() => {
+                        this.snack.showSnackBar(
+                            SnackbarMessages.PASSWORD_CHANGED
+                        );
+                    })
+                )
                 .subscribe();
         }
     }

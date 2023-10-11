@@ -85,7 +85,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
     }
 
     protected setSelectedRole(id: number, role: string): void {
-        this.modifyRoot.changeUserRole(id, role as Roles);
+        // this.modifyRoot.changeUserRole(id, role as Roles);
     }
 
     protected changePassword(userId: number, controlId: number): void {
