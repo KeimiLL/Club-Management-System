@@ -1,4 +1,4 @@
-<div class="date">
-    <span class="date--bold">{{ date | date : "yyyy-MM-dd" }}</span>
+<div class="date" [ngClass]="cssClass">
+    <span class="date__content">{{ date | date : "dd-MM-yyyy" }}</span>
     <mat-icon class="date__icon">calendar_today</mat-icon>
 </div>
