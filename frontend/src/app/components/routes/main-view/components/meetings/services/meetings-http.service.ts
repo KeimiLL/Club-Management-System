@@ -3,8 +3,8 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 import {
-    LongMeeting,
     Meeting,
+    TableMeeting,
 } from "../../../../../../shared/models/meetings.model";
 import { TableResponse } from "../../../../../../shared/models/misc.model";
 
@@ -15,8 +15,8 @@ export class MeetingsHttpService {
     public getMeetingsList(
         page: number,
         capacity: number
-    ): Observable<TableResponse<LongMeeting>> {
-        return this.http.get<TableResponse<LongMeeting>>(
+    ): Observable<TableResponse<TableMeeting>> {
+        return this.http.get<TableResponse<TableMeeting>>(
             `api/v1/meetings?page=${page}&per_page=${capacity}`
         );
     }

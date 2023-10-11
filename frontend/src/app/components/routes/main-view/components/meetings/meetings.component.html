@@ -1,8 +1,7 @@
 <ng-container
     *ngIf="{
         isDetail: isDetail$ | async,
-        longMeetings: longMeetings$ | async,
-        shortMeetings: shortMeetings$ | async,
+        TableMeetings: TableMeetings$ | async,
         currentMeeting: currentMeeting$ | async
     } as vm"
 >
@@ -21,8 +20,8 @@
 
         <ng-container content>
             <app-meeting-table
-                *ngIf="vm.longMeetings && vm.shortMeetings"
-                [data]="vm.isDetail ? vm.shortMeetings : vm.longMeetings"
+                *ngIf="vm.TableMeetings"
+                [data]="vm.TableMeetings"
             ></app-meeting-table>
         </ng-container>
     </app-content-card>

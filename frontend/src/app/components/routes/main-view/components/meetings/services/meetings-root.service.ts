@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { BehaviorSubject, forkJoin, Observable, of } from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
 import { catchError, filter, map, switchMap, tap } from "rxjs/operators";
 
 import {
-    LongMeeting,
     Meeting,
-    ShortMeeting,
+    TableMeeting,
 } from "../../../../../../shared/models/meetings.model";
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
@@ -17,14 +16,6 @@ import { MeetingsHttpService } from "./meetings-http.service";
 
 @Injectable()
 export class MeetingsRootService extends DestroyClass {
-    private readonly longMeetingsStore$ = new BehaviorSubject<LongMeeting[]>(
-        []
-    );
-
-    private readonly shortMeetingsStore$ = new BehaviorSubject<ShortMeeting[]>(
-        []
-    );
-
     private readonly currentMeetingStore$ = new BehaviorSubject<Meeting | null>(
         null
     );
@@ -34,17 +25,31 @@ export class MeetingsRootService extends DestroyClass {
     constructor(
         private readonly http: MeetingsHttpService,
         private readonly dialog: MatDialog,
-        private readonly table: TableService<LongMeeting>,
+        private readonly table: TableService<TableMeeting>,
         private readonly splitView: SplitViewManagerService
     ) {
         super();
         this.initData();
     }
 
+    public set currentMeeting(meeting: Meeting | null) {
+        this.currentMeetingStore$.next(meeting);
+    }
+
+    public get currentMeeting(): Meeting | null {
+        return this.currentMeetingStore$.value;
+    }
+
+    public get currentMeeting$(): Observable<Meeting | null> {
+        return this.currentMeetingStore$.asObservable();
+    }
+
     private initData(): void {
         this.table.currentPageIndex$
             .pipe(
-                switchMap(() => this.refreshMeetings$()),
+                tap(() => {
+                    this.refreshMeetings();
+                }),
                 this.untilDestroyed()
             )
             .subscribe();
@@ -63,48 +68,12 @@ export class MeetingsRootService extends DestroyClass {
         );
     }
 
-    private set longMeetings(longMeetings: LongMeeting[]) {
-        this.longMeetingsStore$.next(longMeetings);
-    }
-
-    public get longMeetings(): LongMeeting[] {
-        return this.longMeetingsStore$.value;
-    }
-
-    public get longMeetings$(): Observable<LongMeeting[]> {
-        return this.longMeetingsStore$.asObservable();
-    }
-
-    private set shortMeetings(shortMeetings: ShortMeeting[]) {
-        this.shortMeetingsStore$.next(shortMeetings);
-    }
-
-    public get shortMeetings(): ShortMeeting[] {
-        return this.shortMeetingsStore$.value;
-    }
-
-    public get shortMeetings$(): Observable<ShortMeeting[]> {
-        return this.shortMeetingsStore$.asObservable();
-    }
-
-    public set currentMeeting(meeting: Meeting | null) {
-        this.currentMeetingStore$.next(meeting);
-    }
-
-    public get currentMeeting(): Meeting | null {
-        return this.currentMeetingStore$.value;
-    }
-
-    public get currentMeeting$(): Observable<Meeting | null> {
-        return this.currentMeetingStore$.asObservable();
-    }
-
     public openNewMeetingDialog(): void {
         this.openDialog(null)
             .afterClosed()
             .pipe(
                 switchMap((result: boolean) => {
-                    if (result) return this.refreshMeetings$();
+                    if (result) this.refreshMeetings();
                     return of(null);
                 }),
                 this.untilDestroyed()
@@ -119,12 +88,10 @@ export class MeetingsRootService extends DestroyClass {
                 filter((result) => result === true),
                 switchMap((result: boolean) => {
                     if (result) {
-                        return forkJoin([
-                            this.refreshMeetings$(),
-                            this.refreshCurrentMeeting$(
-                                this.splitView.currentId
-                            ),
-                        ]).pipe(catchError(() => of(null)));
+                        this.refreshMeetings();
+                        return this.refreshCurrentMeeting$(
+                            this.splitView.currentId
+                        ).pipe(catchError(() => of(null)));
                     }
                     return of(null);
                 }),
@@ -143,20 +110,15 @@ export class MeetingsRootService extends DestroyClass {
         });
     }
 
-    private refreshMeetings$(): Observable<LongMeeting[]> {
-        return this.table
-            .getCurrentPage(
+    private refreshMeetings(): void {
+        this.table
+            .refreshTableItems$(
                 this.http.getMeetingsList(
                     this.table.currentPageIndex,
                     this.table.capacity
                 )
             )
-            .pipe(
-                tap((meetings) => {
-                    this.longMeetings = meetings;
-                    this.minimizeLongMeetings();
-                })
-            );
+            .subscribe();
     }
 
     private refreshCurrentMeeting$(
@@ -177,12 +139,5 @@ export class MeetingsRootService extends DestroyClass {
             );
         }
         return of(null);
-    }
-
-    private minimizeLongMeetings(): void {
-        this.shortMeetings = this.longMeetings.map((meeting) => {
-            const { id, name, is_yours } = meeting;
-            return { id, name, is_yours } as ShortMeeting;
-        });
     }
 }

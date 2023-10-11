@@ -3,9 +3,8 @@ import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 
 import {
-    LongMeeting,
     Meeting,
-    ShortMeeting,
+    TableMeeting,
 } from "../../../../../shared/models/meetings.model";
 import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
@@ -39,19 +38,18 @@ import { MeetingsRootService } from "./services/meetings-root.service";
 })
 export class MeetingsComponent implements OnInit {
     protected isDetail$: Observable<boolean>;
-    protected longMeetings$: Observable<LongMeeting[]>;
-    protected shortMeetings$: Observable<ShortMeeting[]>;
+    protected TableMeetings$: Observable<TableMeeting[]>;
     protected currentMeeting$: Observable<Meeting | null>;
 
     constructor(
         private readonly splitService: SplitViewManagerService,
-        private readonly root: MeetingsRootService
+        private readonly root: MeetingsRootService,
+        private readonly table: TableService<TableMeeting>
     ) {}
 
     ngOnInit(): void {
         this.isDetail$ = this.splitService.isDetail$;
-        this.longMeetings$ = this.root.longMeetings$;
-        this.shortMeetings$ = this.root.shortMeetings$;
+        this.TableMeetings$ = this.table.tableItems$;
         this.currentMeeting$ = this.root.currentMeeting$;
     }
 

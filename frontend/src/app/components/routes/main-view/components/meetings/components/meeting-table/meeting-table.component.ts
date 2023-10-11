@@ -12,10 +12,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { Observable } from "rxjs";
 
 import { PermissionDirective } from "../../../../../../../shared/directives/permission.directive";
-import {
-    LongMeeting,
-    ShortMeeting,
-} from "../../../../../../../shared/models/meetings.model";
+import { TableMeeting } from "../../../../../../../shared/models/meetings.model";
 import { MeetingsPermission } from "../../../../../../../shared/models/permission.model";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
@@ -31,9 +28,12 @@ import { MeetingsRootService } from "../../services/meetings-root.service";
 })
 export class MeetingTableComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
-    @Input() set data(data: LongMeeting[] | ShortMeeting[]) {
+    @Input() set data(data: TableMeeting[]) {
         this.dataSource.data = data;
     }
+
+    protected dataSource: MatTableDataSource<TableMeeting> =
+        new MatTableDataSource<TableMeeting>();
 
     protected displayedColumns$: Observable<string[]>;
     protected totalItems$: Observable<number>;
@@ -41,12 +41,10 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
     protected index$: Observable<number>;
 
     protected readonly permissions = MeetingsPermission;
-    protected dataSource: MatTableDataSource<LongMeeting | ShortMeeting> =
-        new MatTableDataSource<LongMeeting | ShortMeeting>();
 
     constructor(
         private readonly splitManager: SplitViewManagerService,
-        private readonly table: TableService<LongMeeting>,
+        private readonly table: TableService<TableMeeting>,
         private readonly root: MeetingsRootService
     ) {}
 
