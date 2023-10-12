@@ -2,15 +2,16 @@ import { Injectable } from "@angular/core";
 import { FormArray, FormControl, Validators } from "@angular/forms";
 import { Observable, switchMap, tap } from "rxjs";
 
-import { SnackbarMessages } from "../../../../../../../shared/models/messages.model";
+import { SnackbarMessages } from "../../../../../../../../shared/models/messages.model";
 import {
     Roles,
     UserForAdmin,
-} from "../../../../../../../shared/models/user.model";
-import { SnackbarService } from "../../../../../../../shared/services/snackbar.service";
-import { TableService } from "../../../../../../../shared/services/table.service";
-import { UserService } from "../../../../../../../shared/services/user.service";
-import { DestroyClass } from "../../../../../../../shared/utils/destroyClass";
+} from "../../../../../../../../shared/models/user.model";
+import { SnackbarService } from "../../../../../../../../shared/services/snackbar.service";
+import { TableService } from "../../../../../../../../shared/services/table.service";
+import { UserService } from "../../../../../../../../shared/services/user.service";
+import { DestroyClass } from "../../../../../../../../shared/utils/destroyClass";
+import { ModifyUsersPopupService } from "./modify-users-popup.service";
 
 @Injectable()
 export class SettingsModifyRootService extends DestroyClass {
@@ -21,7 +22,8 @@ export class SettingsModifyRootService extends DestroyClass {
     constructor(
         private readonly userService: UserService,
         private readonly table: TableService<UserForAdmin>,
-        private readonly snack: SnackbarService
+        private readonly snack: SnackbarService,
+        private readonly popup: ModifyUsersPopupService
     ) {
         super();
         this.initData();
@@ -37,6 +39,8 @@ export class SettingsModifyRootService extends DestroyClass {
     }
 
     public changeUserRole(id: number, role: Roles): void {
+        this.popup.rolePopupSwitch(role);
+
         this.userService
             .updateRole(id, role)
             .pipe(

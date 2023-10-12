@@ -7,7 +7,9 @@ import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { TableService } from "../../../../../../../shared/services/table.service";
 import { UserTableComponent } from "./components/user-table/user-table.component";
-import { SettingsModifyRootService } from "./settings-modify-root.service";
+import { ModifyUsersHttpService } from "./services/modify-users-http.service";
+import { ModifyUsersPopupService } from "./services/modify-users-popup.service";
+import { SettingsModifyRootService } from "./services/settings-modify-root.service";
 
 @Component({
     selector: "app-modify",
@@ -15,7 +17,12 @@ import { SettingsModifyRootService } from "./settings-modify-root.service";
     imports: [CommonModule, CardsModule, MaterialModule, UserTableComponent],
     templateUrl: "./modify.component.html",
     styleUrls: ["./modify.component.scss"],
-    providers: [TableService, SettingsModifyRootService],
+    providers: [
+        TableService,
+        SettingsModifyRootService,
+        ModifyUsersPopupService,
+        ModifyUsersHttpService,
+    ],
 })
 export class ModifyComponent implements OnInit {
     protected users$: Observable<UserForAdmin[]>;
