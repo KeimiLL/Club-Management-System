@@ -7,7 +7,7 @@ from app.api.dependencies import get_user_from_token, paginate
 from app.core.exceptions import ForbiddenException
 from app.crud.crud_meeting import (
     create_meeting_with_user_ids,
-    get_all_meetings,
+    get_all_meetings_with_pagination,
     get_meeting_by_id,
     get_meetings_by_user_id,
     update_meeting_with_user_ids,
@@ -85,7 +85,7 @@ def get_meetings(
         ItemsListWithTotal[MeetingTableView]: A list of meetings alongside their total number.
     """
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
-        meetings, total = get_all_meetings(**pagination, db=db)
+        meetings, total = get_all_meetings_with_pagination(**pagination, db=db)
         return ItemsListWithTotal[MeetingTableView](
             items=[
                 MeetingTableView(

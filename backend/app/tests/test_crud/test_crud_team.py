@@ -4,7 +4,7 @@
 import pytest
 from app.core.exceptions import MissingException
 from app.crud.crud_coach import create_new_coach
-from app.crud.crud_team import create_new_team, get_team_by_id
+from app.crud.crud_team import create_new_team, get_all_teams, get_team_by_id
 from app.crud.crud_user import create_new_user
 from app.schemas.coach import CoachCreate
 from app.schemas.team import TeamCreate
@@ -60,10 +60,10 @@ def test_correct__get_team_by_user_id(
     create_new_user(user, db_session)
     create_new_coach(coach, db_session)
     new_team = create_new_team(team, db_session)
-    team_user_by_id = get_team_by_id(new_team.id, db_session)
-    assert team_user_by_id.coach.user.full_name == user.full_name
-    assert team_user_by_id.coach.date_of_birth == coach.date_of_birth
-    assert team_user_by_id.name == team.name
+    team_by_user_id = get_team_by_id(new_team.id, db_session)
+    assert team_by_user_id.coach.user.full_name == user.full_name
+    assert team_by_user_id.coach.date_of_birth == coach.date_of_birth
+    assert team_by_user_id.name == team.name
 
 
 @pytest.mark.parametrize(
@@ -83,3 +83,33 @@ def test_incorrect__get_team_by_user_id(
     with pytest.raises(MissingException) as excinfo:
         get_team_by_id(team_id, db_session)
     assert "Team" == str(excinfo.value)
+
+
+@pytest.mark.parametrize(
+    "user,coach,teams",
+    [
+        (user_create_unique_1, coach_create, []),
+        (user_create_unique_1, coach_create, [team_create]),
+    ],
+)
+def test_correct__get_all_teams(
+    user: UserCreate,
+    coach: CoachCreate,
+    teams: list[TeamCreate],
+    db_session: Session,
+) -> None:
+    """Tests getting all teams.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        teams (list[TeamCreate]): Teams to be created and read.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    create_new_coach(coach, db_session)
+    for team in teams:
+        create_new_team(team, db_session)
+    new_teams = get_all_teams(db_session)
+    assert len(teams) == len(new_teams)
+    assert all((team.name == new_team.name for team, new_team in zip(teams, new_teams)))

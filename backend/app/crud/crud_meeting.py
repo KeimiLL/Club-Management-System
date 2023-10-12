@@ -70,7 +70,7 @@ def get_meeting_by_id(meeting_id: int, db: Session) -> Meeting:
         raise exc
 
 
-def get_all_meetings(
+def get_all_meetings_with_pagination(
     page: int,
     per_page: int,
     db: Session,

@@ -1,6 +1,8 @@
 """File responsible for implementing teams related CRUD operations."""
 
 
+from typing import Callable, Sequence
+
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_coach import get_coach_by_user_id
 from app.models.team import Team
@@ -8,6 +10,8 @@ from app.schemas.team import TeamCreate
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
+
+func: Callable
 
 
 def create_new_team(team: TeamCreate, db: Session) -> Team:
@@ -58,5 +62,23 @@ def get_team_by_id(team_id: int, db: Session) -> Team:
         return db.execute(select(Team).where(Team.id == team_id)).scalar_one()
     except NoResultFound as exc:
         raise MissingException(Team.__name__) from exc
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def get_all_teams(db: Session) -> Sequence[Team]:
+    """Gets all teams.
+
+    Args:
+        db (Session): Database session.
+
+    Raises:
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        Sequence[Team]: A list of all Team objects.
+    """
+    try:
+        return db.scalars(select(Team)).all()
     except SQLAlchemyError as exc:
         raise exc
