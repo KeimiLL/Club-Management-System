@@ -50,3 +50,10 @@ class TeamInDBBase(TeamBase):
     players: list["Player"]
     matches: list["Match"]
     trainings: list["Training"]
+
+
+class TeamOnlyBaseInfo(BaseModel):
+    """Team schema for returning data from the database."""
+
+    id: int = Field(..., ge=1, le=10**7)
+    name: str = Field(..., min_length=3)
