@@ -1,1 +1,28 @@
-<p>create-coach-popup works!</p>
+<form [formGroup]="coachForm"></form>
+<mat-form-field appearance="fill" class="popup__basic--name">
+    <input
+        formControlName="date_of_birth"
+        required
+        readonly
+        matInput
+        [matDatepicker]="picker"
+        placeholder="Choose a date"
+        (dateChange)="setBirthDate($event)"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker [disabled]="false" #picker></mat-datepicker>
+</mat-form-field>
+
+<mat-form-field appearance="fill" class="popup__basic--name">
+    <input
+        formControlName="date_of_joining"
+        required
+        readonly
+        matInput
+        [matDatepicker]="picker"
+        placeholder="Choose a date"
+        (dateChange)="setJoiningDate($event)"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker [disabled]="false" #picker></mat-datepicker>
+</mat-form-field>

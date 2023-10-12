@@ -1,9 +1,11 @@
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { Observable, of } from "rxjs";
 
 import { Roles } from "../../../../../../../../shared/models/user.model";
 import { CreateCoachPopupComponent } from "../components/create-coach-popup/create-coach-popup.component";
 import { CreatePlayerPopupComponent } from "../components/create-player-popup/create-player-popup.component";
+import { ModifyUsersHttpService } from "./modify-users-http.service";
 
 type CreatePopupComponent =
     | CreateCoachPopupComponent
@@ -11,32 +13,39 @@ type CreatePopupComponent =
 
 @Injectable()
 export class ModifyUsersPopupService {
-    constructor(private readonly dialog: MatDialog) {}
+    constructor(
+        private readonly dialog: MatDialog,
+        private readonly http: ModifyUsersHttpService
+    ) {}
 
-    public rolePopupSwitch(
+    public rolePopupSwitch$(
         role: Roles
-    ): MatDialogRef<CreatePopupComponent> | null {
+    ): Observable<MatDialogRef<CreatePopupComponent> | null> {
         switch (role) {
             case Roles.Coach:
-                return this.openCoachPopup();
+                return this.openCoachPopup$();
             case Roles.Player:
-                return this.openPlayerPopup();
+                return this.openPlayerPopup$();
             default:
-                return null;
+                return of(null);
         }
     }
 
-    private openCoachPopup(): MatDialogRef<CreateCoachPopupComponent> {
-        return this.dialog.open(CreateCoachPopupComponent, {
-            width: "30vw",
-            disableClose: true,
-        });
+    private openCoachPopup$(): Observable<MatDialogRef<CreateCoachPopupComponent> | null> {
+        return this.dialog
+            .open(CreateCoachPopupComponent, {
+                width: "30vw",
+                disableClose: true,
+            })
+            .afterClosed();
     }
 
-    private openPlayerPopup(): MatDialogRef<CreatePlayerPopupComponent> {
-        return this.dialog.open(CreatePlayerPopupComponent, {
-            width: "30vw",
-            disableClose: true,
-        });
+    private openPlayerPopup$(): Observable<MatDialogRef<CreatePlayerPopupComponent> | null> {
+        return this.dialog
+            .open(CreatePlayerPopupComponent, {
+                width: "30vw",
+                disableClose: true,
+            })
+            .afterClosed();
     }
 }

@@ -39,7 +39,7 @@ export class SettingsModifyRootService extends DestroyClass {
     }
 
     public changeUserRole(id: number, role: Roles): void {
-        this.popup.rolePopupSwitch(role);
+        // this.popup.rolePopupSwitch(role);
 
         this.userService
             .updateRole(id, role)
