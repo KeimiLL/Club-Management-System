@@ -21,5 +21,5 @@ import { MaterialModule } from "../../../../../../../shared/modules/material.mod
     styleUrls: ["./current-meeting-content.component.scss"],
 })
 export class CurrentMeetingContentComponent {
-    @Input() meeting: Meeting;
+    @Input() public meeting: Meeting;
 }

@@ -20,9 +20,9 @@ import { SettingsModifyRootService } from "./settings-modify-root.service";
 export class ModifyComponent implements OnInit {
     protected users$: Observable<UserForAdmin[]>;
 
-    constructor(private readonly root: SettingsModifyRootService) {}
+    constructor(private readonly table: TableService<UserForAdmin>) {}
 
     ngOnInit(): void {
-        this.users$ = this.root.users$;
+        this.users$ = this.table.tableItems$;
     }
 }

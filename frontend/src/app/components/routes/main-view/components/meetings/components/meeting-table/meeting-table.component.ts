@@ -13,8 +13,8 @@ import { Observable } from "rxjs";
 
 import { PermissionDirective } from "../../../../../../../shared/directives/permission.directive";
 import {
-    LongMeeting,
-    ShortMeeting,
+    Meeting,
+    TableMeeting,
 } from "../../../../../../../shared/models/meetings.model";
 import { MeetingsPermission } from "../../../../../../../shared/models/permission.model";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
@@ -31,9 +31,12 @@ import { MeetingsRootService } from "../../services/meetings-root.service";
 })
 export class MeetingTableComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
-    @Input() set data(data: LongMeeting[] | ShortMeeting[]) {
+    @Input() public set data(data: TableMeeting[]) {
         this.dataSource.data = data;
     }
+
+    protected dataSource: MatTableDataSource<TableMeeting> =
+        new MatTableDataSource<TableMeeting>();
 
     protected displayedColumns$: Observable<string[]>;
     protected totalItems$: Observable<number>;
@@ -41,12 +44,10 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
     protected index$: Observable<number>;
 
     protected readonly permissions = MeetingsPermission;
-    protected dataSource: MatTableDataSource<LongMeeting | ShortMeeting> =
-        new MatTableDataSource<LongMeeting | ShortMeeting>();
 
     constructor(
-        private readonly splitManager: SplitViewManagerService,
-        private readonly table: TableService<LongMeeting>,
+        private readonly splitView: SplitViewManagerService<Meeting>,
+        private readonly table: TableService<TableMeeting>,
         private readonly root: MeetingsRootService
     ) {}
 
@@ -64,7 +65,7 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
     }
 
     protected addParamsToURL(id: number): void {
-        this.splitManager.addParamsToRouting(id);
+        this.splitView.addParamsToRouting(id);
     }
 
     protected changePage(event: PageEvent): void {

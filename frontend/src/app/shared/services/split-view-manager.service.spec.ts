@@ -2,6 +2,7 @@ import { TestBed } from "@angular/core/testing";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
 
+import { Meeting } from "../models/meetings.model";
 import { SplitViewManagerService } from "./split-view-manager.service";
 
 class MockActivatedRoute {
@@ -13,7 +14,7 @@ class MockRouter {
 }
 
 describe("SplitViewManagerService", () => {
-    let mockService: SplitViewManagerService;
+    let mockService: SplitViewManagerService<Meeting>;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
