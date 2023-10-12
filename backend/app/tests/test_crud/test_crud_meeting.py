@@ -6,7 +6,7 @@ from app.core.exceptions import GenericException, MissingException
 from app.crud.crud_meeting import (
     create_meeting_with_user_ids,
     create_new_meeting,
-    get_all_meetings,
+    get_all_meetings_with_pagination,
     get_meeting_by_id,
     get_meetings_by_user_id,
     update_meeting_with_user_ids,
@@ -100,7 +100,7 @@ def test_incorrect__get_meeting_by_id(
         (user_create_unique_1, meeting_create, 2, 1, 3),
     ],
 )
-def test_correct__get_all_meetings(
+def test_correct__get_all_meetings_with_pagination(
     user: UserCreate,
     meeting: MeetingCreate,
     page: int,
@@ -120,7 +120,9 @@ def test_correct__get_all_meetings(
     """
     create_new_user(user, db_session)
     new_meetings = [create_new_meeting(meeting, db_session) for _ in range(total)]
-    all_meetings, created_total = get_all_meetings(page, per_page, db_session)
+    all_meetings, created_total = get_all_meetings_with_pagination(
+        page, per_page, db_session
+    )
     assert total == created_total
     for index, new_meeting in enumerate(reversed(new_meetings)):
         if page * per_page <= index < page * per_page + per_page:
