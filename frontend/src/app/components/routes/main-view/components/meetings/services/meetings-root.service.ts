@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { Observable } from "rxjs";
-import { filter, map, tap } from "rxjs/operators";
+import { forkJoin, Observable, of } from "rxjs";
+import { catchError, filter, map, switchMap } from "rxjs/operators";
 
 import {
     Meeting,
@@ -31,18 +31,16 @@ export class MeetingsRootService extends DestroyClass {
     private initData(): void {
         this.table.currentPageIndex$
             .pipe(
-                tap(() => {
-                    this.refreshMeetings();
-                }),
+                switchMap(() => this.refreshMeetings$()),
                 this.untilDestroyed()
             )
             .subscribe();
 
         this.splitView.currentId$
             .pipe(
-                tap((id: number | null) => {
-                    this.refreshCurrentMeeting(id);
-                }),
+                switchMap((id: number | null) =>
+                    this.refreshCurrentMeeting$(id)
+                ),
                 this.untilDestroyed()
             )
             .subscribe();
@@ -56,8 +54,9 @@ export class MeetingsRootService extends DestroyClass {
         this.openDialog(null)
             .afterClosed()
             .pipe(
-                tap((result: boolean) => {
-                    if (result) this.refreshMeetings();
+                switchMap((result: boolean) => {
+                    if (result) return this.refreshMeetings$();
+                    return of(null);
                 }),
                 this.untilDestroyed()
             )
@@ -69,11 +68,16 @@ export class MeetingsRootService extends DestroyClass {
             .afterClosed()
             .pipe(
                 filter((result) => result === true),
-                tap((result: boolean) => {
+                switchMap((result: boolean) => {
                     if (result) {
-                        this.refreshMeetings();
-                        this.refreshCurrentMeeting(this.splitView.currentId);
+                        return forkJoin([
+                            this.refreshMeetings$(),
+                            this.refreshCurrentMeeting$(
+                                this.splitView.currentId
+                            ),
+                        ]).pipe(catchError(() => of(null)));
                     }
+                    return of(null);
                 }),
                 this.untilDestroyed()
             )
@@ -90,21 +94,21 @@ export class MeetingsRootService extends DestroyClass {
         });
     }
 
-    private refreshMeetings(): void {
-        this.table
-            .refreshTableItems$(
-                this.http.getMeetingsList(
-                    this.table.currentPageIndex,
-                    this.table.capacity
-                )
+    private refreshMeetings$(): Observable<TableMeeting[]> {
+        return this.table.refreshTableItems$(
+            this.http.getMeetingsList(
+                this.table.currentPageIndex,
+                this.table.capacity
             )
-            .subscribe();
+        );
     }
 
-    private refreshCurrentMeeting(id: number | null): void {
-        if (id === null) return;
-        this.splitView
-            .refreshCurrentMeeting$(this.http.getMeetingsById(id))
-            .subscribe();
+    private refreshCurrentMeeting$(
+        id: number | null
+    ): Observable<Meeting | null> {
+        if (id === null) return of(null);
+        return this.splitView.refreshCurrentMeeting$(
+            this.http.getMeetingsById(id)
+        );
     }
 }
