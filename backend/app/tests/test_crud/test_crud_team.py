@@ -4,7 +4,12 @@
 import pytest
 from app.core.exceptions import MissingException
 from app.crud.crud_coach import create_new_coach
-from app.crud.crud_team import create_new_team, get_all_teams, get_team_by_id
+from app.crud.crud_team import (
+    create_new_team,
+    get_all_teams,
+    get_all_teams_with_pagination,
+    get_team_by_id,
+)
 from app.crud.crud_user import create_new_user
 from app.schemas.coach import CoachCreate
 from app.schemas.team import TeamCreate
@@ -114,3 +119,43 @@ def test_correct__get_all_teams(
     new_teams = get_all_teams(db_session)
     assert len(teams) == len(new_teams)
     assert all((team.name == new_team.name for team, new_team in zip(teams, new_teams)))
+
+
+@pytest.mark.parametrize(
+    "user,coach,team,page,per_page,total",
+    [
+        (user_create_unique_1, coach_create, team_create, 0, 1, 1),
+        (user_create_unique_1, coach_create, team_create, 0, 2, 2),
+        (user_create_unique_1, coach_create, team_create, 1, 1, 3),
+        (user_create_unique_1, coach_create, team_create, 1, 2, 3),
+        (user_create_unique_1, coach_create, team_create, 2, 1, 3),
+    ],
+)
+def test_correct__get_all_teams_with_pagination(
+    user: UserCreate,
+    coach: CoachCreate,
+    team: TeamCreate,
+    page: int,
+    per_page: int,
+    total: int,
+    db_session: Session,
+) -> None:
+    """Tests getting all teams with pagination.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        page (int): The page index to be retrieved.
+        per_page (int): The number of items per page.
+        total (int): The total number of items.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    create_new_coach(coach, db_session)
+    new_teams = [create_new_team(team, db_session) for _ in range(total)]
+    all_teams, created_total = get_all_teams_with_pagination(page, per_page, db_session)
+    assert total == created_total
+    for index, new_team in enumerate(new_teams):
+        if page * per_page <= index < page * per_page + per_page:
+            assert all_teams[index - page * per_page] == new_team
