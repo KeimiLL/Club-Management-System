@@ -1,4 +1,4 @@
-"""File for testing teames CRUD operations."""
+"""File for testing teams CRUD operations."""
 
 
 import pytest
@@ -43,7 +43,7 @@ def test_correct__create_new_team(
     "user,coach,team",
     [(user_create_unique_1, coach_create, team_create)],
 )
-def test_correct__get_team_by_user_id(
+def test_correct__get_team_by_id(
     user: UserCreate,
     coach: CoachCreate,
     team: TeamCreate,
@@ -60,17 +60,17 @@ def test_correct__get_team_by_user_id(
     create_new_user(user, db_session)
     create_new_coach(coach, db_session)
     new_team = create_new_team(team, db_session)
-    team_by_user_id = get_team_by_id(new_team.id, db_session)
-    assert team_by_user_id.coach.user.full_name == user.full_name
-    assert team_by_user_id.coach.date_of_birth == coach.date_of_birth
-    assert team_by_user_id.name == team.name
+    team_by_id = get_team_by_id(new_team.id, db_session)
+    assert team_by_id.coach.user.full_name == user.full_name
+    assert team_by_id.coach.date_of_birth == coach.date_of_birth
+    assert team_by_id.name == team.name
 
 
 @pytest.mark.parametrize(
     "team_id",
     [0, 1000000],
 )
-def test_incorrect__get_team_by_user_id(
+def test_incorrect__get_team_by_id(
     team_id: int,
     db_session: Session,
 ) -> None:
