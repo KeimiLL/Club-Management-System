@@ -90,6 +90,7 @@ def test_incorrect__get_team_by_id(
     [
         (user_create_unique_1, coach_create, []),
         (user_create_unique_1, coach_create, [team_create]),
+        (user_create_unique_1, coach_create, [team_create, team_create, team_create]),
     ],
 )
 def test_correct__get_all_teams(
