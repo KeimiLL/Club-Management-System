@@ -1,9 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 
-@Injectable({
-    providedIn: "root",
-})
+@Injectable()
 export class LoaderService {
     private readonly isLoadingStore$: BehaviorSubject<boolean> =
         new BehaviorSubject<boolean>(false);

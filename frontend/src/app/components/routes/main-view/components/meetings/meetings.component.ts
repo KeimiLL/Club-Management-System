@@ -35,6 +35,7 @@ import { MeetingsRootService } from "./services/meetings-root.service";
         // MeetingsHttpService,
         MeetingsRootService,
         TableService,
+        LoaderService,
     ],
 })
 export class MeetingsComponent implements OnInit {
