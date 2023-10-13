@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { FormArray, FormControl, Validators } from "@angular/forms";
-import { Observable, switchMap, tap } from "rxjs";
+import { filter, Observable, switchMap, tap } from "rxjs";
 
 import { SnackbarMessages } from "../../../../../../../../shared/models/messages.model";
 import {
@@ -39,11 +39,25 @@ export class SettingsModifyRootService extends DestroyClass {
     }
 
     public changeUserRole(id: number, role: Roles): void {
-        // this.popup.rolePopupSwitch(role);
+        if (role !== Roles.Coach && role !== Roles.Player) {
+            this.userService
+                .updateRole(id, role)
+                .pipe(
+                    switchMap(() => this.refreshUsers$()),
+                    tap(() => {
+                        this.snack.showSnackBar(SnackbarMessages.ROLE_CHANGED);
+                    })
+                )
+                .subscribe();
 
-        this.userService
-            .updateRole(id, role)
+            return;
+        }
+
+        this.popup
+            .rolePopupSwitch$(role)
             .pipe(
+                filter((response) => response !== null),
+                switchMap(() => this.userService.updateRole(id, role)),
                 switchMap(() => this.refreshUsers$()),
                 tap(() => {
                     this.snack.showSnackBar(SnackbarMessages.ROLE_CHANGED);
