@@ -7,7 +7,7 @@ from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_coach import get_coach_by_user_id
 from app.models.team import Team
 from app.schemas.team import TeamCreate
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -80,5 +80,36 @@ def get_all_teams(db: Session) -> Sequence[Team]:
     """
     try:
         return db.scalars(select(Team)).all()
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def get_all_teams_with_pagination(
+    page: int,
+    per_page: int,
+    db: Session,
+) -> tuple[Sequence[Team], int]:
+    """Gets all teams with pagination.
+
+    Args:
+        page (int): The current page number.
+        per_page (int): The number of items per page.
+        db (Session): Database session.
+
+    Raises:
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        tuple[Sequence[Team], int]: The list of all teams alongside the total number of them.
+    """
+    try:
+        query = select(Team)
+        total = db.scalar(select(func.count()).select_from(query))
+        return (
+            db.scalars(
+                query.order_by(Team.name.desc()).offset(page * per_page).limit(per_page)
+            ).all(),
+            total,
+        )
     except SQLAlchemyError as exc:
         raise exc

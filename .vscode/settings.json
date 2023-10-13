@@ -10,5 +10,6 @@
   "eslint.workingDirectories": [{ "mode": "auto" }],
   "python.analysis.diagnosticSeverityOverrides": {
     "reportGeneralTypeIssues": "information"
-  }
+  },
+  "python.analysis.autoImportCompletions": true
 }
