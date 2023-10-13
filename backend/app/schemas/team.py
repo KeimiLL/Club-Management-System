@@ -57,3 +57,9 @@ class TeamOnlyBaseInfo(BaseModel):
 
     id: int = Field(..., ge=1, le=10**7)
     name: str = Field(..., min_length=3)
+
+
+class TeamTableView(TeamOnlyBaseInfo):
+    """Meeting schema for returning data to be shown in the teams' table."""
+
+    coach_user_full_name: str = Field(..., min_length=4)

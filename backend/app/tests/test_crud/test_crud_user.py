@@ -158,7 +158,11 @@ def test_incorrect__get_user_by_id(
 
 @pytest.mark.parametrize(
     "users",
-    [[], [user_create_unique_1], [user_create_unique_2, user_create_with_role]],
+    [
+        [],
+        [user_create_unique_1],
+        [user_create_unique_1, user_create_unique_2, user_create_with_role],
+    ],
 )
 def test_correct__get_all_users(
     users: list[UserCreate | UserCreateWithRole],
