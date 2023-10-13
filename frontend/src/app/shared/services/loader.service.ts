@@ -1,22 +1,32 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 
 @Injectable({
     providedIn: "root",
 })
 export class LoaderService {
-    spinnerMessage = "";
-    public isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-        false
-    );
+    private readonly isLoadingStore$: BehaviorSubject<boolean> =
+        new BehaviorSubject<boolean>(false);
 
-    enableSpinner(message?: string): void {
-        this.spinnerMessage = message ?? "Loading";
-        this.isLoading$.next(true);
+    public set isLoading(b: boolean) {
+        this.isLoadingStore$.next(b);
     }
 
-    disableSpinner(): void {
-        this.spinnerMessage = "";
-        this.isLoading$.next(false);
+    public get isLoading(): boolean {
+        return this.isLoadingStore$.value;
+    }
+
+    public get isLoading$(): Observable<boolean> {
+        return this.isLoadingStore$.asObservable();
+    }
+
+    public enableSpinner(): void {
+        console.log("WCHODZI");
+        this.isLoading = true;
+    }
+
+    public disableSpinner(): void {
+        console.log("WYCHODZI");
+        this.isLoading = false;
     }
 }

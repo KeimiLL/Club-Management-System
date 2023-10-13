@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { SpinnerComponent } from "../../../../../shared/components/spinner/spinner.component";
+// import { SpinnerComponent } from "../../../../../shared/components/spinner/spinner.component";
 import {
     Meeting,
     TableMeeting,
@@ -27,7 +27,6 @@ import { MeetingsRootService } from "./services/meetings-root.service";
         LegendComponent,
         MeetingTableComponent,
         CurrentMeetingContentComponent,
-        SpinnerComponent,
     ],
     templateUrl: "./meetings.component.html",
     styleUrls: ["./meetings.component.scss"],
@@ -35,20 +34,20 @@ import { MeetingsRootService } from "./services/meetings-root.service";
         SplitViewManagerService,
         // MeetingsHttpService,
         MeetingsRootService,
-        // TableService,
+        TableService,
     ],
 })
 export class MeetingsComponent implements OnInit {
     protected isDetail$: Observable<boolean>;
     protected tableMeetings$: Observable<TableMeeting[]>;
     protected currentMeeting$: Observable<Meeting | null>;
-    isLoading$ = this.loaderService.isLoading$;
+    protected isLoading$: Observable<boolean>;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Meeting>,
         private readonly root: MeetingsRootService,
         private readonly table: TableService<TableMeeting>,
-        public loaderService: LoaderService
+        private readonly loaderService: LoaderService
     ) {}
 
     ngOnInit(): void {

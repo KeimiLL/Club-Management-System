@@ -34,6 +34,8 @@ $dark-btn-text: #fdfaff;
 $light-btn-back: #b4befe;
 $light-btn-back-on-hover: #cad0fc;
 $light-btn-text: #020b1b;
+$disabled-btn-color1: #cdcaca;
+$disabled-btn-color2: #858585;
 
 // profile icons background colors
 $admin-icon-back: #ef436b;
@@ -84,6 +86,11 @@ $huge-font: 34px;
         &:hover {
             background-color: $dark-btn-back-on-hover;
         }
+
+        &:disabled {
+            background-color: $disabled-btn-color2;
+            color: $disabled-btn-color1;
+        }
     }
 
     &--light {
@@ -95,13 +102,11 @@ $huge-font: 34px;
         &:hover {
             background-color: $light-btn-back-on-hover;
         }
-    }
 
-    &--disabled {
-        background-color: #ccc;
-        color: #666;
-        cursor: not-allowed;
-        pointer-events: none;
+        &:disabled {
+            background-color: $disabled-btn-color1;
+            color: $disabled-btn-color2;
+        }
     }
 }
 

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, map, Observable, tap } from "rxjs";
+import { BehaviorSubject, finalize, map, Observable, tap } from "rxjs";
 
 import { TableResponse } from "../models/misc.model";
 import { DestroyClass } from "../utils/destroyClass";
@@ -24,7 +24,9 @@ export class TableService<T> extends DestroyClass {
         return this.tableItemsStore$.asObservable();
     }
 
-    constructor(private readonly loaderService: LoaderService) {}
+    constructor(private readonly loaderService: LoaderService) {
+        super();
+    }
 
     public get currentPageIndex(): number {
         return this.currentPageIndexStore$.value;
@@ -49,15 +51,14 @@ export class TableService<T> extends DestroyClass {
     public refreshTableItems$(
         request: Observable<TableResponse<T>>
     ): Observable<T[]> {
-        this.loaderService.enableSpinner("Loading meetings");
-
+        this.loaderService.enableSpinner();
         return request.pipe(
             tap((response) => {
                 this.totalItems = response.total;
                 this.tableItems = response.items;
             }),
             map((response) => response.items),
-            tap(() => {
+            finalize(() => {
                 this.loaderService.disableSpinner();
             })
         );

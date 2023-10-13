@@ -12,6 +12,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { Observable } from "rxjs";
 
 import { DateComponent } from "../../../../../../../shared/components/date/date.component";
+import { SpinnerComponent } from "../../../../../../../shared/components/spinner/spinner.component";
 import { PermissionDirective } from "../../../../../../../shared/directives/permission.directive";
 import {
     Meeting,
@@ -19,6 +20,7 @@ import {
 } from "../../../../../../../shared/models/meeting.model";
 import { MeetingsPermission } from "../../../../../../../shared/models/permission.model";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
+import { LoaderService } from "../../../../../../../shared/services/loader.service";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../../shared/services/table.service";
 import { MeetingsRootService } from "../../services/meetings-root.service";
@@ -32,9 +34,11 @@ import { MeetingsRootService } from "../../services/meetings-root.service";
         MatIconModule,
         PermissionDirective,
         DateComponent,
+        SpinnerComponent,
     ],
     templateUrl: "./meeting-table.component.html",
     styleUrls: ["./meeting-table.component.scss"],
+    providers: [LoaderService],
 })
 export class MeetingTableComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -49,13 +53,16 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
     protected totalItems$: Observable<number>;
     protected itemsPerPage: number;
     protected index$: Observable<number>;
+    protected isLoading$: Observable<boolean>;
+    protected spinnerMessage = "Loading meetings";
 
     protected readonly permissions = MeetingsPermission;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Meeting>,
         private readonly table: TableService<TableMeeting>,
-        private readonly root: MeetingsRootService
+        private readonly root: MeetingsRootService,
+        private readonly loaderService: LoaderService
     ) {}
 
     ngOnInit(): void {
@@ -63,6 +70,7 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
         this.index$ = this.table.currentPageIndex$;
         this.totalItems$ = this.table.totalItems$;
         this.displayedColumns$ = this.root.displayedColumns$;
+        this.isLoading$ = this.loaderService.isLoading$;
     }
 
     ngAfterViewInit(): void {

@@ -56,3 +56,8 @@
         </ng-container>
     </app-half-card-section>
 </div>
+
+<app-spinner
+    [spinnerMessage]="spinnerMessage"
+    *ngIf="isLoading$ | async"
+></app-spinner>

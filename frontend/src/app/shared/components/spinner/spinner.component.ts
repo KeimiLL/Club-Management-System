@@ -1,6 +1,6 @@
 import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
 import { MaterialModule } from "../../modules/material.module";
 import { LoaderService } from "../../services/loader.service";
@@ -22,5 +22,6 @@ import { LoaderService } from "../../services/loader.service";
     ],
 })
 export class SpinnerComponent {
-    constructor(readonly loaderService: LoaderService) {}
+    @Input() public spinnerMessage: string;
+    constructor(private readonly loaderService: LoaderService) {}
 }

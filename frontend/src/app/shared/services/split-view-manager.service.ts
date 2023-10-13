@@ -4,6 +4,7 @@ import { BehaviorSubject, catchError, Observable, of, tap } from "rxjs";
 
 import { MainRoutes } from "../models/misc.model";
 import { DestroyClass } from "../utils/destroyClass";
+import { LoaderService } from "./loader.service";
 import { SnackbarService } from "./snackbar.service";
 
 @Injectable()
@@ -15,7 +16,8 @@ export class SplitViewManagerService<T> extends DestroyClass {
     constructor(
         private readonly activatedRoute: ActivatedRoute,
         private readonly router: Router,
-        private readonly snack: SnackbarService
+        private readonly snack: SnackbarService,
+        private readonly loaderService: LoaderService
     ) {
         super();
         this.urlChecker();
@@ -91,22 +93,26 @@ export class SplitViewManagerService<T> extends DestroyClass {
 
     public refreshCurrentItem$(request: Observable<T>): Observable<T | null> {
         if (this.currentId !== null) {
+            // this.loaderService.enableSpinner();
             return request.pipe(
                 tap((item) => {
                     this.currentItemStore$.next(item);
+                    // this.loaderService.disableSpinner();
                 }),
                 catchError((error) => {
+                    // this.loaderService.disableSpinner();
                     if (error.status === 404) {
                         this.changeDetailState();
                     }
                     if (error.status === 403) {
                         this.router.navigate([MainRoutes.Error]);
-                    }
+                    }                    
                     return of(null);
                 }),
                 this.untilDestroyed()
             );
         }
+        // this.loaderService.disableSpinner();
         return of(null);
     }
 }
