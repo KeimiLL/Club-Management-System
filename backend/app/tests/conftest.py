@@ -15,6 +15,7 @@ from app.main import include_exception_handlers, include_middleware
 from app.schemas.coach import CoachCreate
 from app.schemas.enums import Roles
 from app.schemas.meeting import MeetingCreate, MeetingUpdate
+from app.schemas.player import PlayerCreate
 from app.schemas.team import TeamCreate
 from app.schemas.user import UserCreate, UserCreateWithRole
 from fastapi import FastAPI
@@ -183,4 +184,15 @@ coach_create = CoachCreate(
 team_create = TeamCreate(
     coach_id=1,
     name="U21",
+)
+
+player_create = PlayerCreate(
+    user_id=1,
+    team_id=1,
+    date_of_joining=datetime.date.today(),
+    date_of_birth=datetime.date.today(),
+    height=190,
+    weight=90,
+    notes="GOAT",
+    is_injured=True,
 )
