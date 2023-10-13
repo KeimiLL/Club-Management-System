@@ -11,6 +11,7 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { Observable } from "rxjs";
 
+import { DateComponent } from "../../../../../../../shared/components/date/date.component";
 import { PermissionDirective } from "../../../../../../../shared/directives/permission.directive";
 import {
     Meeting,
@@ -25,7 +26,13 @@ import { MeetingsRootService } from "../../services/meetings-root.service";
 @Component({
     selector: "app-meeting-table",
     standalone: true,
-    imports: [CommonModule, MaterialModule, MatIconModule, PermissionDirective],
+    imports: [
+        CommonModule,
+        MaterialModule,
+        MatIconModule,
+        PermissionDirective,
+        DateComponent,
+    ],
     templateUrl: "./meeting-table.component.html",
     styleUrls: ["./meeting-table.component.scss"],
 })
