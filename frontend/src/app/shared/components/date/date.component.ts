@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnChanges } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
 
 @Component({
@@ -9,21 +9,23 @@ import { MatIconModule } from "@angular/material/icon";
     templateUrl: "./date.component.html",
     styleUrls: ["./date.component.scss"],
 })
-export class DateComponent implements OnChanges {
-    @Input() date: string;
-    cssClass: string;
+export class DateComponent implements OnInit {
+    @Input() public date: string;
+    protected cssClass: string;
 
-    ngOnChanges(): void {
+    ngOnInit(): void {
         const dateObject = new Date(this.date);
         const today = new Date();
+        this.cssClass = this.getClassForDate(dateObject, today);
+    }
 
-        if (this.areDatesEqual(dateObject, today)) {
-            this.cssClass = "date--today";
-        } else if (dateObject < today) {
-            this.cssClass = "date--past";
-        } else {
-            this.cssClass = "date--future";
+    private getClassForDate(inputDate: Date, currentDate: Date): string {
+        if (this.areDatesEqual(inputDate, currentDate)) {
+            return "date--today";
+        } else if (inputDate < currentDate) {
+            return "date--past";
         }
+        return "date--future";
     }
 
     private areDatesEqual(date1: Date, date2: Date): boolean {
