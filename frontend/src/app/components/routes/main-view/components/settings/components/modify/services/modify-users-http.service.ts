@@ -10,8 +10,6 @@ export class ModifyUsersHttpService {
     constructor(private readonly http: HttpClient) {}
 
     public createCoach(coachData: CreateCoach): Observable<BackendResponse> {
-        return this.http.put<BackendResponse>("api/v1/coaches/", {
-            coachData,
-        });
+        return this.http.post<BackendResponse>("api/v1/coaches", coachData);
     }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { FormArray, FormControl, Validators } from "@angular/forms";
-import { filter, Observable, switchMap, tap } from "rxjs";
+import { Observable, switchMap, takeWhile, tap } from "rxjs";
 
 import { SnackbarMessages } from "../../../../../../../../shared/models/messages.model";
 import {
@@ -56,7 +56,7 @@ export class SettingsModifyRootService extends DestroyClass {
         this.popup
             .rolePopupSwitch$(role)
             .pipe(
-                filter((response) => response !== null),
+                takeWhile((response) => response !== null),
                 switchMap(() => this.userService.updateRole(id, role)),
                 switchMap(() => this.refreshUsers$()),
                 tap(() => {
