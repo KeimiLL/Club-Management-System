@@ -1,6 +1,8 @@
 """File responsible for implementing coaches related CRUD operations."""
 
 
+from typing import Sequence
+
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_user import get_user_by_id
 from app.models.coach import Coach
@@ -59,5 +61,23 @@ def get_coach_by_user_id(user_id: int, db: Session) -> Coach:
         return db.execute(select(Coach).where(Coach.user_id == user_id)).scalar_one()
     except NoResultFound as exc:
         raise MissingException(Coach.__name__) from exc
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def get_all_coaches(db: Session) -> Sequence[Coach]:
+    """Gets all coaches.
+
+    Args:
+        db (Session): Database session.
+
+    Raises:
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        Sequence[Coach]: A list of all Coach objects.
+    """
+    try:
+        return db.scalars(select(Coach)).all()
     except SQLAlchemyError as exc:
         raise exc
