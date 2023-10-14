@@ -3,11 +3,16 @@
 
 import pytest
 from app.core.exceptions import MissingException
-from app.crud.crud_coach import create_new_coach, get_coach_by_user_id
+from app.crud.crud_coach import create_new_coach, get_all_coaches, get_coach_by_user_id
 from app.crud.crud_user import create_new_user
 from app.schemas.coach import CoachCreate
-from app.schemas.user import UserCreate
-from app.tests.conftest import coach_create, user_create_unique_1
+from app.schemas.user import UserCreate, UserCreateWithRole
+from app.tests.conftest import (
+    coach_create,
+    user_create_unique_1,
+    user_create_unique_2,
+    user_create_with_role,
+)
 from sqlalchemy.orm import Session
 
 
@@ -75,3 +80,40 @@ def test_incorrect__get_coach_by_user_id(
     with pytest.raises(MissingException) as excinfo:
         get_coach_by_user_id(user_id, db_session)
     assert "Coach" == str(excinfo.value)
+
+
+@pytest.mark.parametrize(
+    "users,coaches",
+    [
+        ([user_create_unique_1], []),
+        ([user_create_unique_1], [coach_create]),
+        (
+            [user_create_unique_1, user_create_unique_2, user_create_with_role],
+            [coach_create, coach_create, coach_create],
+        ),
+    ],
+)
+def test_correct__get_all_teams(
+    users: list[UserCreate | UserCreateWithRole],
+    coaches: list[CoachCreate],
+    db_session: Session,
+) -> None:
+    """Tests getting all teams.
+
+    Args:
+        users (list[UserCreate | UserCreateWithRole]): Users to be created.
+        coaches (list[CoachCreate]): Coaches to be created and read.
+        db_session (Session): Database session.
+    """
+    for user in users:
+        create_new_user(user, db_session)
+    for index, coach in enumerate(coaches):
+        create_new_coach(coach.model_copy(update={"user_id": index + 1}), db_session)
+    new_coaches = get_all_coaches(db_session)
+    assert len(coaches) == len(new_coaches)
+    assert all(
+        (
+            coach.date_of_birth == new_coach.date_of_birth
+            for coach, new_coach in zip(coaches, new_coaches)
+        )
+    )

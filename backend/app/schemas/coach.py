@@ -47,3 +47,10 @@ class CoachInDBBase(CoachBase):
     user_id: int | None = Field(None, ge=1, le=10**7)
     user: "User"
     teams: list["Team"]
+
+
+class CoachOnlyBaseInfo(BaseModel):
+    """Coach schema for returning data from the database."""
+
+    user_id: int = Field(..., ge=1, le=10**7)
+    user_full_name: str = Field(..., min_length=4)
