@@ -16,6 +16,38 @@
                     Old Password is required.
                 </mat-error>
             </mat-form-field>
+            <mat-form-field class="auth__form__field">
+                <mat-label class="field-label">New Password:</mat-label>
+                <input
+                    class="field-input"
+                    matInput
+                    type="password"
+                    formControlName="newPassword"
+                    required
+                />
+                <mat-error class="field-error">
+                    New Password is required.
+                </mat-error>
+                <mat-error class="field-error">
+                    New Password must be at least 6 characters long.
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="auth__form__field">
+                <mat-label class="field-label">Confirm New Password:</mat-label>
+                <input
+                    class="field-input"
+                    matInput
+                    type="password"
+                    formControlName="confirmPassword"
+                    required
+                />
+                <mat-error class="field-error">
+                    Confirm Password is required.
+                </mat-error>
+                <mat-error class="field-error">
+                    New Password and Confirm Password do not match.
+                </mat-error>
+            </mat-form-field>
             <button class="button--dark" mat-raised-button type="submit">
                 Change Password
             </button>
