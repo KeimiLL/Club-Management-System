@@ -9,6 +9,7 @@ import { SplitViewManagerService } from "../../../../../shared/services/split-vi
 import { TableService } from "../../../../../shared/services/table.service";
 import { TeamsContentComponent } from "./components/teams-content/teams-content.component";
 import { TeamsTableComponent } from "./components/teams-table/teams-table.component";
+import { TeamsHttpService } from "./services/teams-http.service";
 import { TeamsRootService } from "./services/teams-root.service";
 
 @Component({
@@ -23,7 +24,12 @@ import { TeamsRootService } from "./services/teams-root.service";
     ],
     templateUrl: "./teams.component.html",
     styleUrls: ["./teams.component.scss"],
-    providers: [TeamsRootService, SplitViewManagerService, TableService],
+    providers: [
+        TeamsRootService,
+        TeamsHttpService,
+        SplitViewManagerService,
+        TableService,
+    ],
 })
 export class TeamsComponent implements OnInit {
     protected isDetail$: Observable<boolean>;

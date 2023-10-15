@@ -1,1 +1,1 @@
-export const teamsColumns = ["Position", "Team name", "Coach"];
+export const teamsColumns = ["Position", "Team name", "Coach name"];

@@ -86,9 +86,7 @@ export class SplitViewManagerService<T> extends DestroyClass {
         });
     }
 
-    public refreshCurrentMeeting$(
-        request: Observable<T>
-    ): Observable<T | null> {
+    public refreshCurrentItem$(request: Observable<T>): Observable<T | null> {
         if (this.currentId !== null) {
             return request.pipe(
                 tap((item) => {

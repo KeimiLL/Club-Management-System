@@ -107,7 +107,7 @@ export class MeetingsRootService extends DestroyClass {
         id: number | null
     ): Observable<Meeting | null> {
         if (id === null) return of(null);
-        return this.splitView.refreshCurrentMeeting$(
+        return this.splitView.refreshCurrentItem$(
             this.http.getMeetingsById(id)
         );
     }

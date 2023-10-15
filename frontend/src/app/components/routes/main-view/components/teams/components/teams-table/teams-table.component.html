@@ -1,1 +1,43 @@
-<p>teams-table works!</p>
+<mat-table #table [dataSource]="dataSource" class="table">
+    <ng-container matColumnDef="Position">
+        <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+        <mat-cell *matCellDef="let element; let i = index">
+            <ng-container *ngIf="{ pageId: (index$ | async) } as vm">
+                <ng-container *ngIf="vm.pageId !== null">{{
+                    vm.pageId * itemsPerPage + i + 1
+                }}</ng-container>
+            </ng-container>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="Team name">
+        <mat-header-cell *matHeaderCellDef> Team Name </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{ element.name }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="Coach name">
+        <mat-header-cell *matHeaderCellDef> Coach name </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="">
+            <mat-icon>
+                {{ element.coach_user_full_name }}
+            </mat-icon>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="addParamsToURL(row.id)"
+    ></mat-row>
+</mat-table>
+
+<div *ngIf="(totalItems$ | async) === 0" class="no-records">No Records</div>
+
+<mat-paginator
+    *ngIf="totalItems$ | async"
+    #paginator
+    [pageSize]="itemsPerPage"
+    [length]="totalItems$ | async"
+    (page)="changePage($event)"
+    class="paginator"
+></mat-paginator>

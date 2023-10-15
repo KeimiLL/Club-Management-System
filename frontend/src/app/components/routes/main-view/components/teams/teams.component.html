@@ -19,7 +19,10 @@
         </app-wide-card-header>
 
         <ng-container content>
-            <app-teams-table *ngIf="vm.tableTeams"></app-teams-table>
+            <app-teams-table
+                *ngIf="vm.tableTeams"
+                [data]="vm.tableTeams"
+            ></app-teams-table>
         </ng-container>
     </app-content-card>
 
