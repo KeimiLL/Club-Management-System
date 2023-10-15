@@ -15,6 +15,12 @@ export interface RegisterFormGroup {
     confirmPassword: FormControl<string>;
 }
 
+export interface ResetPasswordFormGroup {
+    oldPassword: FormControl<string>;
+    newPassword: FormControl<string>;
+    confirmPassword: FormControl<string>;
+}
+
 export const authFormBuilder = {
     buildLoginFormGroup: (): FormGroup<LoginFormGroup> =>
         new FormGroup<LoginFormGroup>({
