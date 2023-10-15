@@ -1,1 +1,24 @@
-<p>general works!</p>
+<app-content-card>
+    <app-wide-card-header header name="General"> </app-wide-card-header>
+
+    <ng-container content>
+        <form (ngSubmit)="saveChanges()" class="auth__form">
+            <mat-form-field class="auth__form__field">
+                <mat-label class="field-label">Old Password:</mat-label>
+                <input
+                    class="field-input"
+                    matInput
+                    type="password"
+                    formControlName="oldPassword"
+                    required
+                />
+                <mat-error class="field-error">
+                    Old Password is required.
+                </mat-error>
+            </mat-form-field>
+            <button class="button--dark" mat-raised-button type="submit">
+                Change Password
+            </button>
+        </form>
+    </ng-container>
+</app-content-card>
