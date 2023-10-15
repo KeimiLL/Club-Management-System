@@ -22,7 +22,7 @@ import { MaterialModule } from "../../../../../../../../../shared/modules/materi
 import { TableService } from "../../../../../../../../../shared/services/table.service";
 import { SettingsRootService } from "../../../../services/settings-root.service";
 import { usersColumns } from "../../meeting-table.data";
-import { SettingsModifyRootService } from "../../settings-modify-root.service";
+import { SettingsModifyRootService } from "../../services/settings-modify-root.service";
 import { UserService } from "./../../../../../../../../../shared/services/user.service";
 
 @Component({

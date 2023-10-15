@@ -1,0 +1,86 @@
+<div class="popup">
+    <mat-card class="card">
+        <mat-card-header class="card__header">
+            <app-half-card-right-header
+                name="Create new Coach"
+                (closedClicked)="onCloseClick()"
+            >
+            </app-half-card-right-header>
+        </mat-card-header>
+        <!-- <div class="card__content"> -->
+        <form [formGroup]="coachForm" (ngSubmit)="onSubmit()">
+            <app-half-card-section>
+                <app-section-header name="Date of birth" sectionHeader>
+                </app-section-header>
+
+                <ng-container sectionContent>
+                    <mat-form-field
+                        appearance="fill"
+                        class="popup__basic--name"
+                    >
+                        <input
+                            formControlName="date_of_birth"
+                            required
+                            readonly
+                            matInput
+                            [matDatepicker]="birthPicker"
+                            placeholder="Choose a date"
+                            (dateChange)="setBirthDate($event)"
+                        />
+                        <mat-datepicker-toggle
+                            matSuffix
+                            [for]="birthPicker"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker
+                            [disabled]="false"
+                            #birthPicker
+                        ></mat-datepicker>
+                    </mat-form-field>
+                </ng-container>
+            </app-half-card-section>
+
+            <app-half-card-section>
+                <app-section-header name="Date of joining" sectionHeader>
+                </app-section-header>
+
+                <ng-container sectionContent>
+                    <mat-form-field
+                        appearance="fill"
+                        class="popup__basic--name"
+                    >
+                        <input
+                            formControlName="date_of_joining"
+                            required
+                            readonly
+                            matInput
+                            [matDatepicker]="joinPicker"
+                            placeholder="Choose a date"
+                            (dateChange)="setJoiningDate($event)"
+                        />
+                        <mat-datepicker-toggle
+                            matSuffix
+                            [for]="joinPicker"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker
+                            [disabled]="false"
+                            #joinPicker
+                        ></mat-datepicker>
+                    </mat-form-field>
+                </ng-container>
+            </app-half-card-section>
+
+            <div class="button-container">
+                <button
+                    [disabled]="coachForm.invalid"
+                    type="submit"
+                    mat-raised-button
+                    class="button--light"
+                    buttons
+                >
+                    Create new Coach
+                </button>
+            </div>
+        </form>
+        <!-- </div> -->
+    </mat-card>
+</div>
