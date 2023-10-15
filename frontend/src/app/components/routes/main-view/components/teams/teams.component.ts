@@ -51,4 +51,8 @@ export class TeamsComponent implements OnInit {
     protected switchDetail(): void {
         this.splitView.changeDetailState();
     }
+
+    protected onNewTeamClick(): void {
+        this.root.openNewMeetingDialog();
+    }
 }

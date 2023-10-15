@@ -1,1 +1,73 @@
-<p>teams-popup works!</p>
+<div class="popup">
+    <mat-card class="card">
+        <mat-card-header class="card__header">
+            <app-half-card-right-header
+                name="Create new Coach"
+                (closedClicked)="onCloseClick()"
+            >
+            </app-half-card-right-header>
+        </mat-card-header>
+        <form [formGroup]="teamForm" (ngSubmit)="onSubmit()">
+            <app-half-card-section>
+                <app-section-header name="Team name" sectionHeader>
+                </app-section-header>
+
+                <ng-container sectionContent>
+                    <mat-form-field appearance="fill">
+                        <input
+                            matInput
+                            placeholder="Team name..."
+                            formControlName="name"
+                        />
+                    </mat-form-field>
+                </ng-container>
+            </app-half-card-section>
+
+            <app-half-card-section>
+                <app-section-header name="Coach" sectionHeader>
+                </app-section-header>
+
+                <ng-container sectionContent>
+                    <mat-form-field appearance="fill">
+                        <input
+                            matInput
+                            placeholder="Add Attendee..."
+                            [formControl]="coachInputControl"
+                            [matAutocomplete]="auto"
+                        />
+                        <mat-autocomplete
+                            #auto="matAutocomplete"
+                            (optionSelected)="onOptionSelected($event)"
+                        >
+                            <mat-option
+                                *ngFor="let coach of coaches$ | async"
+                                [value]="coach"
+                            >
+                                {{ coach.user_full_name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </ng-container>
+            </app-half-card-section>
+
+            <!-- <app-half-card-section>
+                <app-section-header name="Players" sectionHeader>
+                </app-section-header>
+
+                <ng-container sectionContent> </ng-container>
+            </app-half-card-section> -->
+
+            <div class="button-container">
+                <button
+                    [disabled]="teamForm.invalid"
+                    type="submit"
+                    mat-raised-button
+                    class="button--light"
+                    buttons
+                >
+                    Create new Team
+                </button>
+            </div>
+        </form>
+    </mat-card>
+</div>

@@ -2,22 +2,12 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
-import {
-    BackendResponse,
-    TableResponse,
-} from "../../../../../../shared/models/misc.model";
-import {
-    TableTeam,
-    TeamCreate,
-} from "../../../../../../shared/models/team.model";
+import { TableResponse } from "../../../../../../shared/models/misc.model";
+import { TableTeam } from "../../../../../../shared/models/team.model";
 
 @Injectable()
 export class TeamsHttpService {
     constructor(private readonly http: HttpClient) {}
-
-    public createTeam(teamCreate: TeamCreate): Observable<BackendResponse> {
-        return this.http.post<BackendResponse>("/api/v1/teams", teamCreate);
-    }
 
     public getTeamsList(
         page: number,

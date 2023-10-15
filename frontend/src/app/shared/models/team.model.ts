@@ -1,6 +1,6 @@
 export interface TeamCreate {
     name: string;
-    coach_id: string;
+    coach_id: number;
 }
 
 export interface TableTeam {

@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { Observable, switchMap } from "rxjs";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { Observable, of, switchMap } from "rxjs";
 
 import { TableTeam, Team } from "../../../../../../shared/models/team.model";
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
 import { DestroyClass } from "../../../../../../shared/utils/destroyClass";
+import { TeamsPopupComponent } from "../components/teams-popup/teams-popup.component";
 import { TeamsHttpService } from "./teams-http.service";
 
 @Injectable()
@@ -49,4 +50,48 @@ export class TeamsRootService extends DestroyClass {
     //     if (id === null) return of(null);
     //     return this.splitView.refreshCurrentItem$(this.http.getTeamById(id));
     // }
+
+    public openNewMeetingDialog(): void {
+        this.openDialog(null)
+            .afterClosed()
+            .pipe(
+                switchMap((result: boolean) => {
+                    if (result) return this.refreshTeams$();
+                    return of(null);
+                }),
+                this.untilDestroyed()
+            )
+            .subscribe();
+    }
+
+    // public openEditMeetingDialog(): void {
+    //     this.openDialog(this.splitView.currentItem)
+    //         .afterClosed()
+    //         .pipe(
+    //             filter((result) => result === true),
+    //             switchMap((result: boolean) => {
+    //                 if (result) {
+    //                     return forkJoin([
+    //                         this.refreshMeetings$(),
+    //                         this.refreshCurrentMeeting$(
+    //                             this.splitView.currentId
+    //                         ),
+    //                     ]).pipe(catchError(() => of(null)));
+    //                 }
+    //                 return of(null);
+    //             }),
+    //             this.untilDestroyed()
+    //         )
+    //         .subscribe();
+    // }
+
+    private openDialog(
+        dialogData: Team | null
+    ): MatDialogRef<TeamsPopupComponent> {
+        return this.dialog.open(TeamsPopupComponent, {
+            width: "50vw",
+            disableClose: true,
+            data: dialogData,
+        });
+    }
 }
