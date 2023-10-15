@@ -16,11 +16,11 @@ export default [
                     import("./components/dashboard/dashboard.component").then(
                         (c) => c.DashboardComponent
                     ),
-                canActivate: [PermissionGuard],
                 data: {
                     modulesPermission: ModulesPermissions.Dashboard,
                     requiredPermission: null,
                 },
+                canActivate: [PermissionGuard],
             },
 
             {
@@ -35,6 +35,20 @@ export default [
                 },
                 canActivate: [PermissionGuard],
             },
+
+            {
+                path: "teams",
+                loadComponent: () =>
+                    import("./components/teams/teams.component").then(
+                        (c) => c.TeamsComponent
+                    ),
+                data: {
+                    modulesPermission: ModulesPermissions.Teams,
+                    requiredPermission: null,
+                },
+                canActivate: [PermissionGuard],
+            },
+
             {
                 path: "settings",
                 loadChildren: () => import("./components/settings/routes"),
