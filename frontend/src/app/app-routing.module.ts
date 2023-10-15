@@ -17,11 +17,10 @@ const routes: Routes = [
     },
     {
         path: MainRoutes.Error,
-        loadChildren: () =>
+        loadComponent: () =>
             import("./components/routes/error/error.component").then(
                 (c) => c.ErrorComponent
             ),
-        canActivate: [AuthGuard],
     },
     { path: "**", redirectTo: MainRoutes.Auth, pathMatch: "full" },
 ];
