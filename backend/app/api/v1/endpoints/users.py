@@ -180,7 +180,7 @@ def get_users(
     return get_all_users(db=db)
 
 
-@router.put(
+@router.post(
     "/{user_id}/role",
     response_model=MessageFromEnum,
     responses={

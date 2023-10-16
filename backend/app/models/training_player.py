@@ -29,8 +29,12 @@ class TrainingPlayer(Base):
         )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    training_id: Mapped[int] = mapped_column(Integer, ForeignKey("trainings.id"))
-    player_id: Mapped[int] = mapped_column(Integer, ForeignKey("players.user_id"))
+    training_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("trainings.id", ondelete="CASCADE")
+    )
+    player_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("players.user_id", ondelete="CASCADE")
+    )
     presence: Mapped[TrainingPresence] = mapped_column(String, nullable=False)
 
     training: Mapped["Training"] = relationship(back_populates="player_association")

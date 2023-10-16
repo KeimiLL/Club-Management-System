@@ -21,7 +21,7 @@ class TeamBase(BaseModel):
 class TeamCreate(TeamBase):
     """Team schema for creation."""
 
-    coach_id: int = Field(..., ge=1, le=10**7)
+    coach_id: int | None = Field(None, ge=1, le=10**7)
     name: str = Field(..., min_length=3)
 
 
@@ -29,7 +29,7 @@ class Team(TeamBase):
     """Team schema for returning data from DB."""
 
     name: str = Field(..., min_length=3)
-    coach: "Coach"
+    coach: "Coach | None"
     players: list["Player"]
     matches: list["Match"]
     trainings: list["Training"]
@@ -46,7 +46,7 @@ class TeamInDBBase(TeamBase):
 
     id: int | None = Field(None, ge=1, le=10**7)
     coach_id: int | None = Field(None, ge=1, le=10**7)
-    coach: "Coach"
+    coach: "Coach | None"
     players: list["Player"]
     matches: list["Match"]
     trainings: list["Training"]

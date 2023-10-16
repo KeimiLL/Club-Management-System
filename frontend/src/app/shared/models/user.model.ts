@@ -45,4 +45,5 @@ export enum Roles {
     Viewer = "viewer",
     Medic = "medic",
     Board = "board",
+    None = "none",
 }

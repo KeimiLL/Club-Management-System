@@ -30,7 +30,7 @@ class PlayerCreate(PlayerBase):
     """Player schema for creation."""
 
     user_id: int = Field(..., ge=1, le=10**7)
-    team_id: int = Field(..., ge=1, le=10**7)
+    team_id: int | None = Field(None, ge=1, le=10**7)
     date_of_joining: datetime.date
     date_of_birth: datetime.date
     height: PositiveInt
@@ -49,7 +49,7 @@ class Player(PlayerBase):
     notes: str
     is_injured: bool
     user: "User"
-    team: "Team"
+    team: "Team | None"
     injuries: list["Injury"]
     matches: list["Match"]
     trainings: list["Training"]
@@ -67,7 +67,7 @@ class PlayerInDBBase(PlayerBase):
     user_id: int | None = Field(None, ge=1, le=10**7)
     team_id: int | None = Field(None, ge=1, le=10**7)
     user: "User"
-    team: "Team"
+    team: "Team | None"
     injuries: list["Injury"]
     matches: list["Match"]
     trainings: list["Training"]

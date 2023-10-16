@@ -40,7 +40,9 @@ class Player(Base):
     user_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("users.id"), primary_key=True
     )
-    team_id: Mapped[int] = mapped_column(Integer, ForeignKey("teams.id"))
+    team_id: Mapped[int | None] = mapped_column(
+        Integer, ForeignKey("teams.id", ondelete="SET NULL"), nullable=True
+    )
     date_of_joining: Mapped[datetime.date] = mapped_column(Date, nullable=False)
     date_of_birth: Mapped[datetime.date] = mapped_column(Date, nullable=False)
     height: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -50,7 +52,7 @@ class Player(Base):
     diet: Mapped[str | None] = mapped_column(String, nullable=True)
 
     user: Mapped["User"] = relationship(back_populates="player")
-    team: Mapped["Team"] = relationship(back_populates="players")
+    team: Mapped[Team | None] = relationship(back_populates="players")
     injuries: Mapped[list["Injury"]] = relationship(cascade="all, delete-orphan")
 
     match_association: Mapped[list["MatchPlayer"]] = relationship(
