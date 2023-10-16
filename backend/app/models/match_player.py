@@ -29,8 +29,12 @@ class MatchPlayer(Base):
         )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    match_id: Mapped[int] = mapped_column(Integer, ForeignKey("matches.id"))
-    player_id: Mapped[int] = mapped_column(Integer, ForeignKey("players.user_id"))
+    match_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("matches.id", ondelete="CASCADE")
+    )
+    player_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("players.user_id", ondelete="CASCADE")
+    )
     is_starter: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     minutes_played: Mapped[int] = mapped_column(Integer, nullable=False)
     rating: Mapped[int] = mapped_column(Integer, nullable=False)

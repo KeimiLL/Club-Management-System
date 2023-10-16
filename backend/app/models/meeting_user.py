@@ -28,8 +28,12 @@ class MeetingUser(Base):
         )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    meeting_id: Mapped[int] = mapped_column(Integer, ForeignKey("meetings.id"))
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
+    meeting_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("meetings.id", ondelete="CASCADE")
+    )
+    user_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE")
+    )
 
     meeting: Mapped["Meeting"] = relationship(back_populates="user_association")
     user: Mapped["User"] = relationship(back_populates="meeting_association")
