@@ -5,10 +5,12 @@ from typing import Callable, Sequence
 
 from app.core.exceptions import DuplicateException, MissingException
 from app.core.security import Hasher
+from app.models.coach import Coach
+from app.models.player import Player
 from app.models.user import User
 from app.schemas.enums import Roles
 from app.schemas.user import UserCreate, UserCreateWithRole
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -126,6 +128,14 @@ def update_user_role(user_id: int, role: Roles, db: Session) -> User:
     try:
         query = select(User).where(User.id == user_id)
         user = db.execute(query).scalar_one()
+        if user.role == role:
+            return user
+        if user.role == Roles.COACH:
+            query = delete(Coach).where(Coach.user_id == user_id)
+            db.execute(query)
+        elif user.role == Roles.PLAYER:
+            query = delete(Player).where(Player.user_id == user_id)
+            db.execute(query)
         user.role = role
         db.commit()
         return user
