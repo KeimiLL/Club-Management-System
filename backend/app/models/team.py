@@ -35,4 +35,6 @@ class Team(Base):
     coach: Mapped["Coach | None"] = relationship(back_populates="teams")
     players: Mapped[list["Player"]] = relationship(back_populates="team")
     matches: Mapped[list["Match"]] = relationship(back_populates="team")
-    trainings: Mapped[list["Training"]] = relationship(back_populates="team")
+    trainings: Mapped[list["Training"]] = relationship(
+        back_populates="team", cascade="all, delete-orphan"
+    )
