@@ -55,10 +55,11 @@ export const allPermissions: SubPermissions[] = [
 export const RoleColorsMapping: Record<Roles, string> = {
     [Roles.Admin]: "#ef436b",
     [Roles.Coach]: "#ffce5c",
-    [Roles.Player]: "#D281B5",
+    [Roles.Player]: "#d281b5",
     [Roles.Viewer]: "#b4befe",
     [Roles.Medic]: "#ffb056",
     [Roles.Board]: "#06d6a0",
+    [Roles.None]: "#a8a8a8",
 };
 
 export const RoleDefinitions: Record<Roles, RolePermission> = {
@@ -92,6 +93,10 @@ export const RoleDefinitions: Record<Roles, RolePermission> = {
     },
     [Roles.Board]: {
         modules: [ModulesPermissions.Dashboard, ModulesPermissions.Settings],
+        permissions: [],
+    },
+    [Roles.None]: {
+        modules: [],
         permissions: [],
     },
 };

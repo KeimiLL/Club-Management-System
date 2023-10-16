@@ -13,6 +13,7 @@ class Roles(str, Enum):
     PLAYER = "player"
     MEDIC = "medic"
     VIEWER = "viewer"
+    NONE = "none"
 
 
 class HTTPResponseMessage(str, Enum):
