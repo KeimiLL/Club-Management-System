@@ -27,7 +27,8 @@ def create_new_player(player: PlayerCreate, db: Session) -> Player:
     """
     try:
         get_user_by_id(player.user_id, db)
-        get_team_by_id(player.team_id, db)
+        if player.team_id is not None:
+            get_team_by_id(player.team_id, db)
         new_player = Player(
             user_id=player.user_id,
             team_id=player.team_id,

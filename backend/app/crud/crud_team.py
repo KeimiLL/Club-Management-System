@@ -29,7 +29,8 @@ def create_new_team(team: TeamCreate, db: Session) -> Team:
         new_team (Team): Team object.
     """
     try:
-        get_coach_by_user_id(team.coach_id, db)
+        if team.coach_id is not None:
+            get_coach_by_user_id(team.coach_id, db)
         new_team = Team(
             coach_id=team.coach_id,
             name=team.name,
