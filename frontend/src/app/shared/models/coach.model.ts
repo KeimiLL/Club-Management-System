@@ -6,3 +6,8 @@ export interface CreateCoachDates {
 export interface CreateCoach {
     user_id: number;
 }
+
+export interface ShortCoach {
+    user_id: number;
+    user_full_name: string;
+}

@@ -13,7 +13,7 @@ export const menuItems: MainMenuItem[] = [
         icon: "question_answer",
         route: "/app/meetings",
     },
-    // { name: ModulesPermissions.Teams, icon: "groups", route: "/app" },
+    { name: ModulesPermissions.Teams, icon: "groups", route: "/app/teams" },
     // {
     //     name: ModulesPermissions.Schedule,
     //     icon: "event_available",
