@@ -106,6 +106,27 @@
                         New Password and Confirm Password do not match.
                     </mat-error>
                 </mat-form-field>
+                <div class="hint">
+                    <span class="hint__header">Please use at least:</span>
+                    <div class="hint__informations">
+                        <div class="hint__information flex-center">
+                            <mat-icon class="hint__information__icon"
+                                >check_circle</mat-icon
+                            >
+                            <span class="hint__information__text"
+                                >8 characters</span
+                            >
+                        </div>
+                        <div class="hint__information flex-center">
+                            <mat-icon class="hint__information__icon"
+                                >check_circle</mat-icon
+                            >
+                            <span class="hint__information__text"
+                                >No leading spaces</span
+                            >
+                        </div>
+                    </div>
+                </div>
                 <button class="button--light" mat-raised-button type="submit">
                     Change your password
                 </button>
