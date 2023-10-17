@@ -1,56 +1,115 @@
 <app-content-card>
-    <app-wide-card-header header name="General"> </app-wide-card-header>
+    <app-wide-card-header header name="General"></app-wide-card-header>
 
     <ng-container content>
-        <form (ngSubmit)="saveChanges()" class="auth__form">
-            <mat-form-field class="auth__form__field">
-                <mat-label class="field-label">Old Password:</mat-label>
-                <input
-                    class="field-input"
-                    matInput
-                    type="password"
-                    formControlName="oldPassword"
-                    required
-                />
-                <mat-error class="field-error">
-                    Old Password is required.
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field class="auth__form__field">
-                <mat-label class="field-label">New Password:</mat-label>
-                <input
-                    class="field-input"
-                    matInput
-                    type="password"
-                    formControlName="newPassword"
-                    required
-                />
-                <mat-error class="field-error">
-                    New Password is required.
-                </mat-error>
-                <mat-error class="field-error">
-                    New Password must be at least 6 characters long.
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field class="auth__form__field">
-                <mat-label class="field-label">Confirm New Password:</mat-label>
-                <input
-                    class="field-input"
-                    matInput
-                    type="password"
-                    formControlName="confirmPassword"
-                    required
-                />
-                <mat-error class="field-error">
-                    Confirm Password is required.
-                </mat-error>
-                <mat-error class="field-error">
-                    New Password and Confirm Password do not match.
-                </mat-error>
-            </mat-form-field>
-            <button class="button--dark" mat-raised-button type="submit">
-                Change Password
-            </button>
-        </form>
+        <button
+            class="button--dark button-show-hide"
+            mat-raised-button
+            (click)="toggleForm()"
+        >
+            Password
+        </button>
+        <div [@formAnimation]="showForm" class="auth">
+            <form class="auth__form" (ngSubmit)="saveChanges()">
+                <div class="header">
+                    <div class="header__icon flex-center">
+                        <mat-icon>lock</mat-icon>
+                    </div>
+                    <div class="header__text flex-center">
+                        <span>Set your new password</span>
+                    </div>
+                </div>
+
+                <mat-form-field class="auth__form__field">
+                    <mat-label class="field-label">Old Password:</mat-label>
+                    <input
+                        class="field-input"
+                        matInput
+                        type="password"
+                        formControlName="oldPassword"
+                        required
+                        #oldPassword
+                    />
+                    <mat-icon
+                        matSuffix
+                        (mousedown)="oldPassword.type = 'text'"
+                        (mouseup)="oldPassword.type = 'password'"
+                        [inline]="true"
+                    >
+                        {{
+                            oldPassword.type === "password"
+                                ? "visibility_off"
+                                : "visibility"
+                        }}
+                    </mat-icon>
+                    <mat-error class="field-error">
+                        Old Password is required.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="auth__form__field">
+                    <mat-label class="field-label">New Password:</mat-label>
+                    <input
+                        class="field-input"
+                        matInput
+                        type="password"
+                        formControlName="newPassword"
+                        required
+                        #newPassword
+                    />
+                    <mat-icon
+                        matSuffix
+                        (mousedown)="newPassword.type = 'text'"
+                        (mouseup)="newPassword.type = 'password'"
+                        [inline]="true"
+                    >
+                        {{
+                            newPassword.type === "password"
+                                ? "visibility_off"
+                                : "visibility"
+                        }}
+                    </mat-icon>
+                    <mat-error class="field-error">
+                        New Password is required.
+                    </mat-error>
+                    <mat-error class="field-error">
+                        New Password must be at least 6 characters long.
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="auth__form__field">
+                    <mat-label class="field-label"
+                        >Confirm New Password:</mat-label
+                    >
+                    <input
+                        class="field-input"
+                        matInput
+                        type="password"
+                        formControlName="confirmPassword"
+                        required
+                        #confirmNewPassword
+                    />
+                    <mat-icon
+                        matSuffix
+                        (mousedown)="confirmNewPassword.type = 'text'"
+                        (mouseup)="confirmNewPassword.type = 'password'"
+                        [inline]="true"
+                    >
+                        {{
+                            confirmNewPassword.type === "password"
+                                ? "visibility_off"
+                                : "visibility"
+                        }}
+                    </mat-icon>
+                    <mat-error class="field-error">
+                        Confirm Password is required.
+                    </mat-error>
+                    <mat-error class="field-error">
+                        New Password and Confirm Password do not match.
+                    </mat-error>
+                </mat-form-field>
+                <button class="button--light" mat-raised-button type="submit">
+                    Change your password
+                </button>
+            </form>
+        </div>
     </ng-container>
 </app-content-card>
