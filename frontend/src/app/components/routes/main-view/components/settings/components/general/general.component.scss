@@ -37,6 +37,51 @@
                 width: 100%;
                 padding-bottom: $small-spacing;
             }
+
+            .hint {
+                padding-top: $medium-spacing;
+
+                &__header {
+                    color: $dark-grey;
+                }
+
+                &__informations {
+                    padding-top: $medium-spacing;
+                    display: flex;
+                    justify-content: flex-start;
+                }
+
+                &__information {
+                    flex-basis: 50%;
+
+                    &__icon {
+                        color: $blue-icon;
+                        transform: scale(0.8);
+                    }
+
+                    &__text {
+                        color: $dark-grey;
+                    }
+                }
+            }
         }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
     }
 }
