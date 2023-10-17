@@ -14,7 +14,7 @@ from app.crud.crud_meeting import (
 )
 from app.db.session import get_db
 from app.models.user import User
-from app.schemas.enums import Roles
+from app.schemas.enums import HTTPResponseMessage, Roles
 from app.schemas.meeting import MeetingCreate, MeetingOnlyBaseUserInfo, MeetingTableView
 from app.schemas.meeting_user import MeetingUserCreateUserIdList, MeetingUserUpdate
 from app.schemas.misc import ItemsListWithTotal, Message, MessageFromEnum
@@ -26,7 +26,7 @@ router = APIRouter()
 
 @router.post(
     "",
-    response_model=MeetingOnlyBaseUserInfo,
+    response_model=Message,
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
@@ -35,26 +35,27 @@ router = APIRouter()
     },
 )
 def create_meeting(
-    meeting: MeetingUserCreateUserIdList,
+    meeting_user: MeetingUserCreateUserIdList,
     current_user: Annotated[User, Depends(get_user_from_token)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Creates a new meeting and its attendance based on data from a POST request.
 
     Args:
-        meeting (MeetingCreate): Meeting data from POST request.
+        meeting_user (MeetingUserCreateUserIdList): Meeting data from POST request.
         current_user (Annotated[User, Depends]): Current user read from access token.
             Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Returns:
-        MeetingInDBOnlyBaseUserInfo: Created meeting.
+        Message: The response signalling a successful operation.
     """
-    return create_meeting_with_user_ids(
-        meeting=MeetingCreate(user_id=current_user.id, **meeting.meeting.__dict__),
-        user_ids=meeting.user_ids,
+    create_meeting_with_user_ids(
+        meeting=MeetingCreate(user_id=current_user.id, **meeting_user.meeting.__dict__),
+        user_ids=meeting_user.user_ids,
         db=db,
     )
+    return Message(message=HTTPResponseMessage.SUCCESS)
 
 
 @router.get(
