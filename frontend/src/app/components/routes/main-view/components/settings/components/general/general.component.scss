@@ -4,14 +4,39 @@
     width: 100%;
     height: 100%;
     display: flex;
+    justify-content: flex-start;
 
-    form {
-        width: 300px;
-        margin: 0 auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        background-color: #fff;
+    .button-show-hide {
+        width: 100px;
+        margin: $medium-spacing;
+    }
+
+    .auth {
+        overflow: hidden;
+
+        &__form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: $container-padding;
+
+            .header {
+                padding-bottom: $large-spacing;
+
+                &__icon {
+                    color: $blue-icon;
+                    transform: scale(1.3);
+                    padding-bottom: $small-spacing;
+                }
+
+                &__text {
+                    font-size: $normal-font;
+                }
+            }
+
+            &__field {
+                width: 100%;
+                padding-bottom: $small-spacing;
+            }
+        }
     }
 }
