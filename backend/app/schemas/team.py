@@ -3,7 +3,7 @@
 
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, conint, conset
 
 if TYPE_CHECKING:
     from app.schemas.coach import Coach
@@ -23,6 +23,13 @@ class TeamCreate(TeamBase):
 
     coach_id: int | None = Field(None, ge=1, le=10**7)
     name: str = Field(..., min_length=3)
+
+
+class TeamCreatePlayerIdList(TeamBase):
+    """Team schema for creation with a set of player ids."""
+
+    team: TeamCreate
+    player_ids: conset(conint(ge=1, lt=10**7), min_length=0)
 
 
 class Team(TeamBase):
