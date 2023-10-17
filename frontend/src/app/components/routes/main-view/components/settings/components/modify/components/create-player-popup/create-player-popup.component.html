@@ -1,1 +1,154 @@
-<p>create-player-popup works!</p>
+<div class="popup">
+    <mat-card class="card">
+        <mat-card-header class="card__header">
+            <app-half-card-right-header
+                name="Create new Player"
+                (closedClicked)="onCloseClick()"
+            >
+            </app-half-card-right-header>
+        </mat-card-header>
+        <form [formGroup]="playerForm" (ngSubmit)="onSubmit()">
+            <app-half-card-section>
+                <app-section-header name="Team" sectionHeader>
+                </app-section-header>
+
+                <ng-container sectionContent>
+                    <mat-form-field
+                        appearance="fill"
+                        class="popup__basic--name"
+                    >
+                        <mat-label>Select an Team</mat-label>
+                        <mat-select formControlName="team_id">
+                            <mat-option
+                                *ngFor="let team of teams$ | async"
+                                [value]="team.id"
+                            >
+                                {{ team.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </ng-container>
+            </app-half-card-section>
+
+            <app-half-card-section>
+                <app-section-header name="Dates" sectionHeader>
+                </app-section-header>
+
+                <ng-container sectionContent>
+                    <mat-form-field
+                        appearance="fill"
+                        class="popup__basic--date"
+                    >
+                        <mat-label>Choose a date of birth</mat-label>
+                        <input
+                            formControlName="date_of_birth"
+                            required
+                            readonly
+                            matInput
+                            [matDatepicker]="birthPicker"
+                            placeholder="Choose a date of birth"
+                            (dateChange)="setBirthDate($event)"
+                        />
+                        <mat-datepicker-toggle
+                            matSuffix
+                            [for]="birthPicker"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker
+                            [disabled]="false"
+                            #birthPicker
+                        ></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field
+                        appearance="fill"
+                        class="popup__basic--date"
+                    >
+                        <mat-label>Choose a date of joining</mat-label>
+                        <input
+                            formControlName="date_of_joining"
+                            required
+                            readonly
+                            matInput
+                            [matDatepicker]="joinPicker"
+                            placeholder="Choose a date of joining"
+                            (dateChange)="setJoiningDate($event)"
+                        />
+                        <mat-datepicker-toggle
+                            matSuffix
+                            [for]="joinPicker"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker
+                            [disabled]="false"
+                            #joinPicker
+                        ></mat-datepicker>
+                    </mat-form-field>
+                </ng-container>
+            </app-half-card-section>
+
+            <app-half-card-section>
+                <app-section-header name="Biomedical Data" sectionHeader>
+                </app-section-header>
+
+                <ng-container sectionContent>
+                    <mat-form-field
+                        appearance="fill"
+                        class="popup__basic--name"
+                    >
+                        <mat-label>Height...</mat-label>
+                        <input
+                            formControlName="height"
+                            type="number"
+                            required
+                            matInput
+                            placeholder="Height.."
+                        />
+                    </mat-form-field>
+
+                    <mat-form-field
+                        appearance="fill"
+                        class="popup__basic--name"
+                    >
+                        <mat-label>Weight...</mat-label>
+                        <input
+                            formControlName="weight"
+                            type="number"
+                            required
+                            matInput
+                            placeholder="Weight.."
+                        />
+                    </mat-form-field>
+                </ng-container>
+            </app-half-card-section>
+
+            <app-half-card-section>
+                <app-section-header name="Add Notes" sectionHeader>
+                </app-section-header>
+
+                <ng-container sectionContent>
+                    <mat-form-field class="popup__notes" appearance="fill">
+                        <mat-label>Notes</mat-label>
+                        <textarea
+                            formControlName="notes"
+                            matInput
+                            placeholder="notes..."
+                            maxlength="300"
+                        >
+                        </textarea>
+                    </mat-form-field>
+                </ng-container>
+            </app-half-card-section>
+
+            <div class="button-container">
+                <button
+                    [disabled]="playerForm.invalid"
+                    type="submit"
+                    mat-raised-button
+                    class="button--light"
+                    buttons
+                >
+                    Create new Player
+                </button>
+            </div>
+        </form>
+    </mat-card>
+</div>

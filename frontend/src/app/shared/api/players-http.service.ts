@@ -11,7 +11,7 @@ import { Player } from "../models/player.model";
 export class PlayersHttpService {
     constructor(private readonly http: HttpClient) {}
 
-    public createPlater(player: Player): Observable<BackendResponse> {
+    public createPlayer(player: Player): Observable<BackendResponse> {
         return this.http.post<BackendResponse>("/api/v1/players", player);
     }
 }

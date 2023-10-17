@@ -3,14 +3,14 @@ export interface PlayerBase {
     date_of_birth: string;
     height: number;
     weight: number;
-    notes: string;
     user_id: number;
-    team_id: number;
+    team_id: number | null;
+    notes: string | null;
 }
 
 export interface PlayerHealth {
     is_injured: boolean;
-    diet: string;
+    diet: string | null;
 }
 
 export interface Player extends PlayerBase, PlayerHealth {}

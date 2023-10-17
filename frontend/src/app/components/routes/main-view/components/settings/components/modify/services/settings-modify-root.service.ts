@@ -2,8 +2,10 @@ import { Injectable } from "@angular/core";
 import { FormArray, FormControl, Validators } from "@angular/forms";
 import { Observable, switchMap, tap } from "rxjs";
 
+import { TeamsHttpService } from "../../../../../../../../shared/api/teams-http.service";
 import { UserService } from "../../../../../../../../shared/api/user.service";
 import { SnackbarMessages } from "../../../../../../../../shared/models/messages.model";
+import { ShortTeam } from "../../../../../../../../shared/models/team.model";
 import {
     Roles,
     UserForAdmin,
@@ -15,15 +17,14 @@ import { ModifyUsersPopupService } from "./modify-users-popup.service";
 
 @Injectable()
 export class SettingsModifyRootService extends DestroyClass {
-    public passwordFormArray: FormArray<FormControl<string>> = new FormArray<
-        FormControl<string>
-    >([]);
+    public passwordFormArray = new FormArray<FormControl<string>>([]);
 
     constructor(
         private readonly userService: UserService,
         private readonly table: TableService<UserForAdmin>,
         private readonly snack: SnackbarService,
-        private readonly popup: ModifyUsersPopupService
+        private readonly popup: ModifyUsersPopupService,
+        private readonly httpTeams: TeamsHttpService
     ) {
         super();
         this.initData();
@@ -69,6 +70,10 @@ export class SettingsModifyRootService extends DestroyClass {
                     });
                 })
             );
+    }
+
+    public getAllTeams(): Observable<ShortTeam[]> {
+        return this.httpTeams.getAllTeams();
     }
 
     private createPasswordFormControl(): FormControl<string> {

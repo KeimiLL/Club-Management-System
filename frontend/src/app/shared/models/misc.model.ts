@@ -2,11 +2,6 @@ export interface BackendResponse {
     message: string;
 }
 
-export interface Dto {
-    name: string;
-    id: number;
-}
-
 export interface MenuItem {
     name: string;
     route: string;

@@ -2,8 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { BackendResponse, Dto, TableResponse } from "../models/misc.model";
-import { TableTeam, TeamCreate } from "../models/team.model";
+import { BackendResponse, TableResponse } from "../models/misc.model";
+import { ShortTeam, TableTeam, TeamCreate } from "../models/team.model";
 
 @Injectable({
     providedIn: "root",
@@ -24,7 +24,7 @@ export class TeamsHttpService {
         );
     }
 
-    public getAllTeams(): Observable<Dto[]> {
-        return this.http.get<Dto[]>("/api/v1/teams/all");
+    public getAllTeams(): Observable<ShortTeam[]> {
+        return this.http.get<ShortTeam[]>("/api/v1/teams/all");
     }
 }
