@@ -1,7 +1,7 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from "@angular/core";
 
+import { UserService } from "../api/user.service";
 import { RoleDefinitions, SubPermissions } from "../models/permission.model";
-import { UserService } from "../services/user.service";
 
 @Directive({
     selector: "[appPermission]",

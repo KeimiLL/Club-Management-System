@@ -4,8 +4,8 @@ import { RouterModule } from "@angular/router";
 
 import { MenuItem } from "../../../../../../..//shared/models/misc.model";
 import { MenuItemPipe } from "../../../../../../..//shared/pipes/menu-item.pipe";
+import { UserService } from "../../../../../../../shared/api/user.service";
 import { filterMenuItemsByPermissions } from "../../../../../../../shared/utils/permissionFilter";
-import { UserService } from "./../../../../../../../shared/services/user.service";
 import { settingsMenuItems } from "./settings-menu.data";
 
 @Component({

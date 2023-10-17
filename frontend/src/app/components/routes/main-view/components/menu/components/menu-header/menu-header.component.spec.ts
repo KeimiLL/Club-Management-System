@@ -2,9 +2,9 @@ import { CommonModule } from "@angular/common";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { of } from "rxjs";
 
+import { UserService } from "../../../../../../../shared/api/user.service";
 import { Roles } from "../../../../../../../shared/models/user.model";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
-import { UserService } from "../../../../../../../shared/services/user.service";
 import { MenuHeaderComponent } from "./menu-header.component";
 
 describe("MenuHeaderComponent", () => {

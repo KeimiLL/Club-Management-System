@@ -9,8 +9,8 @@ import {
     tap,
 } from "rxjs";
 
+import { UserService } from "../../../../../../../../shared/api/user.service";
 import { ShortUser } from "../../../../../../../../shared/models/user.model";
-import { UserService } from "../../../../../../../../shared/services/user.service";
 import { formatDateFromInputForBackend } from "../../../../../../../../shared/utils/dateHelpers";
 import { DestroyClass } from "../../../../../../../../shared/utils/destroyClass";
 import {

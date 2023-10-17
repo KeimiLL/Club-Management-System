@@ -2,10 +2,11 @@ import { Injectable } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
 import { BehaviorSubject, Observable, tap } from "rxjs";
 
+import { CoachesHttpService } from "../../../../../../../../shared/api/coaches-http.service";
+import { TeamsHttpService } from "../../../../../../../../shared/api/teams-http.service";
 import { ShortCoach } from "../../../../../../../../shared/models/coach.model";
 import { TeamCreate } from "../../../../../../../../shared/models/team.model";
 import { TeamsPopupComponent } from "../teams-popup.component";
-import { TeamsPopupHttpService } from "./teams-popup-http.service";
 
 @Injectable()
 export class TeamsPopupRootService {
@@ -20,14 +21,15 @@ export class TeamsPopupRootService {
     }
 
     constructor(
-        private readonly http: TeamsPopupHttpService,
+        private readonly http: TeamsHttpService,
+        private readonly httpCoaches: CoachesHttpService,
         private readonly dialogRef: MatDialogRef<TeamsPopupComponent>
     ) {
         this.initData();
     }
 
     private initData(): void {
-        this.http
+        this.httpCoaches
             .getAllCoaches()
             .pipe(
                 tap((coaches) => {

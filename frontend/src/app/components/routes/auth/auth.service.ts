@@ -3,9 +3,9 @@ import { FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { catchError, of } from "rxjs";
 
+import { UserService } from "../../../shared/api/user.service";
 import { BackendResponse } from "../../../shared/models/misc.model";
 import { User, UserCreate, UserLogin } from "../../../shared/models/user.model";
-import { UserService } from "../../../shared/services/user.service";
 import { DestroyClass } from "../../../shared/utils/destroyClass";
 import {
     authFormBuilder,

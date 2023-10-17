@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { FormArray, FormControl, Validators } from "@angular/forms";
 import { Observable, switchMap, tap } from "rxjs";
 
+import { UserService } from "../../../../../../../../shared/api/user.service";
 import { SnackbarMessages } from "../../../../../../../../shared/models/messages.model";
 import {
     Roles,
@@ -9,7 +10,6 @@ import {
 } from "../../../../../../../../shared/models/user.model";
 import { SnackbarService } from "../../../../../../../../shared/services/snackbar.service";
 import { TableService } from "../../../../../../../../shared/services/table.service";
-import { UserService } from "../../../../../../../../shared/services/user.service";
 import { DestroyClass } from "../../../../../../../../shared/utils/destroyClass";
 import { ModifyUsersPopupService } from "./modify-users-popup.service";
 

@@ -1,6 +1,6 @@
 import { TemplateRef, ViewContainerRef } from "@angular/core";
 
-import { UserService } from "../services/user.service";
+import { UserService } from "../api/user.service";
 import { PermissionDirective } from "./permission.directive";
 
 xdescribe("PermissionDirective", () => {

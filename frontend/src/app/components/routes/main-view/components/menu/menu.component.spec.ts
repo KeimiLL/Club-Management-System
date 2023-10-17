@@ -2,8 +2,8 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 
+import { UserService } from "../../../../../shared/api/user.service";
 import { Roles } from "../../../../../shared/models/user.model";
-import { UserService } from "../../../../../shared/services/user.service";
 import { MenuComponent } from "./menu.component";
 
 describe("MenuComponent", () => {

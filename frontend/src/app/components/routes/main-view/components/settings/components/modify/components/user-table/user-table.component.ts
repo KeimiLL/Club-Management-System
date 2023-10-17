@@ -12,6 +12,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { RouterModule } from "@angular/router";
 import { Observable } from "rxjs";
 
+import { UserService } from "../../../../../../../../../shared/api/user.service";
 import { PermissionBackgroundColorDirective } from "../../../../../../../../../shared/directives/permission-background-color.directive";
 import {
     Roles,
@@ -23,7 +24,6 @@ import { TableService } from "../../../../../../../../../shared/services/table.s
 import { SettingsRootService } from "../../../../services/settings-root.service";
 import { usersColumns } from "../../meeting-table.data";
 import { SettingsModifyRootService } from "../../services/settings-modify-root.service";
-import { UserService } from "./../../../../../../../../../shared/services/user.service";
 
 @Component({
     selector: "app-user-table",

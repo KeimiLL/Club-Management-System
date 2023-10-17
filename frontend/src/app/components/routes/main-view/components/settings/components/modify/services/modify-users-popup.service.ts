@@ -2,19 +2,19 @@ import { Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable, of, switchMap, takeWhile } from "rxjs";
 
+import { CoachesHttpService } from "../../../../../../../../shared/api/coaches-http.service";
+import { UserService } from "../../../../../../../../shared/api/user.service";
 import { CreateCoach } from "../../../../../../../../shared/models/coach.model";
 import { BackendResponse } from "../../../../../../../../shared/models/misc.model";
 import { Roles } from "../../../../../../../../shared/models/user.model";
 import { CreateCoachPopupComponent } from "../components/create-coach-popup/create-coach-popup.component";
 import { CreatePlayerPopupComponent } from "../components/create-player-popup/create-player-popup.component";
-import { UserService } from "./../../../../../../../../shared/services/user.service";
-import { ModifyUsersHttpService } from "./modify-users-http.service";
 
 @Injectable()
 export class ModifyUsersPopupService {
     constructor(
         private readonly dialog: MatDialog,
-        private readonly http: ModifyUsersHttpService,
+        private readonly http: CoachesHttpService,
         private readonly userService: UserService
     ) {}
 
