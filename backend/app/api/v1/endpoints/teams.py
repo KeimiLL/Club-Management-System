@@ -118,7 +118,10 @@ def get_teams_with_pagination(
         return ItemsListWithTotal[TeamTableView](
             items=[
                 TeamTableView(
-                    **team.__dict__, coach_user_full_name=team.coach.user.full_name
+                    **team.__dict__,
+                    coach_user_full_name=team.coach.user.full_name
+                    if team.coach is not None
+                    else None
                 )
                 for team in teams
             ],

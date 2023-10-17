@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 
 import { Meeting, NewMeeting, TableMeeting } from "../models/meetings.model";
 import { TableResponse } from "../models/misc.model";
+import { BackendResponse } from "./../models/misc.model";
 
 @Injectable({
     providedIn: "root",
@@ -11,8 +12,8 @@ import { TableResponse } from "../models/misc.model";
 export class MeetingsHttpService {
     constructor(private readonly http: HttpClient) {}
 
-    public postNewMeeting(meeting: NewMeeting): Observable<Meeting> {
-        return this.http.post<Meeting>("api/v1/meetings", meeting);
+    public postNewMeeting(meeting: NewMeeting): Observable<BackendResponse> {
+        return this.http.post<BackendResponse>("api/v1/meetings", meeting);
     }
 
     public editMeeting(meeting: NewMeeting, id: number): Observable<Meeting> {

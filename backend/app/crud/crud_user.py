@@ -1,7 +1,7 @@
 """File responsible for implementing users related CRUD operations."""
 
 
-from typing import Callable, Sequence
+from typing import Callable
 
 from app.core.exceptions import DuplicateException, MissingException
 from app.core.security import Hasher
@@ -92,7 +92,7 @@ def get_user_by_id(user_id: int, db: Session) -> User:
         raise exc
 
 
-def get_all_users(db: Session) -> Sequence[User]:
+def get_all_users(db: Session) -> list[User]:
     """Gets all users.
 
     Args:
@@ -102,10 +102,10 @@ def get_all_users(db: Session) -> Sequence[User]:
         SQLAlchemyError: If there is a database error.
 
     Returns:
-        Sequence[User]: A list of all User objects.
+        list[User]: A list of all User objects.
     """
     try:
-        return db.scalars(select(User)).all()
+        return list(db.scalars(select(User)).all())
     except SQLAlchemyError as exc:
         raise exc
 
@@ -176,7 +176,7 @@ def get_all_users_with_pagination(
     page: int,
     per_page: int,
     db: Session,
-) -> tuple[Sequence[User], int]:
+) -> tuple[list[User], int]:
     """Gets and optionally paginates all users.
 
     Args:
@@ -188,15 +188,19 @@ def get_all_users_with_pagination(
         SQLAlchemyError: If there is a database error.
 
     Returns:
-        tuple[Sequence[User], int: The list of all meetings alongside the total number of them.
+        tuple[list[User], int: The list of all meetings alongside the total number of them.
     """
     try:
         query = select(User)
         total = db.scalar(select(func.count()).select_from(query))
         return (
-            db.scalars(
-                query.order_by(User.id.desc()).offset(page * per_page).limit(per_page)
-            ).all(),
+            list(
+                db.scalars(
+                    query.order_by(User.id.desc())
+                    .offset(page * per_page)
+                    .limit(per_page)
+                ).all()
+            ),
             total,
         )
     except SQLAlchemyError as exc:

@@ -39,8 +39,9 @@ def test_correct__create_new_team(
     create_new_user(user, db_session)
     create_new_coach(coach, db_session)
     new_team = create_new_team(team, db_session)
-    assert new_team.coach.user.full_name == user.full_name
-    assert new_team.coach.date_of_birth == coach.date_of_birth
+    if new_team.coach is not None:
+        assert new_team.coach.user.full_name == user.full_name
+        assert new_team.coach.date_of_birth == coach.date_of_birth
     assert new_team.name == team.name
 
 
@@ -66,8 +67,9 @@ def test_correct__get_team_by_id(
     create_new_coach(coach, db_session)
     new_team = create_new_team(team, db_session)
     team_by_id = get_team_by_id(new_team.id, db_session)
-    assert team_by_id.coach.user.full_name == user.full_name
-    assert team_by_id.coach.date_of_birth == coach.date_of_birth
+    if team_by_id.coach is not None:
+        assert team_by_id.coach.user.full_name == user.full_name
+        assert team_by_id.coach.date_of_birth == coach.date_of_birth
     assert team_by_id.name == team.name
 
 

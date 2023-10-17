@@ -20,6 +20,7 @@ from app.crud.crud_user import (
     update_user_role,
 )
 from app.db.session import get_db
+from app.models.user import User as UserModel
 from app.schemas.enums import HTTPResponseMessage, Roles
 from app.schemas.misc import ItemsListWithTotal, Message, MessageFromEnum
 from app.schemas.user import (
@@ -144,12 +145,12 @@ def logout(
     },
 )
 def get_current_user(
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[UserModel, Depends(get_user_from_token)],
 ):
     """Gets current user from authentication cookies.
 
     Args:
-        current_user (Annotated[User, Depends]): Current user read from access token.
+        current_user (Annotated[UserModel, Depends]): Current user read from access token.
             Defaults to Depends(get_user_from_token).
 
     Returns:
@@ -194,7 +195,7 @@ def get_users(
 def change_user_role(
     user_id: Annotated[int, Path(ge=1, le=10**7)],
     role_data: UserUpdateRole,
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[UserModel, Depends(get_user_from_token)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Updates meeting data with the given data.
@@ -203,7 +204,7 @@ def change_user_role(
         user_id (Annotated[int, Path]): The requested user id. Has to be greater than
             or equal to 1 and less than or equal to 10**7.
         role_data (UserUpdateRole): User role to be set.
-        current_user (Annotated[User, Depends]): Current user read from access token.
+        current_user (Annotated[UserModel, Depends]): Current user read from access token.
             Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
@@ -233,7 +234,7 @@ def change_user_role(
 def change_user_password(
     user_id: Annotated[int, Path(ge=1, le=10**7)],
     password_data: UserUpdatePassword,
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[UserModel, Depends(get_user_from_token)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Updates meeting data with the given data.
@@ -242,12 +243,13 @@ def change_user_password(
         user_id (Annotated[int, Path]): The requested user id. Has to be greater than
             or equal to 1 and less than or equal to 10**7.
         password_data (UserUpdatePassword): User password data to be validated and set.
-        current_user (Annotated[User, Depends]): Current user read from access token.
+        current_user (Annotated[UserModel, Depends]): Current user read from access token.
             Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Raises:
         ForbiddenException: If the current user does not have sufficient permissions.
+        InvalidCredentialsException: If the provided password is invalid.
 
     Returns:
         Message: The response signalling a successful operation.
@@ -259,20 +261,19 @@ def change_user_password(
             db=db,
         )
         return Message(message=HTTPResponseMessage.SUCCESS)
-    if (
-        current_user.id == user_id
-        and password_data.old_password
-        and Hasher.verify_password(
-            password_data.old_password,
-            new_hashed_password := Hasher.get_password_hash(password_data.new_password),
-        )
-    ):
-        update_user_password(
-            user_id=user_id,
-            new_hashed_password=new_hashed_password,
-            db=db,
-        )
-        return Message(message=HTTPResponseMessage.SUCCESS)
+    if current_user.id == user_id:
+        if password_data.old_password is not None and Hasher.verify_password(
+            password_data.old_password, current_user.hashed_password
+        ):
+            update_user_password(
+                user_id=user_id,
+                new_hashed_password=Hasher.get_password_hash(
+                    password_data.new_password
+                ),
+                db=db,
+            )
+            return Message(message=HTTPResponseMessage.SUCCESS)
+        raise InvalidCredentialsException(True)
     raise ForbiddenException("user")
 
 
@@ -288,7 +289,7 @@ def change_user_password(
 )
 def get_users_with_pagination(
     pagination: Annotated[dict[str, int], Depends(paginate)],
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[UserModel, Depends(get_user_from_token)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Gets the list of all registered users.
@@ -296,7 +297,7 @@ def get_users_with_pagination(
     Args:
         pagination (Annotated[dict[str, int], Depends]): Pagination read from the query params.
             Defaults to Depends(paginate).
-        current_user (Annotated[User, Depends]): Current user read from access token.
+        current_user (Annotated[UserModel, Depends]): Current user read from access token.
             Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
