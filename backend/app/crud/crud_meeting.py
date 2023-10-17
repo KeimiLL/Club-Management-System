@@ -151,7 +151,7 @@ def create_meeting_with_user_ids(
     user_ids: set[int],
     db: Session,
 ) -> Meeting:
-    """Creates a new meeting_user based on meeting data and a list of user ids.
+    """Creates a new meeting and its attendance based on meeting data and a set of user ids.
 
     Args:
         meeting (MeetingCreate): Meeting based on Meeting schema.

@@ -263,7 +263,7 @@ def test_incorrect__create_meeting_with_user_ids(
     exception: Exception,
     db_session: Session,
 ) -> None:
-    """Tests creating a meeting with a set of user ids.
+    """Tests trying to create a meeting with a list of user ids.
 
     Args:
         created_by (UserCreate): User to be created that will be the creator of the meeting.
