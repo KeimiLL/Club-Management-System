@@ -1,7 +1,7 @@
 """File responsible for implementing meetinges related CRUD operations."""
 
 
-from typing import Callable, Sequence
+from typing import Callable
 
 from app.core.exceptions import DuplicateException, GenericException, MissingException
 from app.crud.crud_user import get_user_by_id
@@ -74,7 +74,7 @@ def get_all_meetings_with_pagination(
     page: int,
     per_page: int,
     db: Session,
-) -> tuple[Sequence[Meeting], int]:
+) -> tuple[list[Meeting], int]:
     """Gets all meetings with pagination.
 
     Args:
@@ -86,17 +86,19 @@ def get_all_meetings_with_pagination(
         SQLAlchemyError: If there is a database error.
 
     Returns:
-        tuple[Sequence[Meeting], int]: The list of all meetings alongside the total number of them.
+        tuple[list[Meeting], int]: The list of all meetings alongside the total number of them.
     """
     try:
         query = select(Meeting)
         total = db.scalar(select(func.count()).select_from(query))
         return (
-            db.scalars(
-                query.order_by(Meeting.date.desc(), Meeting.id.desc())
-                .offset(page * per_page)
-                .limit(per_page)
-            ).all(),
+            list(
+                db.scalars(
+                    query.order_by(Meeting.date.desc(), Meeting.id.desc())
+                    .offset(page * per_page)
+                    .limit(per_page)
+                ).all()
+            ),
             total,
         )
     except SQLAlchemyError as exc:
@@ -105,7 +107,7 @@ def get_all_meetings_with_pagination(
 
 def get_meetings_by_user_id(
     page: int, per_page: int, user_id: int, db: Session
-) -> tuple[Sequence[Meeting], int]:
+) -> tuple[list[Meeting], int]:
     """Gets all meetings that were either created by the current user or the current user
         is part of their attendance.
 
@@ -119,7 +121,7 @@ def get_meetings_by_user_id(
         SQLAlchemyError: If there is a database error.
 
     Returns:
-        tuple[Sequence[Meeting], int]: The filtered list of meetings alongside the total number of
+        tuple[list[Meeting], int]: The filtered list of meetings alongside the total number of
             meetings that meet the criteria.
     """
     try:
@@ -131,11 +133,13 @@ def get_meetings_by_user_id(
         )
         total = db.scalar(select(func.count()).select_from(query))
         return (
-            db.scalars(
-                query.order_by(Meeting.date.desc(), Meeting.id.desc())
-                .offset(page * per_page)
-                .limit(per_page)
-            ).all(),
+            list(
+                db.scalars(
+                    query.order_by(Meeting.date.desc(), Meeting.id.desc())
+                    .offset(page * per_page)
+                    .limit(per_page)
+                ).all()
+            ),
             total,
         )
     except SQLAlchemyError as exc:

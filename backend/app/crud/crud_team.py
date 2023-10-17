@@ -1,7 +1,7 @@
 """File responsible for implementing teams related CRUD operations."""
 
 
-from typing import Callable, Sequence
+from typing import Callable
 
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_coach import get_coach_by_user_id
@@ -67,7 +67,7 @@ def get_team_by_id(team_id: int, db: Session) -> Team:
         raise exc
 
 
-def get_all_teams(db: Session) -> Sequence[Team]:
+def get_all_teams(db: Session) -> list[Team]:
     """Gets all teams.
 
     Args:
@@ -77,10 +77,10 @@ def get_all_teams(db: Session) -> Sequence[Team]:
         SQLAlchemyError: If there is a database error.
 
     Returns:
-        Sequence[Team]: A list of all Team objects.
+        list[Team]: A list of all Team objects.
     """
     try:
-        return db.scalars(select(Team)).all()
+        return list(db.scalars(select(Team)).all())
     except SQLAlchemyError as exc:
         raise exc
 
@@ -89,7 +89,7 @@ def get_all_teams_with_pagination(
     page: int,
     per_page: int,
     db: Session,
-) -> tuple[Sequence[Team], int]:
+) -> tuple[list[Team], int]:
     """Gets all teams with pagination.
 
     Args:
@@ -101,15 +101,19 @@ def get_all_teams_with_pagination(
         SQLAlchemyError: If there is a database error.
 
     Returns:
-        tuple[Sequence[Team], int]: The list of all teams alongside the total number of them.
+        tuple[list[Team], int]: The list of all teams alongside the total number of them.
     """
     try:
         query = select(Team)
         total = db.scalar(select(func.count()).select_from(query))
         return (
-            db.scalars(
-                query.order_by(Team.name.desc()).offset(page * per_page).limit(per_page)
-            ).all(),
+            list(
+                db.scalars(
+                    query.order_by(Team.name.desc())
+                    .offset(page * per_page)
+                    .limit(per_page)
+                ).all()
+            ),
             total,
         )
     except SQLAlchemyError as exc:
