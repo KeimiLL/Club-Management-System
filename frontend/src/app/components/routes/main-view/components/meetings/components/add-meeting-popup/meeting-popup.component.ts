@@ -14,7 +14,7 @@ import { Observable } from "rxjs";
 import { UserService } from "../../../../../../../shared/api/user.service";
 import { PermissionBackgroundColorDirective } from "../../../../../../../shared/directives/permission-background-color.directive";
 import { PermissionColorDirective } from "../../../../../../../shared/directives/permission-color.directive";
-import { Meeting } from "../../../../../../../shared/models/meetings.model";
+import { Meeting } from "../../../../../../../shared/models/meeting.model";
 import { ShortUser } from "../../../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";

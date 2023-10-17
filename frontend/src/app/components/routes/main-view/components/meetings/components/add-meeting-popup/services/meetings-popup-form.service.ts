@@ -10,6 +10,10 @@ import {
 } from "rxjs";
 
 import { UserService } from "../../../../../../../../shared/api/user.service";
+import {
+    Meeting,
+    NewMeeting,
+} from "../../../../../../../../shared/models/meeting.model";
 import { ShortUser } from "../../../../../../../../shared/models/user.model";
 import { formatDateFromInputForBackend } from "../../../../../../../../shared/utils/dateHelpers";
 import { DestroyClass } from "../../../../../../../../shared/utils/destroyClass";
@@ -17,10 +21,6 @@ import {
     newMeetingDataFormBuilder,
     NewMeetingFormGroup,
 } from "../newMeetingFormBuilder";
-import {
-    Meeting,
-    NewMeeting,
-} from "./../../../../../../../../shared/models/meetings.model";
 
 @Injectable()
 export class MeetingsPopupFormService extends DestroyClass {

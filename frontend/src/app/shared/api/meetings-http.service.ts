@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { Meeting, NewMeeting, TableMeeting } from "../models/meetings.model";
+import { Meeting, NewMeeting, TableMeeting } from "../models/meeting.model";
 import { TableResponse } from "../models/misc.model";
 import { BackendResponse } from "./../models/misc.model";
 

@@ -16,7 +16,7 @@ import { PermissionDirective } from "../../../../../../../shared/directives/perm
 import {
     Meeting,
     TableMeeting,
-} from "../../../../../../../shared/models/meetings.model";
+} from "../../../../../../../shared/models/meeting.model";
 import { MeetingsPermission } from "../../../../../../../shared/models/permission.model";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
