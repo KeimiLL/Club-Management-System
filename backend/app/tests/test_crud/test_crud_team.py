@@ -4,17 +4,25 @@
 import pytest
 from app.core.exceptions import MissingException
 from app.crud.crud_coach import create_new_coach
+from app.crud.crud_player import create_new_player
 from app.crud.crud_team import (
     create_new_team,
+    create_team_with_player_ids,
     get_all_teams,
     get_all_teams_with_pagination,
     get_team_by_id,
 )
 from app.crud.crud_user import create_new_user
 from app.schemas.coach import CoachCreate
+from app.schemas.player import PlayerCreate
 from app.schemas.team import TeamCreate
 from app.schemas.user import UserCreate
-from app.tests.conftest import coach_create, team_create, user_create_unique_1
+from app.tests.conftest import (
+    coach_create,
+    player_create,
+    team_create,
+    user_create_unique_1,
+)
 from sqlalchemy.orm import Session
 
 
@@ -161,3 +169,76 @@ def test_correct__get_all_teams_with_pagination(
     for index, new_team in enumerate(new_teams):
         if page * per_page <= index < page * per_page + per_page:
             assert all_teams[index - page * per_page] == new_team
+
+
+@pytest.mark.parametrize(
+    "user,coach,team,player,player_ids",
+    [
+        (user_create_unique_1, coach_create, team_create, player_create, []),
+        (user_create_unique_1, coach_create, team_create, player_create, [1]),
+    ],
+)
+def test_correct__create_meeting_with_user_ids(
+    user: UserCreate,
+    coach: CoachCreate,
+    team: TeamCreate,
+    player: PlayerCreate,
+    player_ids: list[int],
+    db_session: Session,
+) -> None:
+    """Tests creating a team with a list of player ids.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        player (PlayerCreate): Player to be created.
+        player_ids (list[int]): A list of player_ids to be attached to the team.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    create_new_coach(coach, db_session)
+    new_player = create_new_player(
+        player.model_copy(update={"team_id": None}), db_session
+    )
+    new_team = create_team_with_player_ids(team, player_ids, db_session)
+    if new_team.coach is not None:
+        assert new_team.coach.user.full_name == user.full_name
+        assert new_team.coach.date_of_birth == coach.date_of_birth
+    assert new_team.name == team.name
+    if player_ids:
+        assert new_team.players[0] == new_player
+        assert new_player.team_id == new_team.id
+
+
+@pytest.mark.parametrize(
+    "user,coach,team,player,player_ids",
+    [
+        (user_create_unique_1, coach_create, team_create, player_create, [2]),
+        (user_create_unique_1, coach_create, team_create, player_create, [1, 1]),
+        (user_create_unique_1, coach_create, team_create, player_create, [1, 2]),
+    ],
+)
+def test_incorrect_missing__create_meeting_with_user_ids(
+    user: UserCreate,
+    coach: CoachCreate,
+    team: TeamCreate,
+    player: PlayerCreate,
+    player_ids: list[int],
+    db_session: Session,
+) -> None:
+    """Tests trying to create a team with incorrect data.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        player (PlayerCreate): Player to be created.
+        player_ids (list[int]): A list of player_ids to be attached to the team.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    create_new_coach(coach, db_session)
+    create_new_player(player.model_copy(update={"team_id": None}), db_session)
+    with pytest.raises(MissingException):
+        create_team_with_player_ids(team, player_ids, db_session)

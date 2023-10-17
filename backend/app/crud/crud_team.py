@@ -5,6 +5,7 @@ from typing import Callable
 
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_coach import get_coach_by_user_id
+from app.models.player import Player
 from app.models.team import Team
 from app.schemas.team import TeamCreate
 from sqlalchemy import func, select
@@ -116,5 +117,41 @@ def get_all_teams_with_pagination(
             ),
             total,
         )
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def create_team_with_player_ids(
+    team: TeamCreate,
+    player_ids: set[int],
+    db: Session,
+) -> Team:
+    """Creates a new team and attaches players to it based on team data and a set of player ids.
+
+    Args:
+        team (TeamCreate): Team based on Team schema.
+        player_ids (set[int]): Player ids to be added.
+        db (Session): Database session.
+
+    Raises:
+        MissingException: If any of the provided player ids does not match an existing player.
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        Team: The created team.
+    """
+    try:
+        players = list(
+            db.scalars(select(Player).where(Player.user_id.in_(player_ids))).all()
+        )
+        if len(players) != len(player_ids):
+            raise MissingException(Player.__name__)
+        new_team = create_new_team(
+            team=team,
+            db=db,
+        )
+        new_team.players = players
+        db.commit()
+        return new_team
     except SQLAlchemyError as exc:
         raise exc

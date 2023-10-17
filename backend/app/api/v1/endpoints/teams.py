@@ -6,7 +6,7 @@ from typing import Annotated
 from app.api.dependencies import get_user_from_token, paginate, refresh_token_dependency
 from app.core.exceptions import ForbiddenException
 from app.crud.crud_team import (
-    create_new_team,
+    create_team_with_player_ids,
     get_all_teams,
     get_all_teams_with_pagination,
 )
@@ -14,7 +14,7 @@ from app.db.session import get_db
 from app.models.user import User
 from app.schemas.enums import HTTPResponseMessage, Roles
 from app.schemas.misc import ItemsListWithTotal, Message, MessageFromEnum
-from app.schemas.team import TeamCreate, TeamOnlyBaseInfo, TeamTableView
+from app.schemas.team import TeamCreatePlayerIdList, TeamOnlyBaseInfo, TeamTableView
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
@@ -33,14 +33,14 @@ router = APIRouter()
     },
 )
 def create_team(
-    team: TeamCreate,
+    team_player: TeamCreatePlayerIdList,
     current_user: Annotated[User, Depends(get_user_from_token)],
     db: Annotated[Session, Depends(get_db)],
 ):
-    """Creates a new team based on data from a POST request.
+    """Creates a new team and attaches players to it based on data from a POST request.
 
     Args:
-        team (TeamCreate): Team data from POST request.
+        team_player (TeamCreatePlayerIdList): Team data from POST request.
         current_user (Annotated[User, Depends]): Current User read from access token.
             Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
@@ -52,9 +52,8 @@ def create_team(
         Message: The response signalling a successful operation.
     """
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
-        create_new_team(
-            team=team,
-            db=db,
+        create_team_with_player_ids(
+            team=team_player.team, player_ids=team_player.player_ids, db=db
         )
         return Message(message=HTTPResponseMessage.SUCCESS)
     raise ForbiddenException("team")
