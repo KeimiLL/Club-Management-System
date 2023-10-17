@@ -21,7 +21,7 @@ export class TeamsPopupRootService {
     }
 
     constructor(
-        private readonly http: TeamsHttpService,
+        private readonly httpTeams: TeamsHttpService,
         private readonly httpCoaches: CoachesHttpService,
         private readonly dialogRef: MatDialogRef<TeamsPopupComponent>
     ) {
