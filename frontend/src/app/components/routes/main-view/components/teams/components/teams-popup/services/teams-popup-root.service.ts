@@ -40,7 +40,7 @@ export class TeamsPopupRootService {
     }
 
     public createTeam(team: TeamCreate): void {
-        this.http
+        this.httpTeams
             .createTeam(team)
             .pipe(
                 tap(() => {
