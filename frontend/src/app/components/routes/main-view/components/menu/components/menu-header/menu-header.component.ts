@@ -3,9 +3,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
 import { UserService } from "../../../../../../../shared/api/user.service";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
+import { LowerSnakeToUpperNormal } from "../../../../../../../shared/pipes/lower-snake-to-upper-normal.pipe";
 import { PermissionBackgroundColorDirective } from "./../../../../../../../shared/directives/permission-background-color.directive";
 import { User } from "./../../../../../../../shared/models/user.model";
-import { MenuItemPipe } from "./../../../../../../../shared/pipes/menu-item.pipe";
 
 @Component({
     selector: "app-menu-header",
@@ -16,7 +16,7 @@ import { MenuItemPipe } from "./../../../../../../../shared/pipes/menu-item.pipe
         CommonModule,
         MaterialModule,
         PermissionBackgroundColorDirective,
-        MenuItemPipe,
+        LowerSnakeToUpperNormal,
     ],
 })
 export class MenuHeaderComponent implements OnInit {

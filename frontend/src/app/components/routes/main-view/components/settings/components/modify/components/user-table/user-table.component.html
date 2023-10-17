@@ -26,7 +26,9 @@
             <mat-menu #roleMenu="matMenu">
                 <button
                     mat-menu-item
-                    *ngFor="let role of roles"
+                    *ngFor="
+                        let role of roles | exludeRoleFromArray : element.role
+                    "
                     (click)="setSelectedRole(element.id, role)"
                 >
                     {{ role }}

@@ -20,6 +20,7 @@ import {
 } from "../../../../../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../../../shared/modules/material.module";
+import { ExludeRoleFromArrayPipe } from "../../../../../../../../../shared/pipes/exlude-role-from-array.pipe";
 import { TableService } from "../../../../../../../../../shared/services/table.service";
 import { SettingsRootService } from "../../../../services/settings-root.service";
 import { usersColumns } from "../../meeting-table.data";
@@ -35,6 +36,7 @@ import { SettingsModifyRootService } from "../../services/settings-modify-root.s
         ReactiveFormsModule,
         PermissionBackgroundColorDirective,
         RouterModule,
+        ExludeRoleFromArrayPipe,
     ],
     templateUrl: "./user-table.component.html",
     styleUrls: ["./user-table.component.scss"],
