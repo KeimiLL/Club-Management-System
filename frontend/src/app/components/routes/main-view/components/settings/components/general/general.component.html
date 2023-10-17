@@ -10,7 +10,11 @@
             Password
         </button>
         <div [@formAnimation]="showForm" class="auth">
-            <form class="auth__form" (ngSubmit)="saveChanges()">
+            <form
+                [formGroup]="resetPasswordForm"
+                class="auth__form"
+                (ngSubmit)="saveChanges()"
+            >
                 <div class="header">
                     <div class="header__icon flex-center">
                         <mat-icon>lock</mat-icon>
@@ -83,7 +87,7 @@
                         class="field-input"
                         matInput
                         type="password"
-                        formControlName="confirmPassword"
+                        formControlName="confirmNewPassword"
                         required
                         #confirmNewPassword
                     />

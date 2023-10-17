@@ -7,15 +7,21 @@ import {
 } from "@angular/animations";
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 
+import { ChangePassword } from "../../../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
+import {
+    resetPasswordFormBuilder,
+    ResetPasswordFormGroup,
+} from "../../../../../auth/authFromBuilder";
+import { SettingsRootService } from "../../services/settings-root.service";
 
 @Component({
     selector: "app-general",
     standalone: true,
-    imports: [CommonModule, CardsModule, MaterialModule],
+    imports: [CommonModule, CardsModule, MaterialModule, ReactiveFormsModule],
     templateUrl: "./general.component.html",
     styleUrls: ["./general.component.scss"],
     animations: [
@@ -28,14 +34,21 @@ import { MaterialModule } from "../../../../../../../shared/modules/material.mod
     ],
 })
 export class GeneralComponent {
+    public resetPasswordForm: FormGroup<ResetPasswordFormGroup>;
     protected showForm: "hidden" | "visible" = "hidden";
-    changePasswordForm: FormGroup;
+
+    constructor(private readonly root: SettingsRootService) {
+        this.resetPasswordForm =
+            resetPasswordFormBuilder.buildResetPasswordFormGroup();
+    }
 
     protected saveChanges(): void {
-        if (this.changePasswordForm.valid) {
-            console.log("Changes saved");
-        } else {
-            console.log("Password fields are empty or invalid.");
+        if (this.resetPasswordForm.valid) {
+            const changePassword: ChangePassword = {
+                new_password: this.resetPasswordForm.controls.newPassword.value,
+                old_password: this.resetPasswordForm.controls.oldPassword.value,
+            };
+            this.root.changeOwnPassword(changePassword);
         }
     }
 
