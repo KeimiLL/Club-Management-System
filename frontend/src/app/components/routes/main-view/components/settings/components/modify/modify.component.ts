@@ -7,7 +7,6 @@ import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { TableService } from "../../../../../../../shared/services/table.service";
 import { UserTableComponent } from "./components/user-table/user-table.component";
-import { ModifyUsersHttpService } from "./services/modify-users-http.service";
 import { ModifyUsersPopupService } from "./services/modify-users-popup.service";
 import { SettingsModifyRootService } from "./services/settings-modify-root.service";
 
@@ -21,7 +20,6 @@ import { SettingsModifyRootService } from "./services/settings-modify-root.servi
         TableService,
         SettingsModifyRootService,
         ModifyUsersPopupService,
-        ModifyUsersHttpService,
     ],
 })
 export class ModifyComponent implements OnInit {

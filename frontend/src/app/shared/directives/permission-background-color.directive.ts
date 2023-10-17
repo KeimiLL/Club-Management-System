@@ -1,8 +1,8 @@
 import { Directive, ElementRef, Input, OnInit } from "@angular/core";
 
+import { UserService } from "../api/user.service";
 import { RoleColorsMapping } from "../models/permission.model";
 import { Roles } from "../models/user.model";
-import { UserService } from "../services/user.service";
 
 @Directive({
     selector: "[appPermissionBackgroundColor]",

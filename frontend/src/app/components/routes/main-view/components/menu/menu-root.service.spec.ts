@@ -2,9 +2,9 @@ import { TestBed } from "@angular/core/testing";
 import { Router } from "@angular/router";
 import { of } from "rxjs";
 
+import { UserService } from "../../../../../shared/api/user.service";
 import { SnackbarMessages } from "../../../../../shared/models/messages.model";
 import { SnackbarService } from "../../../../../shared/services/snackbar.service";
-import { UserService } from "../../../../../shared/services/user.service";
 import { MenuRootService } from "./menu-root.service";
 
 describe("MenuRootService", () => {

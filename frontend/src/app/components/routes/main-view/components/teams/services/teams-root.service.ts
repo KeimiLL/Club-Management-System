@@ -2,12 +2,12 @@ import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { Observable, of, switchMap } from "rxjs";
 
+import { TeamsHttpService } from "../../../../../../shared/api/teams-http.service";
 import { TableTeam, Team } from "../../../../../../shared/models/team.model";
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
 import { DestroyClass } from "../../../../../../shared/utils/destroyClass";
 import { TeamsPopupComponent } from "../components/teams-popup/teams-popup.component";
-import { TeamsHttpService } from "./teams-http.service";
 
 @Injectable()
 export class TeamsRootService extends DestroyClass {
@@ -64,7 +64,7 @@ export class TeamsRootService extends DestroyClass {
             .subscribe();
     }
 
-    // public openEditMeetingDialog(): void {
+    // public openeditMeeting$Dialog(): void {
     //     this.openDialog(this.splitView.currentItem)
     //         .afterClosed()
     //         .pipe(

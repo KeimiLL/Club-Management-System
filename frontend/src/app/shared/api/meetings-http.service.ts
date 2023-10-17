@@ -2,15 +2,22 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
-import {
-    Meeting,
-    TableMeeting,
-} from "../../../../../../shared/models/meetings.model";
-import { TableResponse } from "../../../../../../shared/models/misc.model";
+import { Meeting, NewMeeting, TableMeeting } from "../models/meetings.model";
+import { TableResponse } from "../models/misc.model";
 
-@Injectable()
+@Injectable({
+    providedIn: "root",
+})
 export class MeetingsHttpService {
     constructor(private readonly http: HttpClient) {}
+
+    public postNewMeeting(meeting: NewMeeting): Observable<Meeting> {
+        return this.http.post<Meeting>("api/v1/meetings", meeting);
+    }
+
+    public editMeeting(meeting: NewMeeting, id: number): Observable<Meeting> {
+        return this.http.put<Meeting>(`api/v1/meetings/${id}`, meeting);
+    }
 
     public getMeetingsList(
         page: number,
@@ -21,7 +28,7 @@ export class MeetingsHttpService {
         );
     }
 
-    public getMeetingsById(id: number): Observable<Meeting> {
+    public getMeetingById(id: number): Observable<Meeting> {
         return this.http.get<Meeting>(`api/v1/meetings/${id}`);
     }
 }

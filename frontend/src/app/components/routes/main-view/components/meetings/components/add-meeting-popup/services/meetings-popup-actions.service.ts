@@ -2,17 +2,17 @@ import { Injectable } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
 import { catchError, of, tap } from "rxjs";
 
+import { MeetingsHttpService } from "../../../../../../../../shared/api/meetings-http.service";
 import { SnackbarMessages } from "../../../../../../../../shared/models/messages.model";
 import { SnackbarService } from "../../../../../../../../shared/services/snackbar.service";
 import { DestroyClass } from "../../../../../../../../shared/utils/destroyClass";
 import { MeetingPopupComponent } from "../meeting-popup.component";
 import { MeetingsPopupFormService } from "./meetings-popup-form.service";
-import { MeetingsPopupHttpService } from "./meetings-popup-http.service";
 
 @Injectable()
 export class MeetingsPopupActionsService extends DestroyClass {
     constructor(
-        private readonly http: MeetingsPopupHttpService,
+        private readonly http: MeetingsHttpService,
         private readonly forms: MeetingsPopupFormService,
         private readonly snack: SnackbarService,
         private readonly dialogRef: MatDialogRef<MeetingPopupComponent>

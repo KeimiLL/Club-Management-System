@@ -6,8 +6,8 @@ import {
     UrlTree,
 } from "@angular/router";
 
+import { UserService } from "../api/user.service";
 import { MainRoutes } from "../models/misc.model";
-import { UserService } from "../services/user.service";
 
 @Injectable({ providedIn: "root" })
 export class AuthGuard {

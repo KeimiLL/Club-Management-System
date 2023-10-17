@@ -12,10 +12,10 @@ import { catchError, of, tap } from "rxjs";
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { FooterComponent } from "./components/base/footer/footer.component";
+import { UserService } from "./shared/api/user.service";
 import { CsrfHttpInterceptor } from "./shared/interceptors/csrf-http.interceptor";
 import { ErrorHttpInterceptor } from "./shared/interceptors/error-http.interceptor";
 import { User } from "./shared/models/user.model";
-import { UserService } from "./shared/services/user.service";
 
 @NgModule({
     declarations: [AppComponent],

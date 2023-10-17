@@ -11,17 +11,16 @@ import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 
+import { UserService } from "../../../../../../../shared/api/user.service";
 import { PermissionBackgroundColorDirective } from "../../../../../../../shared/directives/permission-background-color.directive";
 import { PermissionColorDirective } from "../../../../../../../shared/directives/permission-color.directive";
 import { Meeting } from "../../../../../../../shared/models/meetings.model";
 import { ShortUser } from "../../../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
-import { UserService } from "../../../../../../../shared/services/user.service";
 import { NewMeetingFormGroup } from "./newMeetingFormBuilder";
 import { MeetingsPopupActionsService } from "./services/meetings-popup-actions.service";
 import { MeetingsPopupFormService } from "./services/meetings-popup-form.service";
-import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service";
 
 @Component({
     selector: "app-meeting-popup",
@@ -37,11 +36,7 @@ import { MeetingsPopupHttpService } from "./services/meetings-popup-http.service
     ],
     templateUrl: "./meeting-popup.component.html",
     styleUrls: ["./meeting-popup.component.scss"],
-    providers: [
-        MeetingsPopupActionsService,
-        MeetingsPopupFormService,
-        MeetingsPopupHttpService,
-    ],
+    providers: [MeetingsPopupActionsService, MeetingsPopupFormService],
 })
 export class MeetingPopupComponent implements OnInit {
     protected isEditMode = false;

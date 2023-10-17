@@ -4,8 +4,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { of } from "rxjs";
 
+import { UserService } from "../../../../../../../shared/api/user.service";
 import { Roles } from "../../../../../../../shared/models/user.model";
-import { UserService } from "../../../../../../../shared/services/user.service";
 import { MeetingPopupComponent } from "./meeting-popup.component";
 
 describe("MeetingPopupComponent", () => {

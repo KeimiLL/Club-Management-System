@@ -1,4 +1,4 @@
-import { UserService } from "./../../../../../../../shared/services/user.service";
+import { UserService } from "../../../../../../../shared/api/user.service";
 import { SettingsMenuComponent } from "./settings-menu.component";
 
 describe("SettingsMenuComponent", () => {

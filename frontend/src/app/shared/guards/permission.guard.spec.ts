@@ -1,7 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import { ActivatedRoute, Router } from "@angular/router";
 
-import { UserService } from "../services/user.service";
+import { UserService } from "../api/user.service";
 import { PermissionGuard } from "./permission.guard";
 
 describe("PermissionGuard", () => {

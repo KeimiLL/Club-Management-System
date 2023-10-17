@@ -18,7 +18,6 @@ import {
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "./../../../../../../../shared/modules/material.module";
 import { newTeamDataFormBuilder, TeamControls } from "./newTeamFormBuilder";
-import { TeamsPopupHttpService } from "./services/teams-popup-http.service";
 import { TeamsPopupRootService } from "./services/teams-popup-root.service";
 
 @Component({
@@ -33,7 +32,7 @@ import { TeamsPopupRootService } from "./services/teams-popup-root.service";
     ],
     templateUrl: "./teams-popup.component.html",
     styleUrls: ["./teams-popup.component.scss"],
-    providers: [TeamsPopupHttpService, TeamsPopupRootService],
+    providers: [TeamsPopupRootService],
 })
 export class TeamsPopupComponent {
     protected teamForm: FormGroup<TeamControls>;

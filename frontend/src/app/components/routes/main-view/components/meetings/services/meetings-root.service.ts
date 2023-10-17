@@ -3,6 +3,7 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { forkJoin, Observable, of } from "rxjs";
 import { catchError, filter, map, switchMap } from "rxjs/operators";
 
+import { MeetingsHttpService } from "../../../../../../shared/api/meetings-http.service";
 import {
     Meeting,
     TableMeeting,
@@ -12,7 +13,6 @@ import { TableService } from "../../../../../../shared/services/table.service";
 import { DestroyClass } from "../../../../../../shared/utils/destroyClass";
 import { MeetingPopupComponent } from "../components/add-meeting-popup/meeting-popup.component";
 import { longMeetingColumns, shortMeetingColumns } from "../meeting-table.data";
-import { MeetingsHttpService } from "./meetings-http.service";
 
 @Injectable()
 export class MeetingsRootService extends DestroyClass {
@@ -107,8 +107,6 @@ export class MeetingsRootService extends DestroyClass {
         id: number | null
     ): Observable<Meeting | null> {
         if (id === null) return of(null);
-        return this.splitView.refreshCurrentItem$(
-            this.http.getMeetingsById(id)
-        );
+        return this.splitView.refreshCurrentItem$(this.http.getMeetingById(id));
     }
 }

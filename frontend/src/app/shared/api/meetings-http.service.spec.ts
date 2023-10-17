@@ -1,13 +1,13 @@
 import { TestBed } from "@angular/core/testing";
 
-import { TeamsPopupHttpService } from "./teams-popup-http.service";
+import { MeetingsHttpService } from "./meetings-http.service";
 
-describe("TeamsPopupHttpService", () => {
-    let service: TeamsPopupHttpService;
+describe("MeetingsHttpService", () => {
+    let service: MeetingsHttpService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
-        service = TestBed.inject(TeamsPopupHttpService);
+        service = TestBed.inject(MeetingsHttpService);
     });
 
     it("should be created", () => {

@@ -1,13 +1,13 @@
 import { TestBed } from "@angular/core/testing";
 
-import { ModifyUsersHttpService } from "./modify-users-http.service";
+import { CoachesHttpService } from "./coaches-http.service";
 
-describe("ModifyUsersHttpService", () => {
-    let service: ModifyUsersHttpService;
+describe("CoachesHttpService", () => {
+    let service: CoachesHttpService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({});
-        service = TestBed.inject(ModifyUsersHttpService);
+        service = TestBed.inject(CoachesHttpService);
     });
 
     it("should be created", () => {

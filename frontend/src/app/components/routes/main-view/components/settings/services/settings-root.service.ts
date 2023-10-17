@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { tap } from "rxjs";
 
+import { UserService } from "../../../../../../shared/api/user.service";
 import { SnackbarMessages } from "../../../../../../shared/models/messages.model";
 import { SnackbarService } from "../../../../../../shared/services/snackbar.service";
-import { UserService } from "../../../../../../shared/services/user.service";
 
 @Injectable()
 export class SettingsRootService {
