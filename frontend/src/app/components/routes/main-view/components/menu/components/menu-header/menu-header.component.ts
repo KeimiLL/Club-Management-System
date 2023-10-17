@@ -27,9 +27,8 @@ export class MenuHeaderComponent implements OnInit {
     constructor(private readonly userService: UserService) {}
 
     ngOnInit(): void {
-        if (this.userService.currentUser !== null) {
-            this.user = this.userService.currentUser;
-        }
+        if (this.userService.currentUser === null) return;
+        this.user = this.userService.currentUser;
     }
 
     public onCollapseButtonClick(): void {

@@ -71,9 +71,10 @@ export class UserTableComponent implements OnInit, AfterViewInit {
         this.itemsPerPage = this.table.capacity;
         this.totalItems$ = this.table.totalItems$;
         this.displayedColumns = usersColumns;
-        if (this.userService.currentUser !== null) {
-            this.currentUserEmail = this.userService.currentUser.email;
-        }
+
+        if (this.userService.currentUser === null) return;
+
+        this.currentUserEmail = this.userService.currentUser.email;
     }
 
     ngAfterViewInit(): void {

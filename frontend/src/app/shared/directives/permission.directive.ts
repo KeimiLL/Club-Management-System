@@ -15,17 +15,16 @@ export class PermissionDirective {
     ) {}
 
     @Input() public set appPermission(requiredPermission: SubPermissions) {
-        if (this.userService.currentUser !== null) {
-            const userRole = this.userService.currentUser.role;
+        if (this.userService.currentUser === null) return;
 
-            const rolePermissions = RoleDefinitions[userRole].permissions;
-            const hasPermission = rolePermissions.includes(requiredPermission);
+        const userRole = this.userService.currentUser.role;
+        const rolePermissions = RoleDefinitions[userRole].permissions;
+        const hasPermission = rolePermissions.includes(requiredPermission);
 
-            if (hasPermission) {
-                this.viewContainer.createEmbeddedView(this.templateRef);
-            } else {
-                this.viewContainer.clear();
-            }
+        if (hasPermission) {
+            this.viewContainer.createEmbeddedView(this.templateRef);
+        } else {
+            this.viewContainer.clear();
         }
     }
 }
