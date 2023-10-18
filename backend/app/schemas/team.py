@@ -25,7 +25,7 @@ class TeamCreate(TeamBase):
     name: str = Field(..., min_length=3)
 
 
-class TeamCreatePlayerIdList(TeamBase):
+class TeamCreatePlayerIdList(BaseModel):
     """Team schema for creation with a set of player ids."""
 
     team: TeamCreate
