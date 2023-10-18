@@ -8,6 +8,7 @@ import { ShortCoach } from "../../../../../../../../shared/models/coach.model";
 import { ShortPlayer } from "../../../../../../../../shared/models/player.model";
 import { TeamCreate } from "../../../../../../../../shared/models/team.model";
 import { TeamsPopupComponent } from "../teams-popup.component";
+import { TeamsPopupFormsService } from "./teams-popup-forms.service";
 
 @Injectable()
 export class TeamsPopupRootService {
@@ -37,6 +38,10 @@ export class TeamsPopupRootService {
         this.selectedPlayersStore$.next(players);
     }
 
+    public get selectedPlayers(): ShortPlayer[] {
+        return this.selectedPlayersStore$.value;
+    }
+
     public get selectedPlayers$(): Observable<ShortPlayer[]> {
         return this.selectedPlayersStore$.asObservable();
     }
@@ -44,7 +49,8 @@ export class TeamsPopupRootService {
     constructor(
         private readonly httpTeams: TeamsHttpService,
         private readonly httpCoaches: CoachesHttpService,
-        private readonly dialogRef: MatDialogRef<TeamsPopupComponent>
+        private readonly dialogRef: MatDialogRef<TeamsPopupComponent>,
+        private readonly forms: TeamsPopupFormsService
     ) {
         this.initData();
     }
@@ -62,20 +68,14 @@ export class TeamsPopupRootService {
 
     public selectPlayer(player: ShortPlayer): void {
         this.selectedPlayers = [...this.selectedPlayers, player];
-        // this.playerInputControl.setValue("");
-        // this.teamForm
-        //     .get("user_ids")
-        //     ?.setValue(this.selectedAttendees.map((a) => a.id));
+        this.forms.setPlayersValue(this.selectedPlayers);
     }
 
     public removePlayer(player: ShortPlayer): void {
         this.selectedPlayers = this.selectedPlayers.filter(
             (p) => p.user_id !== player.user_id
         );
-
-        // this.meetingForm
-        //     .get("user_ids")
-        //     ?.setValue(this.selectedAttendees.map((a) => a.id));
+        this.forms.setPlayersValue(this.selectedPlayers);
     }
 
     public createTeam(team: TeamCreate): void {
@@ -83,9 +83,13 @@ export class TeamsPopupRootService {
             .createTeam(team)
             .pipe(
                 tap(() => {
-                    this.dialogRef.close(team);
+                    this.closePopup(team);
                 })
             )
             .subscribe();
+    }
+
+    public closePopup(team: TeamCreate | false): void {
+        this.dialogRef.close(team);
     }
 }
