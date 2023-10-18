@@ -78,3 +78,10 @@ class PlayerOnlyBaseInfo(BaseModel):
 
     user_id: int = Field(..., ge=1, le=10**7)
     user_full_name: str = Field(..., min_length=4)
+
+
+class PlayerTableView(PlayerOnlyBaseInfo):
+    """Player schema for returning data to be shown in the players' table."""
+
+    is_injured: bool
+    date_of_birth: datetime.date

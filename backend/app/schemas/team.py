@@ -67,6 +67,6 @@ class TeamOnlyBaseInfo(BaseModel):
 
 
 class TeamTableView(TeamOnlyBaseInfo):
-    """Meeting schema for returning data to be shown in the teams' table."""
+    """Team schema for returning data to be shown in the teams' table."""
 
     coach_user_full_name: str | None = Field(None, min_length=4)
