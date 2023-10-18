@@ -1,14 +1,19 @@
 """File responsible for implementing players related CRUD operations."""
 
 
+from typing import Callable
+
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_team import get_team_by_id
 from app.crud.crud_user import get_user_by_id
 from app.models.player import Player
+from app.models.user import User
 from app.schemas.player import PlayerCreate
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
+
+func: Callable
 
 
 def create_new_player(player: PlayerCreate, db: Session) -> Player:
@@ -86,5 +91,41 @@ def get_all_players(db: Session) -> list[Player]:
     """
     try:
         return list(db.scalars(select(Player)).all())
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def get_players_with_pagination_by_team_id(
+    page: int, per_page: int, team_id: int, db: Session
+) -> tuple[list[Player], int]:
+    """Gets all players that play in the given team.
+
+    Args:
+        page (int): The current page number.
+        per_page (int): The number of items per page.
+        team_id (int): The team's id.
+        db (Session): Database session.
+
+    Raises:
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        tuple[list[Player], int]: The filtered list of players alongside the total number of
+            players that meet the criteria.
+    """
+    try:
+        get_team_by_id(team_id, db)
+        query = select(Player).join(User).where(Player.team_id == team_id)
+        total = db.scalar(select(func.count()).select_from(query))
+        return (
+            list(
+                db.scalars(
+                    query.order_by(User.full_name.desc())
+                    .offset(page * per_page)
+                    .limit(per_page)
+                ).all()
+            ),
+            total,
+        )
     except SQLAlchemyError as exc:
         raise exc
