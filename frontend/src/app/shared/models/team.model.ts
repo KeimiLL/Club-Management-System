@@ -3,9 +3,14 @@ export interface ShortTeam {
     id: number;
 }
 
-export interface TeamCreate {
+export interface TeamCreateBasicData {
     name: string;
     coach_id: number;
+}
+
+export interface TeamCreate {
+    team: TeamCreateBasicData;
+    player_ids: number[];
 }
 
 export interface TableTeam extends ShortTeam {

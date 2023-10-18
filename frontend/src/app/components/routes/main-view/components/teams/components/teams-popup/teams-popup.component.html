@@ -9,29 +9,24 @@
         </mat-card-header>
         <form [formGroup]="teamForm" (ngSubmit)="onSubmit()">
             <app-half-card-section>
-                <app-section-header name="Team name" sectionHeader>
+                <app-section-header name="Basic Data" sectionHeader>
                 </app-section-header>
 
                 <ng-container sectionContent>
                     <mat-form-field appearance="fill">
+                        <mat-label>Team name</mat-label>
                         <input
                             matInput
                             placeholder="Team name..."
                             formControlName="name"
                         />
                     </mat-form-field>
-                </ng-container>
-            </app-half-card-section>
 
-            <app-half-card-section>
-                <app-section-header name="Coach" sectionHeader>
-                </app-section-header>
-
-                <ng-container sectionContent>
                     <mat-form-field appearance="fill">
+                        <mat-label>Coach name</mat-label>
                         <input
                             matInput
-                            placeholder="Add Attendee..."
+                            placeholder="Choose Coach"
                             [formControl]="coachInputControl"
                             [matAutocomplete]="auto"
                         />
@@ -50,12 +45,12 @@
                 </ng-container>
             </app-half-card-section>
 
-            <!-- <app-half-card-section>
+            <app-half-card-section>
                 <app-section-header name="Players" sectionHeader>
                 </app-section-header>
 
                 <ng-container sectionContent> </ng-container>
-            </app-half-card-section> -->
+            </app-half-card-section>
 
             <div class="button-container">
                 <button
