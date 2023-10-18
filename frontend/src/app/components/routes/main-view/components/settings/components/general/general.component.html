@@ -76,7 +76,7 @@
                         New Password is required.
                     </mat-error>
                     <mat-error class="field-error">
-                        New Password must be at least 6 characters long.
+                        New Password must be at least 8 characters long.
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field class="auth__form__field">
@@ -131,7 +131,12 @@
                         </div>
                     </div>
                 </div>
-                <button class="button--light" mat-raised-button type="submit">
+                <button
+                    class="button--light"
+                    mat-raised-button
+                    type="submit"
+                    [disabled]="!resetPasswordForm.valid"
+                >
                     Change your password
                 </button>
             </form>

@@ -43,13 +43,11 @@ export class GeneralComponent {
     }
 
     protected saveChanges(): void {
-        if (this.resetPasswordForm.valid) {
-            const changePassword: ChangePassword = {
-                new_password: this.resetPasswordForm.controls.newPassword.value,
-                old_password: this.resetPasswordForm.controls.oldPassword.value,
-            };
-            this.root.changeOwnPassword(changePassword);
-        }
+        const changePassword: ChangePassword = {
+            new_password: this.resetPasswordForm.controls.newPassword.value,
+            old_password: this.resetPasswordForm.controls.oldPassword.value,
+        };
+        this.root.changeOwnPassword(changePassword);
     }
 
     protected toggleForm(): void {
