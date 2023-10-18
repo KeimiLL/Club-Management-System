@@ -18,9 +18,6 @@ export class MeetingsPopupFormService extends DestroyClass {
     public meetingForm: FormGroup<NewMeetingFormGroup>;
     public attendeeInputControl = new FormControl<string>("");
 
-    public meetingData: Meeting;
-    public isEditMode = false;
-
     constructor() {
         super();
         this.meetingForm = newMeetingDataFormBuilder.buildFormGroup();

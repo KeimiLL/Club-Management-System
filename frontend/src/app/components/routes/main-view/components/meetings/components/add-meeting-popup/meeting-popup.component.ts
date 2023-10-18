@@ -23,6 +23,7 @@ import { FilterUsingPropControlPipe } from "../../../../../../../shared/pipes/fi
 import { NewMeetingFormGroup } from "./newMeetingFormBuilder";
 import { MeetingsPopupActionsService } from "./services/meetings-popup-actions.service";
 import { MeetingsPopupFormService } from "./services/meetings-popup-form.service";
+import { MeetingsPopupRootService } from "./services/meetings-popup-root.service";
 
 @Component({
     selector: "app-meeting-popup",
@@ -40,7 +41,11 @@ import { MeetingsPopupFormService } from "./services/meetings-popup-form.service
     ],
     templateUrl: "./meeting-popup.component.html",
     styleUrls: ["./meeting-popup.component.scss"],
-    providers: [MeetingsPopupActionsService, MeetingsPopupFormService],
+    providers: [
+        MeetingsPopupActionsService,
+        MeetingsPopupFormService,
+        MeetingsPopupRootService,
+    ],
 })
 export class MeetingPopupComponent implements OnInit {
     protected isEditMode = false;
@@ -57,19 +62,21 @@ export class MeetingPopupComponent implements OnInit {
     constructor(
         private readonly actions: MeetingsPopupActionsService,
         private readonly forms: MeetingsPopupFormService,
+        private readonly root: MeetingsPopupRootService,
         private readonly userService: UserService,
         @Inject(MAT_DIALOG_DATA) public data: Meeting | null
     ) {
-        this.forms.initData(data);
         this.meetingForm = this.forms.meetingForm;
         this.attendeeInputControl = this.forms.attendeeInputControl;
+        this.root.initData(this.data);
+        this.forms.patchFormValue(this.data);
     }
 
     ngOnInit(): void {
-        this.isEditMode = this.forms.isEditMode;
+        this.isEditMode = this.data !== null;
         this.currentUser = this.userService.currentUser as ShortUser;
-        this.allAttendees$ = this.forms.allAttendees$;
-        this.selectedAttendees$ = this.forms.selectedAttendees$;
+        this.allAttendees$ = this.root.allAttendees$;
+        this.selectedAttendees$ = this.root.selectedAttendees$;
     }
 
     protected onCloseClick(): void {
@@ -81,11 +88,11 @@ export class MeetingPopupComponent implements OnInit {
     }
 
     protected onOptionSelected(event: MatAutocompleteSelectedEvent): void {
-        this.forms.addAttendeeToSelectedList(event.option.value);
+        this.root.selectAttendee(event.option.value);
     }
 
     protected removeAttendee(attendee: ShortUser): void {
-        this.forms.removeAttendeeFromSelectedList(attendee);
+        this.root.removeAttendee(attendee);
     }
 
     protected isButtonDisabled(): boolean {
@@ -94,7 +101,8 @@ export class MeetingPopupComponent implements OnInit {
     }
 
     protected onSubmit(): void {
-        if (this.isEditMode) this.actions.editMeeting();
-        else this.actions.createNewMeeting();
+        if (this.isEditMode && this.data !== null) {
+            this.actions.editMeeting(this.data.id);
+        } else this.actions.createNewMeeting();
     }
 }
