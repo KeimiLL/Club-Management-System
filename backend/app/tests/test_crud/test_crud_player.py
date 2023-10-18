@@ -8,6 +8,7 @@ from app.crud.crud_player import (
     create_new_player,
     get_all_players,
     get_player_by_user_id,
+    get_players_with_pagination_by_team_id,
 )
 from app.crud.crud_team import create_new_team
 from app.crud.crud_user import create_new_user
@@ -154,3 +155,102 @@ def test_correct__get_all_players(
             for player, new_player in zip(players, new_players)
         )
     )
+
+
+@pytest.mark.parametrize(
+    "users,coach,team,players,page,per_page,team_ids",
+    [
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            [player_create, player_create],
+            0,
+            1,
+            [1, 1],
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            [player_create, player_create],
+            0,
+            2,
+            [1, 2],
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2, user_create_with_role],
+            coach_create,
+            team_create,
+            [player_create, player_create, player_create],
+            1,
+            1,
+            [1, 2, 1],
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2, user_create_with_role],
+            coach_create,
+            team_create,
+            [player_create, player_create, player_create],
+            1,
+            2,
+            [1, 2, 2],
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2, user_create_with_role],
+            coach_create,
+            team_create,
+            [player_create, player_create, player_create],
+            2,
+            1,
+            [1, 2, 2],
+        ),
+    ],
+)
+def test_correct__get_players_with_pagination_by_team_id(
+    users: list[UserCreate | UserCreateWithRole],
+    coach: CoachCreate,
+    team: TeamCreate,
+    players: list[PlayerCreate],
+    page: int,
+    per_page: int,
+    team_ids: list[int],
+    db_session: Session,
+) -> None:
+    """Tests getting all players that meet the filtering criteria.
+
+    Args:
+        users (list[UserCreate | UserCreateWithRole]): Users to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        players (list[PlayerCreate]): Players to be created and read.
+        page (int): The page index to be retrieved.
+        per_page (int): The number of items per page.
+        team_ids (list[int]): The team ids to read.
+        db_session (Session): Database session.
+    """
+    for user in users:
+        create_new_user(user, db_session)
+    create_new_coach(coach, db_session)
+    for _ in team_ids:
+        create_new_team(
+            team,
+            db_session,
+        )
+    new_players = [
+        create_new_player(
+            player.model_copy(update={"user_id": index + 1, "team_id": team_id}),
+            db_session,
+        )
+        for index, (player, team_id) in enumerate(zip(players, team_ids))
+    ]
+    for team_id in set(team_ids):
+        all_players, new_total = get_players_with_pagination_by_team_id(
+            page, per_page, team_id, db_session
+        )
+        assert new_total == sum(t == team_id for t in team_ids)
+        for index, new_player in enumerate(
+            [p for p in new_players if p.team_id == team_id]
+        ):
+            if page * per_page <= index < page * per_page + per_page:
+                assert all_players[index - page * per_page] == new_player
