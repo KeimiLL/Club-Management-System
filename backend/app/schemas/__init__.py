@@ -2,7 +2,7 @@
 
 
 # pylint: disable=unused-import
-from app.schemas.coach import Coach, CoachInDBBase
+from app.schemas.coach import Coach, CoachInDBBase, CoachOnlyBaseInfo
 from app.schemas.injury import Injury, InjuryInDBBase
 from app.schemas.match import Match, MatchInDBBase
 from app.schemas.match_player import MatchPlayer, MatchPlayerInDBBase
@@ -19,8 +19,8 @@ from app.schemas.meeting_user import (
     MeetingUserInDBBase,
     MeetingUserUpdate,
 )
-from app.schemas.player import Player, PlayerInDBBase
-from app.schemas.team import Team, TeamInDBBase
+from app.schemas.player import Player, PlayerInDBBase, PlayerOnlyBaseInfo
+from app.schemas.team import Team, TeamInDBBase, TeamSideView
 from app.schemas.training import Training, TrainingInDBBase
 from app.schemas.training_player import TrainingPlayer, TrainingPlayerInDBBase
 from app.schemas.user import User, UserInDBBase, UserOnlyBaseInfo
@@ -42,6 +42,7 @@ Player.model_rebuild()
 PlayerInDBBase.model_rebuild()
 Team.model_rebuild()
 TeamInDBBase.model_rebuild()
+TeamSideView.model_rebuild()
 Training.model_rebuild()
 TrainingInDBBase.model_rebuild()
 TrainingPlayer.model_rebuild()
