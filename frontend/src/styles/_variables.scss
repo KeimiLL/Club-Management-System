@@ -28,9 +28,11 @@ $accent-color: #ff9900;
 $tooltip-color: #00bfff;
 
 // button colors
-$dark-btn-back: #5d217e;
+$dark-btn-back: #6c2c8e;
+$dark-btn-back-on-hover: #8c50ac;
 $dark-btn-text: #fdfaff;
 $light-btn-back: #b4befe;
+$light-btn-back-on-hover: #cad0fc;
 $light-btn-text: #020b1b;
 
 // profile icons background colors
@@ -39,6 +41,9 @@ $player-icon-back: #d281b5;
 $coach-icon-back: #ffce5c;
 $medic-icon-back: #ffb056;
 $board-icon-back: #06d6a0;
+
+// app icons
+$blue-icon: #587cfe;
 
 // filter colors for meetings table
 $filter-past: #5392d0;
@@ -72,6 +77,10 @@ $huge-font: 34px;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         background-color: $dark-btn-back;
         color: $dark-btn-text;
+
+        &:hover {
+            background-color: $dark-btn-back-on-hover;
+        }
     }
 
     &--light {
@@ -80,6 +89,10 @@ $huge-font: 34px;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         background-color: $light-btn-back;
         color: $light-btn-text;
+
+        &:hover {
+            background-color: $light-btn-back-on-hover;
+        }
     }
 }
 

@@ -1,0 +1,87 @@
+@import "../../../../../../../../styles/variables";
+
+:host {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+
+    .button-show-hide {
+        width: 100px;
+        margin: $medium-spacing;
+    }
+
+    .auth {
+        overflow: hidden;
+
+        &__form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: $container-padding;
+
+            .header {
+                padding-bottom: $large-spacing;
+
+                &__icon {
+                    color: $blue-icon;
+                    transform: scale(1.3);
+                    padding-bottom: $small-spacing;
+                }
+
+                &__text {
+                    font-size: $normal-font;
+                }
+            }
+
+            &__field {
+                width: 100%;
+                padding-bottom: $small-spacing;
+            }
+
+            .hint {
+                padding-top: $medium-spacing;
+
+                &__header {
+                    color: $dark-grey;
+                }
+
+                &__informations {
+                    padding-top: $medium-spacing;
+                    display: flex;
+                    justify-content: flex-start;
+                }
+
+                &__information {
+                    flex-basis: 50%;
+
+                    &__icon {
+                        color: $blue-icon;
+                        transform: scale(0.8);
+                    }
+
+                    &__text {
+                        color: $dark-grey;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}

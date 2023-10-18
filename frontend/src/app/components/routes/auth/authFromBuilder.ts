@@ -15,6 +15,12 @@ export interface RegisterFormGroup {
     confirmPassword: FormControl<string>;
 }
 
+export interface ResetPasswordFormGroup {
+    oldPassword: FormControl<string>;
+    newPassword: FormControl<string>;
+    confirmNewPassword: FormControl<string>;
+}
+
 export const authFormBuilder = {
     buildLoginFormGroup: (): FormGroup<LoginFormGroup> =>
         new FormGroup<LoginFormGroup>({
@@ -57,5 +63,30 @@ export const authFormBuilder = {
         );
 
         return registerForm;
+    },
+};
+
+export const resetPasswordFormBuilder = {
+    buildResetPasswordFormGroup: (): FormGroup<ResetPasswordFormGroup> => {
+        const resetPasswordForm = new FormGroup<ResetPasswordFormGroup>({
+            oldPassword: new FormControl("", {
+                nonNullable: true,
+                validators: [Validators.required, Validators.minLength(8)],
+            }),
+            newPassword: new FormControl("", {
+                nonNullable: true,
+                validators: [Validators.required, Validators.minLength(8)],
+            }),
+            confirmNewPassword: new FormControl("", {
+                nonNullable: true,
+                validators: [Validators.required, Validators.minLength(8)],
+            }),
+        });
+
+        resetPasswordForm.controls.confirmNewPassword.setValidators(
+            matchStringValidator(resetPasswordForm.controls.newPassword)
+        );
+
+        return resetPasswordForm;
     },
 };
