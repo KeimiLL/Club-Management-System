@@ -8,7 +8,7 @@ from app.crud.crud_meeting import (
     create_new_meeting,
     get_all_meetings_with_pagination,
     get_meeting_by_id,
-    get_meetings_by_user_id,
+    get_meetings_with_pagination_by_user_id,
     update_meeting_with_user_ids,
 )
 from app.crud.crud_user import create_new_user
@@ -157,7 +157,7 @@ def test_correct__get_all_meetings_with_pagination(
         ),
     ],
 )
-def test_correct__get_meetings_by_user_id(
+def test_correct__get_meetings_with_pagination_by_user_id(
     users: list[UserCreate],
     meeting: MeetingCreate,
     page: int,
@@ -190,7 +190,7 @@ def test_correct__get_meetings_by_user_id(
         for user_id in user_ids
     ]
     for user_id in set(user_ids):
-        all_meetings, new_total = get_meetings_by_user_id(
+        all_meetings, new_total = get_meetings_with_pagination_by_user_id(
             page, per_page, user_id, db_session
         )
         assert new_total == sum(u == user_id for u in user_ids)

@@ -9,7 +9,7 @@ from app.crud.crud_meeting import (
     create_meeting_with_user_ids,
     get_all_meetings_with_pagination,
     get_meeting_by_id,
-    get_meetings_by_user_id,
+    get_meetings_with_pagination_by_user_id,
     update_meeting_with_user_ids,
 )
 from app.db.session import get_db
@@ -68,12 +68,12 @@ def create_meeting(
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def get_meetings(
+def get_meetings_with_pagination(
     pagination: Annotated[dict[str, int], Depends(paginate)],
     current_user: Annotated[User, Depends(get_user_from_token)],
     db: Annotated[Session, Depends(get_db)],
 ):
-    """Creates a new meeting and its attendance based on data from a POST request.
+    """Gets meetings with pagination depending on the current user's role.
 
     Args:
         pagination (Annotated[dict[str, int], Depends]): Pagination read from the query params.
@@ -101,7 +101,7 @@ def get_meetings(
             ],
             total=total,
         )
-    meetings, total = get_meetings_by_user_id(
+    meetings, total = get_meetings_with_pagination_by_user_id(
         **pagination,
         user_id=current_user.id,
         db=db,

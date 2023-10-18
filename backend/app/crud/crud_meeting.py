@@ -105,7 +105,7 @@ def get_all_meetings_with_pagination(
         raise exc
 
 
-def get_meetings_by_user_id(
+def get_meetings_with_pagination_by_user_id(
     page: int, per_page: int, user_id: int, db: Session
 ) -> tuple[list[Meeting], int]:
     """Gets all meetings that were either created by the current user or the current user
