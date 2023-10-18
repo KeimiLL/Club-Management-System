@@ -13,35 +13,43 @@
                 </app-section-header>
 
                 <ng-container sectionContent>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Team name</mat-label>
-                        <input
-                            matInput
-                            placeholder="Team name..."
-                            formControlName="name"
-                        />
-                    </mat-form-field>
-
-                    <mat-form-field appearance="fill">
-                        <mat-label>Coach name</mat-label>
-                        <input
-                            matInput
-                            placeholder="Choose Coach"
-                            [formControl]="coachInputControl"
-                            [matAutocomplete]="auto"
-                        />
-                        <mat-autocomplete
-                            #auto="matAutocomplete"
-                            (optionSelected)="onOptionSelected($event)"
+                    <div class="popup__basic">
+                        <mat-form-field
+                            appearance="fill"
+                            class="popup__basic--control"
                         >
-                            <mat-option
-                                *ngFor="let coach of coaches$ | async"
-                                [value]="coach"
+                            <mat-label>Team name</mat-label>
+                            <input
+                                matInput
+                                placeholder="Team name..."
+                                formControlName="name"
+                            />
+                        </mat-form-field>
+
+                        <mat-form-field
+                            appearance="fill"
+                            class="popup__basic--control"
+                        >
+                            <mat-label>Coach name</mat-label>
+                            <input
+                                matInput
+                                placeholder="Choose Coach"
+                                [formControl]="coachInputControl"
+                                [matAutocomplete]="auto"
+                            />
+                            <mat-autocomplete
+                                #auto="matAutocomplete"
+                                (optionSelected)="onOptionSelected($event)"
                             >
-                                {{ coach.user_full_name }}
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
+                                <mat-option
+                                    *ngFor="let coach of coaches$ | async"
+                                    [value]="coach"
+                                >
+                                    {{ coach.user_full_name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
                 </ng-container>
             </app-half-card-section>
 
@@ -49,7 +57,42 @@
                 <app-section-header name="Players" sectionHeader>
                 </app-section-header>
 
-                <ng-container sectionContent> </ng-container>
+                <ng-container sectionContent>
+                    <div class="popup__players">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Players</mat-label>
+                            <input
+                                matInput
+                                placeholder="Add Player..."
+                                [formControl]="playerInputControl"
+                                [matAutocomplete]="auto"
+                            />
+                            <mat-autocomplete
+                                #auto="matAutocomplete"
+                                (optionSelected)="onOptionSelected($event)"
+                            >
+                                <mat-option
+                                    *ngFor="
+                                        let player of filteredPlayers$ | async
+                                    "
+                                    [value]="player"
+                                >
+                                    {{ player.full_name }},
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+                        <mat-chip-listbox>
+                            <mat-chip
+                                *ngFor="let player of selectedPlayers$ | async"
+                                (removed)="removePlayer(player)"
+                            >
+                                {{ player.full_name }}
+                                <mat-icon matChipRemove> cancel </mat-icon>
+                            </mat-chip>
+                        </mat-chip-listbox>
+                    </div>
+                </ng-container>
             </app-half-card-section>
 
             <div class="button-container">
