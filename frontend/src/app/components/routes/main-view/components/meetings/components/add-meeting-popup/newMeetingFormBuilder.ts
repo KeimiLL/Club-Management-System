@@ -15,10 +15,10 @@ interface MeetingControls {
 }
 
 export const newMeetingDataFormBuilder = {
-    buildFormGroup: (meeting: Meeting | null): FormGroup<NewMeetingFormGroup> =>
+    buildFormGroup: (): FormGroup<NewMeetingFormGroup> =>
         new FormGroup<NewMeetingFormGroup>({
             meeting: new FormGroup<MeetingControls>({
-                name: new FormControl<string>(meeting?.name ?? "", {
+                name: new FormControl<string>("", {
                     nonNullable: true,
                     validators: [
                         Validators.required,
@@ -27,19 +27,16 @@ export const newMeetingDataFormBuilder = {
                     ],
                 }),
                 date: new FormControl<string>(
-                    meeting?.date ?? formatDateFromInputForBackend(new Date()),
+                    formatDateFromInputForBackend(new Date()),
                     { nonNullable: true, validators: Validators.required }
                 ),
-                notes: new FormControl<string | null>(meeting?.notes ?? null, {
+                notes: new FormControl<string | null>(null, {
                     nonNullable: false,
                 }),
             }),
-            user_ids: new FormControl<number[]>(
-                meeting?.users.map((user) => user.id) ?? [],
-                {
-                    nonNullable: true,
-                    validators: Validators.required,
-                }
-            ),
+            user_ids: new FormControl<number[]>([], {
+                nonNullable: true,
+                validators: Validators.required,
+            }),
         }),
 };
