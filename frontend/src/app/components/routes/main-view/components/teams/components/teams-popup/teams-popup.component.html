@@ -89,6 +89,9 @@
                                                 let player of vm.allPlayers
                                                     | filterUsingArray
                                                         : vm.selectedPlayers
+                                                    | filterUsingPropControl
+                                                        : 'user_full_name'
+                                                        : playerInputControl
                                             "
                                             [value]="player"
                                         >

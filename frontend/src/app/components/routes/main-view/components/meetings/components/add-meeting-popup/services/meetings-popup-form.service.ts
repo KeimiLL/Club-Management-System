@@ -1,13 +1,6 @@
 import { Injectable } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import {
-    BehaviorSubject,
-    combineLatest,
-    map,
-    Observable,
-    startWith,
-    tap,
-} from "rxjs";
+import { BehaviorSubject, Observable, tap } from "rxjs";
 
 import { UserService } from "../../../../../../../../shared/api/user.service";
 import {
@@ -52,12 +45,20 @@ export class MeetingsPopupFormService extends DestroyClass {
             .getAllUsers()
             .pipe(
                 tap((users) => {
-                    this.allAttendees = users;
                     if (meetingData !== null) {
+                        this.allAttendees = users.filter(
+                            (attendee) =>
+                                attendee.id !== meetingData.created_by_user.id
+                        );
                         this.selectedAttendees = users.filter((user) =>
                             meetingData.users.some(
                                 (dataUser) => dataUser.id === user.id
                             )
+                        );
+                    } else {
+                        this.allAttendees = users.filter(
+                            (attendee) =>
+                                attendee.id !== this.userService.currentUser?.id
                         );
                     }
                 }),
@@ -84,39 +85,6 @@ export class MeetingsPopupFormService extends DestroyClass {
 
     public get selectedAttendees$(): Observable<ShortUser[]> {
         return this.selectedAttendeesStore$.asObservable();
-    }
-
-    public get filteredAttendees$(): Observable<ShortUser[]> {
-        return combineLatest([
-            this.allAttendees$,
-            this.selectedAttendees$,
-            this.attendeeInputControl.valueChanges.pipe(
-                startWith(this.attendeeInputControl.value)
-            ),
-        ]).pipe(
-            map(([allAttendees, selectedAttendees, inputValue]) => {
-                const filterValue = inputValue ?? "";
-                return allAttendees.filter((attendee) => {
-                    if (this.isEditMode) {
-                        return (
-                            attendee.id !==
-                                this.meetingData.created_by_user.id &&
-                            !selectedAttendees.some(
-                                (a) => a.id === attendee.id
-                            ) &&
-                            attendee.full_name
-                                .toLowerCase()
-                                .includes(filterValue)
-                        );
-                    }
-                    return (
-                        attendee.id !== this.userService.currentUser?.id &&
-                        !selectedAttendees.some((a) => a.id === attendee.id) &&
-                        attendee.full_name.toLowerCase().includes(filterValue)
-                    );
-                });
-            })
-        );
     }
 
     public addAttendeeToSelectedList(attendee: ShortUser): void {

@@ -15,6 +15,7 @@ import { ShortPlayer } from "../../../../../../../shared/models/player.model";
 import { TeamCreate } from "../../../../../../../shared/models/team.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { FilterUsingArrayPipe } from "../../../../../../../shared/pipes/filter-using-array.pipe";
+import { FilterUsingPropControlPipe } from "../../../../../../../shared/pipes/filter-using-prop-control.pipe";
 import { MaterialModule } from "./../../../../../../../shared/modules/material.module";
 import { TeamControls } from "./newTeamFormBuilder";
 import { TeamsPopupFormsService } from "./services/teams-popup-forms.service";
@@ -30,6 +31,7 @@ import { TeamsPopupRootService } from "./services/teams-popup-root.service";
         ReactiveFormsModule,
         FormsModule,
         FilterUsingArrayPipe,
+        FilterUsingPropControlPipe,
     ],
     templateUrl: "./teams-popup.component.html",
     styleUrls: ["./teams-popup.component.scss"],

@@ -18,6 +18,8 @@ import { Meeting } from "../../../../../../../shared/models/meeting.model";
 import { ShortUser } from "../../../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
+import { FilterUsingArrayPipe } from "../../../../../../../shared/pipes/filter-using-array.pipe";
+import { FilterUsingPropControlPipe } from "../../../../../../../shared/pipes/filter-using-prop-control.pipe";
 import { NewMeetingFormGroup } from "./newMeetingFormBuilder";
 import { MeetingsPopupActionsService } from "./services/meetings-popup-actions.service";
 import { MeetingsPopupFormService } from "./services/meetings-popup-form.service";
@@ -33,6 +35,8 @@ import { MeetingsPopupFormService } from "./services/meetings-popup-form.service
         FormsModule,
         PermissionColorDirective,
         PermissionBackgroundColorDirective,
+        FilterUsingArrayPipe,
+        FilterUsingPropControlPipe,
     ],
     templateUrl: "./meeting-popup.component.html",
     styleUrls: ["./meeting-popup.component.scss"],
@@ -65,7 +69,6 @@ export class MeetingPopupComponent implements OnInit {
         this.isEditMode = this.forms.isEditMode;
         this.currentUser = this.userService.currentUser as ShortUser;
         this.allAttendees$ = this.forms.allAttendees$;
-        this.filteredAttendees$ = this.forms.filteredAttendees$;
         this.selectedAttendees$ = this.forms.selectedAttendees$;
     }
 
