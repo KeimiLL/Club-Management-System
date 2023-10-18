@@ -122,9 +122,14 @@ def get_teams_with_pagination(
                 **pagination, user_id=current_user.id, db=db
             )
         case Roles.PLAYER:
-            teams, total = [
-                current_user.player.team
-            ] if current_user.player.team is not None else [], 1
+            teams, total = (
+                (
+                    [current_user.player.team],
+                    1,
+                )
+                if current_user.player.team is not None
+                else ([], 0)
+            )
         case _:
             raise ForbiddenException("team")
     return ItemsListWithTotal[TeamTableView](
