@@ -70,3 +70,21 @@ def get_player_by_user_id(user_id: int, db: Session) -> Player:
         raise MissingException(Player.__name__) from exc
     except SQLAlchemyError as exc:
         raise exc
+
+
+def get_all_players(db: Session) -> list[Player]:
+    """Gets all players.
+
+    Args:
+        db (Session): Database session.
+
+    Raises:
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        list[Player]: A list of all Player objects.
+    """
+    try:
+        return list(db.scalars(select(Player)).all())
+    except SQLAlchemyError as exc:
+        raise exc
