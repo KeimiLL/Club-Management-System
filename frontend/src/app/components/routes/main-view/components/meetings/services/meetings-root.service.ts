@@ -7,7 +7,7 @@ import { MeetingsHttpService } from "../../../../../../shared/api/meetings-http.
 import {
     Meeting,
     TableMeeting,
-} from "../../../../../../shared/models/meetings.model";
+} from "../../../../../../shared/models/meeting.model";
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
 import { DestroyClass } from "../../../../../../shared/utils/destroyClass";

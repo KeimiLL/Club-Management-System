@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import {
     Meeting,
     TableMeeting,
-} from "../../../../../shared/models/meetings.model";
+} from "../../../../../shared/models/meeting.model";
 import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../shared/services/split-view-manager.service";

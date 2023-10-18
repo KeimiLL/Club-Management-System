@@ -3,7 +3,7 @@ import { TestBed } from "@angular/core/testing";
 import { MatDialogModule } from "@angular/material/dialog";
 import { of } from "rxjs";
 
-import { TableMeeting } from "../../../../../../shared/models/meetings.model";
+import { TableMeeting } from "../../../../../../shared/models/meeting.model";
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
 import { MeetingsHttpService } from "./meetings-http.service";

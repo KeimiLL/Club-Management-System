@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { Meeting } from "../../../../../../../shared/models/meetings.model";
+import { Meeting } from "../../../../../../../shared/models/meeting.model";
 import {
     Roles,
     ShortUser,

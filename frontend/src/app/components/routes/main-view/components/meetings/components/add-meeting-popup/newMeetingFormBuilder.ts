@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
-import { Meeting } from "../../../../../../../shared/models/meetings.model";
+import { Meeting } from "../../../../../../../shared/models/meeting.model";
 import { formatDateFromInputForBackend } from "../../../../../../../shared/utils/dateHelpers";
 
 export interface NewMeetingFormGroup {

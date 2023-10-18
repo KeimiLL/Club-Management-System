@@ -14,16 +14,16 @@ export function filterMenuItemsByPermissions<T extends MenuItem>(
     const roleDefinitions = RoleDefinitions[userRole];
 
     if (isModulesFilter) {
-        return menuItems.filter((menuItem) =>
+        return menuItems.filter((snakeToNormal) =>
             roleDefinitions.modules.includes(
-                menuItem.name as ModulesPermissions
+                snakeToNormal.name as ModulesPermissions
             )
         );
     }
 
-    return menuItems.filter((menuItem) =>
+    return menuItems.filter((snakeToNormal) =>
         roleDefinitions.permissions.includes(
-            menuItem.name as SettingsPermission
+            snakeToNormal.name as SettingsPermission
         )
     );
 }

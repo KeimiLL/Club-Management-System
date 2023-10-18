@@ -34,12 +34,11 @@ export class MenuComponent implements OnInit {
     constructor(private readonly userService: UserService) {}
 
     ngOnInit(): void {
-        if (this.userService.currentUser !== null) {
-            this.menuItems = filterMenuItemsByPermissions(
-                menuItems,
-                this.userService.currentUser.role
-            );
-        }
+        if (this.userService.currentUser === null) return;
+        this.menuItems = filterMenuItemsByPermissions(
+            menuItems,
+            this.userService.currentUser.role
+        );
     }
 
     public toggleCollapse(): void {

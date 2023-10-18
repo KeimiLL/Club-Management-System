@@ -1,0 +1,31 @@
+@import "../../../../../../../../../../styles/component-styles/components";
+
+.popup {
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+
+    &__basic {
+        display: flex;
+        justify-content: space-between;
+        width: calc(100% - 1rem);
+
+        &--name {
+            width: 40%;
+        }
+        &--date {
+            width: 40%;
+        }
+    }
+
+    &__notes {
+        width: calc(100% - 1rem);
+        textarea {
+            resize: none;
+        }
+    }
+    .button-container {
+        width: 20%;
+        margin: 10px auto;
+    }
+}
