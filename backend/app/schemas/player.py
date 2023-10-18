@@ -71,3 +71,10 @@ class PlayerInDBBase(PlayerBase):
     injuries: list["Injury"]
     matches: list["Match"]
     trainings: list["Training"]
+
+
+class PlayerOnlyBaseInfo(BaseModel):
+    """Player schema for returning data from the database."""
+
+    user_id: int = Field(..., ge=1, le=10**7)
+    user_full_name: str = Field(..., min_length=4)
