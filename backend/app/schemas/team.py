@@ -6,9 +6,9 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict, Field, conint, conset
 
 if TYPE_CHECKING:
-    from app.schemas.coach import Coach
+    from app.schemas.coach import Coach, CoachOnlyBaseInfo
     from app.schemas.match import Match
-    from app.schemas.player import Player
+    from app.schemas.player import Player, PlayerOnlyBaseInfo
     from app.schemas.training import Training
 
 
@@ -64,6 +64,13 @@ class TeamOnlyBaseInfo(BaseModel):
 
     id: int = Field(..., ge=1, le=10**7)
     name: str = Field(..., min_length=3)
+
+
+class TeamSideView(TeamOnlyBaseInfo):
+    """Team schema for displaying data in the side panel."""
+
+    coach: "CoachOnlyBaseInfo | None"
+    players: list["PlayerOnlyBaseInfo"]
 
 
 class TeamTableView(TeamOnlyBaseInfo):

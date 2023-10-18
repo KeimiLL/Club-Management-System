@@ -15,7 +15,7 @@ from app.crud.crud_meeting import (
 from app.db.session import get_db
 from app.models.user import User
 from app.schemas.enums import HTTPResponseMessage, Roles
-from app.schemas.meeting import MeetingCreate, MeetingOnlyBaseUserInfo, MeetingTableView
+from app.schemas.meeting import MeetingCreate, MeetingSideView, MeetingTableView
 from app.schemas.meeting_user import MeetingUserCreateUserIdList, MeetingUserUpdate
 from app.schemas.misc import ItemsListWithTotal, Message, MessageFromEnum
 from fastapi import APIRouter, Depends, Path, status
@@ -119,7 +119,7 @@ def get_meetings_with_pagination(
 
 @router.get(
     "/{meeting_id}",
-    response_model=MeetingOnlyBaseUserInfo,
+    response_model=MeetingSideView,
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
@@ -158,7 +158,7 @@ def get_meeting(
 
 @router.put(
     "/{meeting_id}",
-    response_model=MeetingOnlyBaseUserInfo,
+    response_model=MeetingSideView,
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
