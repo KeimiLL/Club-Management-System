@@ -228,7 +228,7 @@ def test_correct__get_teams_with_pagination_by_coach_id(
         team (TeamCreate): Team to be created.
         page (int): The page index to be retrieved.
         per_page (int): The number of items per page.
-        user_ids (list[int]): The user ids to read .
+        user_ids (list[int]): The user ids to read.
         db_session (Session): Database session.
     """
     for user in users:
