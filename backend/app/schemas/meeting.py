@@ -55,8 +55,8 @@ class MeetingInDBBase(MeetingBase):
     users: list["User"]
 
 
-class MeetingOnlyBaseUserInfo(MeetingBase):
-    """Base Meeting schema for returning filtered data from DB."""
+class MeetingSideView(MeetingBase):
+    """Meeting schema for displaying data in the side panel."""
 
     id: int = Field(..., ge=1, le=10**7)
     created_by_user: "UserOnlyBaseInfo"

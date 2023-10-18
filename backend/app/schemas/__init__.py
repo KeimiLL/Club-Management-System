@@ -10,7 +10,7 @@ from app.schemas.meeting import (
     Meeting,
     MeetingCreateNoUserId,
     MeetingInDBBase,
-    MeetingOnlyBaseUserInfo,
+    MeetingSideView,
     MeetingUpdate,
 )
 from app.schemas.meeting_user import (
@@ -33,7 +33,7 @@ MatchPlayer.model_rebuild()
 MatchPlayerInDBBase.model_rebuild()
 Meeting.model_rebuild()
 MeetingInDBBase.model_rebuild()
-MeetingOnlyBaseUserInfo.model_rebuild()
+MeetingSideView.model_rebuild()
 MeetingUser.model_rebuild()
 MeetingUserCreateUserIdList.model_rebuild()
 MeetingUserInDBBase.model_rebuild()
