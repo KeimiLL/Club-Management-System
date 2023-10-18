@@ -1,7 +1,8 @@
 <ng-container
     *ngIf="{
         allPlayers: allPlayers$ | async,
-        selectedPlayers: selectedPlayers$ | async
+        selectedPlayers: selectedPlayers$ | async,
+        coaches: coaches$ | async
     } as vm"
 >
     <ng-container *ngIf="vm.allPlayers && vm.selectedPlayers">
@@ -14,7 +15,10 @@
                     >
                     </app-half-card-right-header>
                 </mat-card-header>
-                <form [formGroup]="teamForm" (ngSubmit)="onSubmit()">
+                <form
+                    [formGroup]="teamForm.controls.team"
+                    (ngSubmit)="onSubmit()"
+                >
                     <app-half-card-section>
                         <app-section-header name="Basic Data" sectionHeader>
                         </app-section-header>
@@ -42,18 +46,14 @@
                                         matInput
                                         placeholder="Choose Coach"
                                         [formControl]="coachInputControl"
-                                        [matAutocomplete]="auto"
+                                        [matAutocomplete]="coachAuto"
                                     />
                                     <mat-autocomplete
-                                        #auto="matAutocomplete"
-                                        (optionSelected)="
-                                            onOptionSelected($event)
-                                        "
+                                        #coachAuto="matAutocomplete"
+                                        (optionSelected)="onCoachSelect($event)"
                                     >
                                         <mat-option
-                                            *ngFor="
-                                                let coach of coaches$ | async
-                                            "
+                                            *ngFor="let coach of vm.coaches"
                                             [value]="coach"
                                         >
                                             {{ coach.user_full_name }}
@@ -76,12 +76,12 @@
                                         matInput
                                         placeholder="Add Player..."
                                         [formControl]="playerInputControl"
-                                        [matAutocomplete]="auto"
+                                        [matAutocomplete]="playerAuto"
                                     />
                                     <mat-autocomplete
-                                        #auto="matAutocomplete"
+                                        #playerAuto="matAutocomplete"
                                         (optionSelected)="
-                                            onOptionSelected($event)
+                                            onPlayerSelect($event)
                                         "
                                     >
                                         <mat-option
@@ -92,7 +92,7 @@
                                             "
                                             [value]="player"
                                         >
-                                            {{ player.user_full_name }},
+                                            {{ player.user_full_name }}
                                         </mat-option>
                                     </mat-autocomplete>
                                 </mat-form-field>
@@ -102,7 +102,7 @@
                                         *ngFor="
                                             let player of vm.selectedPlayers
                                         "
-                                        (removed)="removePlayer(player)"
+                                        (removed)="onPlayerRemove(player)"
                                     >
                                         {{ player.user_full_name }}
                                         <mat-icon matChipRemove>

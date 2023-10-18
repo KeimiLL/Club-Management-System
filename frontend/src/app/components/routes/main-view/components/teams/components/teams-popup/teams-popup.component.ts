@@ -59,15 +59,15 @@ export class TeamsPopupComponent {
         this.selectedPlayers$ = this.root.selectedPlayers$;
     }
 
-    protected onOptionSelected(event: MatAutocompleteSelectedEvent): void {
+    protected onCoachSelect(event: MatAutocompleteSelectedEvent): void {
         this.forms.setCoachValue(event.option.value as ShortCoach);
     }
 
-    protected selectPlayer(player: ShortPlayer): void {
-        this.root.selectPlayer(player);
+    protected onPlayerSelect(event: MatAutocompleteSelectedEvent): void {
+        this.root.selectPlayer(event.option.value as ShortPlayer);
     }
 
-    protected removePlayer(player: ShortPlayer): void {
+    protected onPlayerRemove(player: ShortPlayer): void {
         this.root.removePlayer(player);
     }
 

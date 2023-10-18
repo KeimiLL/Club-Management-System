@@ -3,6 +3,7 @@ import { MatDialogRef } from "@angular/material/dialog";
 import { BehaviorSubject, Observable, tap } from "rxjs";
 
 import { CoachesHttpService } from "../../../../../../../../shared/api/coaches-http.service";
+import { PlayersHttpService } from "../../../../../../../../shared/api/players-http.service";
 import { TeamsHttpService } from "../../../../../../../../shared/api/teams-http.service";
 import { ShortCoach } from "../../../../../../../../shared/models/coach.model";
 import { ShortPlayer } from "../../../../../../../../shared/models/player.model";
@@ -49,6 +50,7 @@ export class TeamsPopupRootService {
     constructor(
         private readonly httpTeams: TeamsHttpService,
         private readonly httpCoaches: CoachesHttpService,
+        private readonly httpPlayers: PlayersHttpService,
         private readonly dialogRef: MatDialogRef<TeamsPopupComponent>,
         private readonly forms: TeamsPopupFormsService
     ) {
@@ -61,6 +63,15 @@ export class TeamsPopupRootService {
             .pipe(
                 tap((coaches) => {
                     this.coaches = coaches;
+                })
+            )
+            .subscribe();
+
+        this.httpPlayers
+            .getAllPlayers()
+            .pipe(
+                tap((players) => {
+                    this.allPlayers = players;
                 })
             )
             .subscribe();
