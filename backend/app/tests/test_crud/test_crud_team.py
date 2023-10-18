@@ -11,6 +11,7 @@ from app.crud.crud_team import (
     get_all_teams,
     get_all_teams_with_pagination,
     get_team_by_id,
+    get_teams_with_pagination_by_coach_id,
 )
 from app.crud.crud_user import create_new_user
 from app.schemas.coach import CoachCreate
@@ -22,6 +23,7 @@ from app.tests.conftest import (
     player_create,
     team_create,
     user_create_unique_1,
+    user_create_unique_2,
 )
 from sqlalchemy.orm import Session
 
@@ -169,6 +171,86 @@ def test_correct__get_all_teams_with_pagination(
     for index, new_team in enumerate(new_teams):
         if page * per_page <= index < page * per_page + per_page:
             assert all_teams[index - page * per_page] == new_team
+
+
+@pytest.mark.parametrize(
+    "users,coach,team,page,per_page,user_ids",
+    [
+        ([user_create_unique_1], coach_create, team_create, 0, 1, [1, 1]),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            0,
+            2,
+            [1, 2],
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            1,
+            1,
+            [1, 2, 1],
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            1,
+            2,
+            [1, 2, 2],
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            2,
+            1,
+            [1, 2, 2],
+        ),
+    ],
+)
+def test_correct__get_teams_with_pagination_by_coach_id(
+    users: list[UserCreate],
+    coach: CoachCreate,
+    team: TeamCreate,
+    page: int,
+    per_page: int,
+    user_ids: list[int],
+    db_session: Session,
+) -> None:
+    """Tests getting all teams that meet the filtering criteria.
+
+    Args:
+        users (list[UserCreate]): Users to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        page (int): The page index to be retrieved.
+        per_page (int): The number of items per page.
+        user_ids (list[int]): The user ids to read .
+        db_session (Session): Database session.
+    """
+    for user in users:
+        user_id = create_new_user(user, db_session).id
+        create_new_coach(coach.model_copy(update={"user_id": user_id}), db_session)
+    new_teams = [
+        create_new_team(
+            TeamCreate(coach_id=user_id, name=team.name),
+            db_session,
+        )
+        for user_id in user_ids
+    ]
+    for user_id in set(user_ids):
+        all_teams, new_total = get_teams_with_pagination_by_coach_id(
+            page, per_page, user_id, db_session
+        )
+        assert new_total == sum(u == user_id for u in user_ids)
+        for index, new_team in enumerate(
+            [t for t in new_teams if t.coach_id == user_id]
+        ):
+            if page * per_page <= index < page * per_page + per_page:
+                assert all_teams[index - page * per_page] == new_team
 
 
 @pytest.mark.parametrize(
