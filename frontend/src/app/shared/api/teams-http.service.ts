@@ -28,7 +28,7 @@ export class TeamsHttpService {
         return this.http.get<ShortTeam[]>("/api/v1/teams/all");
     }
 
-    public getMeetingById(id: number): Observable<Team> {
+    public getTeamById(id: number): Observable<Team> {
         return this.http.get<Team>(`api/v1/teams/${id}`);
     }
 }
