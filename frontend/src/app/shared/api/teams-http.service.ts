@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { BackendResponse, TableResponse } from "../models/misc.model";
-import { ShortTeam, TableTeam, TeamCreate } from "../models/team.model";
+import { ShortTeam, TableTeam, Team, TeamCreate } from "../models/team.model";
 
 @Injectable({
     providedIn: "root",
@@ -26,5 +26,9 @@ export class TeamsHttpService {
 
     public getAllTeams(): Observable<ShortTeam[]> {
         return this.http.get<ShortTeam[]>("/api/v1/teams/all");
+    }
+
+    public getMeetingById(id: number): Observable<Team> {
+        return this.http.get<Team>(`api/v1/teams/${id}`);
     }
 }

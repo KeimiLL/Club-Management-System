@@ -1,3 +1,6 @@
+import { ShortCoach } from "./coach.model";
+import { ShortPlayer } from "./player.model";
+
 export interface ShortTeam {
     name: string;
     id: number;
@@ -17,6 +20,7 @@ export interface TableTeam extends ShortTeam {
     coach_user_full_name: string;
 }
 
-export interface Team extends TableTeam {
-    players: string[];
+export interface Team extends ShortTeam {
+    coach: ShortCoach;
+    players: ShortPlayer[];
 }
