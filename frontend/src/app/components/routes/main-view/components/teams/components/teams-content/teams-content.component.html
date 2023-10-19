@@ -10,13 +10,15 @@
     <app-section-header name="Players" sectionHeader></app-section-header>
 
     <ng-container sectionContent>
-        <mat-list role="list">
-            <mat-list-item
-                role="listitem"
-                class="player"
-                *ngFor="let player of team.players; let index = index"
-                >{{ index + 1 }}. {{ player.user_full_name }}
-            </mat-list-item>
+        <mat-list role="list" class="list">
+            <div class="row">
+                <mat-list-item
+                    role="listitem"
+                    class="player"
+                    *ngFor="let player of team.players; let index = index"
+                    >{{ index + 1 }}. {{ player.user_full_name }}
+                </mat-list-item>
+            </div>
         </mat-list>
     </ng-container>
 </app-half-card-section>
