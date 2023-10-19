@@ -9,6 +9,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
+import { MatListModule } from "@angular/material/list";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSelectModule } from "@angular/material/select";
@@ -34,6 +35,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         MatFormFieldModule,
         MatTooltipModule,
         MatMenuModule,
+        MatListModule,
     ],
 })
 export class MaterialModule {}
