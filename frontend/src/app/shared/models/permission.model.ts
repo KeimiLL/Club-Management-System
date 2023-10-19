@@ -15,6 +15,7 @@ export enum ModulesPermissions {
     Dashboard = "dashboard",
     Meetings = "meetings",
     Teams = "teams",
+    Squad = "squad",
     Schedule = "schedule",
 }
 
@@ -22,21 +23,27 @@ export type SubPermissions =
     | TeamPermission
     | MeetingsPermission
     | SettingsPermission
+    | SquadPermissions
     | SchedulePermission;
 
-export enum TeamPermission {
+export enum SquadPermissions {
     Bio = "bio",
     Stats = "stats",
     Modify = "modify",
     Cluster = "cluster",
 }
+
+export enum TeamPermission {
+    All = "all",
+}
+
 export enum MeetingsPermission {
     CreateMeeting = "createMeeting",
     SeeAllMeetings = "seeAllMeeting",
 }
 
 export enum SettingsPermission {
-    Modifyusers = "modify_users",
+    ModifyUsers = "modify_users",
     Help = "help",
     General = "general",
 }
@@ -45,11 +52,18 @@ export enum SchedulePermission {
     Marks = "marks",
 }
 
-export const allPermissions: SubPermissions[] = [
+const allPermissions: SubPermissions[] = [
     ...Object.values(TeamPermission),
     ...Object.values(MeetingsPermission),
     ...Object.values(SettingsPermission),
     ...Object.values(SchedulePermission),
+    ...Object.values(SquadPermissions),
+];
+
+const modulesBase: ModulesPermissions[] = [
+    ModulesPermissions.Dashboard,
+    ModulesPermissions.Settings,
+    ModulesPermissions.Meetings,
 ];
 
 export const RoleColorsMapping: Record<Roles, string> = {
@@ -65,38 +79,41 @@ export const RoleColorsMapping: Record<Roles, string> = {
 export const RoleDefinitions: Record<Roles, RolePermission> = {
     [Roles.Admin]: {
         modules: Object.values(ModulesPermissions),
-        permissions: [
-            ...Object.values(TeamPermission),
-            ...Object.values(MeetingsPermission),
-            ...Object.values(SettingsPermission),
-            ...Object.values(SchedulePermission),
-        ],
+        permissions: [...allPermissions],
     },
     [Roles.Coach]: {
-        modules: Object.values(ModulesPermissions),
+        modules: [
+            ...modulesBase,
+            ModulesPermissions.Squad,
+            ModulesPermissions.Schedule,
+        ],
         permissions: [
             ...Object.values(TeamPermission),
             ...Object.values(SchedulePermission),
         ],
     },
     [Roles.Player]: {
-        modules: Object.values(ModulesPermissions),
-        permissions: [TeamPermission.Bio],
+        modules: [
+            ...modulesBase,
+            ModulesPermissions.Squad,
+            ModulesPermissions.Schedule,
+        ],
+        permissions: [],
     },
     [Roles.Viewer]: {
-        modules: [ModulesPermissions.Dashboard, ModulesPermissions.Settings],
+        modules: [...modulesBase],
         permissions: [],
     },
     [Roles.Medic]: {
-        modules: [ModulesPermissions.Dashboard, ModulesPermissions.Settings],
+        modules: [...modulesBase],
         permissions: [],
     },
     [Roles.Board]: {
-        modules: [ModulesPermissions.Dashboard, ModulesPermissions.Settings],
+        modules: Object.values(ModulesPermissions),
         permissions: [],
     },
     [Roles.None]: {
-        modules: [],
+        modules: [ModulesPermissions.Dashboard],
         permissions: [],
     },
 };
