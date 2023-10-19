@@ -4,7 +4,7 @@ import { MAT_SNACK_BAR_DATA } from "@angular/material/snack-bar";
 
 export interface SnackbarData {
     message: string;
-    variant: "error" | "normal";
+    variant: "error" | "normal" | "warn";
 }
 
 @Component({
