@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { BackendResponse } from "../models/misc.model";
-import { Player } from "../models/player.model";
+import { Player, ShortPlayer } from "../models/player.model";
 
 @Injectable({
     providedIn: "root",
@@ -13,5 +13,9 @@ export class PlayersHttpService {
 
     public createPlayer(player: Player): Observable<BackendResponse> {
         return this.http.post<BackendResponse>("/api/v1/players", player);
+    }
+
+    public getAllPlayers(): Observable<ShortPlayer[]> {
+        return this.http.get<ShortPlayer[]>("/api/v1/players/all");
     }
 }

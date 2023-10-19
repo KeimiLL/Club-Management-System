@@ -38,9 +38,9 @@ export class MeetingsPopupActionsService extends DestroyClass {
             });
     }
 
-    public editMeeting(): void {
+    public editMeeting(id: number): void {
         this.http
-            .editMeeting(this.forms.getFormData(), this.forms.meetingData.id)
+            .editMeeting(this.forms.getFormData(), id)
             .pipe(
                 tap(() => {
                     this.snack.showSnackBar(

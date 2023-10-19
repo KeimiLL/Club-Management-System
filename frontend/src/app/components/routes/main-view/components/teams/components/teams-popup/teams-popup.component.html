@@ -1,73 +1,135 @@
-<div class="popup">
-    <mat-card class="card">
-        <mat-card-header class="card__header">
-            <app-half-card-right-header
-                name="Create new Coach"
-                (closedClicked)="onCloseClick()"
-            >
-            </app-half-card-right-header>
-        </mat-card-header>
-        <form [formGroup]="teamForm" (ngSubmit)="onSubmit()">
-            <app-half-card-section>
-                <app-section-header name="Team name" sectionHeader>
-                </app-section-header>
-
-                <ng-container sectionContent>
-                    <mat-form-field appearance="fill">
-                        <input
-                            matInput
-                            placeholder="Team name..."
-                            formControlName="name"
-                        />
-                    </mat-form-field>
-                </ng-container>
-            </app-half-card-section>
-
-            <app-half-card-section>
-                <app-section-header name="Coach" sectionHeader>
-                </app-section-header>
-
-                <ng-container sectionContent>
-                    <mat-form-field appearance="fill">
-                        <input
-                            matInput
-                            placeholder="Add Attendee..."
-                            [formControl]="coachInputControl"
-                            [matAutocomplete]="auto"
-                        />
-                        <mat-autocomplete
-                            #auto="matAutocomplete"
-                            (optionSelected)="onOptionSelected($event)"
-                        >
-                            <mat-option
-                                *ngFor="let coach of coaches$ | async"
-                                [value]="coach"
-                            >
-                                {{ coach.user_full_name }}
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                </ng-container>
-            </app-half-card-section>
-
-            <!-- <app-half-card-section>
-                <app-section-header name="Players" sectionHeader>
-                </app-section-header>
-
-                <ng-container sectionContent> </ng-container>
-            </app-half-card-section> -->
-
-            <div class="button-container">
-                <button
-                    [disabled]="teamForm.invalid"
-                    type="submit"
-                    mat-raised-button
-                    class="button--light"
-                    buttons
+<ng-container
+    *ngIf="{
+        allPlayers: allPlayers$ | async,
+        selectedPlayers: selectedPlayers$ | async,
+        coaches: coaches$ | async
+    } as vm"
+>
+    <ng-container *ngIf="vm.allPlayers && vm.selectedPlayers">
+        <div class="popup">
+            <mat-card class="card">
+                <mat-card-header class="card__header">
+                    <app-half-card-right-header
+                        name="Create new Coach"
+                        (closedClicked)="onCloseClick()"
+                    >
+                    </app-half-card-right-header>
+                </mat-card-header>
+                <form
+                    [formGroup]="teamForm.controls.team"
+                    (ngSubmit)="onSubmit()"
                 >
-                    Create new Team
-                </button>
-            </div>
-        </form>
-    </mat-card>
-</div>
+                    <app-half-card-section>
+                        <app-section-header name="Basic Data" sectionHeader>
+                        </app-section-header>
+
+                        <ng-container sectionContent>
+                            <div class="popup__basic">
+                                <mat-form-field
+                                    appearance="fill"
+                                    class="popup__basic--control"
+                                >
+                                    <mat-label>Team name</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Team name..."
+                                        formControlName="name"
+                                    />
+                                </mat-form-field>
+
+                                <mat-form-field
+                                    appearance="fill"
+                                    class="popup__basic--control"
+                                >
+                                    <mat-label>Coach name</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Choose Coach"
+                                        [formControl]="coachInputControl"
+                                        [matAutocomplete]="coachAuto"
+                                    />
+                                    <mat-autocomplete
+                                        #coachAuto="matAutocomplete"
+                                        (optionSelected)="onCoachSelect($event)"
+                                    >
+                                        <mat-option
+                                            *ngFor="let coach of vm.coaches"
+                                            [value]="coach"
+                                        >
+                                            {{ coach.user_full_name }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
+                    </app-half-card-section>
+
+                    <app-half-card-section>
+                        <app-section-header name="Players" sectionHeader>
+                        </app-section-header>
+
+                        <ng-container sectionContent>
+                            <div class="popup__players">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Players</mat-label>
+                                    <input
+                                        matInput
+                                        placeholder="Add Player..."
+                                        [formControl]="playerInputControl"
+                                        [matAutocomplete]="playerAuto"
+                                    />
+                                    <mat-autocomplete
+                                        #playerAuto="matAutocomplete"
+                                        (optionSelected)="
+                                            onPlayerSelect($event)
+                                        "
+                                    >
+                                        <mat-option
+                                            *ngFor="
+                                                let player of vm.allPlayers
+                                                    | filterUsingArray
+                                                        : vm.selectedPlayers
+                                                    | filterUsingPropControl
+                                                        : 'user_full_name'
+                                                        : playerInputControl.value
+                                            "
+                                            [value]="player"
+                                        >
+                                            {{ player.user_full_name }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+
+                                <mat-chip-listbox>
+                                    <mat-chip
+                                        *ngFor="
+                                            let player of vm.selectedPlayers
+                                        "
+                                        (removed)="onPlayerRemove(player)"
+                                    >
+                                        {{ player.user_full_name }}
+                                        <mat-icon matChipRemove>
+                                            cancel
+                                        </mat-icon>
+                                    </mat-chip>
+                                </mat-chip-listbox>
+                            </div>
+                        </ng-container>
+                    </app-half-card-section>
+
+                    <div class="button-container">
+                        <button
+                            [disabled]="teamForm.invalid"
+                            type="submit"
+                            mat-raised-button
+                            class="button--light"
+                            buttons
+                        >
+                            Create new Team
+                        </button>
+                    </div>
+                </form>
+            </mat-card>
+        </div>
+    </ng-container>
+</ng-container>

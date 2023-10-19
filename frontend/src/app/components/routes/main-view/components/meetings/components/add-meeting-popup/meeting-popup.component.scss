@@ -10,10 +10,7 @@
         justify-content: space-between;
         width: calc(100% - 1rem);
 
-        &--name {
-            width: 40%;
-        }
-        &--date {
+        &--control {
             width: 40%;
         }
     }

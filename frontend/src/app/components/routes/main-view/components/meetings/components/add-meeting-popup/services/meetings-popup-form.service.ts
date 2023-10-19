@@ -1,15 +1,6 @@
 import { Injectable } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import {
-    BehaviorSubject,
-    combineLatest,
-    map,
-    Observable,
-    startWith,
-    tap,
-} from "rxjs";
 
-import { UserService } from "../../../../../../../../shared/api/user.service";
 import {
     Meeting,
     NewMeeting,
@@ -27,113 +18,30 @@ export class MeetingsPopupFormService extends DestroyClass {
     public meetingForm: FormGroup<NewMeetingFormGroup>;
     public attendeeInputControl = new FormControl<string>("");
 
-    public meetingData: Meeting;
-    public isEditMode = false;
-
-    private readonly allAttendeesStore$ = new BehaviorSubject<ShortUser[]>([]);
-    private readonly selectedAttendeesStore$ = new BehaviorSubject<ShortUser[]>(
-        []
-    );
-
-    constructor(private readonly userService: UserService) {
+    constructor() {
         super();
+        this.meetingForm = newMeetingDataFormBuilder.buildFormGroup();
     }
 
-    public initData(meetingData: Meeting | null): void {
-        this.meetingForm =
-            newMeetingDataFormBuilder.buildFormGroup(meetingData);
-
-        if (meetingData !== null) {
-            this.isEditMode = true;
-            this.meetingData = meetingData;
-        }
-
-        this.userService
-            .getAllUsers()
-            .pipe(
-                tap((users) => {
-                    this.allAttendees = users;
-                    if (meetingData !== null) {
-                        this.selectedAttendees = users.filter((user) =>
-                            meetingData.users.some(
-                                (dataUser) => dataUser.id === user.id
-                            )
-                        );
-                    }
-                }),
-                this.untilDestroyed()
-            )
-            .subscribe();
+    public patchFormValue(meeting: Meeting | null): void {
+        if (meeting === null) return;
+        this.meetingForm.patchValue(this.meetingMapper(meeting));
     }
 
-    private set allAttendees(allAttendees: ShortUser[]) {
-        this.allAttendeesStore$.next(allAttendees);
+    private meetingMapper(meeting: Meeting): NewMeeting {
+        return {
+            meeting: {
+                name: meeting.name,
+                date: meeting.date,
+                notes: meeting.notes,
+            },
+            user_ids: meeting.users.map((user) => user.id),
+        };
     }
 
-    public get allAttendees$(): Observable<ShortUser[]> {
-        return this.allAttendeesStore$.asObservable();
-    }
-
-    private set selectedAttendees(selectedAttendees: ShortUser[]) {
-        this.selectedAttendeesStore$.next(selectedAttendees);
-    }
-
-    public get selectedAttendees(): ShortUser[] {
-        return this.selectedAttendeesStore$.value;
-    }
-
-    public get selectedAttendees$(): Observable<ShortUser[]> {
-        return this.selectedAttendeesStore$.asObservable();
-    }
-
-    public get filteredAttendees$(): Observable<ShortUser[]> {
-        return combineLatest([
-            this.allAttendees$,
-            this.selectedAttendees$,
-            this.attendeeInputControl.valueChanges.pipe(
-                startWith(this.attendeeInputControl.value)
-            ),
-        ]).pipe(
-            map(([allAttendees, selectedAttendees, inputValue]) => {
-                const filterValue = inputValue ?? "";
-                return allAttendees.filter((attendee) => {
-                    if (this.isEditMode) {
-                        return (
-                            attendee.id !==
-                                this.meetingData.created_by_user.id &&
-                            !selectedAttendees.some(
-                                (a) => a.id === attendee.id
-                            ) &&
-                            attendee.full_name
-                                .toLowerCase()
-                                .includes(filterValue)
-                        );
-                    }
-                    return (
-                        attendee.id !== this.userService.currentUser?.id &&
-                        !selectedAttendees.some((a) => a.id === attendee.id) &&
-                        attendee.full_name.toLowerCase().includes(filterValue)
-                    );
-                });
-            })
-        );
-    }
-
-    public addAttendeeToSelectedList(attendee: ShortUser): void {
-        this.selectedAttendees = [...this.selectedAttendees, attendee];
+    public setAttendeesValue(attendees: ShortUser[]): void {
         this.attendeeInputControl.setValue("");
-        this.meetingForm
-            .get("user_ids")
-            ?.setValue(this.selectedAttendees.map((a) => a.id));
-    }
-
-    public removeAttendeeFromSelectedList(attendee: ShortUser): void {
-        this.selectedAttendees = this.selectedAttendees.filter(
-            (a) => a.id !== attendee.id
-        );
-        this.meetingForm
-            .get("user_ids")
-            ?.setValue(this.selectedAttendees.map((a) => a.id));
+        this.meetingForm.controls.user_ids.setValue(attendees.map((a) => a.id));
     }
 
     public setDateInMeetingForm(selectedDate: Date): void {

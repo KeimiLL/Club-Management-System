@@ -8,6 +8,11 @@ export interface PlayerBase {
     notes: string | null;
 }
 
+export interface ShortPlayer {
+    user_id: number;
+    user_full_name: string;
+}
+
 export interface PlayerHealth {
     is_injured: boolean;
     diet: string | null;
