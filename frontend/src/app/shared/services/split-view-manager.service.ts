@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BehaviorSubject, catchError, Observable, of, tap } from "rxjs";
 
-import { SnackbarMessages } from "../models/messages.model";
 import { MainRoutes } from "../models/misc.model";
 import { DestroyClass } from "../utils/destroyClass";
 import { SnackbarService } from "./snackbar.service";
@@ -99,13 +98,9 @@ export class SplitViewManagerService<T> extends DestroyClass {
                 catchError((error) => {
                     if (error.status === 404) {
                         this.changeDetailState();
-                        return of(null);
                     }
                     if (error.status === 403) {
-                        this.changeDetailState();
-                        this.snack.showSnackBar(SnackbarMessages.NO_PERMISSION);
                         this.router.navigate([MainRoutes.Error]);
-                        return of(null);
                     }
                     return of(null);
                 }),

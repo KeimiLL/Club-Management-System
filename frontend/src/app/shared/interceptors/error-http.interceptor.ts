@@ -9,7 +9,7 @@ import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { catchError, Observable, throwError } from "rxjs";
 
-import { MainRoutes } from "../models/misc.model";
+import { SnackbarMessages } from "../models/messages.model";
 import { SnackbarService } from "../services/snackbar.service";
 
 @Injectable()
@@ -27,20 +27,35 @@ export class ErrorHttpInterceptor implements HttpInterceptor {
         return next.handle(request).pipe(
             catchError((httpResponseWithError: HttpErrorResponse) => {
                 if (httpResponseWithError instanceof HttpErrorResponse) {
-                    if (httpResponseWithError.status === 401) {
-                        if (
-                            this.activatedRoute.routeConfig?.path !==
-                                undefined &&
-                            this.activatedRoute.routeConfig.path !==
-                                MainRoutes.Auth
-                        ) {
+                    switch (httpResponseWithError.status) {
+                        case 0:
+                            break;
+                        case 401: {
+                            this.snack.showSnackBar(
+                                SnackbarMessages.NOT_LOGGED,
+                                "warn"
+                            );
+                            break;
+                        }
+                        case 403:
+                            this.snack.showSnackBar(
+                                SnackbarMessages.NO_PERMISSION,
+                                "warn"
+                            );
+                            break;
+
+                        case 404:
+                            this.snack.showSnackBar(
+                                SnackbarMessages.NO_CONTENT,
+                                "warn"
+                            );
+                            break;
+                        default: {
                             this.snack.showHttpErrorSnackBar(
                                 httpResponseWithError
                             );
-                            this.router.parseUrl("/auth/login");
+                            break;
                         }
-                    } else {
-                        this.snack.showHttpErrorSnackBar(httpResponseWithError);
                     }
                 }
                 return throwError(() => httpResponseWithError);
