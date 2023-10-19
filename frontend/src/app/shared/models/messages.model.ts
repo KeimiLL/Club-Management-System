@@ -4,4 +4,5 @@ export enum SnackbarMessages {
     "MEETING_EDITED" = "Meeting edited successfully",
     "PASSWORD_CHANGED" = "Password changed successfully",
     "ROLE_CHANGED" = "Role changed successfully",
+    "NO_PERMISSION" = "No access to this content",
 }
