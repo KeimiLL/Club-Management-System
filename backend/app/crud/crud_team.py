@@ -124,7 +124,7 @@ def get_all_teams_with_pagination(
 def get_teams_with_pagination_by_coach_id(
     page: int, per_page: int, user_id: int, db: Session
 ) -> tuple[list[Team], int]:
-    """Gets all teams that are coached by the current user.
+    """Gets all teams that are coached by the coach with the given user id with pagination.
 
     Args:
         page (int): The current page number.
@@ -188,5 +188,25 @@ def create_team_with_player_ids(
         new_team.players = players
         db.commit()
         return new_team
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def get_all_teams_by_coach_id(user_id: int, db: Session) -> list[Team]:
+    """Gets all teams that are coached by the coach with the given user id.
+
+    Args:
+        user_id (int): The current user's id.
+        db (Session): Database session.
+
+    Raises:
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        list[Team]: The filtered list of teams that meet the criteria.
+    """
+    try:
+        query = select(Team).where(Team.coach_id == user_id)
+        return list(db.scalars(query.order_by(Team.name.desc())).all())
     except SQLAlchemyError as exc:
         raise exc
