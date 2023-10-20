@@ -47,7 +47,7 @@ class Player(Base):
     date_of_birth: Mapped[datetime.date] = mapped_column(Date, nullable=False)
     height: Mapped[int] = mapped_column(Integer, nullable=False)
     weight: Mapped[int] = mapped_column(Integer, nullable=False)
-    notes: Mapped[str] = mapped_column(String, nullable=False)
+    notes: Mapped[str | None] = mapped_column(String, nullable=True)
     is_injured: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     diet: Mapped[str | None] = mapped_column(String, nullable=True)
 

@@ -35,7 +35,6 @@ class PlayerCreate(PlayerBase):
     date_of_birth: datetime.date
     height: PositiveInt
     weight: PositiveInt
-    notes: str
     is_injured: bool = False
 
 
@@ -46,7 +45,6 @@ class Player(PlayerBase):
     date_of_birth: datetime.date
     height: PositiveInt
     weight: PositiveInt
-    notes: str
     is_injured: bool
     user: "User"
     team: "Team | None"

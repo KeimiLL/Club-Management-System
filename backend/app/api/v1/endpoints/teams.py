@@ -3,11 +3,12 @@
 
 from typing import Annotated
 
-from app.api.dependencies import get_user_from_token, paginate, refresh_token_dependency
+from app.api.dependencies import get_user_from_token, paginate
 from app.core.exceptions import ForbiddenException, MissingException
 from app.crud.crud_team import (
     create_team_with_player_ids,
     get_all_teams,
+    get_all_teams_by_coach_id,
     get_all_teams_with_pagination,
     get_team_by_id,
     get_teams_with_pagination_by_coach_id,
@@ -74,21 +75,38 @@ def create_team(
     response_model=list[TeamOnlyBaseInfo],
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
 def get_teams(
-    _: Annotated[str, Depends(refresh_token_dependency)],
+    current_user: Annotated[User, Depends(get_user_from_token)],
     db: Annotated[Session, Depends(get_db)],
 ):
-    """Gets the list of all registered teams.
+    """Gets the list of all registered teams depending on the current user's role.
 
     Args:
+        current_user (Annotated[User, Depends]): Current user read from access token.
+            Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Returns:
-        list[TeamOnlyBaseInfo]: The list of all teams.
+        list[TeamOnlyBaseInfo]: The list of all teams depending on the current user's role.
     """
-    return get_all_teams(db=db)
+    match current_user.role:
+        case Roles.ADMIN | Roles.BOARD:
+            teams = get_all_teams(db=db)
+        case Roles.COACH:
+            teams = get_all_teams_by_coach_id(user_id=current_user.id, db=db)
+        case Roles.PLAYER:
+            teams = (
+                [current_user.player.team]
+                if current_user.player.team is not None
+                else []
+            )
+        case _:
+            raise ForbiddenException("team")
+    return teams
 
 
 @router.get(

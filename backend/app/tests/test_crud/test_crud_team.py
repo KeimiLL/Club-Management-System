@@ -9,6 +9,7 @@ from app.crud.crud_team import (
     create_new_team,
     create_team_with_player_ids,
     get_all_teams,
+    get_all_teams_by_coach_id,
     get_all_teams_with_pagination,
     get_team_by_id,
     get_teams_with_pagination_by_coach_id,
@@ -324,3 +325,34 @@ def test_incorrect_missing__create_meeting_with_user_ids(
     create_new_player(player.model_copy(update={"team_id": None}), db_session)
     with pytest.raises(MissingException):
         create_team_with_player_ids(team, player_ids, db_session)
+
+
+@pytest.mark.parametrize(
+    "user,coach,teams",
+    [
+        (user_create_unique_1, coach_create, []),
+        (user_create_unique_1, coach_create, [team_create]),
+        (user_create_unique_1, coach_create, [team_create, team_create, team_create]),
+    ],
+)
+def test_correct__get_all_teams_by_coach_id(
+    user: UserCreate,
+    coach: CoachCreate,
+    teams: list[TeamCreate],
+    db_session: Session,
+) -> None:
+    """Tests getting all teams by coach id.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        teams (list[TeamCreate]): Teams to be created and read.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    create_new_coach(coach, db_session)
+    for team in teams:
+        create_new_team(team, db_session)
+    new_teams = get_all_teams_by_coach_id(1, db_session)
+    assert len(teams) == len(new_teams)
+    assert all((team.name == new_team.name for team, new_team in zip(teams, new_teams)))
