@@ -29,12 +29,12 @@ export class TeamsRootService extends DestroyClass {
             )
             .subscribe();
 
-        // this.splitView.currentId$
-        //     .pipe(
-        //         switchMap((id: number | null) => this.refreshCurrentTeam$(id)),
-        //         this.untilDestroyed()
-        //     )
-        //     .subscribe();
+        this.splitView.currentId$
+            .pipe(
+                switchMap((id: number | null) => this.refreshCurrentTeam$(id)),
+                this.untilDestroyed()
+            )
+            .subscribe();
     }
 
     private refreshTeams$(): Observable<TableTeam[]> {
@@ -46,10 +46,10 @@ export class TeamsRootService extends DestroyClass {
         );
     }
 
-    // private refreshCurrentTeam$(id: number | null): Observable<Team | null> {
-    //     if (id === null) return of(null);
-    //     return this.splitView.refreshCurrentItem$(this.http.getTeamById(id));
-    // }
+    private refreshCurrentTeam$(id: number | null): Observable<Team | null> {
+        if (id === null) return of(null);
+        return this.splitView.refreshCurrentItem$(this.http.getTeamById(id));
+    }
 
     public openNewMeetingDialog(): void {
         this.openDialog(null)

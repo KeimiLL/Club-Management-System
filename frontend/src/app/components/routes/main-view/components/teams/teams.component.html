@@ -33,18 +33,17 @@
             (closedClicked)="switchDetail()"
         >
             <app-button-container buttons>
-                <!-- <button
-                    mat-raised-button
-                    class="button--light"
-                    (click)="onModifyMeetingClick()"
-                >
-                    Modify Meeting
-                </button> -->
+                <button mat-raised-button class="button--light">
+                    Modify Team
+                </button>
             </app-button-container>
         </app-half-card-right-header>
 
         <ng-container content>
-            <app-teams-content *ngIf="vm.currentTeam"></app-teams-content>
+            <app-teams-content
+                *ngIf="vm.currentTeam"
+                [team]="vm.currentTeam"
+            ></app-teams-content>
         </ng-container>
     </app-content-card>
 </ng-container>

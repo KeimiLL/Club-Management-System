@@ -1,1 +1,24 @@
-<p>teams-content works!</p>
+<app-half-card-section>
+    <app-section-header name="Coach" sectionHeader></app-section-header>
+
+    <ng-container sectionContent>
+        <div class="coach">{{ team.coach.user_full_name }}</div>
+    </ng-container>
+</app-half-card-section>
+
+<app-half-card-section>
+    <app-section-header name="Players" sectionHeader></app-section-header>
+
+    <ng-container sectionContent>
+        <mat-list role="list" class="list">
+            <div class="row">
+                <mat-list-item
+                    role="listitem"
+                    class="player"
+                    *ngFor="let player of team.players; let index = index"
+                    >{{ index + 1 }}. {{ player.user_full_name }}
+                </mat-list-item>
+            </div>
+        </mat-list>
+    </ng-container>
+</app-half-card-section>
