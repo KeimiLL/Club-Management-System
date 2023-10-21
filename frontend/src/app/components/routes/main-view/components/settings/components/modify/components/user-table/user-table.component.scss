@@ -9,11 +9,28 @@
     }
 
     .cell {
+        align-self: flex-start;
         padding: 1px;
+
+        &__input {
+            transform: scale(0.8);
+        }
+
+        &__icon {
+            transform: scale(1.5);
+            padding: 0;
+            margin: 0;
+        }
     }
 
     .button--table {
-        width: 40%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        margin: 0;
     }
 
     .link {

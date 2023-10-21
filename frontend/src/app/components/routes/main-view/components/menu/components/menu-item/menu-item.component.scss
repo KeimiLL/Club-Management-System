@@ -34,11 +34,11 @@
     &__icon {
         transform: scale(1.5);
     }
-}
 
-.menu-item:hover {
-    transform: scale(1.07);
-    color: $dark-btn-back;
+    &:hover {
+        transform: scale(1.07);
+        color: $dark-btn-back;
+    }
 }
 
 @keyframes expandLink {

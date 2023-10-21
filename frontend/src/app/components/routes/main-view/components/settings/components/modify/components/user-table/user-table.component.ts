@@ -9,6 +9,7 @@ import {
 import { FormArray, FormControl, ReactiveFormsModule } from "@angular/forms";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { RouterModule } from "@angular/router";
 import { Observable } from "rxjs";
 
@@ -37,6 +38,7 @@ import { SettingsModifyRootService } from "../../services/settings-modify-root.s
         PermissionBackgroundColorDirective,
         RouterModule,
         ExludeRoleFromArrayPipe,
+        MatTooltipModule,
     ],
     templateUrl: "./user-table.component.html",
     styleUrls: ["./user-table.component.scss"],
