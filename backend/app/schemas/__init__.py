@@ -19,8 +19,13 @@ from app.schemas.meeting_user import (
     MeetingUserInDBBase,
     MeetingUserUpdate,
 )
-from app.schemas.player import Player, PlayerInDBBase, PlayerOnlyBaseInfo
-from app.schemas.team import Team, TeamInDBBase, TeamSideView
+from app.schemas.player import (
+    Player,
+    PlayerInDBBase,
+    PlayerOnlyBaseInfo,
+    PlayerSideView,
+)
+from app.schemas.team import Team, TeamInDBBase, TeamOnlyBaseInfo, TeamSideView
 from app.schemas.training import Training, TrainingInDBBase
 from app.schemas.training_player import TrainingPlayer, TrainingPlayerInDBBase
 from app.schemas.user import User, UserInDBBase, UserOnlyBaseInfo
@@ -40,6 +45,7 @@ MeetingUserInDBBase.model_rebuild()
 MeetingUserUpdate.model_rebuild()
 Player.model_rebuild()
 PlayerInDBBase.model_rebuild()
+PlayerSideView.model_rebuild()
 Team.model_rebuild()
 TeamInDBBase.model_rebuild()
 TeamSideView.model_rebuild()
