@@ -77,7 +77,6 @@ $huge-font: 34px;
 .mat-mdc-raised-button.button {
     &--dark {
         width: 100%;
-        margin-top: 10px;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         background-color: $dark-btn-back;
         color: $dark-btn-text;
@@ -89,7 +88,6 @@ $huge-font: 34px;
 
     &--light {
         width: 100%;
-        margin-top: 10px;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         background-color: $light-btn-back;
         color: $light-btn-text;

@@ -16,6 +16,8 @@
         align-items: center;
         height: 10%;
         padding: $small-spacing;
+        padding-right: $large-spacing;
+        background-color: red;
     }
 
     &__content {
@@ -26,6 +28,7 @@
 
 .mat-mdc-card-title.card__title {
     font-size: $huge-font;
+
     &--half {
         font-size: $very-large-font;
     }
