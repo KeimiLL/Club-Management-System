@@ -9,7 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field, PositiveInt
 if TYPE_CHECKING:
     from app.schemas.injury import Injury
     from app.schemas.match import Match
-    from app.schemas.team import Team
+    from app.schemas.team import Team, TeamOnlyBaseInfo
     from app.schemas.training import Training
     from app.schemas.user import User
 
@@ -83,3 +83,15 @@ class PlayerTableView(PlayerOnlyBaseInfo):
 
     is_injured: bool
     date_of_birth: datetime.date
+
+
+class PlayerSideView(PlayerOnlyBaseInfo):
+    """Player schema for displaying data in the side panel."""
+
+    date_of_joining: datetime.date
+    date_of_birth: datetime.date
+    height: PositiveInt
+    weight: PositiveInt
+    is_injured: bool = False
+    diet: str | None = None
+    team: "TeamOnlyBaseInfo"

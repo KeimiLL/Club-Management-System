@@ -146,12 +146,13 @@ def get_meeting(
         ForbiddenException: If the current user does not have sufficient permissions.
 
     Returns:
-        MeetingInDBOnlyBaseUserInfo: The requested meeting.
+        MeetingSideView: The requested meeting.
     """
     meeting = get_meeting_by_id(meeting_id=meeting_id, db=db)
-    if current_user.role in (Roles.ADMIN, Roles.BOARD):
-        return meeting
-    if current_user.id in (meeting.user_id, *[user.id for user in meeting.users]):
+    if current_user.role in (Roles.ADMIN, Roles.BOARD) or current_user.id in (
+        meeting.user_id,
+        *[user.id for user in meeting.users],
+    ):
         return meeting
     raise ForbiddenException("meeting")
 
@@ -187,7 +188,7 @@ def update_meeting(
         ForbiddenException: If the current user does not have sufficient permissions.
 
     Returns:
-        MeetingInDBOnlyBaseUserInfo: The requested meeting.
+        MeetingSideView: The requested meeting.
     """
     meeting = get_meeting_by_id(meeting_id=meeting_id, db=db)
     if (
