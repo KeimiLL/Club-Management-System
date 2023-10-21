@@ -24,7 +24,8 @@
 
     &__list {
         list-style: none;
-        padding: $medium-spacing;
+        padding: $medium-spacing $medium-spacing $medium-spacing
+            $extra-large-spacing;
         display: flex;
         flex-direction: column;
     }

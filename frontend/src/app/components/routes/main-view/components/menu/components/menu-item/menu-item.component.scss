@@ -7,8 +7,7 @@
     margin-top: $extra-large-spacing;
     color: $black;
     text-decoration: none;
-    font-size: $large-font;
-    font-weight: $light-weight;
+    font-size: $normal-font;
     transition: color 0.3s ease;
 
     &__link {
@@ -22,8 +21,8 @@
         }
     }
     &.active {
-        font-size: $large-font;
-        font-weight: $normal-weight;
+        color: $active-link;
+        font-weight: $bold-weight;
     }
 
     &__icon-container {
@@ -38,6 +37,7 @@
 }
 
 .menu-item:hover {
+    transform: scale(1.07);
     color: $dark-btn-back;
 }
 
