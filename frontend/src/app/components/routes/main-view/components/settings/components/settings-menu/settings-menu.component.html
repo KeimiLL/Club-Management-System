@@ -3,6 +3,7 @@
     <ul class="sidenav__list">
         <li *ngFor="let item of menuItems">
             <a
+                *appPermission="item.name | stringToSubpermission"
                 class="sidenav__link"
                 routerLinkActive="active"
                 [routerLink]="item.route"

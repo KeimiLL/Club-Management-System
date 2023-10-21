@@ -27,8 +27,8 @@ export type SubPermissions =
     | SchedulePermission;
 
 export enum MeetingsPermission {
-    CreateMeeting = "create_meeting",
     EditMeeting = "edit_meeting",
+    DeleteMeeting = "delete_meeting",
 }
 
 export enum TeamPermission {
@@ -37,8 +37,7 @@ export enum TeamPermission {
 }
 
 export enum SquadPermissions {
-    AllPLayers = "all_players",
-    OwnProfile = "own_profile",
+    Stats = "stats",
 }
 
 export enum SchedulePermission {
@@ -91,7 +90,13 @@ export const RoleDefinitions: Record<Roles, RolePermission> = {
 
     [Roles.Board]: {
         modules: Object.values(ModulesPermissions),
-        permissions: [...subPermissionsBase, ...Object.values(TeamPermission)],
+        permissions: [
+            ...subPermissionsBase,
+            ...Object.values(MeetingsPermission),
+            ...Object.values(TeamPermission),
+            ...Object.values(SquadPermissions),
+            SchedulePermission.AddEvent,
+        ],
     },
 
     [Roles.Coach]: {
@@ -102,8 +107,8 @@ export const RoleDefinitions: Record<Roles, RolePermission> = {
         ],
         permissions: [
             ...subPermissionsBase,
+            ...Object.values(SquadPermissions),
             ...Object.values(SchedulePermission),
-            SquadPermissions.AllPLayers,
         ],
     },
 
@@ -113,7 +118,7 @@ export const RoleDefinitions: Record<Roles, RolePermission> = {
             ModulesPermissions.Squad,
             ModulesPermissions.Schedule,
         ],
-        permissions: [...subPermissionsBase, SquadPermissions.OwnProfile],
+        permissions: [...subPermissionsBase],
     },
 
     [Roles.Medic]: {
