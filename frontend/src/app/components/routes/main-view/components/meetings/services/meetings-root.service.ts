@@ -4,10 +4,15 @@ import { forkJoin, Observable, of } from "rxjs";
 import { catchError, filter, map, switchMap } from "rxjs/operators";
 
 import { MeetingsHttpService } from "../../../../../../shared/api/meetings-http.service";
+import { UserService } from "../../../../../../shared/api/user.service";
 import {
     Meeting,
     TableMeeting,
 } from "../../../../../../shared/models/meeting.model";
+import {
+    MeetingsPermission,
+    RoleDefinitions,
+} from "../../../../../../shared/models/permission.model";
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
 import { DestroyClass } from "../../../../../../shared/utils/destroyClass";
@@ -22,7 +27,8 @@ export class MeetingsRootService extends DestroyClass {
         private readonly http: MeetingsHttpService,
         private readonly dialog: MatDialog,
         private readonly table: TableService<TableMeeting>,
-        private readonly splitView: SplitViewManagerService<Meeting>
+        private readonly splitView: SplitViewManagerService<Meeting>,
+        private readonly userService: UserService
     ) {
         super();
         this.initData();
@@ -46,7 +52,18 @@ export class MeetingsRootService extends DestroyClass {
             .subscribe();
 
         this.displayedColumns$ = this.splitView.isDetail$.pipe(
-            map((value) => (value ? shortMeetingColumns : longMeetingColumns))
+            map((value) => (value ? shortMeetingColumns : longMeetingColumns)),
+            map((value) => {
+                if (this.userService.currentUser === null) return value;
+                const userRole = this.userService.currentUser.role;
+                const rolePermissions = RoleDefinitions[userRole].permissions;
+                const hasPermission = rolePermissions.includes(
+                    MeetingsPermission.SeeAll
+                );
+
+                if (hasPermission) return value;
+                return value.filter((column) => column !== "Your meeting");
+            })
         );
     }
 

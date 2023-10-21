@@ -17,7 +17,6 @@ import {
     Meeting,
     TableMeeting,
 } from "../../../../../../../shared/models/meeting.model";
-import { MeetingsPermission } from "../../../../../../../shared/models/permission.model";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../../shared/services/table.service";
@@ -49,8 +48,6 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
     protected totalItems$: Observable<number>;
     protected itemsPerPage: number;
     protected index$: Observable<number>;
-
-    protected readonly permissions = MeetingsPermission;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Meeting>,
