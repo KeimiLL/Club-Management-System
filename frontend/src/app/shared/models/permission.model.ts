@@ -102,6 +102,7 @@ export const RoleDefinitions: Record<Roles, RolePermission> = {
     [Roles.Coach]: {
         modules: [
             ...modulesBase,
+            ModulesPermissions.Teams,
             ModulesPermissions.Squad,
             ModulesPermissions.Schedule,
         ],
