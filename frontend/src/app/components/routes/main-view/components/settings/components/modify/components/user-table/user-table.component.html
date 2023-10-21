@@ -49,7 +49,7 @@
                     />
                 </mat-form-field>
                 <button
-                    class="button--light button--table"
+                    class="button--light button--table flex-center"
                     mat-raised-button
                     matTooltip="Change password"
                     (click)="changePassword(element.id, i)"
@@ -60,7 +60,7 @@
             </ng-container>
             <ng-template #you>
                 <a
-                    class="link"
+                    class="link flex-center"
                     routerLinkActive="active"
                     [routerLink]="['./../general']"
                 >
