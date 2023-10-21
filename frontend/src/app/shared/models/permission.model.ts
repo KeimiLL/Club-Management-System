@@ -26,33 +26,35 @@ export type SubPermissions =
     | SquadPermissions
     | SchedulePermission;
 
-export enum SquadPermissions {
-    Bio = "bio",
-    Stats = "stats",
-    Modify = "modify",
-    Cluster = "cluster",
+export enum MeetingsPermission {
+    CreateMeeting = "create_meeting",
+    EditMeeting = "edit_meeting",
 }
 
 export enum TeamPermission {
-    All = "all",
+    CreateTeam = "create_team",
+    EditTeam = "edit_team",
 }
 
-export enum MeetingsPermission {
-    CreateMeeting = "createMeeting",
-    SeeAllMeetings = "seeAllMeeting",
-}
-
-export enum SettingsPermission {
-    ModifyUsers = "modify_users",
-    Help = "help",
-    General = "general",
+export enum SquadPermissions {
+    AllPLayers = "all_players",
+    OwnProfile = "own_profile",
 }
 
 export enum SchedulePermission {
     Marks = "marks",
+    AddEvent = "add_event",
+    CheckPresent = "check_present",
+    AddSquad = "add_squad",
 }
 
-const allPermissions: SubPermissions[] = [
+export enum SettingsPermission {
+    Modify = "modify_users",
+    Help = "help",
+    General = "general",
+}
+
+export const allPermissions: SubPermissions[] = [
     ...Object.values(TeamPermission),
     ...Object.values(MeetingsPermission),
     ...Object.values(SettingsPermission),
@@ -64,6 +66,11 @@ const modulesBase: ModulesPermissions[] = [
     ModulesPermissions.Dashboard,
     ModulesPermissions.Settings,
     ModulesPermissions.Meetings,
+];
+
+const subPermissionsBase: SubPermissions[] = [
+    SettingsPermission.General,
+    SettingsPermission.Help,
 ];
 
 export const RoleColorsMapping: Record<Roles, string> = {
@@ -81,6 +88,12 @@ export const RoleDefinitions: Record<Roles, RolePermission> = {
         modules: Object.values(ModulesPermissions),
         permissions: [...allPermissions],
     },
+
+    [Roles.Board]: {
+        modules: Object.values(ModulesPermissions),
+        permissions: [...subPermissionsBase, ...Object.values(TeamPermission)],
+    },
+
     [Roles.Coach]: {
         modules: [
             ...modulesBase,
@@ -88,30 +101,31 @@ export const RoleDefinitions: Record<Roles, RolePermission> = {
             ModulesPermissions.Schedule,
         ],
         permissions: [
-            ...Object.values(TeamPermission),
+            ...subPermissionsBase,
             ...Object.values(SchedulePermission),
+            SquadPermissions.AllPLayers,
         ],
     },
+
     [Roles.Player]: {
         modules: [
             ...modulesBase,
             ModulesPermissions.Squad,
             ModulesPermissions.Schedule,
         ],
-        permissions: [],
+        permissions: [...subPermissionsBase, SquadPermissions.OwnProfile],
     },
-    [Roles.Viewer]: {
-        modules: [...modulesBase],
-        permissions: [],
-    },
+
     [Roles.Medic]: {
         modules: [...modulesBase],
-        permissions: [],
+        permissions: [...subPermissionsBase],
     },
-    [Roles.Board]: {
-        modules: Object.values(ModulesPermissions),
-        permissions: [],
+
+    [Roles.Viewer]: {
+        modules: [...modulesBase],
+        permissions: [...subPermissionsBase],
     },
+
     [Roles.None]: {
         modules: [ModulesPermissions.Dashboard],
         permissions: [],
