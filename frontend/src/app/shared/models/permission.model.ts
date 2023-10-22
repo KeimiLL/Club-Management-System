@@ -15,6 +15,7 @@ export enum ModulesPermissions {
     Dashboard = "dashboard",
     Meetings = "meetings",
     Teams = "teams",
+    Squad = "squad",
     Schedule = "schedule",
 }
 
@@ -22,27 +23,34 @@ export type SubPermissions =
     | TeamPermission
     | MeetingsPermission
     | SettingsPermission
+    | SquadPermissions
     | SchedulePermission;
 
-export enum TeamPermission {
-    Bio = "bio",
-    Stats = "stats",
-    Modify = "modify",
-    Cluster = "cluster",
-}
 export enum MeetingsPermission {
-    CreateMeeting = "createMeeting",
-    SeeAllMeetings = "seeAllMeeting",
+    EditMeeting = "edit_meeting",
+    DeleteMeeting = "delete_meeting",
 }
 
-export enum SettingsPermission {
-    Modifyusers = "modify_users",
-    Help = "help",
-    General = "general",
+export enum TeamPermission {
+    CreateTeam = "create_team",
+    EditTeam = "edit_team",
+}
+
+export enum SquadPermissions {
+    Stats = "stats",
 }
 
 export enum SchedulePermission {
     Marks = "marks",
+    AddEvent = "add_event",
+    CheckPresent = "check_present",
+    AddSquad = "add_squad",
+}
+
+export enum SettingsPermission {
+    Modify = "modify_users",
+    Help = "help",
+    General = "general",
 }
 
 export const allPermissions: SubPermissions[] = [
@@ -50,6 +58,18 @@ export const allPermissions: SubPermissions[] = [
     ...Object.values(MeetingsPermission),
     ...Object.values(SettingsPermission),
     ...Object.values(SchedulePermission),
+    ...Object.values(SquadPermissions),
+];
+
+const modulesBase: ModulesPermissions[] = [
+    ModulesPermissions.Dashboard,
+    ModulesPermissions.Settings,
+    ModulesPermissions.Meetings,
+];
+
+const subPermissionsBase: SubPermissions[] = [
+    SettingsPermission.General,
+    SettingsPermission.Help,
 ];
 
 export const RoleColorsMapping: Record<Roles, string> = {
@@ -65,38 +85,55 @@ export const RoleColorsMapping: Record<Roles, string> = {
 export const RoleDefinitions: Record<Roles, RolePermission> = {
     [Roles.Admin]: {
         modules: Object.values(ModulesPermissions),
-        permissions: [
-            ...Object.values(TeamPermission),
-            ...Object.values(MeetingsPermission),
-            ...Object.values(SettingsPermission),
-            ...Object.values(SchedulePermission),
-        ],
+        permissions: [...allPermissions],
     },
-    [Roles.Coach]: {
-        modules: Object.values(ModulesPermissions),
-        permissions: [
-            ...Object.values(TeamPermission),
-            ...Object.values(SchedulePermission),
-        ],
-    },
-    [Roles.Player]: {
-        modules: Object.values(ModulesPermissions),
-        permissions: [TeamPermission.Bio],
-    },
-    [Roles.Viewer]: {
-        modules: [ModulesPermissions.Dashboard, ModulesPermissions.Settings],
-        permissions: [],
-    },
-    [Roles.Medic]: {
-        modules: [ModulesPermissions.Dashboard, ModulesPermissions.Settings],
-        permissions: [],
-    },
+
     [Roles.Board]: {
-        modules: [ModulesPermissions.Dashboard, ModulesPermissions.Settings],
-        permissions: [],
+        modules: Object.values(ModulesPermissions),
+        permissions: [
+            ...subPermissionsBase,
+            ...Object.values(MeetingsPermission),
+            ...Object.values(TeamPermission),
+            ...Object.values(SquadPermissions),
+            SchedulePermission.AddEvent,
+        ],
     },
+
+    [Roles.Coach]: {
+        modules: [
+            ...modulesBase,
+            ModulesPermissions.Teams,
+            ModulesPermissions.Squad,
+            ModulesPermissions.Schedule,
+        ],
+        permissions: [
+            ...subPermissionsBase,
+            ...Object.values(SquadPermissions),
+            ...Object.values(SchedulePermission),
+        ],
+    },
+
+    [Roles.Player]: {
+        modules: [
+            ...modulesBase,
+            ModulesPermissions.Squad,
+            ModulesPermissions.Schedule,
+        ],
+        permissions: [...subPermissionsBase],
+    },
+
+    [Roles.Medic]: {
+        modules: [...modulesBase],
+        permissions: [...subPermissionsBase],
+    },
+
+    [Roles.Viewer]: {
+        modules: [...modulesBase],
+        permissions: [...subPermissionsBase],
+    },
+
     [Roles.None]: {
-        modules: [],
+        modules: [ModulesPermissions.Dashboard],
         permissions: [],
     },
 };

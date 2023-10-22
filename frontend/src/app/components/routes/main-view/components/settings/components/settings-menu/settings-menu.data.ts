@@ -3,6 +3,6 @@ import { SettingsPermission } from "../../../../../../../shared/models/permissio
 
 export const settingsMenuItems: MenuItem[] = [
     { name: SettingsPermission.General, route: "/app/settings/general" },
-    { name: SettingsPermission.Modifyusers, route: "/app/settings/modify" },
+    { name: SettingsPermission.Modify, route: "/app/settings/modify" },
     { name: SettingsPermission.Help, route: "/app/settings/help" },
 ];
