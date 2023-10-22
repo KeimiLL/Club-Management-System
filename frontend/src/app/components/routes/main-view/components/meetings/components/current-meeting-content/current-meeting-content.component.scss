@@ -3,6 +3,24 @@
 :host {
     .date {
         padding: $small-spacing;
-        font-size: $very-large-font;
+        font-size: $normal-font;
+    }
+}
+
+.container {
+    &__left {
+        flex-basis: 20%;
+
+        &__icon {
+            transform: scale(2.5);
+            color: $light-blue-icon;
+            background-color: $blue-icon;
+            border-radius: 5px;
+            padding: $small-spacing;
+        }
+    }
+
+    &__right {
+        flex-basis: 80%;
     }
 }

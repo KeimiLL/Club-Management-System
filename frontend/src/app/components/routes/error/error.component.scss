@@ -20,13 +20,10 @@
             margin: 0 auto;
 
             &-text {
-                display: flex;
-                align-items: center;
                 height: 60%;
                 padding: $large-spacing;
                 line-height: 32px;
                 text-align: justify;
-                justify-content: center;
                 font-size: $very-large-font;
                 font-weight: $bold-weight;
             }

@@ -41,7 +41,7 @@
         <mat-header-cell *matHeaderCellDef> Password </mat-header-cell>
         <mat-cell *matCellDef="let element; let i = index" class="cell">
             <ng-container *ngIf="element.email !== currentUserEmail; else you">
-                <mat-form-field>
+                <mat-form-field class="cell__input">
                     <input
                         matInput
                         [formControl]="passwordFormArray.at(i)"
@@ -49,17 +49,18 @@
                     />
                 </mat-form-field>
                 <button
-                    class="button--light button--table"
+                    class="button--light button--table flex-center"
                     mat-raised-button
+                    matTooltip="Change password"
                     (click)="changePassword(element.id, i)"
                     [disabled]="passwordFormArray.at(i).invalid"
                 >
-                    Change Password
+                    <mat-icon class="cell__icon"> lock_reset </mat-icon>
                 </button>
             </ng-container>
             <ng-template #you>
                 <a
-                    class="link"
+                    class="link flex-center"
                     routerLinkActive="active"
                     [routerLink]="['./../general']"
                 >

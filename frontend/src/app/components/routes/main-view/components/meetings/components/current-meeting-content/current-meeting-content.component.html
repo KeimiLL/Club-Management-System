@@ -1,42 +1,58 @@
-<app-half-card-section>
-    <app-section-header name="Date" sectionHeader> </app-section-header>
+<div class="container flex-center">
+    <div class="container__left flex-center">
+        <mat-icon class="container__left__icon">event</mat-icon>
+    </div>
+    <app-half-card-section class="container__right">
+        <app-section-header name="Date" sectionHeader> </app-section-header>
+        <ng-container sectionContent>
+            <div class="date">{{ meeting.date.toString() }}</div>
+        </ng-container>
+    </app-half-card-section>
+</div>
 
-    <ng-container sectionContent>
-        <div class="date">{{ meeting.date.toString() }}</div>
-    </ng-container>
-</app-half-card-section>
-
-<app-half-card-section>
-    <app-section-header name="Attendees" sectionHeader>
-        <app-button-container>
-            <button mat-raised-button class="button--light" buttons>
-                Modify Attendees
-            </button></app-button-container
-        >
-    </app-section-header>
-
-    <ng-container sectionContent>
-        <mat-chip-listbox>
-            <mat-chip
-                [appPermissionBackgroundColor]="meeting.created_by_user.role"
-                matTooltip="Creator"
+<div class="container flex-center">
+    <div class="container__left flex-center">
+        <mat-icon class="container__left__icon">people</mat-icon>
+    </div>
+    <app-half-card-section class="container__right">
+        <app-section-header name="Attendees" sectionHeader>
+            <app-button-container>
+                <button mat-raised-button class="button--light" buttons>
+                    Modify Attendees
+                </button></app-button-container
             >
-                {{ meeting.created_by_user.full_name }}
-            </mat-chip>
-            <mat-chip
-                *ngFor="let attendee of meeting.users"
-                [appPermissionColor]="attendee.role"
-            >
-                {{ attendee.full_name }}
-            </mat-chip>
-        </mat-chip-listbox>
-    </ng-container>
-</app-half-card-section>
+        </app-section-header>
 
-<app-half-card-section>
-    <app-section-header name="Description" sectionHeader> </app-section-header>
+        <ng-container sectionContent>
+            <mat-chip-listbox>
+                <mat-chip
+                    [appPermissionBackgroundColor]="
+                        meeting.created_by_user.role
+                    "
+                    matTooltip="Creator"
+                >
+                    {{ meeting.created_by_user.full_name }}
+                </mat-chip>
+                <mat-chip
+                    *ngFor="let attendee of meeting.users"
+                    [appPermissionColor]="attendee.role"
+                >
+                    {{ attendee.full_name }}
+                </mat-chip>
+            </mat-chip-listbox>
+        </ng-container>
+    </app-half-card-section>
+</div>
 
-    <ng-container sectionContent>
-        <div>{{ meeting.notes ?? "No notes" }}</div>
-    </ng-container>
-</app-half-card-section>
+<div class="container flex-center">
+    <div class="container__left flex-center">
+        <mat-icon class="container__left__icon">description</mat-icon>
+    </div>
+    <app-half-card-section class="container__right">
+        <app-section-header name="Description" sectionHeader>
+        </app-section-header>
+        <ng-container sectionContent>
+            <div>{{ meeting.notes ?? "No notes" }}</div>
+        </ng-container>
+    </app-half-card-section>
+</div>

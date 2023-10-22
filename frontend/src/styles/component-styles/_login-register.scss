@@ -24,7 +24,7 @@
             width: 100%;
             margin-bottom: 10px;
 
-            .field_input {
+            .field-input {
                 width: 100%;
             }
 
@@ -43,12 +43,13 @@
             color: $red;
             margin-top: 5px;
         }
+
+        &__submit {
+            margin-top: $large-spacing;
+        }
     }
 
     &__bottom {
-        display: flex;
-        justify-content: center;
-        align-items: center;
         padding-top: $large-spacing;
 
         &-text {
@@ -58,7 +59,7 @@
         &-link {
             a {
                 text-decoration: none;
-                color: $purple-dark;
+                color: $dark-btn-back;
                 font-weight: $bold-weight;
             }
         }
