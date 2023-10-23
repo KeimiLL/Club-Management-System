@@ -177,7 +177,7 @@ def update_meeting(
     """Updates meeting data with the given data.
 
     Args:
-        meeting_id (Annotated[int, Path]): The requested meeting's id. Has to be greater than
+        meeting_id (Annotated[int, Path]): The given meeting's id. Has to be greater than
             or equal to 1 and less than or equal to 10**7.
         meeting_user (MeetingUserUpdate): Meeting data to update.
         current_user (Annotated[User, Depends]): Current user read from access token.
@@ -188,7 +188,7 @@ def update_meeting(
         ForbiddenException: If the current user does not have sufficient permissions.
 
     Returns:
-        MeetingSideView: The requested meeting.
+        MeetingSideView: The updated meeting.
     """
     meeting = get_meeting_by_id(meeting_id=meeting_id, db=db)
     if (

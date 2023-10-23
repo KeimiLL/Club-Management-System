@@ -116,7 +116,7 @@ def get_players_by_team_id(
     Args:
         pagination (Annotated[dict[str, int], Depends]): Pagination read from the query params.
             Defaults to Depends(paginate).
-        team_id (Annotated[int, Query]): The requested team's id. Has to be greater than
+        team_id (Annotated[int, Query]): The given team's id. Has to be greater than
             1 and less than or equal to 10**7.
         current_user (Annotated[User, Depends]): Current user read from access token.
             Defaults to Depends(get_user_from_token).
