@@ -198,10 +198,10 @@ def change_user_role(
     current_user: Annotated[UserModel, Depends(get_user_from_token)],
     db: Annotated[Session, Depends(get_db)],
 ):
-    """Updates meeting data with the given data.
+    """Updates user's role'.
 
     Args:
-        user_id (Annotated[int, Path]): The requested user id. Has to be greater than
+        user_id (Annotated[int, Path]): The given user id. Has to be greater than
             or equal to 1 and less than or equal to 10**7.
         role_data (UserUpdateRole): User role to be set.
         current_user (Annotated[UserModel, Depends]): Current user read from access token.
@@ -237,10 +237,10 @@ def change_user_password(
     current_user: Annotated[UserModel, Depends(get_user_from_token)],
     db: Annotated[Session, Depends(get_db)],
 ):
-    """Updates meeting data with the given data.
+    """Updates user's password.
 
     Args:
-        user_id (Annotated[int, Path]): The requested user id. Has to be greater than
+        user_id (Annotated[int, Path]): The given user id. Has to be greater than
             or equal to 1 and less than or equal to 10**7.
         password_data (UserUpdatePassword): User password data to be validated and set.
         current_user (Annotated[UserModel, Depends]): Current user read from access token.
