@@ -7,7 +7,7 @@ import { allPermissions, SubPermissions } from "../models/permission.model";
     standalone: true,
 })
 export class StringToSubpermissionPipe implements PipeTransform {
-    transform(value: string, ...args: unknown[]): SubPermissions | null {
+    transform(value: string): SubPermissions | null {
         if (
             Object.values(
                 allPermissions.map((item) => item.valueOf())

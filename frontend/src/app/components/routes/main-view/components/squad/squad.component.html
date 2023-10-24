@@ -2,19 +2,33 @@
     *ngIf="{
         isDetail: isDetail$ | async,
         tablePlayers: tablePlayers$ | async,
-        currentPlayer: currentPlayer$ | async
+        currentPlayer: currentPlayer$ | async,
+        teams: teams$ | async,
+        teamId: teamId$ | async
     } as vm"
 >
     <app-content-card>
         <app-wide-card-header header name="Players">
             <app-button-container buttons>
-                <!-- <button
-                    mat-raised-button
-                    class="button--light"
-                    (click)="onNewPlayerClick()"
-                >
-                    Add Player
-                </button> -->
+                <ng-container *ngIf="vm.teams">
+                    <button
+                        mat-button
+                        [matMenuTriggerFor]="roleMenu"
+                        *ngIf="vm.teamId"
+                    >
+                        {{ vm.teams | getNameById : vm.teamId }}
+                    </button>
+
+                    <mat-menu #roleMenu="matMenu">
+                        <button
+                            mat-menu-item
+                            *ngFor="let team of teams$ | async"
+                            (click)="setSelectedTeam(team.id)"
+                        >
+                            {{ team.name }}
+                        </button>
+                    </mat-menu>
+                </ng-container>
             </app-button-container>
         </app-wide-card-header>
 

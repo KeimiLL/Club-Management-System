@@ -39,6 +39,7 @@ export enum TeamPermission {
 
 export enum SquadPermissions {
     Stats = "stats",
+    MoreTeams = "more_teams",
 }
 
 export enum SchedulePermission {

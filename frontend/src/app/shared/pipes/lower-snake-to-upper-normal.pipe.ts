@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from "@angular/core";
     standalone: true,
 })
 export class LowerSnakeToUpperNormal implements PipeTransform {
-    transform(value: string, ...args: unknown[]): string {
+    transform(value: string): string {
         const newString = value[0].toUpperCase() + value.slice(1);
         return newString.replace("_", " ");
     }
