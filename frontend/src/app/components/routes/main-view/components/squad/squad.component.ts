@@ -50,7 +50,7 @@ export class SquadComponent {
         private readonly table: TableService<TablePlayer>
     ) {
         this.teams$ = this.dropdown.teams$;
-        this.teamId$ = this.dropdown.currentTeamId$;
+        this.teamId$ = this.dropdown.teamId$;
     }
 
     protected switchDetail(): void {

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { BehaviorSubject, Observable, tap } from "rxjs";
+import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
 
 import { TeamsHttpService } from "../api/teams-http.service";
 import { ShortTeam } from "../models/team.model";
@@ -9,9 +9,7 @@ import { DestroyClass } from "../utils/destroyClass";
 @Injectable()
 export class DropdownViewManagerService extends DestroyClass {
     private readonly teamsStore$ = new BehaviorSubject<ShortTeam[]>([]);
-    private readonly currentTeamIdStore$ = new BehaviorSubject<number | null>(
-        null
-    );
+    private readonly teamIdStore$ = new BehaviorSubject<number | null>(null);
 
     constructor(
         private readonly activatedRoute: ActivatedRoute,
@@ -19,54 +17,61 @@ export class DropdownViewManagerService extends DestroyClass {
         private readonly httpTeams: TeamsHttpService
     ) {
         super();
-        this.initDropdown();
+        this.urlChecker();
     }
 
-    private set currentTeamId(teamId: number | null) {
-        this.currentTeamIdStore$.next(teamId);
+    private set teamId(teamId: number | null) {
+        this.teamIdStore$.next(teamId);
     }
 
-    public get currentTeamId(): number | null {
-        return this.currentTeamIdStore$.value;
+    public get teamId(): number | null {
+        return this.teamIdStore$.value;
     }
 
-    public get currentTeamId$(): Observable<number | null> {
-        return this.currentTeamIdStore$.asObservable();
+    public get teamId$(): Observable<number | null> {
+        return this.teamIdStore$.asObservable();
     }
 
     public set teams(teams: ShortTeam[]) {
         this.teamsStore$.next(teams);
     }
 
+    public get teams(): ShortTeam[] {
+        return this.teamsStore$.value;
+    }
+
     public get teams$(): Observable<ShortTeam[]> {
         return this.teamsStore$.asObservable();
     }
 
-    private initDropdown(): void {
-        this.httpTeams
-            .getAllTeams()
-            .pipe(
-                tap((teams) => {
-                    this.teams = teams;
-                    this.currentTeamId = teams[0].id;
-                    this.addParamsToRouting(this.currentTeamId);
-                })
-            )
-            .subscribe(() => {
-                this.urlChecker();
-            });
+    private initTeams$(id: null | number): Observable<ShortTeam[] | null> {
+        return this.httpTeams.getAllTeams().pipe(
+            tap((teams) => {
+                this.teams = teams;
+                if (this.teams.length > 0) {
+                    if (
+                        id === null ||
+                        this.teams.find((team) => team.id === id) === undefined
+                    ) {
+                        this.teamId = teams[0].id;
+                    } else {
+                        this.teamId = id;
+                    }
+                    this.addParamsToRouting(this.teamId);
+                }
+            })
+        );
     }
 
     private urlChecker(): void {
         this.activatedRoute.queryParams
             .pipe(
-                tap((params) => {
+                switchMap((params) => {
                     if ("teamId" in params) {
                         const { teamId } = params;
-                        this.currentTeamId = teamId;
-                    } else {
-                        this.initDropdown();
+                        return this.initTeams$(teamId as number);
                     }
+                    return this.initTeams$(null);
                 }),
                 this.untilDestroyed()
             )
@@ -85,6 +90,6 @@ export class DropdownViewManagerService extends DestroyClass {
 
     public changeTeamId(teamId: number): void {
         this.addParamsToRouting(teamId);
-        this.currentTeamId = teamId;
+        this.teamId = teamId;
     }
 }
