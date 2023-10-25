@@ -93,12 +93,12 @@ def test_incorrect__get_coach_by_user_id(
         ),
     ],
 )
-def test_correct__get_all_teams(
+def test_correct__get_all_coaches(
     users: list[UserCreate | UserCreateWithRole],
     coaches: list[CoachCreate],
     db_session: Session,
 ) -> None:
-    """Tests getting all teams.
+    """Tests getting all coaches.
 
     Args:
         users (list[UserCreate | UserCreateWithRole]): Users to be created.

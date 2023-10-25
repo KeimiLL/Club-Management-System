@@ -261,7 +261,7 @@ def test_correct__get_teams_with_pagination_by_coach_id(
         (user_create_unique_1, coach_create, team_create, player_create, [1]),
     ],
 )
-def test_correct__create_meeting_with_user_ids(
+def test_correct__create_team_with_user_ids(
     user: UserCreate,
     coach: CoachCreate,
     team: TeamCreate,
@@ -302,7 +302,7 @@ def test_correct__create_meeting_with_user_ids(
         (user_create_unique_1, coach_create, team_create, player_create, [1, 2]),
     ],
 )
-def test_incorrect_missing__create_meeting_with_user_ids(
+def test_incorrect_missing__create_team_with_user_ids(
     user: UserCreate,
     coach: CoachCreate,
     team: TeamCreate,
