@@ -4,6 +4,7 @@
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_user import get_user_by_id
 from app.models.coach import Coach
+from app.models.team import Team
 from app.schemas.coach import CoachCreate
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
@@ -77,5 +78,30 @@ def get_all_coaches(db: Session) -> list[Coach]:
     """
     try:
         return list(db.scalars(select(Coach)).all())
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def get_coach_by_team_id(team_id: int, db: Session) -> Coach | None:
+    """Gets the coach that is assigned to the given team.
+
+    Args:
+        team_id (int): The team's id.
+        db (Session): Database session.
+
+    Raises:
+        MissingException: If the requested team does not exist.
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        Coach | None: The team's coach if it was assigned to a team.
+    """
+    try:
+        try:
+            db.execute(select(Team).where(Team.id == team_id)).scalar_one()
+        except NoResultFound as exc:
+            raise MissingException(Team.__name__) from exc
+        query = select(Coach).join(Team).where(Team.id == team_id)
+        return db.execute(query).scalar_one_or_none()
     except SQLAlchemyError as exc:
         raise exc
