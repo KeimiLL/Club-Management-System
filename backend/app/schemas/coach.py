@@ -54,3 +54,9 @@ class CoachOnlyBaseInfo(BaseModel):
 
     user_id: int = Field(..., ge=1, le=10**7)
     user_full_name: str = Field(..., min_length=4)
+
+
+class CoachOnlyName(BaseModel):
+    """Coach schema for returning data from the database."""
+
+    user_full_name: str | None = Field(None, min_length=4)
