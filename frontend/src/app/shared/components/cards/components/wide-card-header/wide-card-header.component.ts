@@ -12,5 +12,5 @@ import { MaterialModule } from "../../../../modules/material.module";
 })
 export class WideCardHeaderComponent {
     @Input() public name: string;
-    @Input() public subName = "";
+    @Input() public subName: string | null;
 }

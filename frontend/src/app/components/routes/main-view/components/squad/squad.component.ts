@@ -3,11 +3,12 @@ import { Component } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { UserService } from "../../../../../shared/api/user.service";
+import { ShortCoach } from "../../../../../shared/models/coach.model";
 import { Player, TablePlayer } from "../../../../../shared/models/player.model";
 import { ShortTeam } from "../../../../../shared/models/team.model";
 import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
-import { GetNameByIdPipe } from "../../../../../shared/pipes/get-name-by-id.pipe";
+import { GetItemByIdPipe } from "../../../../../shared/pipes/get-item-by-id.pipe";
 import { DropdownViewManagerService } from "../../../../../shared/services/dropdown-view-manager.service";
 import { SplitViewManagerService } from "../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../shared/services/table.service";
@@ -24,7 +25,7 @@ import { SquadRootService } from "./services/squad-root.service";
         MaterialModule,
         SquadTableComponent,
         SquadContentComponent,
-        GetNameByIdPipe,
+        GetItemByIdPipe,
     ],
     templateUrl: "./squad.component.html",
     styleUrls: ["./squad.component.scss"],
@@ -41,6 +42,7 @@ export class SquadComponent {
     protected isDetail$: Observable<boolean>;
     protected tablePlayers$: Observable<TablePlayer>;
     protected currentPlayer$: Observable<Player>;
+    protected currentCoach$: Observable<ShortCoach | null>;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Player>,
@@ -51,6 +53,7 @@ export class SquadComponent {
     ) {
         this.teams$ = this.dropdown.teams$;
         this.teamId$ = this.dropdown.teamId$;
+        this.currentCoach$ = this.root.teamCoach$;
     }
 
     protected switchDetail(): void {

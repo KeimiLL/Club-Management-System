@@ -32,7 +32,7 @@ export class DropdownViewManagerService extends DestroyClass {
         return this.teamIdStore$.asObservable();
     }
 
-    public set teams(teams: ShortTeam[]) {
+    private set teams(teams: ShortTeam[]) {
         this.teamsStore$.next(teams);
     }
 
@@ -48,10 +48,10 @@ export class DropdownViewManagerService extends DestroyClass {
         return this.httpTeams.getAllTeams().pipe(
             tap((teams) => {
                 this.teams = teams;
-                if (this.teams.length > 0) {
+                if (teams.length > 0) {
                     if (
                         id === null ||
-                        this.teams.find((team) => team.id === id) === undefined
+                        teams.find((team) => team.id === id) === undefined
                     ) {
                         this.teamId = teams[0].id;
                     } else {
@@ -69,7 +69,7 @@ export class DropdownViewManagerService extends DestroyClass {
                 switchMap((params) => {
                     if ("teamId" in params) {
                         const { teamId } = params;
-                        return this.initTeams$(teamId as number);
+                        return this.initTeams$(Number(teamId));
                     }
                     return this.initTeams$(null);
                 }),

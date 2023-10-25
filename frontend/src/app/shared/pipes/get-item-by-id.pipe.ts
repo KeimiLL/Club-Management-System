@@ -6,12 +6,12 @@ interface Dto {
 }
 
 @Pipe({
-    name: "getNameById",
+    name: "getItemById",
     standalone: true,
 })
-export class GetNameByIdPipe<T extends Dto> implements PipeTransform {
-    transform(items: T[], id: number): string | undefined {
+export class GetItemByIdPipe<T extends Dto> implements PipeTransform {
+    transform(items: T[], id: number): T | undefined {
         const item = items.find((item) => item.id === id);
-        return item?.name;
+        return item;
     }
 }

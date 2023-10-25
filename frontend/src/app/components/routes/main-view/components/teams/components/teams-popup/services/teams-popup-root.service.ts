@@ -19,7 +19,7 @@ export class TeamsPopupRootService {
         []
     );
 
-    public set coaches(coaches: ShortCoach[]) {
+    private set coaches(coaches: ShortCoach[]) {
         this.coachesStore$.next(coaches);
     }
 
@@ -27,7 +27,7 @@ export class TeamsPopupRootService {
         return this.coachesStore$.asObservable();
     }
 
-    public set allPlayers(players: ShortPlayer[]) {
+    private set allPlayers(players: ShortPlayer[]) {
         this.allPlayersStore$.next(players);
     }
 
@@ -35,7 +35,7 @@ export class TeamsPopupRootService {
         return this.allPlayersStore$.asObservable();
     }
 
-    public set selectedPlayers(players: ShortPlayer[]) {
+    private set selectedPlayers(players: ShortPlayer[]) {
         this.selectedPlayersStore$.next(players);
     }
 

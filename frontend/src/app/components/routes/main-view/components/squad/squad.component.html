@@ -4,30 +4,38 @@
         tablePlayers: tablePlayers$ | async,
         currentPlayer: currentPlayer$ | async,
         teams: teams$ | async,
-        teamId: teamId$ | async
+        teamId: teamId$ | async,
+        currentCoach: currentCoach$ | async
     } as vm"
 >
     <app-content-card>
-        <app-wide-card-header header name="Players">
+        <app-wide-card-header
+            header
+            [name]="(vm.teams | getItemById : vm.teamId).name"
+            [subName]="vm.currentCoach?.user_full_name ?? null"
+        >
             <app-button-container buttons>
                 <ng-container *ngIf="vm.teams">
-                    <button
-                        mat-button
-                        [matMenuTriggerFor]="roleMenu"
-                        *ngIf="vm.teamId"
-                    >
-                        {{ vm.teams | getNameById : vm.teamId }}
-                    </button>
-
-                    <mat-menu #roleMenu="matMenu">
+                    <ng-container *ngIf="vm.teams.length > 1">
                         <button
-                            mat-menu-item
-                            *ngFor="let team of teams$ | async"
-                            (click)="setSelectedTeam(team.id)"
+                            mat-raised-button
+                            class="button--light"
+                            [matMenuTriggerFor]="roleMenu"
+                            *ngIf="vm.teamId"
                         >
-                            {{ team.name }}
+                            Select Team
                         </button>
-                    </mat-menu>
+
+                        <mat-menu #roleMenu="matMenu">
+                            <button
+                                mat-menu-item
+                                *ngFor="let team of teams$ | async"
+                                (click)="setSelectedTeam(team.id)"
+                            >
+                                {{ team.name }}
+                            </button>
+                        </mat-menu>
+                    </ng-container>
                 </ng-container>
             </app-button-container>
         </app-wide-card-header>
