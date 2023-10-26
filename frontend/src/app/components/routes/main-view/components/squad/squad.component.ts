@@ -40,8 +40,8 @@ export class SquadComponent {
     protected teams$: Observable<ShortTeam[]>;
     protected teamId$: Observable<number | null>;
     protected isDetail$: Observable<boolean>;
-    protected tablePlayers$: Observable<TablePlayer>;
-    protected currentPlayer$: Observable<Player>;
+    protected tablePlayers$: Observable<TablePlayer[]>;
+    protected currentPlayer$: Observable<Player | null>;
     protected currentCoach$: Observable<CoachName | null>;
 
     constructor(
@@ -54,6 +54,9 @@ export class SquadComponent {
         this.teams$ = this.dropdown.teams$;
         this.teamId$ = this.dropdown.teamId$;
         this.currentCoach$ = this.root.teamCoach$;
+        this.isDetail$ = this.splitView.isDetail$;
+        this.tablePlayers$ = this.table.tableItems$;
+        this.currentPlayer$ = this.splitView.currentItem$;
     }
 
     protected switchDetail(): void {

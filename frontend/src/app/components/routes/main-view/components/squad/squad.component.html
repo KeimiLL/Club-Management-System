@@ -29,7 +29,7 @@
                         <mat-menu #roleMenu="matMenu">
                             <button
                                 mat-menu-item
-                                *ngFor="let team of teams$ | async"
+                                *ngFor="let team of vm.teams"
                                 (click)="setSelectedTeam(team.id)"
                             >
                                 {{ team.name }}
@@ -41,11 +41,10 @@
         </app-wide-card-header>
 
         <ng-container content>
-            <!-- <app-squad-table
+            <app-squad-table
                 *ngIf="vm.tablePlayers"
                 [data]="vm.tablePlayers"
-            ></app-squad-table> -->
-            <app-squad-table></app-squad-table>
+            ></app-squad-table>
         </ng-container>
     </app-content-card>
 

@@ -1,0 +1,13 @@
+@import "../../../../../../../../styles/component-styles/components";
+@import "../../../../../../../../styles/variables";
+
+:host {
+    mat-row {
+        cursor: pointer;
+    }
+
+    .no-records {
+        font-size: $large-font;
+        margin: $medium-spacing auto;
+    }
+}

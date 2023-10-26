@@ -25,7 +25,7 @@ export class PlayersHttpService {
         capacity: number
     ): Observable<TableResponse<TablePlayer>> {
         return this.http.get<TableResponse<TablePlayer>>(
-            `api/v1/teams?team_id=${id}page=${page}&per_page=${capacity}`
+            `api/v1/players?team_id=${id}&page=${page}&per_page=${capacity}`
         );
     }
 }
