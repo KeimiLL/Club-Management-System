@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
 
 import { TeamsHttpService } from "../api/teams-http.service";
+import { MainRoutes } from "../models/misc.model";
 import { ShortTeam } from "../models/team.model";
 import { DestroyClass } from "../utils/destroyClass";
 
@@ -49,15 +50,17 @@ export class DropdownViewManagerService extends DestroyClass {
             tap((teams) => {
                 this.teams = teams;
                 if (teams.length > 0) {
-                    if (
-                        id === null ||
+                    if (id === null) {
+                        this.teamId = teams[0].id;
+                        this.addParamsToRouting(this.teamId);
+                    } else if (
                         teams.find((team) => team.id === id) === undefined
                     ) {
-                        this.teamId = teams[0].id;
+                        this.router.navigate([MainRoutes.Error]);
                     } else {
                         this.teamId = id;
+                        this.addParamsToRouting(this.teamId);
                     }
-                    this.addParamsToRouting(this.teamId);
                 }
             })
         );

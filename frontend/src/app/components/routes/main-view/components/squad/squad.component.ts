@@ -3,7 +3,7 @@ import { Component } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { UserService } from "../../../../../shared/api/user.service";
-import { ShortCoach } from "../../../../../shared/models/coach.model";
+import { CoachName } from "../../../../../shared/models/coach.model";
 import { Player, TablePlayer } from "../../../../../shared/models/player.model";
 import { ShortTeam } from "../../../../../shared/models/team.model";
 import { CardsModule } from "../../../../../shared/modules/cards.module";
@@ -42,7 +42,7 @@ export class SquadComponent {
     protected isDetail$: Observable<boolean>;
     protected tablePlayers$: Observable<TablePlayer>;
     protected currentPlayer$: Observable<Player>;
-    protected currentCoach$: Observable<ShortCoach | null>;
+    protected currentCoach$: Observable<CoachName | null>;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Player>,
