@@ -46,12 +46,10 @@ export class TableService<T> extends DestroyClass {
     public refreshTableItems$(
         request: Observable<TableResponse<T>>
     ): Observable<T[]> {
-        console.log("try");
         return request.pipe(
             tap((response) => {
                 this.totalItems = response.total;
                 this.tableItems = response.items;
-                console.log(response);
             }),
             this.untilDestroyed(),
             map((items) => items.items)

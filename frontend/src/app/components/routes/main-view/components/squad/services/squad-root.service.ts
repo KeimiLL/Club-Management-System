@@ -1,5 +1,13 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, filter, map, Observable, switchMap, tap } from "rxjs";
+import {
+    BehaviorSubject,
+    filter,
+    forkJoin,
+    map,
+    Observable,
+    switchMap,
+    tap,
+} from "rxjs";
 
 import { CoachesHttpService } from "../../../../../../shared/api/coaches-http.service";
 import { PlayersHttpService } from "../../../../../../shared/api/players-http.service";
@@ -28,11 +36,16 @@ export class SquadRootService extends DestroyClass {
     private initData(): void {
         this.dropdown.teamId$
             .pipe(
-                filter(Boolean),
-                switchMap((teamId) => {
+                tap(() => {
                     this.table.changePage(0);
-                    return this.refreshCoach$(teamId);
                 }),
+                filter(Boolean),
+                switchMap((teamId) =>
+                    forkJoin({
+                        coach: this.refreshCoach$(teamId),
+                        players: this.refreshPlayers$(teamId),
+                    })
+                ),
                 this.untilDestroyed()
             )
             .subscribe();
