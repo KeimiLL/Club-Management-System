@@ -123,7 +123,7 @@ def get_meetings_with_pagination(
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
@@ -154,7 +154,7 @@ def get_meeting(
         *[user.id for user in meeting.users],
     ):
         return meeting
-    raise ForbiddenException("meeting")
+    raise ForbiddenException()
 
 
 @router.put(
@@ -163,7 +163,7 @@ def get_meeting(
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
@@ -201,4 +201,4 @@ def update_meeting(
             user_ids=meeting_user.user_ids,
             db=db,
         )
-    raise ForbiddenException("meeting")
+    raise ForbiddenException()

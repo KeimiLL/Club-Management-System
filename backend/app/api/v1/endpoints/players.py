@@ -35,7 +35,7 @@ router = APIRouter()
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
@@ -65,7 +65,7 @@ def create_player(
             db=db,
         )
         return Message(message=HTTPResponseMessage.SUCCESS)
-    raise ForbiddenException("player")
+    raise ForbiddenException()
 
 
 @router.get(
@@ -100,7 +100,7 @@ def get_players(
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
@@ -148,7 +148,7 @@ def get_players_by_team_id(
             ],
             total=total,
         )
-    raise ForbiddenException("player")
+    raise ForbiddenException()
 
 
 @router.get(
@@ -157,7 +157,7 @@ def get_players_by_team_id(
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
@@ -185,7 +185,7 @@ def get_player(
     """
     if current_user.role == Roles.PLAYER:
         if player_id != current_user.id:
-            raise ForbiddenException("player")
+            raise ForbiddenException()
         if current_user.player.team is None:
             raise MissingException(Team.__name__)
         player_dict = current_user.player.__dict__
@@ -208,7 +208,7 @@ def get_player(
         player = get_player_by_user_id(user_id=player_id, db=db)
         coach_id = player.team.coach_id if player.team is not None else None
         if coach_id != current_user.id:
-            raise ForbiddenException("player")
+            raise ForbiddenException()
         if player.team is None:
             raise MissingException(Team.__name__)
         player_dict = player.__dict__
@@ -218,4 +218,4 @@ def get_player(
             user_full_name=player.user.full_name,
             team=TeamOnlyBaseInfo(**player.team.__dict__)
         )
-    raise ForbiddenException("player")
+    raise ForbiddenException()

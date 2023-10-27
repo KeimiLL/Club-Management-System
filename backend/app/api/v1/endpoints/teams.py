@@ -38,7 +38,7 @@ router = APIRouter()
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
@@ -67,7 +67,7 @@ def create_team(
             team=team_player.team, player_ids=team_player.player_ids, db=db
         )
         return Message(message=HTTPResponseMessage.SUCCESS)
-    raise ForbiddenException("team")
+    raise ForbiddenException()
 
 
 @router.get(
@@ -75,7 +75,7 @@ def create_team(
     response_model=list[TeamOnlyBaseInfo],
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
@@ -105,7 +105,7 @@ def get_teams(
                 else []
             )
         case _:
-            raise ForbiddenException("team")
+            raise ForbiddenException()
     return teams
 
 
@@ -115,7 +115,7 @@ def get_teams(
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
@@ -158,7 +158,7 @@ def get_teams_with_pagination(
                 else ([], 0)
             )
         case _:
-            raise ForbiddenException("team")
+            raise ForbiddenException()
     return ItemsListWithTotal[TeamTableView](
         items=[
             TeamTableView(
@@ -179,7 +179,7 @@ def get_teams_with_pagination(
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
@@ -230,4 +230,4 @@ def get_team(
                 if team.coach is not None
                 else None,
             )
-    raise ForbiddenException("team")
+    raise ForbiddenException()
