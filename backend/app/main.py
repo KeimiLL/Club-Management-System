@@ -1,6 +1,7 @@
 """Main file for the application."""
 
 import logging
+from typing import Any
 
 import uvicorn
 from app.api.base import api_router
@@ -30,7 +31,32 @@ from app.db import base  # pylint: disable=unused-import
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
 from sqlalchemy.exc import SQLAlchemyError
+
+
+def custom_openapi(application: FastAPI) -> dict[str, Any]:
+    """Overrides the `securitySchemes` set by OpenAPI since they are not accurate.
+
+    Args:
+        application (FastAPI): FastAPI application.
+
+    Returns:
+        dict[str, Any]: The automatically generated OpenAPI schema with overridden
+            `securitySchemes`.
+    """
+    if application.openapi_schema:
+        return application.openapi_schema
+    openapi_schema = get_openapi(
+        title=get_settings().PROJECT_NAME,
+        version=get_settings().PROJECT_VERSION,
+        routes=application.routes,
+    )
+    openapi_schema["components"]["securitySchemes"] = {
+        "APIKeyHeader": {"type": "apiKey", "in": "header", "name": "x-xsrf-token"},
+    }
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
 
 
 def include_exception_handlers(application: FastAPI) -> None:
@@ -90,6 +116,11 @@ def start_application() -> FastAPI:
     application.include_router(api_router)
     include_exception_handlers(application)
     include_middleware(application)
+
+    def custom_openapi_wrapper() -> dict[str, Any]:
+        return custom_openapi(application)
+
+    application.openapi = custom_openapi_wrapper
 
     return application
 

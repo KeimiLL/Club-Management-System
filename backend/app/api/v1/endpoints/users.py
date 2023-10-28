@@ -187,7 +187,7 @@ def get_users(
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
@@ -217,7 +217,7 @@ def change_user_role(
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
         update_user_role(user_id=user_id, role=role_data.role, db=db)
         return Message(message=HTTPResponseMessage.SUCCESS)
-    raise ForbiddenException("user")
+    raise ForbiddenException()
 
 
 @router.put(
@@ -226,7 +226,7 @@ def change_user_role(
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
@@ -274,7 +274,7 @@ def change_user_password(
             )
             return Message(message=HTTPResponseMessage.SUCCESS)
         raise InvalidCredentialsException(True)
-    raise ForbiddenException("user")
+    raise ForbiddenException()
 
 
 @router.get(
@@ -283,7 +283,7 @@ def change_user_password(
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
@@ -315,4 +315,4 @@ def get_users_with_pagination(
         return ItemsListWithTotal[User](
             items=[User(**user.__dict__) for user in users], total=total
         )
-    raise ForbiddenException("meeting")
+    raise ForbiddenException()

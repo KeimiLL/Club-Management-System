@@ -184,5 +184,5 @@ async def forbidden_exception_handler(
     logging.getLogger("uvicorn").info(msg=exc, exc_info=True)
     return JSONResponse(
         status_code=status.HTTP_403_FORBIDDEN,
-        content={"message": f"You cannot access {exc.item_name}."},
+        content={"message": HTTPResponseMessage.UNAUTHORIZED},
     )

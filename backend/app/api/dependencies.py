@@ -8,18 +8,50 @@ from app.core.jwt_utils import create_access_token, decode_token
 from app.crud.crud_user import get_user_by_email
 from app.db.session import get_db
 from app.models.user import User
-from fastapi import Cookie, Depends, Header, Query, Response
+from app.schemas.enums import HTTPResponseMessage
+from fastapi import Depends, Query, Request, Response
+from fastapi.security import APIKeyCookie as ApiKeyCookie403
+from fastapi.security import APIKeyHeader as ApiKeyHeader403
 from jose import ExpiredSignatureError, JWTError
 from sqlalchemy.orm import Session
 
 
+class APIKeyHeader(ApiKeyHeader403):
+    """Custom implementation of fastapi.security.APIKeyHeader, returning 401 if any of the auth
+    tokens is missing."""
+
+    async def __call__(self, request: Request) -> str:
+        api_key = request.headers.get(self.model.name)
+        if not api_key:
+            raise JWTTokensException(message=HTTPResponseMessage.UNAUTHENTICATED)
+        return api_key
+
+
+class APIKeyCookie(ApiKeyCookie403):
+    """Custom implementation of fastapi.security.APIKeyCookie, returning 401 if any of the auth
+    tokens is missing."""
+
+    async def __call__(self, request: Request) -> str:
+        api_key = request.cookies.get(self.model.name)
+        if not api_key:
+            raise JWTTokensException(message=HTTPResponseMessage.UNAUTHENTICATED)
+        return api_key
+
+
+access_token_scheme = APIKeyCookie(name="access_token")
+refresh_token_scheme = APIKeyCookie(name="refresh_token")
+xsrf_access_token_scheme = APIKeyCookie(name="xsrf_access_token")
+xsrf_refresh_token_scheme = APIKeyCookie(name="xsrf_refresh_token")
+xsrf_header_scheme = APIKeyHeader(name="x-xsrf-token")
+
+
 def refresh_token_dependency(
     response: Response,
-    access_token: Annotated[str | None, Cookie()] = None,
-    refresh_token: Annotated[str | None, Cookie()] = None,
-    xsrf_access_token: Annotated[str | None, Cookie()] = None,
-    xsrf_refresh_token: Annotated[str | None, Cookie()] = None,
-    x_xsrf_token: Annotated[str | None, Header()] = None,
+    access_token: Annotated[str, Depends(access_token_scheme)],
+    refresh_token: Annotated[str, Depends(refresh_token_scheme)],
+    xsrf_access_token: Annotated[str, Depends(xsrf_access_token_scheme)],
+    xsrf_refresh_token: Annotated[str, Depends(xsrf_refresh_token_scheme)],
+    x_xsrf_token: Annotated[str, Depends(xsrf_header_scheme)],
 ) -> str:
     """Dependency to refresh access_token if it has expired.
 
@@ -44,14 +76,6 @@ def refresh_token_dependency(
         str: Refreshed access_token if it has expired, access_token cookie value otherwise.
     """
     try:
-        if (
-            not access_token
-            or not refresh_token
-            or not xsrf_access_token
-            or not xsrf_refresh_token
-            or not x_xsrf_token
-        ):
-            raise JWTTokensException("Invalid tokens")
         decode_token(access_token)
         try:
             if (

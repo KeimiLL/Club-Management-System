@@ -25,7 +25,7 @@ router = APIRouter()
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
@@ -55,7 +55,7 @@ def create_new_coach(
             db=db,
         )
         return Message(message=HTTPResponseMessage.SUCCESS)
-    raise ForbiddenException("coach")
+    raise ForbiddenException()
 
 
 @router.get(
@@ -90,7 +90,7 @@ def get_all_coaches(
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
-        status.HTTP_403_FORBIDDEN: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
@@ -127,4 +127,4 @@ def get_coach_by_team_id(
     ):
         coach = crud_coach.get_coach_by_team_id(team_id=team_id, db=db)
         return CoachOnlyName(user_full_name=coach.user.full_name if coach else None)
-    raise ForbiddenException("coach")
+    raise ForbiddenException()
