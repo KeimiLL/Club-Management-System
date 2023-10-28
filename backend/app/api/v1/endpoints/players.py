@@ -3,7 +3,8 @@
 
 from typing import Annotated
 
-from app.api.dependencies import get_user_from_token, paginate, refresh_token_dependency
+from app.api import board_not_allowed, viewer_not_allowed
+from app.api.dependencies import paginate
 from app.core.exceptions import ForbiddenException, MissingException
 from app.crud.crud_player import (
     create_new_player,
@@ -42,30 +43,23 @@ router = APIRouter()
 )
 def create_player(
     player: PlayerCreate,
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    _: Annotated[User, Depends(board_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Creates a new player based on data from a POST request.
 
     Args:
         player (PlayerCreate): Player data from POST request.
-        current_user (Annotated[User, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
-
-    Raises:
-        ForbiddenException: If the current user does not have sufficient permissions.
 
     Returns:
         Message: The response signalling a successful operation.
     """
-    if current_user.role in (Roles.ADMIN, Roles.BOARD):
-        create_new_player(
-            player=player,
-            db=db,
-        )
-        return Message(message=HTTPResponseMessage.SUCCESS)
-    raise ForbiddenException()
+    create_new_player(
+        player=player,
+        db=db,
+    )
+    return Message(message=HTTPResponseMessage.SUCCESS)
 
 
 @router.get(
@@ -76,7 +70,7 @@ def create_player(
     },
 )
 def get_players(
-    _: Annotated[str, Depends(refresh_token_dependency)],
+    _: Annotated[str, Depends(board_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Gets the list of all registered players.
@@ -108,7 +102,7 @@ def get_players(
 def get_players_by_team_id(
     pagination: Annotated[dict[str, int], Depends(paginate)],
     team_id: Annotated[int, Query(ge=1, lt=10000)],
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[User, Depends(viewer_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Gets the list of players that play in the team with the given id.
@@ -119,7 +113,7 @@ def get_players_by_team_id(
         team_id (Annotated[int, Query]): The given team's id. Has to be greater than
             1 and less than or equal to 10**7.
         current_user (Annotated[User, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
+            Defaults to Depends(viewer_not_allowed).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Raises:
@@ -164,7 +158,7 @@ def get_players_by_team_id(
 )
 def get_player(
     player_id: Annotated[int, Path(ge=1, le=10**7)],
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[User, Depends(viewer_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Returns the player by the given id.
@@ -173,7 +167,7 @@ def get_player(
         player_id (Annotated[int, Path]): The requested player's id. Has to be greater than
             or equal to 1 and less than or equal to 10**7.
         current_user (Annotated[User, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
+            Defaults to Depends(viewer_not_allowed).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Raises:

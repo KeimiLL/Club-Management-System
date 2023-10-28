@@ -3,7 +3,8 @@
 
 from typing import Annotated
 
-from app.api.dependencies import get_user_from_token, paginate, refresh_token_dependency
+from app.api import all_allowed, board_not_allowed
+from app.api.dependencies import paginate, refresh_token_dependency
 from app.core.exceptions import (
     ForbiddenException,
     InvalidCredentialsException,
@@ -83,6 +84,7 @@ def login(
 
     Raises:
         InvalidCredentialsException: If the provided credentials are invalid.
+        ForbiddenException: If the logged in user does not have sufficient permissions.
 
     Returns:
         user_by_email (User): The logged in user.
@@ -105,6 +107,8 @@ def login(
         user_by_email = get_user_by_email(email=user.email, db=db)
         if not Hasher.verify_password(user.password, user_by_email.hashed_password):
             raise InvalidCredentialsException()
+        if user_by_email.role == Roles.NONE:
+            raise ForbiddenException()
     except (MissingException, SQLAlchemyError) as exc:
         raise InvalidCredentialsException() from exc
     return user_by_email
@@ -145,13 +149,13 @@ def logout(
     },
 )
 def get_current_user(
-    current_user: Annotated[UserModel, Depends(get_user_from_token)],
+    current_user: Annotated[UserModel, Depends(all_allowed)],
 ):
     """Gets current user from authentication cookies.
 
     Args:
         current_user (Annotated[UserModel, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
+            Defaults to Depends(all_allowed).
 
     Returns:
         current_user (User): The currently logged in user.
@@ -167,10 +171,10 @@ def get_current_user(
     },
 )
 def get_users(
-    _: Annotated[str, Depends(refresh_token_dependency)],
+    _: Annotated[str, Depends(all_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
-    """Gets the list of all registered users.
+    """Gets a list of all registered users.
 
     Args:
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
@@ -195,7 +199,7 @@ def get_users(
 def change_user_role(
     user_id: Annotated[int, Path(ge=1, le=10**7)],
     role_data: UserUpdateRole,
-    current_user: Annotated[UserModel, Depends(get_user_from_token)],
+    _: Annotated[UserModel, Depends(board_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Updates user's role'.
@@ -204,20 +208,13 @@ def change_user_role(
         user_id (Annotated[int, Path]): The given user id. Has to be greater than
             or equal to 1 and less than or equal to 10**7.
         role_data (UserUpdateRole): User role to be set.
-        current_user (Annotated[UserModel, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
-
-    Raises:
-        ForbiddenException: If the current user does not have sufficient permissions.
 
     Returns:
         Message: The response signalling a successful operation.
     """
-    if current_user.role in (Roles.ADMIN, Roles.BOARD):
-        update_user_role(user_id=user_id, role=role_data.role, db=db)
-        return Message(message=HTTPResponseMessage.SUCCESS)
-    raise ForbiddenException()
+    update_user_role(user_id=user_id, role=role_data.role, db=db)
+    return Message(message=HTTPResponseMessage.SUCCESS)
 
 
 @router.put(
@@ -234,7 +231,7 @@ def change_user_role(
 def change_user_password(
     user_id: Annotated[int, Path(ge=1, le=10**7)],
     password_data: UserUpdatePassword,
-    current_user: Annotated[UserModel, Depends(get_user_from_token)],
+    current_user: Annotated[UserModel, Depends(all_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Updates user's password.
@@ -244,7 +241,7 @@ def change_user_password(
             or equal to 1 and less than or equal to 10**7.
         password_data (UserUpdatePassword): User password data to be validated and set.
         current_user (Annotated[UserModel, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
+            Defaults to Depends(all_allowed).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Raises:
@@ -289,7 +286,7 @@ def change_user_password(
 )
 def get_users_with_pagination(
     pagination: Annotated[dict[str, int], Depends(paginate)],
-    current_user: Annotated[UserModel, Depends(get_user_from_token)],
+    _: Annotated[UserModel, Depends(board_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Gets the list of all registered users.
@@ -297,22 +294,15 @@ def get_users_with_pagination(
     Args:
         pagination (Annotated[dict[str, int], Depends]): Pagination read from the query params.
             Defaults to Depends(paginate).
-        current_user (Annotated[UserModel, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
-
-    Raises:
-        ForbiddenException: If the current user does not have sufficient permissions.
 
     Returns:
         ItemsListWithTotal[User]: A list of users alongside their total number.
     """
-    if current_user.role == Roles.ADMIN:
-        users, total = get_all_users_with_pagination(
-            **pagination,
-            db=db,
-        )
-        return ItemsListWithTotal[User](
-            items=[User(**user.__dict__) for user in users], total=total
-        )
-    raise ForbiddenException()
+    users, total = get_all_users_with_pagination(
+        **pagination,
+        db=db,
+    )
+    return ItemsListWithTotal[User](
+        items=[User(**user.__dict__) for user in users], total=total
+    )

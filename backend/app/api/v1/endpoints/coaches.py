@@ -1,11 +1,9 @@
 """Coaches related endpoints."""
 
 
-from __future__ import annotations
-
 from typing import Annotated
 
-from app.api.dependencies import get_user_from_token, refresh_token_dependency
+from app.api import board_not_allowed, viewer_not_allowed
 from app.core.exceptions import ForbiddenException
 from app.crud import crud_coach
 from app.db.session import get_db
@@ -32,30 +30,23 @@ router = APIRouter()
 )
 def create_new_coach(
     coach: CoachCreate,
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    _: Annotated[User, Depends(board_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Creates a new coach based on data from a POST request.
 
     Args:
         coach (CoachCreate): Coach data from POST request.
-        current_user (Annotated[User, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
-
-    Raises:
-        ForbiddenException: If the current user does not have sufficient permissions.
 
     Returns:
         Message: The response signalling a successful operation.
     """
-    if current_user.role == Roles.ADMIN:
-        crud_coach.create_new_coach(
-            coach=coach,
-            db=db,
-        )
-        return Message(message=HTTPResponseMessage.SUCCESS)
-    raise ForbiddenException()
+    crud_coach.create_new_coach(
+        coach=coach,
+        db=db,
+    )
+    return Message(message=HTTPResponseMessage.SUCCESS)
 
 
 @router.get(
@@ -63,10 +54,11 @@ def create_new_coach(
     response_model=list[CoachOnlyBaseInfo],
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
     },
 )
 def get_all_coaches(
-    _: Annotated[str, Depends(refresh_token_dependency)],
+    _: Annotated[User, Depends(viewer_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Gets the list of all registered coaches.
@@ -97,7 +89,7 @@ def get_all_coaches(
 )
 def get_coach_by_team_id(
     team_id: Annotated[int, Query(ge=1, lt=10000)],
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[User, Depends(viewer_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Gets the coach that is assigned to the team with the given id.
@@ -106,7 +98,7 @@ def get_coach_by_team_id(
         team_id (Annotated[int, Query]): The given team's id. Has to be greater than
             1 and less than or equal to 10**7.
         current_user (Annotated[User, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
+            Defaults to Depends(viewer_not_allowed).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Raises:

@@ -3,7 +3,8 @@
 
 from typing import Annotated
 
-from app.api.dependencies import get_user_from_token, paginate
+from app.api import all_allowed
+from app.api.dependencies import paginate
 from app.core.exceptions import ForbiddenException
 from app.crud.crud_meeting import (
     create_meeting_with_user_ids,
@@ -36,7 +37,7 @@ router = APIRouter()
 )
 def create_meeting(
     meeting_user: MeetingUserCreateUserIdList,
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[User, Depends(all_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Creates a new meeting and its attendance based on data from a POST request.
@@ -44,7 +45,7 @@ def create_meeting(
     Args:
         meeting_user (MeetingUserCreateUserIdList): Meeting data from POST request.
         current_user (Annotated[User, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
+            Defaults to Depends(all_allowed).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Returns:
@@ -70,7 +71,7 @@ def create_meeting(
 )
 def get_meetings_with_pagination(
     pagination: Annotated[dict[str, int], Depends(paginate)],
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[User, Depends(all_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Gets meetings with pagination depending on the current user's role.
@@ -79,7 +80,7 @@ def get_meetings_with_pagination(
         pagination (Annotated[dict[str, int], Depends]): Pagination read from the query params.
             Defaults to Depends(paginate).
         current_user (Annotated[User, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
+            Defaults to Depends(all_allowed).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Returns:
@@ -130,7 +131,7 @@ def get_meetings_with_pagination(
 )
 def get_meeting(
     meeting_id: Annotated[int, Path(ge=1, le=10**7)],
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[User, Depends(all_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Returns the meeting by the given id.
@@ -139,7 +140,7 @@ def get_meeting(
         meeting_id (Annotated[int, Path]): The requested meeting's id. Has to be greater than
             or equal to 1 and less than or equal to 10**7.
         current_user (Annotated[User, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
+            Defaults to Depends(all_allowed).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Raises:
@@ -171,7 +172,7 @@ def get_meeting(
 def update_meeting(
     meeting_id: Annotated[int, Path(ge=1, le=10**7)],
     meeting_user: MeetingUserUpdate,
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[User, Depends(all_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Updates meeting data with the given data.
@@ -181,7 +182,7 @@ def update_meeting(
             or equal to 1 and less than or equal to 10**7.
         meeting_user (MeetingUserUpdate): Meeting data to update.
         current_user (Annotated[User, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
+            Defaults to Depends(all_allowed).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Raises:
