@@ -17,10 +17,21 @@ from sqlalchemy.orm import Session
 
 
 class APIKeyHeader(ApiKeyHeader403):
-    """Custom implementation of fastapi.security.APIKeyHeader, returning 401 if any of the auth
-    tokens is missing."""
+    """Custom implementation of fastapi.security.APIKeyCookie, raising a custom exception if
+    an api key was not found."""
 
     async def __call__(self, request: Request) -> str:
+        """Overrides the inherited implementation to raise a custom exception.
+
+        Args:
+            request (Request): The passed request to check for an api key.
+
+        Raises:
+            JWTTokensException: If the key is missing from the request headers.
+
+        Returns:
+            str: The api key.
+        """
         api_key = request.headers.get(self.model.name)
         if not api_key:
             raise JWTTokensException(message=HTTPResponseMessage.UNAUTHENTICATED)
@@ -28,10 +39,21 @@ class APIKeyHeader(ApiKeyHeader403):
 
 
 class APIKeyCookie(ApiKeyCookie403):
-    """Custom implementation of fastapi.security.APIKeyCookie, returning 401 if any of the auth
-    tokens is missing."""
+    """Custom implementation of fastapi.security.APIKeyCookie, raising a custom exception if
+    an api key was not found."""
 
     async def __call__(self, request: Request) -> str:
+        """Overrides the inherited implementation to raise a custom exception.
+
+        Args:
+            request (Request): The passed request to check for an api key.
+
+        Raises:
+            JWTTokensException: If the key is missing from the request cookies.
+
+        Returns:
+            str: The api key.
+        """
         api_key = request.cookies.get(self.model.name)
         if not api_key:
             raise JWTTokensException(message=HTTPResponseMessage.UNAUTHENTICATED)
