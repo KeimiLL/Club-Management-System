@@ -77,7 +77,6 @@ export const RoleColorsMapping: Record<Roles, string> = {
     [Roles.Coach]: "#ffce5c",
     [Roles.Player]: "#d281b5",
     [Roles.Viewer]: "#b4befe",
-    [Roles.Medic]: "#ffb056",
     [Roles.Board]: "#06d6a0",
     [Roles.None]: "#a8a8a8",
 };
@@ -119,11 +118,6 @@ export const RoleDefinitions: Record<Roles, RolePermission> = {
             ModulesPermissions.Squad,
             ModulesPermissions.Schedule,
         ],
-        permissions: [...subPermissionsBase],
-    },
-
-    [Roles.Medic]: {
-        modules: [...modulesBase],
         permissions: [...subPermissionsBase],
     },
 

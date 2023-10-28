@@ -43,7 +43,6 @@ export enum Roles {
     Coach = "coach",
     Player = "player",
     Viewer = "viewer",
-    Medic = "medic",
     Board = "board",
     None = "none",
 }
