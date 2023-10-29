@@ -14,9 +14,9 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(case_sensitive=True, env_file=Path(".") / ".env")
 
     PROJECT_NAME: str = "Club Management System"
-    PROJECT_VERSION: str = "0.0.1"
+    PROJECT_VERSION: str = "1.0.0"
 
-    BACKEND_CORS_ORIGINS: list[str] = Field(default=[])
+    BACKEND_CORS_ORIGINS: list[str] = Field([])
 
     # pylint: disable=no-self-argument
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
@@ -38,11 +38,11 @@ class Settings(BaseSettings):
             return value
         raise ValueError(value)
 
-    POSTGRES_SERVER: str = Field(default=...)
-    POSTGRES_USER: str = Field(default=...)
-    POSTGRES_PASSWORD: str = Field(default=...)
-    POSTGRES_PORT: str = Field(default=...)
-    POSTGRES_DB: str = Field(default=...)
+    POSTGRES_SERVER: str = Field(...)
+    POSTGRES_USER: str = Field(...)
+    POSTGRES_PASSWORD: str = Field(...)
+    POSTGRES_PORT: str = Field(...)
+    POSTGRES_DB: str = Field(...)
 
     @property
     def db_uri(self) -> str:
@@ -56,18 +56,26 @@ class Settings(BaseSettings):
             + f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
 
-    SECRET_KEY: str = Field(default=...)
+    SECRET_KEY: str = Field(...)
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=...)
-    REFRESH_TOKEN_EXPIRE_DAYS: int = Field(default=...)
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(...)
+    REFRESH_TOKEN_EXPIRE_DAYS: int = Field(...)
 
-    TEST_USER_FULL_NAME: str = Field(default=...)
-    TEST_USER_EMAIL: EmailStr = Field(default=...)
-    TEST_USER_PASSWORD: str = Field(default=...)
+    TEST_USER_FULL_NAME: str = Field(...)
+    TEST_USER_EMAIL: EmailStr = Field(...)
+    TEST_USER_PASSWORD: str = Field(...)
 
-    SUPER_USER_FULL_NAME: str = Field(default=...)
-    SUPER_USER_EMAIL: EmailStr = Field(default=...)
-    SUPER_USER_PASSWORD: str = Field(default=...)
+    SUPER_USER_FULL_NAME: str = Field(...)
+    SUPER_USER_EMAIL: EmailStr = Field(...)
+    SUPER_USER_PASSWORD: str = Field(...)
+
+    DEV_VIEWER_FULL_NAME: str = Field(...)
+    DEV_VIEWER_EMAIL: EmailStr = Field(...)
+    DEV_VIEWER_PASSWORD: str = Field(...)
+
+    DEV_NONE_FULL_NAME: str = Field(...)
+    DEV_NONE_EMAIL: EmailStr = Field(...)
+    DEV_NONE_PASSWORD: str = Field(...)
 
 
 @lru_cache()

@@ -12,20 +12,46 @@ from sqlalchemy.orm import Session
 
 
 def init_db(db: Session) -> None:
-    """Function to initialize the database with data.
+    """Creates users with different roles in the database.
 
     Args:
         db (Session): Database session.
     """
     try:
-        user = get_user_by_email(get_settings().SUPER_USER_EMAIL, db)
+        get_user_by_email(get_settings().SUPER_USER_EMAIL, db)
     except (MissingException, SQLAlchemyError):
-        user = None
-    if not user:
-        new_user = UserCreateWithRole(
-            full_name=get_settings().SUPER_USER_FULL_NAME,
-            email=get_settings().SUPER_USER_EMAIL,
-            password=get_settings().SUPER_USER_PASSWORD,
-            role=Roles.ADMIN,
+        create_new_user(
+            UserCreateWithRole(
+                full_name=get_settings().SUPER_USER_FULL_NAME,
+                email=get_settings().SUPER_USER_EMAIL,
+                password=get_settings().SUPER_USER_PASSWORD,
+                role=Roles.ADMIN,
+            ),
+            db,
         )
-        user = create_new_user(new_user, db)
+
+    try:
+        get_user_by_email(get_settings().DEV_VIEWER_EMAIL, db)
+    except (MissingException, SQLAlchemyError):
+        create_new_user(
+            UserCreateWithRole(
+                full_name=get_settings().DEV_VIEWER_FULL_NAME,
+                email=get_settings().DEV_VIEWER_EMAIL,
+                password=get_settings().DEV_VIEWER_PASSWORD,
+                role=Roles.VIEWER,
+            ),
+            db,
+        )
+
+    try:
+        get_user_by_email(get_settings().DEV_NONE_EMAIL, db)
+    except (MissingException, SQLAlchemyError):
+        create_new_user(
+            UserCreateWithRole(
+                full_name=get_settings().DEV_NONE_FULL_NAME,
+                email=get_settings().DEV_NONE_EMAIL,
+                password=get_settings().DEV_NONE_PASSWORD,
+                role=Roles.NONE,
+            ),
+            db,
+        )
