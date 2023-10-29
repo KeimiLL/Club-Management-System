@@ -6,13 +6,7 @@ from typing import Annotated
 from app.api import all_allowed
 from app.api.dependencies import paginate
 from app.core.exceptions import ForbiddenException
-from app.crud.crud_meeting import (
-    create_meeting_with_user_ids,
-    get_all_meetings_with_pagination,
-    get_meeting_by_id,
-    get_meetings_with_pagination_by_user_id,
-    update_meeting_with_user_ids,
-)
+from app.crud import crud_meeting
 from app.db.session import get_db
 from app.models.user import User
 from app.schemas.enums import HTTPResponseMessage, Roles
@@ -35,7 +29,7 @@ router = APIRouter()
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def create_meeting(
+def create_meeting_with_user_ids(
     meeting_user: MeetingUserCreateUserIdList,
     current_user: Annotated[User, Depends(all_allowed)],
     db: Annotated[Session, Depends(get_db)],
@@ -51,7 +45,7 @@ def create_meeting(
     Returns:
         Message: The response signalling a successful operation.
     """
-    create_meeting_with_user_ids(
+    crud_meeting.create_meeting_with_user_ids(
         meeting=MeetingCreate(user_id=current_user.id, **meeting_user.meeting.__dict__),
         user_ids=meeting_user.user_ids,
         db=db,
@@ -88,7 +82,9 @@ def get_meetings_with_pagination(
         ItemsListWithTotal[MeetingTableView]: A list of meetings alongside their total number.
     """
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
-        meetings, total = get_all_meetings_with_pagination(**pagination, db=db)
+        meetings, total = crud_meeting.get_all_meetings_with_pagination(
+            **pagination, db=db
+        )
         return ItemsListWithTotal[MeetingTableView](
             items=[
                 MeetingTableView(
@@ -103,7 +99,7 @@ def get_meetings_with_pagination(
             ],
             total=total,
         )
-    meetings, total = get_meetings_with_pagination_by_user_id(
+    meetings, total = crud_meeting.get_meetings_with_pagination_by_user_id(
         **pagination,
         user_id=current_user.id,
         db=db,
@@ -130,7 +126,7 @@ def get_meetings_with_pagination(
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def get_meeting(
+def get_meeting_by_id(
     meeting_id: Annotated[int, Path(ge=1, le=10**7)],
     current_user: Annotated[User, Depends(all_allowed)],
     db: Annotated[Session, Depends(get_db)],
@@ -150,7 +146,7 @@ def get_meeting(
     Returns:
         MeetingSideView: The requested meeting.
     """
-    meeting = get_meeting_by_id(meeting_id=meeting_id, db=db)
+    meeting = crud_meeting.get_meeting_by_id(meeting_id=meeting_id, db=db)
     if current_user.role in (Roles.ADMIN, Roles.BOARD) or current_user.id in (
         meeting.user_id,
         *[user.id for user in meeting.users],
@@ -170,7 +166,7 @@ def get_meeting(
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def update_meeting(
+def update_meeting_with_user_ids(
     meeting_id: Annotated[int, Path(ge=1, le=10**7)],
     meeting_user: MeetingUserUpdate,
     current_user: Annotated[User, Depends(all_allowed)],
@@ -192,12 +188,12 @@ def update_meeting(
     Returns:
         MeetingSideView: The updated meeting.
     """
-    meeting = get_meeting_by_id(meeting_id=meeting_id, db=db)
+    meeting = crud_meeting.get_meeting_by_id(meeting_id=meeting_id, db=db)
     if (
         current_user.role in (Roles.ADMIN, Roles.BOARD)
         or current_user.id == meeting.user_id
     ):
-        return update_meeting_with_user_ids(
+        return crud_meeting.update_meeting_with_user_ids(
             meeting_update=meeting_user.meeting,
             meeting_id=meeting_id,
             user_ids=meeting_user.user_ids,
