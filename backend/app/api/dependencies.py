@@ -3,12 +3,12 @@
 
 from typing import Annotated
 
-from app.core.exceptions import JWTTokensException
+from app.core.exceptions import ForbiddenException, JWTTokensException
 from app.core.jwt_utils import create_access_token, decode_token
 from app.crud.crud_user import get_user_by_email
 from app.db.session import get_db
 from app.models.user import User
-from app.schemas.enums import HTTPResponseMessage
+from app.schemas.enums import HTTPResponseMessage, Roles
 from fastapi import Depends, Query, Request, Response
 from fastapi.security import APIKeyCookie as ApiKeyCookie403
 from fastapi.security import APIKeyHeader as ApiKeyHeader403
@@ -17,10 +17,21 @@ from sqlalchemy.orm import Session
 
 
 class APIKeyHeader(ApiKeyHeader403):
-    """Custom implementation of fastapi.security.APIKeyHeader, returning 401 if any of the auth
-    tokens is missing."""
+    """Custom implementation of fastapi.security.APIKeyHeader, raising a custom exception if
+    an api key was not found."""
 
     async def __call__(self, request: Request) -> str:
+        """Overrides the inherited implementation to raise a custom exception.
+
+        Args:
+            request (Request): The passed request to check for an api key.
+
+        Raises:
+            JWTTokensException: If the key is missing from the request headers.
+
+        Returns:
+            str: The api key.
+        """
         api_key = request.headers.get(self.model.name)
         if not api_key:
             raise JWTTokensException(message=HTTPResponseMessage.UNAUTHENTICATED)
@@ -28,10 +39,21 @@ class APIKeyHeader(ApiKeyHeader403):
 
 
 class APIKeyCookie(ApiKeyCookie403):
-    """Custom implementation of fastapi.security.APIKeyCookie, returning 401 if any of the auth
-    tokens is missing."""
+    """Custom implementation of fastapi.security.APIKeyCookie, raising a custom exception if
+    an api key was not found."""
 
     async def __call__(self, request: Request) -> str:
+        """Overrides the inherited implementation to raise a custom exception.
+
+        Args:
+            request (Request): The passed request to check for an api key.
+
+        Raises:
+            JWTTokensException: If the key is missing from the request cookies.
+
+        Returns:
+            str: The api key.
+        """
         api_key = request.cookies.get(self.model.name)
         if not api_key:
             raise JWTTokensException(message=HTTPResponseMessage.UNAUTHENTICATED)
@@ -131,6 +153,40 @@ def get_user_from_token(
         raise JWTTokensException("Expired tokens") from exc
     except JWTError as exc:
         raise JWTTokensException("Invalid tokens") from exc
+
+
+class CanUserAccessEndpoint:
+    """Dependency class for checking whether the current user is authorised to use an endpoint"""
+
+    def __init__(self, disallowed_roles: set[Roles] | None = None) -> None:
+        """Initializes the class instance with an optional set of disallowed roles.
+
+        Args:
+            disallowed_roles (list[Roles], optional): The set of disallowed roles.
+                Defaults to None.
+        """
+        if disallowed_roles is None:
+            disallowed_roles = set()
+        self.disallowed_roles = disallowed_roles | {Roles.NONE}
+
+    def __call__(
+        self,
+        current_user: Annotated[User, Depends(get_user_from_token)],
+    ) -> User:
+        """Checks if the current user is authorized to access an endpoint.
+
+        Args:
+            current_user (User): The user retrieved from the access token.
+
+        Raises:
+            ForbiddenException: If the current user does not have sufficient permissions.
+
+        Returns:
+            User: The current user if authorized.
+        """
+        if current_user.role not in self.disallowed_roles:
+            return current_user
+        raise ForbiddenException()
 
 
 def paginate(

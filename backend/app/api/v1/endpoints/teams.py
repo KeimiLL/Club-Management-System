@@ -3,7 +3,8 @@
 
 from typing import Annotated
 
-from app.api.dependencies import get_user_from_token, paginate
+from app.api import board_not_allowed, coach_not_allowed, viewer_not_allowed
+from app.api.dependencies import paginate
 from app.core.exceptions import ForbiddenException, MissingException
 from app.crud.crud_team import (
     create_team_with_player_ids,
@@ -45,29 +46,22 @@ router = APIRouter()
 )
 def create_team(
     team_player: TeamCreatePlayerIdList,
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    _: Annotated[User, Depends(coach_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Creates a new team and attaches players to it based on data from a POST request.
 
     Args:
         team_player (TeamCreatePlayerIdList): Team data from POST request.
-        current_user (Annotated[User, Depends]): Current User read from access token.
-            Defaults to Depends(get_user_from_token).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
-
-    Raises:
-        ForbiddenException: If the current team does not have sufficient permissions.
 
     Returns:
         Message: The response signalling a successful operation.
     """
-    if current_user.role in (Roles.ADMIN, Roles.BOARD):
-        create_team_with_player_ids(
-            team=team_player.team, player_ids=team_player.player_ids, db=db
-        )
-        return Message(message=HTTPResponseMessage.SUCCESS)
-    raise ForbiddenException()
+    create_team_with_player_ids(
+        team=team_player.team, player_ids=team_player.player_ids, db=db
+    )
+    return Message(message=HTTPResponseMessage.SUCCESS)
 
 
 @router.get(
@@ -80,14 +74,14 @@ def create_team(
     },
 )
 def get_teams(
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[User, Depends(board_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
-    """Gets the list of all registered teams depending on the current user's role.
+    """Gets the list of all created teams depending on the current user's role.
 
     Args:
         current_user (Annotated[User, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
+            Defaults to Depends(board_not_allowed).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Returns:
@@ -122,7 +116,7 @@ def get_teams(
 )
 def get_teams_with_pagination(
     pagination: Annotated[dict[str, int], Depends(paginate)],
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[User, Depends(viewer_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Gets teams with pagination depending on the current user's role.
@@ -131,7 +125,7 @@ def get_teams_with_pagination(
         pagination (Annotated[dict[str, int], Depends]): Pagination read from the query params.
             Defaults to Depends(paginate).
         current_user (Annotated[User, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
+            Defaults to Depends(viewer_not_allowed).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Raises:
@@ -186,7 +180,7 @@ def get_teams_with_pagination(
 )
 def get_team(
     team_id: Annotated[int, Path(ge=1, le=10**7)],
-    current_user: Annotated[User, Depends(get_user_from_token)],
+    current_user: Annotated[User, Depends(viewer_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Returns the team by the given id.
@@ -195,7 +189,7 @@ def get_team(
         team_id (Annotated[int, Path]): The requested team's id. Has to be greater than
             or equal to 1 and less than or equal to 10**7.
         current_user (Annotated[User, Depends]): Current user read from access token.
-            Defaults to Depends(get_user_from_token).
+            Defaults to Depends(viewer_not_allowed).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Raises:
@@ -205,29 +199,29 @@ def get_team(
     Returns:
         TeamSideView: The requested team.
     """
-    if current_user.role in (Roles.ADMIN, Roles.BOARD, Roles.COACH, Roles.PLAYER):
-        if current_user.role == Roles.PLAYER:
-            if (team := current_user.player.team) is None:
-                raise MissingException(Team.__name__)
-        else:
-            team = get_team_by_id(team_id=team_id, db=db)
-        if current_user.role in (Roles.ADMIN, Roles.BOARD, Roles.PLAYER) or (
-            current_user.role == Roles.COACH and current_user.id == team.coach_id
-        ):
-            return TeamSideView(
-                id=team.id,
-                name=team.name,
-                players=[
-                    PlayerOnlyBaseInfo(
-                        user_id=player.user_id, user_full_name=player.user.full_name
-                    )
-                    for player in team.players
-                ],
-                coach=CoachOnlyBaseInfo(
-                    user_id=team.coach.user.id,
-                    user_full_name=team.coach.user.full_name,
+    if current_user.role == Roles.PLAYER:
+        if (team := current_user.player.team) is None:
+            raise MissingException(Team.__name__)
+    else:
+        team = get_team_by_id(team_id=team_id, db=db)
+
+    if current_user.role != Roles.COACH or (
+        current_user.role == Roles.COACH and current_user.id == team.coach_id
+    ):
+        return TeamSideView(
+            id=team.id,
+            name=team.name,
+            players=[
+                PlayerOnlyBaseInfo(
+                    user_id=player.user_id, user_full_name=player.user.full_name
                 )
-                if team.coach is not None
-                else None,
+                for player in team.players
+            ],
+            coach=CoachOnlyBaseInfo(
+                user_id=team.coach.user.id,
+                user_full_name=team.coach.user.full_name,
             )
+            if team.coach is not None
+            else None,
+        )
     raise ForbiddenException()
