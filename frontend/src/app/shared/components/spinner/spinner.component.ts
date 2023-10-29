@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
 
 import { MaterialModule } from "../../modules/material.module";
-import { LoaderService } from "../../services/loader.service";
 
 @Component({
     selector: "app-spinner",
@@ -23,5 +22,4 @@ import { LoaderService } from "../../services/loader.service";
 })
 export class SpinnerComponent {
     @Input() public spinnerMessage: string;
-    constructor(private readonly loaderService: LoaderService) {}
 }

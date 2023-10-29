@@ -9,6 +9,7 @@ import { Meeting } from "../../../../../../../shared/models/meeting.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { LoaderService } from "../../../../../../../shared/services/loader.service";
+import { MeetingsRootService } from "../../services/meetings-root.service";
 
 @Component({
     selector: "app-current-meeting-content",
@@ -27,12 +28,12 @@ import { LoaderService } from "../../../../../../../shared/services/loader.servi
 })
 export class CurrentMeetingContentComponent implements OnInit {
     @Input() public meeting: Meeting;
-    protected isLoading$: Observable<boolean>;
-    protected spinnerMessage = "Loading meetings";
+    protected isCurrentMeetingLoading$: Observable<boolean>;
+    protected spinnerMessage = "Loading selected meeting...";
 
-    constructor(private readonly loaderService: LoaderService) {}
+    constructor(private readonly root: MeetingsRootService) {}
 
     ngOnInit(): void {
-        this.isLoading$ = this.loaderService.isLoading$;
+        this.isCurrentMeetingLoading$ = this.root.isLoading$;
     }
 }

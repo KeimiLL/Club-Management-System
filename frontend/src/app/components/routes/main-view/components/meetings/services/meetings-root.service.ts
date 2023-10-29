@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { forkJoin, Observable, of } from "rxjs";
+import { BehaviorSubject, finalize, forkJoin, Observable, of } from "rxjs";
 import { catchError, filter, map, switchMap } from "rxjs/operators";
 
 import { MeetingsHttpService } from "../../../../../../shared/api/meetings-http.service";
@@ -17,6 +17,9 @@ import { longMeetingColumns, shortMeetingColumns } from "../meeting-table.data";
 @Injectable()
 export class MeetingsRootService extends DestroyClass {
     public displayedColumns$: Observable<string[]>;
+    private readonly isCurrentMeetingLoading$ = new BehaviorSubject<boolean>(
+        false
+    );
 
     constructor(
         private readonly http: MeetingsHttpService,
@@ -26,6 +29,18 @@ export class MeetingsRootService extends DestroyClass {
     ) {
         super();
         this.initData();
+    }
+
+    public set isLoading(b: boolean) {
+        this.isCurrentMeetingLoading$.next(b);
+    }
+
+    public get isLoading(): boolean {
+        return this.isCurrentMeetingLoading$.value;
+    }
+
+    public get isLoading$(): Observable<boolean> {
+        return this.isCurrentMeetingLoading$.asObservable();
     }
 
     private initData(): void {
@@ -107,6 +122,13 @@ export class MeetingsRootService extends DestroyClass {
         id: number | null
     ): Observable<Meeting | null> {
         if (id === null) return of(null);
-        return this.splitView.refreshCurrentItem$(this.http.getMeetingById(id));
+        this.isLoading = true;
+        return this.splitView
+            .refreshCurrentItem$(this.http.getMeetingById(id))
+            .pipe(
+                finalize(() => {
+                    this.isLoading = false;
+                })
+            );
     }
 }

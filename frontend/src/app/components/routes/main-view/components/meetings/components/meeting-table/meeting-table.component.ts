@@ -53,16 +53,15 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
     protected totalItems$: Observable<number>;
     protected itemsPerPage: number;
     protected index$: Observable<number>;
-    protected isLoading$: Observable<boolean>;
-    protected spinnerMessage = "Loading meetings";
+    protected isTableLoading$: Observable<boolean>;
+    protected spinnerMessage = "Loading meetings...";
 
     protected readonly permissions = MeetingsPermission;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Meeting>,
         private readonly table: TableService<TableMeeting>,
-        private readonly root: MeetingsRootService,
-        private readonly loaderService: LoaderService
+        private readonly root: MeetingsRootService
     ) {}
 
     ngOnInit(): void {
@@ -70,7 +69,7 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
         this.index$ = this.table.currentPageIndex$;
         this.totalItems$ = this.table.totalItems$;
         this.displayedColumns$ = this.root.displayedColumns$;
-        this.isLoading$ = this.loaderService.isLoading$;
+        this.isTableLoading$ = this.table.isLoading$;
     }
 
     ngAfterViewInit(): void {

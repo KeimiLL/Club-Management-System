@@ -19,12 +19,10 @@ export class LoaderService {
     }
 
     public enableSpinner(): void {
-        console.log("WCHODZI");
         this.isLoading = true;
     }
 
     public disableSpinner(): void {
-        console.log("WYCHODZI");
         this.isLoading = false;
     }
 }

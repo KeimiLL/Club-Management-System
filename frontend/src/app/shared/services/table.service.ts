@@ -3,11 +3,11 @@ import { BehaviorSubject, finalize, map, Observable, tap } from "rxjs";
 
 import { TableResponse } from "../models/misc.model";
 import { DestroyClass } from "../utils/destroyClass";
-import { LoaderService } from "./loader.service";
 
 @Injectable()
 export class TableService<T> extends DestroyClass {
     public readonly capacity = 7;
+    private readonly isTableLoading$ = new BehaviorSubject<boolean>(true);
     private readonly currentPageIndexStore$ = new BehaviorSubject<number>(0);
     private readonly totalItemsStore$ = new BehaviorSubject<number>(0);
     private readonly tableItemsStore$ = new BehaviorSubject<T[]>([]);
@@ -22,10 +22,6 @@ export class TableService<T> extends DestroyClass {
 
     public get tableItems$(): Observable<T[]> {
         return this.tableItemsStore$.asObservable();
-    }
-
-    constructor(private readonly loaderService: LoaderService) {
-        super();
     }
 
     public get currentPageIndex(): number {
@@ -48,10 +44,22 @@ export class TableService<T> extends DestroyClass {
         this.currentPageIndexStore$.next(newPage);
     }
 
+    public set isLoading(b: boolean) {
+        this.isTableLoading$.next(b);
+    }
+
+    public get isLoading(): boolean {
+        return this.isTableLoading$.value;
+    }
+
+    public get isLoading$(): Observable<boolean> {
+        return this.isTableLoading$.asObservable();
+    }
+
     public refreshTableItems$(
         request: Observable<TableResponse<T>>
     ): Observable<T[]> {
-        this.loaderService.enableSpinner();
+        this.isLoading = true;
         return request.pipe(
             tap((response) => {
                 this.totalItems = response.total;
@@ -59,7 +67,7 @@ export class TableService<T> extends DestroyClass {
             }),
             map((response) => response.items),
             finalize(() => {
-                this.loaderService.disableSpinner();
+                this.isLoading = false;
             })
         );
     }

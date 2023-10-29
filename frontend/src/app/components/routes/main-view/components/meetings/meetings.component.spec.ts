@@ -5,7 +5,6 @@ import { ActivatedRoute } from "@angular/router";
 import { of } from "rxjs";
 
 import { SpinnerComponent } from "../../../../../shared/components/spinner/spinner.component";
-import { LoaderService } from "../../../../../shared/services/loader.service";
 import { MeetingsComponent } from "./meetings.component";
 
 class MockActivatedRoute {
@@ -26,7 +25,6 @@ describe("MeetingsComponent", () => {
             ],
             providers: [
                 { provide: ActivatedRoute, useClass: MockActivatedRoute },
-                LoaderService,
             ],
         });
         fixture = TestBed.createComponent(MeetingsComponent);
