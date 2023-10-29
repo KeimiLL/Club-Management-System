@@ -4,14 +4,21 @@
 from typing import Annotated
 
 from app.api import board_not_allowed, viewer_not_allowed
-from app.core.exceptions import ForbiddenException
+from app.core.exceptions import ForbiddenException, MissingException
 from app.crud import crud_coach
 from app.db.session import get_db
+from app.models.team import Team
 from app.models.user import User
-from app.schemas.coach import CoachCreate, CoachOnlyBaseInfo, CoachOnlyName
+from app.schemas.coach import (
+    CoachCreate,
+    CoachOnlyBaseInfo,
+    CoachOnlyName,
+    CoachPopupView,
+)
 from app.schemas.enums import HTTPResponseMessage, Roles
 from app.schemas.misc import Message, MessageFromEnum
-from fastapi import APIRouter, Depends, Query, status
+from app.schemas.team import TeamOnlyBaseInfo
+from fastapi import APIRouter, Depends, Path, Query, status
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -120,4 +127,83 @@ def get_coach_by_team_id(
     ):
         coach = crud_coach.get_coach_by_team_id(team_id=team_id, db=db)
         return CoachOnlyName(user_full_name=coach.user.full_name if coach else None)
+    raise ForbiddenException()
+
+
+@router.get(
+    "/{coach_id}",
+    response_model=CoachPopupView,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def get_coach_by_user_id(
+    coach_id: Annotated[int, Path(ge=1, le=10**7)],
+    current_user: Annotated[User, Depends(viewer_not_allowed)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Returns the coach by the given id.
+
+    Args:
+        coach_id (Annotated[int, Path]): The requested coach's id. Has to be greater than
+            or equal to 1 and less than or equal to 10**7.
+        current_user (Annotated[User, Depends]): Current user read from access token.
+            Defaults to Depends(viewer_not_allowed).
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+    Raises:
+        MissingException: If a coach with the given id exists, but it have a team assigned to them.
+        ForbiddenException: If the current user does not have sufficient permissions.
+
+    Returns:
+        CoachPopupView: The requested coach.
+    """
+    if current_user.role == Roles.COACH:
+        if coach_id != current_user.id:
+            raise ForbiddenException()
+        if not current_user.coach.teams:
+            raise MissingException(Team.__name__)
+        coach_dict = current_user.coach.__dict__
+        del coach_dict["teams"]
+        return CoachPopupView(
+            **coach_dict,
+            user_full_name=current_user.full_name,
+            teams=[
+                TeamOnlyBaseInfo(**team.__dict__) for team in current_user.coach.teams
+            ]
+        )
+    if current_user.role in (Roles.ADMIN, Roles.BOARD):
+        coach = crud_coach.get_coach_by_user_id(user_id=coach_id, db=db)
+        coach_dict = coach.__dict__
+        del coach_dict["team"]
+        return CoachPopupView(
+            **coach_dict,
+            user_full_name=current_user.full_name,
+            teams=[
+                TeamOnlyBaseInfo(**team.__dict__) for team in current_user.coach.teams
+            ]
+        )
+    if current_user.role == Roles.PLAYER:
+        team_coach_id = (
+            current_user.player.team.coach_id
+            if current_user.player.team is not None
+            else None
+        )
+        if current_user.player.team is None:
+            raise MissingException(Team.__name__)
+        if coach_id != team_coach_id:
+            raise ForbiddenException()
+        coach_dict = current_user.player.team.coach.__dict__
+        del coach_dict["team"]
+        return CoachPopupView(
+            **coach_dict,
+            user_full_name=current_user.full_name,
+            teams=[
+                TeamOnlyBaseInfo(**team.__dict__) for team in current_user.coach.teams
+            ]
+        )
     raise ForbiddenException()
