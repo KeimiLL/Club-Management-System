@@ -70,6 +70,7 @@ def create_team(
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
         status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
