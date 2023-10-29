@@ -9,7 +9,7 @@ import { Meeting } from "../../../../../../../shared/models/meeting.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { LoaderService } from "../../../../../../../shared/services/loader.service";
-import { MeetingsRootService } from "../../services/meetings-root.service";
+import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 
 @Component({
     selector: "app-current-meeting-content",
@@ -31,9 +31,9 @@ export class CurrentMeetingContentComponent implements OnInit {
     protected isCurrentMeetingLoading$: Observable<boolean>;
     protected spinnerMessage = "Loading selected meeting...";
 
-    constructor(private readonly root: MeetingsRootService) {}
+    constructor(private readonly splitView: SplitViewManagerService<Meeting>) {}
 
     ngOnInit(): void {
-        this.isCurrentMeetingLoading$ = this.root.isLoading$;
+        this.isCurrentMeetingLoading$ = this.splitView.isLoading$;
     }
 }

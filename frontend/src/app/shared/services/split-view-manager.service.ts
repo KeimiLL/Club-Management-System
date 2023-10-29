@@ -1,6 +1,13 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { BehaviorSubject, catchError, Observable, of, tap } from "rxjs";
+import {
+    BehaviorSubject,
+    catchError,
+    finalize,
+    Observable,
+    of,
+    tap,
+} from "rxjs";
 
 import { MainRoutes } from "../models/misc.model";
 import { DestroyClass } from "../utils/destroyClass";
@@ -11,6 +18,7 @@ export class SplitViewManagerService<T> extends DestroyClass {
     private readonly isDetailStore$ = new BehaviorSubject<boolean>(false);
     private readonly currentIdStore$ = new BehaviorSubject<number | null>(null);
     private readonly currentItemStore$ = new BehaviorSubject<T | null>(null);
+    private readonly isItemLoading$ = new BehaviorSubject<boolean>(false);
 
     constructor(
         private readonly activatedRoute: ActivatedRoute,
@@ -19,6 +27,18 @@ export class SplitViewManagerService<T> extends DestroyClass {
     ) {
         super();
         this.urlChecker();
+    }
+
+    public set isLoading(b: boolean) {
+        this.isItemLoading$.next(b);
+    }
+
+    public get isLoading(): boolean {
+        return this.isItemLoading$.value;
+    }
+
+    public get isLoading$(): Observable<boolean> {
+        return this.isItemLoading$.asObservable();
     }
 
     public get currentId(): number | null {
@@ -90,6 +110,7 @@ export class SplitViewManagerService<T> extends DestroyClass {
     }
 
     public refreshCurrentItem$(request: Observable<T>): Observable<T | null> {
+        this.isLoading = true;
         if (this.currentId !== null) {
             return request.pipe(
                 tap((item) => {
@@ -104,9 +125,13 @@ export class SplitViewManagerService<T> extends DestroyClass {
                     }
                     return of(null);
                 }),
+                finalize(() => {
+                    this.isLoading = false;
+                }),
                 this.untilDestroyed()
             );
         }
+        this.isLoading = false;
         return of(null);
     }
 }
