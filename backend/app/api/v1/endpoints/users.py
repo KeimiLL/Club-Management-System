@@ -119,6 +119,7 @@ def login(
     response_model=MessageFromEnum,
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
     },
 )
 def logout(
@@ -145,6 +146,7 @@ def logout(
     response_model=User,
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
     },
 )
@@ -168,6 +170,8 @@ def get_current_user(
     response_model=list[UserOnlyBaseInfo],
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
     },
 )
 def get_users(
@@ -281,6 +285,7 @@ def change_user_password(
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
         status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )

@@ -55,6 +55,7 @@ def create_new_coach(
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
         status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
     },
 )
 def get_all_coaches(

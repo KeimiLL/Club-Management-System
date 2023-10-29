@@ -67,10 +67,12 @@ def create_player(
     response_model=list[PlayerOnlyBaseInfo],
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
     },
 )
 def get_players(
-    _: Annotated[str, Depends(board_not_allowed)],
+    _: Annotated[User, Depends(board_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Gets the list of all registered players.
