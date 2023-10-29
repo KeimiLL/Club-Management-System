@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
-    from app.schemas.team import Team
+    from app.schemas.team import Team, TeamOnlyBaseInfo
     from app.schemas.user import User
 
 
@@ -60,3 +60,11 @@ class CoachOnlyName(BaseModel):
     """Coach schema for returning data from the database."""
 
     user_full_name: str | None = Field(None, min_length=4)
+
+
+class CoachPopupView(CoachOnlyBaseInfo):
+    """Coach schema for displaying data in the popup."""
+
+    date_of_joining: datetime.date
+    date_of_birth: datetime.date
+    teams: list["TeamOnlyBaseInfo"]
