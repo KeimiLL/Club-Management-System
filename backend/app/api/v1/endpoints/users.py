@@ -17,6 +17,7 @@ from app.crud.crud_user import (
     get_all_users,
     get_all_users_with_pagination,
     get_user_by_email,
+    get_user_by_id,
     update_user_password,
     update_user_role,
 )
@@ -178,7 +179,7 @@ def get_users(
     _: Annotated[str, Depends(all_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
-    """Gets a list of all registered users.
+    """Gets a list of all registered users that don't have the `none` role.
 
     Args:
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
@@ -186,7 +187,7 @@ def get_users(
     Returns:
         list[UserOnlyBaseInfo]: The list of all users.
     """
-    return get_all_users(db=db)
+    return [user for user in get_all_users(db=db) if user.role != Roles.NONE]
 
 
 @router.post(
@@ -249,13 +250,17 @@ def change_user_password(
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Raises:
-        ForbiddenException: If the current user does not have sufficient permissions.
+        ForbiddenException: If the current user does not have sufficient permissions or the target
+            user has role `none`.
         InvalidCredentialsException: If the provided password is invalid.
 
     Returns:
         Message: The response signalling a successful operation.
     """
     if current_user.role == Roles.ADMIN and current_user.id != user_id:
+        user = get_user_by_id(user_id=user_id, db=db)
+        if user.role == Roles.NONE:
+            raise ForbiddenException()
         update_user_password(
             user_id=user_id,
             new_hashed_password=Hasher.get_password_hash(password_data.new_password),
