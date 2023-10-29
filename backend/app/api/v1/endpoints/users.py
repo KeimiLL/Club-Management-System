@@ -12,15 +12,7 @@ from app.core.exceptions import (
 )
 from app.core.jwt_utils import create_access_token, create_refresh_token
 from app.core.security import Hasher
-from app.crud.crud_user import (
-    create_new_user,
-    get_all_users,
-    get_all_users_with_pagination,
-    get_user_by_email,
-    get_user_by_id,
-    update_user_password,
-    update_user_role,
-)
+from app.crud import crud_user
 from app.db.session import get_db
 from app.models.user import User as UserModel
 from app.schemas.enums import HTTPResponseMessage, Roles
@@ -48,7 +40,7 @@ router = APIRouter()
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def register(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
+def create_new_user(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
     """Creates a new user based on data from a POST request.
 
     Args:
@@ -58,7 +50,7 @@ def register(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
     Returns:
         Message: The response signalling a successful operation.
     """
-    create_new_user(user=user, db=db)
+    crud_user.create_new_user(user=user, db=db)
     return Message(message=HTTPResponseMessage.SUCCESS)
 
 
@@ -105,7 +97,7 @@ def login(
     )
 
     try:
-        user_by_email = get_user_by_email(email=user.email, db=db)
+        user_by_email = crud_user.get_user_by_email(email=user.email, db=db)
         if not Hasher.verify_password(user.password, user_by_email.hashed_password):
             raise InvalidCredentialsException()
         if user_by_email.role == Roles.NONE:
@@ -175,7 +167,7 @@ def get_current_user(
         status.HTTP_404_NOT_FOUND: {"model": Message},
     },
 )
-def get_users(
+def get_all_users(
     _: Annotated[str, Depends(all_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
@@ -187,7 +179,7 @@ def get_users(
     Returns:
         list[UserOnlyBaseInfo]: The list of all users.
     """
-    return [user for user in get_all_users(db=db) if user.role != Roles.NONE]
+    return [user for user in crud_user.get_all_users(db=db) if user.role != Roles.NONE]
 
 
 @router.post(
@@ -201,7 +193,7 @@ def get_users(
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def change_user_role(
+def update_user_role(
     user_id: Annotated[int, Path(ge=1, le=10**7)],
     role_data: UserUpdateRole,
     _: Annotated[UserModel, Depends(board_not_allowed)],
@@ -218,7 +210,7 @@ def change_user_role(
     Returns:
         Message: The response signalling a successful operation.
     """
-    update_user_role(user_id=user_id, role=role_data.role, db=db)
+    crud_user.update_user_role(user_id=user_id, role=role_data.role, db=db)
     return Message(message=HTTPResponseMessage.SUCCESS)
 
 
@@ -233,7 +225,7 @@ def change_user_role(
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def change_user_password(
+def update_user_password(
     user_id: Annotated[int, Path(ge=1, le=10**7)],
     password_data: UserUpdatePassword,
     current_user: Annotated[UserModel, Depends(all_allowed)],
@@ -258,10 +250,10 @@ def change_user_password(
         Message: The response signalling a successful operation.
     """
     if current_user.role == Roles.ADMIN and current_user.id != user_id:
-        user = get_user_by_id(user_id=user_id, db=db)
+        user = crud_user.get_user_by_id(user_id=user_id, db=db)
         if user.role == Roles.NONE:
             raise ForbiddenException()
-        update_user_password(
+        crud_user.update_user_password(
             user_id=user_id,
             new_hashed_password=Hasher.get_password_hash(password_data.new_password),
             db=db,
@@ -271,7 +263,7 @@ def change_user_password(
         if password_data.old_password is not None and Hasher.verify_password(
             password_data.old_password, current_user.hashed_password
         ):
-            update_user_password(
+            crud_user.update_user_password(
                 user_id=user_id,
                 new_hashed_password=Hasher.get_password_hash(
                     password_data.new_password
@@ -294,7 +286,7 @@ def change_user_password(
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def get_users_with_pagination(
+def get_all_users_with_pagination(
     pagination: Annotated[dict[str, int], Depends(paginate)],
     _: Annotated[UserModel, Depends(board_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
@@ -309,7 +301,7 @@ def get_users_with_pagination(
     Returns:
         ItemsListWithTotal[User]: A list of users alongside their total number.
     """
-    users, total = get_all_users_with_pagination(
+    users, total = crud_user.get_all_users_with_pagination(
         **pagination,
         db=db,
     )

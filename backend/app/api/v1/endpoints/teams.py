@@ -6,14 +6,7 @@ from typing import Annotated
 from app.api import board_not_allowed, coach_not_allowed, viewer_not_allowed
 from app.api.dependencies import paginate
 from app.core.exceptions import ForbiddenException, MissingException
-from app.crud.crud_team import (
-    create_team_with_player_ids,
-    get_all_teams,
-    get_all_teams_by_coach_id,
-    get_all_teams_with_pagination,
-    get_team_by_id,
-    get_teams_with_pagination_by_coach_id,
-)
+from app.crud import crud_team
 from app.db.session import get_db
 from app.models.team import Team
 from app.models.user import User
@@ -44,7 +37,7 @@ router = APIRouter()
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def create_team(
+def create_team_with_player_ids(
     team_player: TeamCreatePlayerIdList,
     _: Annotated[User, Depends(coach_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
@@ -58,7 +51,7 @@ def create_team(
     Returns:
         Message: The response signalling a successful operation.
     """
-    create_team_with_player_ids(
+    crud_team.create_team_with_player_ids(
         team=team_player.team, player_ids=team_player.player_ids, db=db
     )
     return Message(message=HTTPResponseMessage.SUCCESS)
@@ -90,9 +83,9 @@ def get_teams(
     """
     match current_user.role:
         case Roles.ADMIN | Roles.BOARD:
-            teams = get_all_teams(db=db)
+            teams = crud_team.get_all_teams(db=db)
         case Roles.COACH:
-            teams = get_all_teams_by_coach_id(user_id=current_user.id, db=db)
+            teams = crud_team.get_all_teams_by_coach_id(user_id=current_user.id, db=db)
         case Roles.PLAYER:
             teams = (
                 [current_user.player.team]
@@ -138,9 +131,9 @@ def get_teams_with_pagination(
 
     match current_user.role:
         case Roles.ADMIN | Roles.BOARD:
-            teams, total = get_all_teams_with_pagination(**pagination, db=db)
+            teams, total = crud_team.get_all_teams_with_pagination(**pagination, db=db)
         case Roles.COACH:
-            teams, total = get_teams_with_pagination_by_coach_id(
+            teams, total = crud_team.get_teams_with_pagination_by_coach_id(
                 **pagination, user_id=current_user.id, db=db
             )
         case Roles.PLAYER:
@@ -179,7 +172,7 @@ def get_teams_with_pagination(
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def get_team(
+def get_team_by_id(
     team_id: Annotated[int, Path(ge=1, le=10**7)],
     current_user: Annotated[User, Depends(viewer_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
@@ -204,7 +197,7 @@ def get_team(
         if (team := current_user.player.team) is None:
             raise MissingException(Team.__name__)
     else:
-        team = get_team_by_id(team_id=team_id, db=db)
+        team = crud_team.get_team_by_id(team_id=team_id, db=db)
 
     if current_user.role != Roles.COACH or (
         current_user.role == Roles.COACH and current_user.id == team.coach_id

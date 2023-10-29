@@ -6,12 +6,7 @@ from typing import Annotated
 from app.api import board_not_allowed, viewer_not_allowed
 from app.api.dependencies import paginate
 from app.core.exceptions import ForbiddenException, MissingException
-from app.crud.crud_player import (
-    create_new_player,
-    get_all_players,
-    get_player_by_user_id,
-    get_players_with_pagination_by_team_id,
-)
+from app.crud import crud_player
 from app.db.session import get_db
 from app.models.team import Team
 from app.models.user import User
@@ -41,7 +36,7 @@ router = APIRouter()
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def create_player(
+def create_new_player(
     player: PlayerCreate,
     _: Annotated[User, Depends(board_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
@@ -55,7 +50,7 @@ def create_player(
     Returns:
         Message: The response signalling a successful operation.
     """
-    create_new_player(
+    crud_player.create_new_player(
         player=player,
         db=db,
     )
@@ -71,7 +66,7 @@ def create_player(
         status.HTTP_404_NOT_FOUND: {"model": Message},
     },
 )
-def get_players(
+def get_all_players(
     _: Annotated[User, Depends(board_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
@@ -83,7 +78,7 @@ def get_players(
     Returns:
         list[PlayerOnlyBaseInfo]: The list of all players.
     """
-    players = get_all_players(db=db)
+    players = crud_player.get_all_players(db=db)
     return [
         PlayerOnlyBaseInfo(**player.__dict__, user_full_name=player.user.full_name)
         for player in players
@@ -101,7 +96,7 @@ def get_players(
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def get_players_by_team_id(
+def get_players_with_pagination_by_team_id(
     pagination: Annotated[dict[str, int], Depends(paginate)],
     team_id: Annotated[int, Query(ge=1, lt=10000)],
     current_user: Annotated[User, Depends(viewer_not_allowed)],
@@ -134,7 +129,7 @@ def get_players_by_team_id(
             current_user.role == Roles.PLAYER and team_id == current_user.player.team_id
         )
     ):
-        players, total = get_players_with_pagination_by_team_id(
+        players, total = crud_player.get_players_with_pagination_by_team_id(
             **pagination, team_id=team_id, db=db
         )
         return ItemsListWithTotal[PlayerTableView](
@@ -158,7 +153,7 @@ def get_players_by_team_id(
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
 )
-def get_player(
+def get_player_by_user_id(
     player_id: Annotated[int, Path(ge=1, le=10**7)],
     current_user: Annotated[User, Depends(viewer_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
@@ -192,7 +187,7 @@ def get_player(
             team=TeamOnlyBaseInfo(**current_user.player.team.__dict__)
         )
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
-        player = get_player_by_user_id(user_id=player_id, db=db)
+        player = crud_player.get_player_by_user_id(user_id=player_id, db=db)
         player_dict = player.__dict__
         del player_dict["team"]
         return PlayerSideView(
@@ -201,7 +196,7 @@ def get_player(
             team=TeamOnlyBaseInfo(**player.team.__dict__)
         )
     if current_user.role == Roles.COACH:
-        player = get_player_by_user_id(user_id=player_id, db=db)
+        player = crud_player.get_player_by_user_id(user_id=player_id, db=db)
         coach_id = player.team.coach_id if player.team is not None else None
         if coach_id != current_user.id:
             raise ForbiddenException()
