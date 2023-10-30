@@ -18,4 +18,11 @@ export interface PlayerHealth {
     diet: string | null;
 }
 
-export interface Player extends PlayerBase, PlayerHealth {}
+export interface TablePlayer extends ShortPlayer {
+    date_of_birth: string;
+    is_injured: boolean;
+}
+
+export interface PlayerCreate extends PlayerBase, PlayerHealth {}
+
+export interface Player extends PlayerBase, PlayerHealth, ShortPlayer {}

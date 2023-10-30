@@ -27,6 +27,7 @@ export type SubPermissions =
     | SchedulePermission;
 
 export enum MeetingsPermission {
+    SeeAll = "see_all",
     EditMeeting = "edit_meeting",
     DeleteMeeting = "delete_meeting",
 }
@@ -38,6 +39,7 @@ export enum TeamPermission {
 
 export enum SquadPermissions {
     Stats = "stats",
+    MoreTeams = "more_teams",
 }
 
 export enum SchedulePermission {

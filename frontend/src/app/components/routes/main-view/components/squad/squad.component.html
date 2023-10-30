@@ -1,0 +1,76 @@
+<ng-container
+    *ngIf="{
+        isDetail: isDetail$ | async,
+        tablePlayers: tablePlayers$ | async,
+        currentPlayer: currentPlayer$ | async,
+        teams: teams$ | async,
+        teamId: teamId$ | async,
+        currentCoach: currentCoach$ | async
+    } as vm"
+>
+    <app-content-card>
+        <app-wide-card-header
+            header
+            [name]="(vm.teams | getItemById : vm.teamId).name"
+            [subName]="vm.currentCoach?.user_full_name ?? null"
+        >
+            <app-button-container buttons>
+                <ng-container *ngIf="vm.teams">
+                    <ng-container *ngIf="vm.teams.length > 1">
+                        <button
+                            mat-raised-button
+                            class="button--light"
+                            [matMenuTriggerFor]="roleMenu"
+                            *ngIf="vm.teamId"
+                        >
+                            Select Team
+                        </button>
+
+                        <mat-menu #roleMenu="matMenu">
+                            <button
+                                mat-menu-item
+                                *ngFor="let team of vm.teams"
+                                (click)="setSelectedTeam(team.id)"
+                            >
+                                {{ team.name }}
+                            </button>
+                        </mat-menu>
+                    </ng-container>
+                </ng-container>
+            </app-button-container>
+        </app-wide-card-header>
+
+        <ng-container content>
+            <app-squad-table
+                *ngIf="vm.tablePlayers"
+                [data]="vm.tablePlayers"
+            ></app-squad-table>
+        </ng-container>
+    </app-content-card>
+
+    <app-content-card *ngIf="vm.isDetail">
+        <app-half-card-right-header
+            header
+            name="{{ vm.currentPlayer?.user_full_name }}"
+            (closedClicked)="switchDetail()"
+        >
+            <app-button-container buttons>
+                <!-- <button
+                    mat-raised-button
+                    class="button--light"
+                    (click)="onModifyPlayerClick()"
+                >
+                    Modify Player
+                </button> -->
+            </app-button-container>
+        </app-half-card-right-header>
+
+        <ng-container content>
+            <!-- <app-current-Player-content
+                *ngIf="vm.currentPlayer"
+                [Player]="vm.currentPlayer"
+            ></app-current-Player-content> -->
+            <app-squad-content></app-squad-content>
+        </ng-container>
+    </app-content-card>
+</ng-container>

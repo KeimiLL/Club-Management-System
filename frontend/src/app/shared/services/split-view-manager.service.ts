@@ -4,7 +4,6 @@ import { BehaviorSubject, catchError, Observable, of, tap } from "rxjs";
 
 import { MainRoutes } from "../models/misc.model";
 import { DestroyClass } from "../utils/destroyClass";
-import { SnackbarService } from "./snackbar.service";
 
 @Injectable()
 export class SplitViewManagerService<T> extends DestroyClass {
@@ -14,8 +13,7 @@ export class SplitViewManagerService<T> extends DestroyClass {
 
     constructor(
         private readonly activatedRoute: ActivatedRoute,
-        private readonly router: Router,
-        private readonly snack: SnackbarService
+        private readonly router: Router
     ) {
         super();
         this.urlChecker();

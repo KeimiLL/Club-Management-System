@@ -11,7 +11,7 @@ export class TableService<T> extends DestroyClass {
     private readonly totalItemsStore$ = new BehaviorSubject<number>(0);
     private readonly tableItemsStore$ = new BehaviorSubject<T[]>([]);
 
-    public set tableItems(tableItems: T[]) {
+    private set tableItems(tableItems: T[]) {
         this.tableItemsStore$.next(tableItems);
     }
 
@@ -31,7 +31,7 @@ export class TableService<T> extends DestroyClass {
         return this.currentPageIndexStore$.asObservable();
     }
 
-    public set totalItems(totalItems: number) {
+    private set totalItems(totalItems: number) {
         this.totalItemsStore$.next(totalItems);
     }
 

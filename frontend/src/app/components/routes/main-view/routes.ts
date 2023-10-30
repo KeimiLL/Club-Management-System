@@ -50,6 +50,19 @@ export default [
             },
 
             {
+                path: "squad",
+                loadComponent: () =>
+                    import("./components/squad/squad.component").then(
+                        (c) => c.SquadComponent
+                    ),
+                data: {
+                    modulesPermission: ModulesPermissions.Squad,
+                    requiredPermission: null,
+                },
+                canActivate: [PermissionGuard],
+            },
+
+            {
                 path: "settings",
                 loadChildren: () => import("./components/settings/routes"),
                 canActivate: [PermissionGuard],

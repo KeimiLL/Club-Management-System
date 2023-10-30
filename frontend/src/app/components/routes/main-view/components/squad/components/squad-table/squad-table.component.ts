@@ -9,57 +9,51 @@ import {
 import { MatIconModule } from "@angular/material/icon";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 
 import { DateComponent } from "../../../../../../../shared/components/date/date.component";
-import { PermissionDirective } from "../../../../../../../shared/directives/permission.directive";
 import {
-    Meeting,
-    TableMeeting,
-} from "../../../../../../../shared/models/meeting.model";
+    Player,
+    TablePlayer,
+} from "../../../../../../../shared/models/player.model";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../../shared/services/table.service";
-import { MeetingsRootService } from "../../services/meetings-root.service";
+import { SquadRootService } from "../../services/squad-root.service";
+import { longPlayerColumns } from "../../squad-table.data";
 
 @Component({
-    selector: "app-meeting-table",
+    selector: "app-squad-table",
     standalone: true,
-    imports: [
-        CommonModule,
-        MaterialModule,
-        MatIconModule,
-        PermissionDirective,
-        DateComponent,
-    ],
-    templateUrl: "./meeting-table.component.html",
-    styleUrls: ["./meeting-table.component.scss"],
+    imports: [CommonModule, MaterialModule, MatIconModule, DateComponent],
+    templateUrl: "./squad-table.component.html",
+    styleUrls: ["./squad-table.component.scss"],
 })
-export class MeetingTableComponent implements OnInit, AfterViewInit {
+export class SquadTableComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
-    @Input() public set data(data: TableMeeting[]) {
+    @Input() public set data(data: TablePlayer[]) {
         this.dataSource.data = data;
     }
 
-    protected dataSource: MatTableDataSource<TableMeeting> =
-        new MatTableDataSource<TableMeeting>();
+    protected dataSource: MatTableDataSource<TablePlayer> =
+        new MatTableDataSource<TablePlayer>();
 
-    protected displayedColumns$: Observable<string[]>;
+    protected displayedColumns$: Observable<string[]> = of(longPlayerColumns);
     protected totalItems$: Observable<number>;
     protected itemsPerPage: number;
     protected index$: Observable<number>;
 
     constructor(
-        private readonly splitView: SplitViewManagerService<Meeting>,
-        private readonly table: TableService<TableMeeting>,
-        private readonly root: MeetingsRootService
+        private readonly splitView: SplitViewManagerService<Player>,
+        private readonly table: TableService<TablePlayer>,
+        private readonly root: SquadRootService
     ) {}
 
     ngOnInit(): void {
         this.itemsPerPage = this.table.capacity;
         this.index$ = this.table.currentPageIndex$;
         this.totalItems$ = this.table.totalItems$;
-        this.displayedColumns$ = this.root.displayedColumns$;
+        // this.displayedColumns$ = this.root.displayedColumns$;
     }
 
     ngAfterViewInit(): void {

@@ -14,6 +14,11 @@ export const menuItems: MainMenuItem[] = [
         route: "/app/meetings",
     },
     { name: ModulesPermissions.Teams, icon: "groups", route: "/app/teams" },
+    {
+        name: ModulesPermissions.Squad,
+        icon: "directions_run",
+        route: "/app/squad",
+    },
     // {
     //     name: ModulesPermissions.Schedule,
     //     icon: "event_available",

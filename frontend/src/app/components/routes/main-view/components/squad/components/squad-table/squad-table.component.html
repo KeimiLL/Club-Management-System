@@ -1,0 +1,54 @@
+<mat-table #table [dataSource]="dataSource" class="table">
+    <ng-container matColumnDef="Position">
+        <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+        <mat-cell *matCellDef="let element; let i = index">
+            <ng-container *ngIf="{ pageId: (index$ | async) } as vm">
+                <ng-container *ngIf="vm.pageId !== null">{{
+                    vm.pageId * itemsPerPage + i + 1
+                }}</ng-container>
+            </ng-container>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="Player">
+        <mat-header-cell *matHeaderCellDef> Player Name </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            {{ element.user_full_name }}
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="Date">
+        <mat-header-cell *matHeaderCellDef> Date of birth </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            <app-date [date]="element.date_of_birth"></app-date>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="Injury">
+        <mat-header-cell *matHeaderCellDef> Injury </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="">
+            <mat-icon>
+                {{ element.is_injured ? "healing" : "how_to_reg" }}
+            </mat-icon>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row
+        *matHeaderRowDef="displayedColumns$ | async"
+    ></mat-header-row>
+    <mat-row
+        *matRowDef="let row; columns: displayedColumns$ | async"
+        (click)="addParamsToURL(row.id)"
+    ></mat-row>
+</mat-table>
+
+<div *ngIf="(totalItems$ | async) === 0" class="no-records">No Records</div>
+
+<mat-paginator
+    *ngIf="totalItems$ | async"
+    #paginator
+    [pageSize]="itemsPerPage"
+    [length]="totalItems$ | async"
+    (page)="changePage($event)"
+    class="paginator"
+></mat-paginator>

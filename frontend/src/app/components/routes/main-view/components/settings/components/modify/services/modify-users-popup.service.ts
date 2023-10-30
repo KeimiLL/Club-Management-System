@@ -7,7 +7,7 @@ import { PlayersHttpService } from "../../../../../../../../shared/api/players-h
 import { UserService } from "../../../../../../../../shared/api/user.service";
 import { CreateCoach } from "../../../../../../../../shared/models/coach.model";
 import { BackendResponse } from "../../../../../../../../shared/models/misc.model";
-import { Player } from "../../../../../../../../shared/models/player.model";
+import { PlayerCreate } from "../../../../../../../../shared/models/player.model";
 import { Roles } from "../../../../../../../../shared/models/user.model";
 import { CreateCoachPopupComponent } from "../components/create-coach-popup/create-coach-popup.component";
 import { CreatePlayerPopupComponent } from "../components/create-player-popup/create-player-popup.component";
@@ -69,7 +69,7 @@ export class ModifyUsersPopupService {
                 switchMap((playerInfo: PlayerBase | false) => {
                     if (playerInfo === false) return of(null);
 
-                    const createPlayerObject: Player = {
+                    const createPlayerObject: PlayerCreate = {
                         ...playerInfo,
                         user_id: id,
                         diet: null,
