@@ -27,7 +27,7 @@ export type SubPermissions =
     | SchedulePermission;
 
 export enum MeetingsPermission {
-    SeeAll = "see-all",
+    SeeAll = "see_all",
     EditMeeting = "edit_meeting",
     DeleteMeeting = "delete_meeting",
 }
