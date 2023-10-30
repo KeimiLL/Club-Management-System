@@ -10,7 +10,9 @@ import { DestroyClass } from "../utils/destroyClass";
 @Injectable()
 export class DropdownViewManagerService extends DestroyClass {
     private readonly teamsStore$ = new BehaviorSubject<ShortTeam[]>([]);
-    private readonly teamIdStore$ = new BehaviorSubject<number | null>(null);
+    private readonly currentTeamStore$ = new BehaviorSubject<ShortTeam | null>(
+        null
+    );
 
     constructor(
         private readonly activatedRoute: ActivatedRoute,
@@ -21,16 +23,16 @@ export class DropdownViewManagerService extends DestroyClass {
         this.urlChecker();
     }
 
-    private set teamId(teamId: number | null) {
-        this.teamIdStore$.next(teamId);
+    private set currentTeam(team: ShortTeam | null) {
+        this.currentTeamStore$.next(team);
     }
 
-    public get teamId(): number | null {
-        return this.teamIdStore$.value;
+    public get currentTeam(): ShortTeam | null {
+        return this.currentTeamStore$.value;
     }
 
-    public get teamId$(): Observable<number | null> {
-        return this.teamIdStore$.asObservable();
+    public get currentTeam$(): Observable<ShortTeam | null> {
+        return this.currentTeamStore$.asObservable();
     }
 
     private set teams(teams: ShortTeam[]) {
@@ -51,16 +53,20 @@ export class DropdownViewManagerService extends DestroyClass {
                 this.teams = teams;
                 if (teams.length > 0) {
                     if (id === null) {
-                        this.teamId = teams[0].id;
-                        this.addParamsToRouting(this.teamId);
-                    } else if (
-                        teams.find((team) => team.id === id) === undefined
-                    ) {
-                        this.router.navigate([MainRoutes.Error]);
+                        [this.currentTeam] = teams;
                     } else {
-                        this.teamId = id;
-                        this.addParamsToRouting(this.teamId);
+                        const selectedTeam = teams.find(
+                            (team) => team.id === id
+                        );
+
+                        if (selectedTeam === undefined) {
+                            this.router.navigate([MainRoutes.Error]);
+                        } else {
+                            this.currentTeam = selectedTeam;
+                        }
                     }
+
+                    this.addParamsToRouting(this.currentTeam?.id);
                 }
             })
         );
@@ -81,7 +87,8 @@ export class DropdownViewManagerService extends DestroyClass {
             .subscribe();
     }
 
-    private addParamsToRouting(teamId: number): void {
+    private addParamsToRouting(teamId: number | undefined): void {
+        if (teamId === undefined) return;
         this.router.navigate([], {
             relativeTo: this.activatedRoute,
             queryParams: {
@@ -91,8 +98,8 @@ export class DropdownViewManagerService extends DestroyClass {
         });
     }
 
-    public changeTeamId(teamId: number): void {
-        this.addParamsToRouting(teamId);
-        this.teamId = teamId;
+    public changeTeam(team: ShortTeam): void {
+        this.addParamsToRouting(team.id);
+        this.currentTeam = team;
     }
 }

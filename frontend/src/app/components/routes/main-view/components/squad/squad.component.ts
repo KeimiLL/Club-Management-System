@@ -38,7 +38,7 @@ import { SquadRootService } from "./services/squad-root.service";
 })
 export class SquadComponent {
     protected teams$: Observable<ShortTeam[]>;
-    protected teamId$: Observable<number | null>;
+    protected currentTeam$: Observable<ShortTeam | null>;
     protected isDetail$: Observable<boolean>;
     protected tablePlayers$: Observable<TablePlayer[]>;
     protected currentPlayer$: Observable<Player | null>;
@@ -52,7 +52,7 @@ export class SquadComponent {
         private readonly table: TableService<TablePlayer>
     ) {
         this.teams$ = this.dropdown.teams$;
-        this.teamId$ = this.dropdown.teamId$;
+        this.currentTeam$ = this.dropdown.currentTeam$;
         this.currentCoach$ = this.root.teamCoach$;
         this.isDetail$ = this.splitView.isDetail$;
         this.tablePlayers$ = this.table.tableItems$;
@@ -63,7 +63,7 @@ export class SquadComponent {
         this.splitView.changeDetailState();
     }
 
-    protected setSelectedTeam(id: number): void {
-        this.dropdown.changeTeamId(id);
+    protected setSelectedTeam(team: ShortTeam): void {
+        this.dropdown.changeTeam(team);
     }
 }

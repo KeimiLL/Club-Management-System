@@ -4,14 +4,14 @@
         tablePlayers: tablePlayers$ | async,
         currentPlayer: currentPlayer$ | async,
         teams: teams$ | async,
-        teamId: teamId$ | async,
+        currentTeam: currentTeam$ | async,
         currentCoach: currentCoach$ | async
     } as vm"
 >
     <app-content-card>
         <app-wide-card-header
             header
-            [name]="(vm.teams | getItemById : vm.teamId).name"
+            [name]="vm.currentTeam?.name ?? ''"
             [subName]="vm.currentCoach?.user_full_name ?? null"
         >
             <app-button-container buttons>
@@ -21,7 +21,7 @@
                             mat-raised-button
                             class="button--light"
                             [matMenuTriggerFor]="roleMenu"
-                            *ngIf="vm.teamId"
+                            *ngIf="vm.currentTeam"
                         >
                             Select Team
                         </button>
@@ -30,7 +30,7 @@
                             <button
                                 mat-menu-item
                                 *ngFor="let team of vm.teams"
-                                (click)="setSelectedTeam(team.id)"
+                                (click)="setSelectedTeam(team)"
                             >
                                 {{ team.name }}
                             </button>
