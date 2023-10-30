@@ -7,6 +7,7 @@ from app.api import all_allowed, board_not_allowed
 from app.api.dependencies import paginate, refresh_token_dependency
 from app.core.exceptions import (
     ForbiddenException,
+    GenericException,
     InvalidCredentialsException,
     MissingException,
 )
@@ -242,8 +243,8 @@ def update_user_password(
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Raises:
-        ForbiddenException: If the current user does not have sufficient permissions or the target
-            user has role `none`.
+        ForbiddenException: If the current user does not have sufficient permissions.
+        GenericException: If the target user has the `none` role.
         InvalidCredentialsException: If the provided password is invalid.
 
     Returns:
@@ -252,7 +253,7 @@ def update_user_password(
     if current_user.role == Roles.ADMIN and current_user.id != user_id:
         user = crud_user.get_user_by_id(user_id=user_id, db=db)
         if user.role == Roles.NONE:
-            raise ForbiddenException()
+            raise GenericException("Cannot change user's password.")
         crud_user.update_user_password(
             user_id=user_id,
             new_hashed_password=Hasher.get_password_hash(password_data.new_password),
