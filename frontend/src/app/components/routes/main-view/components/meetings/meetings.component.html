@@ -12,6 +12,7 @@
                     mat-raised-button
                     class="button--light"
                     (click)="onNewMeetingClick()"
+                    [disabled]="isTableLoading$ | async"
                 >
                     Add Meeting
                 </button>
@@ -37,6 +38,7 @@
                     mat-raised-button
                     class="button--light"
                     (click)="onModifyMeetingClick()"
+                    [disabled]="isCurrentMeetingLoading$ | async"
                 >
                     Modify Meeting
                 </button>

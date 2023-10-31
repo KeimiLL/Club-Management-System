@@ -1,8 +1,10 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ActivatedRoute } from "@angular/router";
 import { of } from "rxjs";
 
+import { SpinnerComponent } from "../../../../../shared/components/spinner/spinner.component";
 import { MeetingsComponent } from "./meetings.component";
 
 class MockActivatedRoute {
@@ -15,7 +17,12 @@ describe("MeetingsComponent", () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule, MeetingsComponent],
+            imports: [
+                HttpClientTestingModule,
+                MeetingsComponent,
+                SpinnerComponent,
+                BrowserAnimationsModule,
+            ],
             providers: [
                 { provide: ActivatedRoute, useClass: MockActivatedRoute },
             ],
@@ -25,7 +32,7 @@ describe("MeetingsComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });

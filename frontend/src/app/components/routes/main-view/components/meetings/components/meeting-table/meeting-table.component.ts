@@ -12,12 +12,14 @@ import { MatTableDataSource } from "@angular/material/table";
 import { Observable } from "rxjs";
 
 import { DateComponent } from "../../../../../../../shared/components/date/date.component";
+import { SpinnerComponent } from "../../../../../../../shared/components/spinner/spinner.component";
 import { PermissionDirective } from "../../../../../../../shared/directives/permission.directive";
 import {
     Meeting,
     TableMeeting,
 } from "../../../../../../../shared/models/meeting.model";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
+import { LoaderService } from "../../../../../../../shared/services/loader.service";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../../shared/services/table.service";
 import { MeetingsRootService } from "../../services/meetings-root.service";
@@ -31,9 +33,11 @@ import { MeetingsRootService } from "../../services/meetings-root.service";
         MatIconModule,
         PermissionDirective,
         DateComponent,
+        SpinnerComponent,
     ],
     templateUrl: "./meeting-table.component.html",
     styleUrls: ["./meeting-table.component.scss"],
+    providers: [LoaderService],
 })
 export class MeetingTableComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -48,6 +52,8 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
     protected totalItems$: Observable<number>;
     protected itemsPerPage: number;
     protected index$: Observable<number>;
+    protected isTableLoading$: Observable<boolean>;
+    protected spinnerMessage = "Loading meetings...";
 
     constructor(
         private readonly splitView: SplitViewManagerService<Meeting>,
@@ -60,6 +66,7 @@ export class MeetingTableComponent implements OnInit, AfterViewInit {
         this.index$ = this.table.currentPageIndex$;
         this.totalItems$ = this.table.totalItems$;
         this.displayedColumns$ = this.root.displayedColumns$;
+        this.isTableLoading$ = this.table.isLoading$;
     }
 
     ngAfterViewInit(): void {

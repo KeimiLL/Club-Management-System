@@ -34,6 +34,8 @@ export class MeetingsComponent implements OnInit {
     protected isDetail$: Observable<boolean>;
     protected tableMeetings$: Observable<TableMeeting[]>;
     protected currentMeeting$: Observable<Meeting | null>;
+    protected isCurrentMeetingLoading$: Observable<boolean>;
+    protected isTableLoading$: Observable<boolean>;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Meeting>,
@@ -45,6 +47,8 @@ export class MeetingsComponent implements OnInit {
         this.isDetail$ = this.splitView.isDetail$;
         this.tableMeetings$ = this.table.tableItems$;
         this.currentMeeting$ = this.splitView.currentItem$;
+        this.isCurrentMeetingLoading$ = this.splitView.isLoading$;
+        this.isTableLoading$ = this.table.isLoading$;
     }
 
     protected switchDetail(): void {
