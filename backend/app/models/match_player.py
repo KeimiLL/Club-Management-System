@@ -35,9 +35,9 @@ class MatchPlayer(Base):
     player_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("players.user_id", ondelete="CASCADE")
     )
-    is_starter: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
-    minutes_played: Mapped[int] = mapped_column(Integer, nullable=False)
-    rating: Mapped[int] = mapped_column(Integer, nullable=False)
+    is_starter: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    minutes_played: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    rating: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
     match: Mapped["Match"] = relationship(back_populates="player_association")
     player: Mapped["Player"] = relationship(back_populates="match_association")
