@@ -245,7 +245,7 @@ def test_incorrect__logout(client: TestClient) -> None:
     )
 
     assert response.status_code == 401
-    assert response.json()["message"] == "Invalid tokens"
+    assert response.json()["message"] == HTTPResponseMessage.UNAUTHENTICATED
     assert "access_token" not in response.cookies
     assert "refresh_token" not in response.cookies
     assert "xsrf_access_token" not in response.cookies
@@ -298,7 +298,7 @@ def test_incorrect__get_current_user(
     )
 
     assert response.status_code == 401
-    assert response.json()["message"] == "Invalid tokens"
+    assert response.json()["message"] == HTTPResponseMessage.UNAUTHENTICATED
     assert "access_token" not in response.cookies
     assert "refresh_token" not in response.cookies
     assert "xsrf_access_token" not in response.cookies
@@ -427,7 +427,7 @@ def test_invalid_tokens__get_current_user(
     )
 
     assert response.status_code == 401
-    assert response.json()["message"] == "Invalid tokens"
+    assert response.json()["message"] == HTTPResponseMessage.UNAUTHENTICATED
     assert "access_token" not in response.cookies
     assert "refresh_token" not in response.cookies
     assert "xsrf_access_token" not in response.cookies
@@ -454,7 +454,7 @@ def test_no_csrf_header__get_current_user(
     response = client.get("/api/v1/users/current")
 
     assert response.status_code == 401
-    assert response.json()["message"] == "Invalid tokens"
+    assert response.json()["message"] == HTTPResponseMessage.UNAUTHENTICATED
     assert "access_token" not in response.cookies
     assert "refresh_token" not in response.cookies
     assert "xsrf_access_token" not in response.cookies
