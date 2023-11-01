@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import {
     BehaviorSubject,
     filter,
-    forkJoin,
     map,
     Observable,
     of,
@@ -45,17 +44,12 @@ export class SquadRootService extends DestroyClass {
     private initData(): void {
         this.dropdown.currentTeam$
             .pipe(
+                filter(Boolean),
+                map((team) => team.id),
+                switchMap((teamId) => this.refreshCoach$(teamId)),
                 tap(() => {
                     this.table.changePage(0);
                 }),
-                filter(Boolean),
-                map((team) => team.id),
-                switchMap((teamId) =>
-                    forkJoin({
-                        coach: this.refreshCoach$(teamId),
-                        players: this.refreshPlayers$(teamId),
-                    })
-                ),
                 this.untilDestroyed()
             )
             .subscribe();

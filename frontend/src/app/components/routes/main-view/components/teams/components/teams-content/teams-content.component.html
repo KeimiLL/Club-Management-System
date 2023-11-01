@@ -2,7 +2,9 @@
     <app-section-header name="Coach" sectionHeader></app-section-header>
 
     <ng-container sectionContent>
-        <div class="coach">{{ team.coach.user_full_name }}</div>
+        <div class="coach">
+            {{ team.coach ? team.coach.user_full_name : "No coach" }}
+        </div>
     </ng-container>
 </app-half-card-section>
 

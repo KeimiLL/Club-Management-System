@@ -5,12 +5,13 @@ import { Observable } from "rxjs";
 import { SpinnerComponent } from "../../../../../../../shared/components/spinner/spinner.component";
 import { Player } from "../../../../../../../shared/models/player.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
+import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 
 @Component({
     selector: "app-squad-content",
     standalone: true,
-    imports: [CommonModule, CardsModule, SpinnerComponent],
+    imports: [CommonModule, MaterialModule, CardsModule, SpinnerComponent],
     templateUrl: "./squad-content.component.html",
     styleUrls: ["./squad-content.component.scss"],
 })

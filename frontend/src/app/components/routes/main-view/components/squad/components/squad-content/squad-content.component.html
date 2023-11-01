@@ -1,4 +1,70 @@
-<p>squad-content works!</p>
+<div class="container flex-center">
+    <div class="container__left flex-center">
+        <mat-icon class="container__left__icon">event</mat-icon>
+    </div>
+    <app-half-card-section class="container__right">
+        <app-section-header name="Date of joining" sectionHeader>
+        </app-section-header>
+        <ng-container sectionContent>
+            <div class="date">{{ player.date_of_joining.toString() }}</div>
+        </ng-container>
+    </app-half-card-section>
+</div>
+
+<div class="container flex-center">
+    <div class="container__left flex-center">
+        <mat-icon class="container__left__icon">date_range</mat-icon>
+    </div>
+    <app-half-card-section class="container__right">
+        <app-section-header name="Date of birth" sectionHeader>
+        </app-section-header>
+        <ng-container sectionContent>
+            <div class="date">{{ player.date_of_birth.toString() }}</div>
+        </ng-container>
+    </app-half-card-section>
+</div>
+
+<div class="container flex-center">
+    <div class="container__left flex-center">
+        <mat-icon class="container__left__icon">accessibility_new</mat-icon>
+    </div>
+    <app-half-card-section class="container__right">
+        <app-section-header name="Height and weight" sectionHeader>
+        </app-section-header>
+        <ng-container sectionContent>
+            <div>{{ player.height }}cm {{ player.weight }}kg</div>
+        </ng-container>
+    </app-half-card-section>
+</div>
+
+<div class="container flex-center">
+    <div class="container__left flex-center">
+        <mat-icon class="container__left__icon">healing</mat-icon>
+    </div>
+    <app-half-card-section class="container__right">
+        <app-section-header name="Health and diet" sectionHeader>
+        </app-section-header>
+        <ng-container sectionContent>
+            <div>
+                {{ player.is_injured ? "Player is injured" : "No injuries" }}
+            </div>
+            <div>{{ player.diet ?? "No Diet" }}</div>
+        </ng-container>
+    </app-half-card-section>
+</div>
+
+<div class="container flex-center">
+    <div class="container__left flex-center">
+        <mat-icon class="container__left__icon">description</mat-icon>
+    </div>
+    <app-half-card-section class="container__right">
+        <app-section-header name="Description" sectionHeader>
+        </app-section-header>
+        <ng-container sectionContent>
+            <div>{{ player.notes ?? "No notes" }}</div>
+        </ng-container>
+    </app-half-card-section>
+</div>
 
 <app-spinner
     spinnerMessage="Loading selected player..."
