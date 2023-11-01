@@ -41,7 +41,7 @@
                     mat-raised-button
                     class="button--light"
                     (click)="openCurrentPlayerInfo()"
-                    *ngIf="vm.isDetail === false && currentPlayerId"
+                    *ngIf="vm.isDetail === false && currentPlayerAsUserId"
                 >
                     Your Bio
                 </button>
@@ -52,7 +52,7 @@
             <app-squad-table
                 *ngIf="vm.tablePlayers"
                 [data]="vm.tablePlayers"
-                [isUserPlayer]="currentPlayerId !== null"
+                [isUserPlayer]="currentPlayerAsUserId !== null"
             ></app-squad-table>
         </ng-container>
     </app-content-card>
@@ -75,10 +75,10 @@
         </app-half-card-right-header>
 
         <ng-container content>
-            <!-- <app-current-Player-content
+            <app-squad-content
                 *ngIf="vm.currentPlayer"
-                [Player]="vm.currentPlayer"
-            ></app-current-Player-content> -->
+                [player]="vm.currentPlayer"
+            ></app-squad-content>
             <app-squad-content></app-squad-content>
         </ng-container>
     </app-content-card>

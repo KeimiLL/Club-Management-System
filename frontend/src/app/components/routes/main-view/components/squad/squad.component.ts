@@ -45,7 +45,7 @@ export class SquadComponent implements OnInit {
     protected currentPlayer$: Observable<Player | null>;
     protected currentCoach$: Observable<CoachName | null>;
 
-    protected currentPlayerId: number | null = null;
+    protected currentPlayerAsUserId: number | null = null;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Player>,
@@ -66,7 +66,7 @@ export class SquadComponent implements OnInit {
         const { currentUser } = this.userService;
         if (currentUser === null) return;
         if (currentUser.role === Roles.Player) {
-            this.currentPlayerId = currentUser.id;
+            this.currentPlayerAsUserId = currentUser.id;
         }
     }
 
@@ -79,7 +79,7 @@ export class SquadComponent implements OnInit {
     }
 
     protected openCurrentPlayerInfo(): void {
-        if (this.currentPlayerId === null) return;
-        this.splitView.addParamsToRouting(this.currentPlayerId);
+        if (this.currentPlayerAsUserId === null) return;
+        this.splitView.addParamsToRouting(this.currentPlayerAsUserId);
     }
 }

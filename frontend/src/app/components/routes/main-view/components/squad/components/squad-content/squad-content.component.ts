@@ -15,7 +15,7 @@ import { SplitViewManagerService } from "../../../../../../../shared/services/sp
     styleUrls: ["./squad-content.component.scss"],
 })
 export class SquadContentComponent implements OnInit {
-    @Input() player: Player;
+    @Input() public player: Player;
     protected isCurrentPlayerLoading$: Observable<boolean>;
 
     constructor(private readonly splitView: SplitViewManagerService<Player>) {}

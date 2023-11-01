@@ -5,6 +5,7 @@ import {
     forkJoin,
     map,
     Observable,
+    of,
     switchMap,
     tap,
 } from "rxjs";
@@ -59,6 +60,15 @@ export class SquadRootService extends DestroyClass {
             )
             .subscribe();
 
+        this.splitView.currentId$
+            .pipe(
+                switchMap((id: number | null) =>
+                    this.refreshCurrentPlayer$(id)
+                ),
+                this.untilDestroyed()
+            )
+            .subscribe();
+
         this.table.currentPageIndex$
             .pipe(
                 map(() => this.dropdown.currentTeam),
@@ -95,6 +105,15 @@ export class SquadRootService extends DestroyClass {
                 this.table.currentPageIndex,
                 this.table.capacity
             )
+        );
+    }
+
+    private refreshCurrentPlayer$(
+        id: number | null
+    ): Observable<Player | null> {
+        if (id === null) return of(null);
+        return this.splitView.refreshCurrentItem$(
+            this.httpPlayer.getPlayerById(id)
         );
     }
 }
