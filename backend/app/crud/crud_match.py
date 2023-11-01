@@ -31,8 +31,6 @@ def create_new_match(match: MatchCreate, db: Session) -> Match:
             team_id=match.team_id,
             opponent=match.opponent,
             is_home=match.is_home,
-            goals_scored=match.goals_scored,
-            goals_conceded=match.goals_conceded,
             notes=match.notes,
             date=match.date,
         )

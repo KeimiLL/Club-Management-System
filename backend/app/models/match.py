@@ -33,9 +33,9 @@ class Match(Base):
     team_id: Mapped[int] = mapped_column(Integer, ForeignKey("teams.id"))
     opponent: Mapped[str] = mapped_column(String, nullable=False)
     is_home: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
-    goals_scored: Mapped[int] = mapped_column(Integer, nullable=False)
-    goals_conceded: Mapped[int] = mapped_column(Integer, nullable=False)
-    notes: Mapped[str] = mapped_column(String, nullable=False)
+    goals_scored: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    goals_conceded: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    notes: Mapped[str | None] = mapped_column(String, nullable=True)
     date: Mapped[datetime.date] = mapped_column(Date, nullable=False)
 
     team: Mapped["Team"] = relationship(back_populates="matches")
