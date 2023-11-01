@@ -20,9 +20,11 @@ class MatchBase(BaseModel):
     goals_conceded: NonNegativeInt | None = None
     notes: str | None = None
     date: datetime.date | None = None
+    has_started: bool | None = None
+    has_ended: bool | None = None
 
 
-class MatchCreate(MatchBase):
+class MatchCreate(BaseModel):
     """Match schema for creation."""
 
     team_id: int = Field(..., ge=1, le=10**7)
@@ -38,6 +40,8 @@ class Match(MatchBase):
     opponent: str = Field(..., min_length=3)
     is_home: bool
     date: datetime.date
+    has_started: bool = False
+    has_ended: bool = False
     team: "Team"
     players: list["Player"]
 

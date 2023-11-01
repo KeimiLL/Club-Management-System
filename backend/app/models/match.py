@@ -37,6 +37,8 @@ class Match(Base):
     goals_conceded: Mapped[int | None] = mapped_column(Integer, nullable=True)
     notes: Mapped[str | None] = mapped_column(String, nullable=True)
     date: Mapped[datetime.date] = mapped_column(Date, nullable=False)
+    has_started: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    has_ended: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     team: Mapped["Team"] = relationship(back_populates="matches")
 

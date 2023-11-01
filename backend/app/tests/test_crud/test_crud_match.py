@@ -53,6 +53,7 @@ def test_correct__create_new_match(
     new_match = create_new_match(match, db_session)
     assert new_match.notes == match.notes
     assert new_match.date == match.date
+    assert new_match.has_started is False
     assert new_match.team.name == team.name
     if new_match.team.coach is not None:
         assert new_match.team.coach.date_of_birth == coach.date_of_birth
@@ -85,6 +86,7 @@ def test_correct__get_match_by_id(
     match_by_id = get_match_by_id(new_match.id, db_session)
     assert match_by_id.notes == match.notes
     assert match_by_id.date == match.date
+    assert new_match.has_started is False
     assert match_by_id.team.name == team.name
     if match_by_id.team.coach is not None:
         assert match_by_id.team.coach.date_of_birth == coach.date_of_birth
@@ -149,6 +151,7 @@ def test_correct__create_match_with_player_ids(
     new_match = create_match_with_player_ids(match, player_ids, db_session)
     assert new_match.notes == match.notes
     assert new_match.date == match.date
+    assert new_match.has_started is False
     assert new_match.team.name == team.name
     if new_match.team.coach is not None:
         assert new_match.team.coach.date_of_birth == coach.date_of_birth
