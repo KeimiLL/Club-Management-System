@@ -13,8 +13,8 @@ if TYPE_CHECKING:
 class MatchPlayerBase(BaseModel):
     """Base MatchPlayer schema."""
 
-    is_starter: bool | None = None
-    minutes_played: NonNegativeInt | None = None
+    is_starter: bool = False
+    minutes_played: NonNegativeInt = 0
     rating: int | None = Field(None, ge=1, le=10)
 
 
@@ -23,17 +23,11 @@ class MatchPlayerCreate(MatchPlayerBase):
 
     match_id: int = Field(..., ge=1, le=10**7)
     player_id: int = Field(..., ge=1, le=10**7)
-    is_starter: bool = True
-    minutes_played: NonNegativeInt
-    rating: int = Field(..., ge=1, le=10)
 
 
 class MatchPlayer(MatchPlayerBase):
     """MatchPlayer schema for returning data from DB."""
 
-    is_starter: bool
-    minutes_played: NonNegativeInt
-    rating: int = Field(..., ge=1, le=10)
     match: "Match"
     player: "Player"
 
