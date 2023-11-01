@@ -209,8 +209,7 @@ def update_meeting_with_user_ids(
         Meeting: The updated Meeting object.
     """
     try:
-        query = select(Meeting).where(Meeting.id == meeting_id)
-        meeting = db.execute(query).scalar_one()
+        meeting = get_meeting_by_id(meeting_id=meeting_id, db=db)
 
         if meeting.user_id in user_ids:
             raise GenericException(

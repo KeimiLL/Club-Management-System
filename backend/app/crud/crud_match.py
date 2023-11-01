@@ -5,8 +5,9 @@ from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_team import get_team_by_id
 from app.models.match import Match
 from app.models.player import Player
+from app.schemas.enums import MatchEvent
 from app.schemas.match import MatchCreate
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -104,5 +105,42 @@ def create_match_with_player_ids(
         new_match.players = players
         db.commit()
         return new_match
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def update_match_state(
+    match_event: MatchEvent,
+    match_id: int,
+    db: Session,
+) -> Match:
+    """Starts or ends a match with the given id.
+
+    Args:
+        match_event (MatchEvent): The type of match event to be handled.
+        match_id (int): Match's id.
+        db (Session): Database session.
+
+    Raises:
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        Match: The updated match.
+    """
+    try:
+        match = get_match_by_id(match_id=match_id, db=db)
+        if match_event is MatchEvent.START:
+            match_update = {
+                "has_started": True,
+                "goals_scored": 0,
+                "goals_conceded": 0,
+            }
+        else:
+            match_update = {
+                "has_ended": True,
+            }
+        db.execute(update(Match).where(Match.id == match_id).values(**match_update))
+        db.commit()
+        return match
     except SQLAlchemyError as exc:
         raise exc
