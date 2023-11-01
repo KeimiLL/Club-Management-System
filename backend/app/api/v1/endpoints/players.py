@@ -188,6 +188,8 @@ def get_player_by_user_id(
         )
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
         player = crud_player.get_player_by_user_id(user_id=player_id, db=db)
+        if player.team is None:
+            raise MissingException(Team.__name__)
         player_dict = player.__dict__
         del player_dict["team"]
         return PlayerSideView(

@@ -20,17 +20,17 @@ class MatchBase(BaseModel):
     goals_conceded: NonNegativeInt | None = None
     notes: str | None = None
     date: datetime.date | None = None
+    has_started: bool | None = None
+    has_ended: bool | None = None
 
 
-class MatchCreate(MatchBase):
+class MatchCreate(BaseModel):
     """Match schema for creation."""
 
     team_id: int = Field(..., ge=1, le=10**7)
     opponent: str = Field(..., min_length=3)
     is_home: bool = True
-    goals_scored: NonNegativeInt
-    goals_conceded: NonNegativeInt
-    notes: str
+    notes: str | None = None
     date: datetime.date
 
 
@@ -39,10 +39,9 @@ class Match(MatchBase):
 
     opponent: str = Field(..., min_length=3)
     is_home: bool
-    goals_scored: NonNegativeInt
-    goals_conceded: NonNegativeInt
-    notes: str
     date: datetime.date
+    has_started: bool = False
+    has_ended: bool = False
     team: "Team"
     players: list["Player"]
 
@@ -60,3 +59,7 @@ class MatchInDBBase(MatchBase):
     team_id: int | None = Field(None, ge=1, le=10**7)
     team: "Team"
     players: list["Player"]
+
+
+class MatchStateUpdate(MatchBase):
+    """Match schema for returning a match with an updated state."""

@@ -49,3 +49,10 @@ class TrainingPresence(str, Enum):
     PRESENT = "Present"
     ABSENT = "Absent"
     EXCUSED = "Excused"
+
+
+class MatchEvent(str, Enum):
+    """Enum for star and end match events."""
+
+    START = "start"
+    END = "end"

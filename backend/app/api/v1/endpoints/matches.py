@@ -4,14 +4,15 @@
 from typing import Annotated
 
 from app.api import player_not_allowed
+from app.core.exceptions import GenericException
 from app.crud import crud_match
 from app.db.session import get_db
 from app.models.user import User
-from app.schemas.enums import HTTPResponseMessage
-from app.schemas.match import MatchCreate
+from app.schemas.enums import HTTPResponseMessage, MatchEvent
+from app.schemas.match import MatchCreate, MatchStateUpdate
 from app.schemas.match_player import MatchPlayerCreatePlayerIdList
 from app.schemas.misc import Message, MessageFromEnum
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Path, status
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -23,6 +24,7 @@ router = APIRouter()
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
         status.HTTP_404_NOT_FOUND: {"model": Message},
         status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
     },
@@ -47,3 +49,47 @@ def create_match_with_player_ids(
         db=db,
     )
     return Message(message=HTTPResponseMessage.SUCCESS)
+
+
+@router.post(
+    "/{match_id}/{match_event}",
+    response_model=MatchStateUpdate,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def update_match_state(
+    match_id: Annotated[int, Path(ge=1, le=10**7)],
+    match_event: Annotated[MatchEvent, Path()],
+    _: Annotated[User, Depends(player_not_allowed)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Handles a match with the given id and event type.
+
+    Args:
+        match_id (Annotated[int, Path]): The given match's id. Has to be greater than
+            or equal to 1 and less than or equal to 10**7.
+        match_event (Annotated[MatchEvent, Path]): The type of match event to be handled.
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+    Raises:
+        GenericException: If the current state of the match is in conflict
+            with the given one.
+
+    Returns:
+        MatchStateUpdate: The match with an updated state.
+    """
+    match = crud_match.get_match_by_id(match_id=match_id, db=db)
+    if (match_event == MatchEvent.START and match.has_started) or (
+        match_event == MatchEvent.END and (match.has_ended or not match.has_started)
+    ):
+        raise GenericException("Conflict with the current match state.")
+    return crud_match.update_match_state(
+        match_event=match_event,
+        match_id=match_id,
+        db=db,
+    )

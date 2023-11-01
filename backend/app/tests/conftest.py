@@ -202,8 +202,6 @@ match_create = MatchCreate(
     team_id=1,
     opponent="test_opponent",
     is_home=True,
-    goals_scored=1,
-    goals_conceded=1,
     notes="test_notes",
     date=datetime.date.today(),
 )
