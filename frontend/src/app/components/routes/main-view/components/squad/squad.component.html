@@ -21,7 +21,7 @@
                             mat-raised-button
                             class="button--light"
                             [matMenuTriggerFor]="roleMenu"
-                            *ngIf="vm.currentTeam"
+                            *ngIf="vm.isDetail === false && vm.currentTeam"
                         >
                             Select Team
                         </button>
@@ -37,6 +37,14 @@
                         </mat-menu>
                     </ng-container>
                 </ng-container>
+                <button
+                    mat-raised-button
+                    class="button--light"
+                    (click)="openCurrentPlayerInfo()"
+                    *ngIf="vm.isDetail === false && currentPlayerId"
+                >
+                    Your Bio
+                </button>
             </app-button-container>
         </app-wide-card-header>
 
@@ -44,6 +52,7 @@
             <app-squad-table
                 *ngIf="vm.tablePlayers"
                 [data]="vm.tablePlayers"
+                [isUserPlayer]="currentPlayerId !== null"
             ></app-squad-table>
         </ng-container>
     </app-content-card>

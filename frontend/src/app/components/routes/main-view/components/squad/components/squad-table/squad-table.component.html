@@ -37,8 +37,9 @@
         *matHeaderRowDef="displayedColumns$ | async"
     ></mat-header-row>
     <mat-row
+        [ngClass]="{ pointer: isUserPlayer === false }"
         *matRowDef="let row; columns: displayedColumns$ | async"
-        (click)="addParamsToURL(row.id)"
+        (click)="addParamsToURL(row.user_id)"
     ></mat-row>
 </mat-table>
 

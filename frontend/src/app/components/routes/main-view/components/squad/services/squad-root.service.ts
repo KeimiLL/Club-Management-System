@@ -12,10 +12,15 @@ import {
 import { CoachesHttpService } from "../../../../../../shared/api/coaches-http.service";
 import { PlayersHttpService } from "../../../../../../shared/api/players-http.service";
 import { CoachName } from "../../../../../../shared/models/coach.model";
-import { TablePlayer } from "../../../../../../shared/models/player.model";
+import {
+    Player,
+    TablePlayer,
+} from "../../../../../../shared/models/player.model";
 import { DropdownViewManagerService } from "../../../../../../shared/services/dropdown-view-manager.service";
+import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
 import { DestroyClass } from "../../../../../../shared/utils/destroyClass";
+import { longPlayerColumns, shortPlayerColumns } from "../squad-table.data";
 
 @Injectable()
 export class SquadRootService extends DestroyClass {
@@ -23,9 +28,12 @@ export class SquadRootService extends DestroyClass {
         null
     );
 
+    public displayedColumns$: Observable<string[]>;
+
     constructor(
         private readonly httpCoach: CoachesHttpService,
         private readonly httpPlayer: PlayersHttpService,
+        private readonly splitView: SplitViewManagerService<Player>,
         private readonly table: TableService<TablePlayer>,
         private readonly dropdown: DropdownViewManagerService
     ) {
@@ -34,12 +42,13 @@ export class SquadRootService extends DestroyClass {
     }
 
     private initData(): void {
-        this.dropdown.teamId$
+        this.dropdown.currentTeam$
             .pipe(
                 tap(() => {
                     this.table.changePage(0);
                 }),
                 filter(Boolean),
+                map((team) => team.id),
                 switchMap((teamId) =>
                     forkJoin({
                         coach: this.refreshCoach$(teamId),
@@ -52,12 +61,17 @@ export class SquadRootService extends DestroyClass {
 
         this.table.currentPageIndex$
             .pipe(
-                map(() => this.dropdown.teamId),
+                map(() => this.dropdown.currentTeam),
                 filter(Boolean),
+                map((team) => team.id),
                 switchMap((id) => this.refreshPlayers$(id)),
                 this.untilDestroyed()
             )
             .subscribe();
+
+        this.displayedColumns$ = this.splitView.isDetail$.pipe(
+            map((value) => (value ? shortPlayerColumns : longPlayerColumns))
+        );
     }
 
     private set teamCoach(coach: null | CoachName) {

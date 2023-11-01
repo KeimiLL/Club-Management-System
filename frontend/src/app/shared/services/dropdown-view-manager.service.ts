@@ -52,21 +52,16 @@ export class DropdownViewManagerService extends DestroyClass {
             tap((teams) => {
                 this.teams = teams;
                 if (teams.length > 0) {
+                    const selectedTeam = teams.find((team) => team.id === id);
                     if (id === null) {
                         [this.currentTeam] = teams;
+                        this.addParamsToRouting(this.currentTeam.id);
+                    } else if (selectedTeam === undefined) {
+                        this.router.navigate([MainRoutes.Error]);
                     } else {
-                        const selectedTeam = teams.find(
-                            (team) => team.id === id
-                        );
-
-                        if (selectedTeam === undefined) {
-                            this.router.navigate([MainRoutes.Error]);
-                        } else {
-                            this.currentTeam = selectedTeam;
-                        }
+                        this.currentTeam = selectedTeam;
+                        this.addParamsToRouting(this.currentTeam.id);
                     }
-
-                    this.addParamsToRouting(this.currentTeam?.id);
                 }
             })
         );

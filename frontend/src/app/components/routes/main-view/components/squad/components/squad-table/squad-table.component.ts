@@ -11,6 +11,7 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { Observable, of } from "rxjs";
 
+import { UserService } from "../../../../../../../shared/api/user.service";
 import { DateComponent } from "../../../../../../../shared/components/date/date.component";
 import {
     Player,
@@ -23,7 +24,7 @@ import { SquadRootService } from "../../services/squad-root.service";
 import { longPlayerColumns } from "../../squad-table.data";
 
 @Component({
-    selector: "app-squad-table",
+    selector: "app-squad-table[isUserPlayer]",
     standalone: true,
     imports: [CommonModule, MaterialModule, MatIconModule, DateComponent],
     templateUrl: "./squad-table.component.html",
@@ -34,6 +35,8 @@ export class SquadTableComponent implements OnInit, AfterViewInit {
     @Input() public set data(data: TablePlayer[]) {
         this.dataSource.data = data;
     }
+
+    @Input() public isUserPlayer = false;
 
     protected dataSource: MatTableDataSource<TablePlayer> =
         new MatTableDataSource<TablePlayer>();
@@ -46,14 +49,15 @@ export class SquadTableComponent implements OnInit, AfterViewInit {
     constructor(
         private readonly splitView: SplitViewManagerService<Player>,
         private readonly table: TableService<TablePlayer>,
-        private readonly root: SquadRootService
+        private readonly root: SquadRootService,
+        private readonly userService: UserService
     ) {}
 
     ngOnInit(): void {
         this.itemsPerPage = this.table.capacity;
         this.index$ = this.table.currentPageIndex$;
         this.totalItems$ = this.table.totalItems$;
-        // this.displayedColumns$ = this.root.displayedColumns$;
+        this.displayedColumns$ = this.root.displayedColumns$;
     }
 
     ngAfterViewInit(): void {
@@ -63,7 +67,7 @@ export class SquadTableComponent implements OnInit, AfterViewInit {
     }
 
     protected addParamsToURL(id: number): void {
-        this.splitView.addParamsToRouting(id);
+        if (!this.isUserPlayer) this.splitView.addParamsToRouting(id);
     }
 
     protected changePage(event: PageEvent): void {
