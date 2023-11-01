@@ -3,10 +3,10 @@
 
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, ConfigDict, Field, NonNegativeInt
+from pydantic import BaseModel, ConfigDict, Field, NonNegativeInt, conint, conset
 
 if TYPE_CHECKING:
-    from app.schemas.match import Match
+    from app.schemas.match import Match, MatchCreate
     from app.schemas.player import Player
 
 
@@ -46,3 +46,10 @@ class MatchPlayerInDBBase(MatchPlayerBase):
     player_id: int | None = Field(None, ge=1, le=10**7)
     match: "Match"
     player: "Player"
+
+
+class MatchPlayerCreatePlayerIdList(BaseModel):
+    """MatchPlayer schema for creation with a set of players ids."""
+
+    match: "MatchCreate"
+    player_ids: conset(conint(ge=1, lt=10**7), min_length=1)
