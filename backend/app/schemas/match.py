@@ -59,3 +59,7 @@ class MatchInDBBase(MatchBase):
     team_id: int | None = Field(None, ge=1, le=10**7)
     team: "Team"
     players: list["Player"]
+
+
+class MatchStateUpdate(MatchBase):
+    """Match schema for returning a match with an updated state."""
