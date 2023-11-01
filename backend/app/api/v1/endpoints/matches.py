@@ -3,7 +3,7 @@
 
 from typing import Annotated
 
-from app.api import all_allowed
+from app.api import player_not_allowed
 from app.crud import crud_match
 from app.db.session import get_db
 from app.models.user import User
@@ -29,7 +29,7 @@ router = APIRouter()
 )
 def create_match_with_player_ids(
     match_player: MatchPlayerCreatePlayerIdList,
-    _: Annotated[User, Depends(all_allowed)],
+    _: Annotated[User, Depends(player_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Creates a new match and its squad based on data from a POST request.
