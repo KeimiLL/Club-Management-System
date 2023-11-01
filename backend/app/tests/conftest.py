@@ -14,6 +14,7 @@ from app.db.session import get_db
 from app.main import include_exception_handlers, include_middleware
 from app.schemas.coach import CoachCreate
 from app.schemas.enums import Roles
+from app.schemas.match import MatchCreate
 from app.schemas.meeting import MeetingCreate, MeetingUpdate
 from app.schemas.player import PlayerCreate
 from app.schemas.team import TeamCreate
@@ -195,4 +196,14 @@ player_create = PlayerCreate(
     weight=90,
     notes="GOAT",
     is_injured=True,
+)
+
+match_create = MatchCreate(
+    team_id=1,
+    opponent="test_opponent",
+    is_home=True,
+    goals_scored=1,
+    goals_conceded=1,
+    notes="test_notes",
+    date=datetime.date.today(),
 )

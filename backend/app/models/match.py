@@ -44,5 +44,7 @@ class Match(Base):
         back_populates="match", cascade="all, delete-orphan"
     )
     players: AssociationProxy[list["Player"]] = association_proxy(
-        "player_association", "player"
+        "player_association",
+        "player",
+        creator=lambda player: MatchPlayer(player=player),
     )

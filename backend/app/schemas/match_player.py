@@ -3,18 +3,18 @@
 
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, ConfigDict, Field, NonNegativeInt
+from pydantic import BaseModel, ConfigDict, Field, NonNegativeInt, conint, conset
 
 if TYPE_CHECKING:
-    from app.schemas.match import Match
+    from app.schemas.match import Match, MatchCreate
     from app.schemas.player import Player
 
 
 class MatchPlayerBase(BaseModel):
     """Base MatchPlayer schema."""
 
-    is_starter: bool | None = None
-    minutes_played: NonNegativeInt | None = None
+    is_starter: bool = False
+    minutes_played: NonNegativeInt = 0
     rating: int | None = Field(None, ge=1, le=10)
 
 
@@ -23,17 +23,11 @@ class MatchPlayerCreate(MatchPlayerBase):
 
     match_id: int = Field(..., ge=1, le=10**7)
     player_id: int = Field(..., ge=1, le=10**7)
-    is_starter: bool = True
-    minutes_played: NonNegativeInt
-    rating: int = Field(..., ge=1, le=10)
 
 
 class MatchPlayer(MatchPlayerBase):
     """MatchPlayer schema for returning data from DB."""
 
-    is_starter: bool
-    minutes_played: NonNegativeInt
-    rating: int = Field(..., ge=1, le=10)
     match: "Match"
     player: "Player"
 
@@ -52,3 +46,10 @@ class MatchPlayerInDBBase(MatchPlayerBase):
     player_id: int | None = Field(None, ge=1, le=10**7)
     match: "Match"
     player: "Player"
+
+
+class MatchPlayerCreatePlayerIdList(BaseModel):
+    """MatchPlayer schema for creation with a set of players ids."""
+
+    match: "MatchCreate"
+    player_ids: conset(conint(ge=1, lt=10**7), min_length=1)

@@ -16,15 +16,15 @@ class Roles(str, Enum):
 
 
 class HTTPResponseMessage(str, Enum):
-    """Enum for HTTP responses messages."""
+    """Enum for HTTP responses messages"""
 
-    SUCCESS = "Operation completed successfully."
+    SUCCESS = "Operation completed successfully"
 
-    UNAUTHENTICATED = "Unauthenticated request."
-    UNAUTHORIZED = "Unauthorized request."
-    CONFLICT = "State conflict."
+    UNAUTHENTICATED = "Unauthenticated request"
+    UNAUTHORIZED = "Unauthorized request"
+    CONFLICT = "State conflict"
 
-    INTERNAL_ERROR = "Internal server error."
+    INTERNAL_ERROR = "Internal server error"
 
 
 class Injuries(str, Enum):
