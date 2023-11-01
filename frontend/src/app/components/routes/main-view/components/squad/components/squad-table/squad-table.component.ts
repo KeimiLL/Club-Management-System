@@ -13,6 +13,7 @@ import { Observable, of } from "rxjs";
 
 import { UserService } from "../../../../../../../shared/api/user.service";
 import { DateComponent } from "../../../../../../../shared/components/date/date.component";
+import { SpinnerComponent } from "../../../../../../../shared/components/spinner/spinner.component";
 import {
     Player,
     TablePlayer,
@@ -26,7 +27,13 @@ import { longPlayerColumns } from "../../squad-table.data";
 @Component({
     selector: "app-squad-table[isUserPlayer]",
     standalone: true,
-    imports: [CommonModule, MaterialModule, MatIconModule, DateComponent],
+    imports: [
+        CommonModule,
+        MaterialModule,
+        MatIconModule,
+        DateComponent,
+        SpinnerComponent,
+    ],
     templateUrl: "./squad-table.component.html",
     styleUrls: ["./squad-table.component.scss"],
 })
@@ -45,6 +52,7 @@ export class SquadTableComponent implements OnInit, AfterViewInit {
     protected totalItems$: Observable<number>;
     protected itemsPerPage: number;
     protected index$: Observable<number>;
+    protected isPlayersLoading$: Observable<boolean>;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Player>,
@@ -58,6 +66,7 @@ export class SquadTableComponent implements OnInit, AfterViewInit {
         this.index$ = this.table.currentPageIndex$;
         this.totalItems$ = this.table.totalItems$;
         this.displayedColumns$ = this.root.displayedColumns$;
+        this.isPlayersLoading$ = this.table.isLoading$;
     }
 
     ngAfterViewInit(): void {

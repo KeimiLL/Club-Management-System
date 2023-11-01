@@ -1,1 +1,6 @@
 <p>squad-content works!</p>
+
+<app-spinner
+    spinnerMessage="Loading selected player..."
+    *ngIf="isCurrentPlayerLoading$ | async"
+></app-spinner>
