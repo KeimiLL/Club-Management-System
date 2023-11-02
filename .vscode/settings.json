@@ -1,7 +1,4 @@
 {
-  "python.linting.pylintEnabled": true,
-  "python.linting.enabled": true,
-  "python.linting.pylintArgs": ["--rcfile", "./backend/pyproject.toml"],
   "python.analysis.typeCheckingMode": "basic",
   "python.testing.pytestArgs": ["backend"],
   "python.testing.unittestEnabled": false,
@@ -11,5 +8,14 @@
   "python.analysis.diagnosticSeverityOverrides": {
     "reportGeneralTypeIssues": "information"
   },
-  "python.analysis.autoImportCompletions": true
+  "python.analysis.autoImportCompletions": true,
+  "pylint.args": ["--rcfile=./backend/pyproject.toml"],
+  "isort.args": ["--profile=black"],
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  }
 }
