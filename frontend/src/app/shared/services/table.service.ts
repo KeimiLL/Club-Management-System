@@ -44,12 +44,8 @@ export class TableService<T> extends DestroyClass {
         this.currentPageIndexStore$.next(newPage);
     }
 
-    public set isLoading(b: boolean) {
+    private set isLoading(b: boolean) {
         this.isTableLoading$.next(b);
-    }
-
-    public get isLoading(): boolean {
-        return this.isTableLoading$.value;
     }
 
     public get isLoading$(): Observable<boolean> {

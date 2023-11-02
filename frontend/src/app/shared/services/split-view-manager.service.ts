@@ -27,12 +27,8 @@ export class SplitViewManagerService<T> extends DestroyClass {
         this.urlChecker();
     }
 
-    public set isLoading(b: boolean) {
+    private set isLoading(b: boolean) {
         this.isItemLoading$.next(b);
-    }
-
-    public get isLoading(): boolean {
-        return this.isItemLoading$.value;
     }
 
     public get isLoading$(): Observable<boolean> {

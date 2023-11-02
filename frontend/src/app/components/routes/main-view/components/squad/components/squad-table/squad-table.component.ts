@@ -11,7 +11,6 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { Observable, of } from "rxjs";
 
-import { UserService } from "../../../../../../../shared/api/user.service";
 import { DateComponent } from "../../../../../../../shared/components/date/date.component";
 import { SpinnerComponent } from "../../../../../../../shared/components/spinner/spinner.component";
 import {
@@ -43,7 +42,7 @@ export class SquadTableComponent implements OnInit, AfterViewInit {
         this.dataSource.data = data;
     }
 
-    @Input() public isUserPlayer = false;
+    @Input() public isUserPlayer: boolean;
 
     protected dataSource: MatTableDataSource<TablePlayer> =
         new MatTableDataSource<TablePlayer>();
@@ -57,8 +56,7 @@ export class SquadTableComponent implements OnInit, AfterViewInit {
     constructor(
         private readonly splitView: SplitViewManagerService<Player>,
         private readonly table: TableService<TablePlayer>,
-        private readonly root: SquadRootService,
-        private readonly userService: UserService
+        private readonly root: SquadRootService
     ) {}
 
     ngOnInit(): void {

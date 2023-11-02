@@ -21,5 +21,5 @@ import { MaterialModule } from "../../modules/material.module";
     ],
 })
 export class SpinnerComponent {
-    @Input() public spinnerMessage: string;
+    @Input() public spinnerMessage = "Loading...";
 }
