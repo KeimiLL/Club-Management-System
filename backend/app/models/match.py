@@ -5,6 +5,7 @@ import datetime
 
 from app.db.base_class import Base
 from app.models.match_player import MatchPlayer
+from app.models.matchevent import MatchEvent
 from app.models.player import Player
 from app.models.team import Team
 from sqlalchemy import Boolean, Date, ForeignKey, Integer, String
@@ -41,6 +42,7 @@ class Match(Base):
     has_ended: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     team: Mapped["Team"] = relationship(back_populates="matches")
+    matchevents: Mapped[list[MatchEvent]] = relationship(cascade="all, delete-orphan")
 
     player_association: Mapped[list["MatchPlayer"]] = relationship(
         back_populates="match", cascade="all, delete-orphan"
