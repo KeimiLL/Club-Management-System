@@ -2,7 +2,15 @@
     <app-wide-card-header header name="Help"></app-wide-card-header>
 
     <ng-container content class="flex-center">
-        <div class="card flex-center"></div>
+        <div class="card flex-center" *ngIf="showWelcomeCard">
+            <h2 class="card__headline">
+                Welcome to the Club Management System!
+            </h2>
+            <p class="card__text">Click the button below to get started.</p>
+            <button class="card__button button--dark" mat-raised-button>
+                I Want to Get to Know the System
+            </button>
+        </div>
 
         <div class="carousel flex-center">
             <button mat-raised-button class="button--light carousel__prev">
@@ -17,6 +25,14 @@
             </button>
         </div>
 
-        <div class="card flex-center"></div>
+        <div class="card flex-center" *ngIf="showFarewellCard">
+            <h2 class="card__headline">Thank You for Exploring!</h2>
+            <p class="card__text">
+                We hope you enjoyed the Club Management System!
+            </p>
+            <button class="card__button button--dark" mat-raised-button>
+                I Want to Start Guide Again
+            </button>
+        </div>
     </ng-container>
 </app-content-card>

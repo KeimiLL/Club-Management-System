@@ -3,6 +3,7 @@ import { Component } from "@angular/core";
 
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
+import { Photo, photos } from "./help.data";
 
 @Component({
     selector: "app-help",
@@ -11,4 +12,8 @@ import { MaterialModule } from "../../../../../../../shared/modules/material.mod
     templateUrl: "./help.component.html",
     styleUrls: ["./help.component.scss"],
 })
-export class HelpComponent {}
+export class HelpComponent {
+    protected photos: Photo[] = photos;
+    protected showWelcomeCard = true;
+    protected showFarewellCard = false;
+}
