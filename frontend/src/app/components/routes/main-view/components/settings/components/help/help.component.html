@@ -7,7 +7,11 @@
                 Welcome to the Club Management System!
             </h2>
             <p class="card__text">Click the button below to get started.</p>
-            <button class="card__button button--dark" mat-raised-button>
+            <button
+                class="card__button button--dark"
+                mat-raised-button
+                (click)="startGuide()"
+            >
                 I Want to Get to Know the System
             </button>
         </div>
@@ -53,7 +57,11 @@
             <p class="card__text">
                 We hope you enjoyed the Club Management System!
             </p>
-            <button class="card__button button--dark" mat-raised-button>
+            <button
+                class="card__button button--dark"
+                mat-raised-button
+                (click)="restartGuide()"
+            >
                 I Want to Start Guide Again
             </button>
         </div>

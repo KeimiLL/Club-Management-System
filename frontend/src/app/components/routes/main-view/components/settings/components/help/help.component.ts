@@ -30,7 +30,19 @@ export class HelpComponent {
     protected showCarousel = false;
     protected showFarewellCard = false;
 
-    nextPhoto(): void {
+    protected startGuide(): void {
+        this.showWelcomeCard = false;
+        this.showCarousel = true;
+    }
+
+    protected restartGuide(): void {
+        this.showFarewellCard = false;
+        this.currentPhotoIndex = 0;
+        this.currentPhoto = this.photos[this.currentPhotoIndex];
+        this.showCarousel = true;
+    }
+
+    protected nextPhoto(): void {
         if (this.currentPhotoIndex < this.photos.length - 1) {
             this.currentPhotoIndex++;
             this.currentPhoto = this.photos[this.currentPhotoIndex];
@@ -40,10 +52,15 @@ export class HelpComponent {
         }
     }
 
-    previousPhoto(): void {
+    protected previousPhoto(): void {
         if (this.currentPhotoIndex > 0) {
             this.currentPhotoIndex--;
             this.currentPhoto = this.photos[this.currentPhotoIndex];
         }
+    }
+
+    protected toggleFarewellCard(): void {
+        this.showCarousel = false;
+        this.showFarewellCard = true;
     }
 }
