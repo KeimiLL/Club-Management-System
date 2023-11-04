@@ -7,7 +7,7 @@
     justify-content: center;
     align-items: center;
 
-    .carousel {
+    .guide {
         height: 100%;
 
         &__content {
@@ -19,7 +19,7 @@
 
         &__img {
             background-color: $white;
-            padding: 20px;
+            padding: $medium-spacing;
             max-width: 100%;
             max-height: 55vh;
             transition: transform 0.3s ease;
@@ -28,7 +28,7 @@
 
             &__details {
                 background-color: $white;
-                padding: 20px;
+                padding: $medium-spacing;
                 border-radius: 8px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
@@ -46,11 +46,11 @@
         }
 
         &__prev {
-            margin-right: 20px;
+            margin-right: $medium-spacing;
         }
 
         &__next {
-            margin-left: 20px;
+            margin-left: $medium-spacing;
         }
     }
 

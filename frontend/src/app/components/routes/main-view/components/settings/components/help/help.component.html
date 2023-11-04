@@ -17,27 +17,27 @@
         </div>
 
         <mat-progress-bar
-            *ngIf="showCarousel"
+            *ngIf="showGuide"
             mode="determinate"
             [value]="((currentPhotoIndex + 1) / photos.length) * 100"
         ></mat-progress-bar>
 
-        <div class="carousel flex-center" *ngIf="showCarousel">
+        <div class="guide flex-center" *ngIf="showGuide">
             <button
                 (click)="previousPhoto()"
                 mat-raised-button
-                class="button--light carousel__prev"
+                class="button--light guide__prev"
                 [disabled]="!(currentPhotoIndex > 0)"
             >
-                <mat-icon class="carousel__prev__icon">arrow_back</mat-icon>
+                <mat-icon class="guide__prev__icon">arrow_back</mat-icon>
             </button>
-            <div class="carousel__content" [@photoAnimation]="currentPhoto">
+            <div class="guide__content" [@photoAnimation]="currentPhoto">
                 <img
-                    class="carousel__img"
+                    class="guide__img"
                     [src]="currentPhoto.url"
                     alt="Current Photo"
                 />
-                <div class="carousel__img__details">
+                <div class="guide__img__details">
                     <h2>{{ currentPhoto.title }}</h2>
                     <p>{{ currentPhoto.description }}</p>
                 </div>
@@ -45,10 +45,10 @@
             <button
                 (click)="nextPhoto()"
                 mat-raised-button
-                class="button--light carousel__next"
+                class="button--light guide__next"
                 [disabled]="!(currentPhotoIndex < photos.length)"
             >
-                <mat-icon class="carousel__next__icon">arrow_forward</mat-icon>
+                <mat-icon class="guide__next__icon">arrow_forward</mat-icon>
             </button>
         </div>
 
