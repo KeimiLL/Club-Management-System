@@ -77,8 +77,7 @@ def update_match_state(
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Raises:
-        GenericException: If the current state of the match is in conflict
-            with the given one.
+        GenericException: If the current state of the match is in conflict with the given one.
 
     Returns:
         MatchStateUpdate: The match with an updated state.
