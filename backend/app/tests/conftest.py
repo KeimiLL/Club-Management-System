@@ -13,8 +13,9 @@ from app.db.base import Base
 from app.db.session import get_db
 from app.main import include_exception_handlers, include_middleware
 from app.schemas.coach import CoachCreate
-from app.schemas.enums import Roles
+from app.schemas.enums import EventType, Roles
 from app.schemas.match import MatchCreate
+from app.schemas.matchevent import MatchEventCreate
 from app.schemas.meeting import MeetingCreate, MeetingUpdate
 from app.schemas.player import PlayerCreate
 from app.schemas.team import TeamCreate
@@ -204,4 +205,8 @@ match_create = MatchCreate(
     is_home=True,
     notes="test_notes",
     date=datetime.date.today(),
+)
+
+matchevent_create = MatchEventCreate(
+    match_id=1, minute=10, event_type=EventType.GOAL, description="Goal"
 )
