@@ -1,4 +1,4 @@
-"""File responsible for implementing match_playeres related CRUD operations."""
+"""File responsible for implementing match_players related CRUD operations."""
 
 
 from app.core.exceptions import MissingAssociationObjectException, MissingException
