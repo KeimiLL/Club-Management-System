@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict, Field, NonNegativeInt
 
 if TYPE_CHECKING:
+    from app.schemas.matchevent import MatchEvent
     from app.schemas.player import Player
     from app.schemas.team import Team
 
@@ -44,6 +45,7 @@ class Match(MatchBase):
     has_ended: bool = False
     team: "Team"
     players: list["Player"]
+    match_events: list["MatchEvent"]
 
 
 class MatchUpdate(MatchBase):
@@ -59,6 +61,7 @@ class MatchInDBBase(MatchBase):
     team_id: int | None = Field(None, ge=1, le=10**7)
     team: "Team"
     players: list["Player"]
+    match_events: list["MatchEvent"]
 
 
 class MatchStateUpdate(MatchBase):

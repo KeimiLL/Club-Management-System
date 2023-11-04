@@ -10,6 +10,7 @@ from app.schemas.match_player import (
     MatchPlayerCreatePlayerIdList,
     MatchPlayerInDBBase,
 )
+from app.schemas.matchevent import MatchEvent
 from app.schemas.meeting import (
     Meeting,
     MeetingCreateNoUserId,
