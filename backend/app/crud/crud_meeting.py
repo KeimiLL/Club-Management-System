@@ -1,4 +1,4 @@
-"""File responsible for implementing meetinges related CRUD operations."""
+"""File responsible for implementing meetings related CRUD operations."""
 
 
 from typing import Callable

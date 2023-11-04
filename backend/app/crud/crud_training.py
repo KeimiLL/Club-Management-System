@@ -1,4 +1,4 @@
-"""File responsible for implementing traininges related CRUD operations."""
+"""File responsible for implementing trainings related CRUD operations."""
 
 
 from app.core.exceptions import DuplicateException, MissingException

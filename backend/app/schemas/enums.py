@@ -52,7 +52,15 @@ class TrainingPresence(str, Enum):
 
 
 class MatchEvent(str, Enum):
-    """Enum for star and end match events."""
+    """Enum for start and end match events."""
 
     START = "start"
     END = "end"
+
+
+class EventType(str, Enum):
+    """Enum for types of match event."""
+
+    GOAL = "goal"
+    YELLOW_CARD = "yellow_card"
+    RED_CARD = "red_card"
