@@ -1,1 +1,22 @@
-<p>help works!</p>
+<app-content-card>
+    <app-wide-card-header header name="Help"></app-wide-card-header>
+
+    <ng-container content class="flex-center">
+        <div class="card flex-center"></div>
+
+        <div class="carousel flex-center">
+            <button mat-raised-button class="button--light carousel__prev">
+                <mat-icon class="carousel__prev__icon">arrow_back</mat-icon>
+            </button>
+            <div class="carousel__content">
+                <img class="carousel__img" alt="Current Photo" />
+                <div class="carousel__img__details"></div>
+            </div>
+            <button mat-raised-button class="button--light carousel__next">
+                <mat-icon class="carousel__next__icon">arrow_forward</mat-icon>
+            </button>
+        </div>
+
+        <div class="card flex-center"></div>
+    </ng-container>
+</app-content-card>
