@@ -1,0 +1,31 @@
+@import "../../../../../../../../styles/variables";
+
+:host {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .card {
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+
+        &__headline {
+            font-size: $huge-font;
+        }
+
+        &__text {
+            margin-top: $medium-spacing;
+            font-size: $large-font;
+        }
+
+        &__button {
+            margin-top: $extra-large-spacing;
+            width: 60vh;
+        }
+    }
+}
