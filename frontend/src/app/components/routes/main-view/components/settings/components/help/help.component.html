@@ -12,15 +12,32 @@
             </button>
         </div>
 
-        <div class="carousel flex-center">
-            <button mat-raised-button class="button--light carousel__prev">
+        <div class="carousel flex-center" *ngIf="showCarousel">
+            <button
+                (click)="previousPhoto()"
+                mat-raised-button
+                class="button--light carousel__prev"
+                [disabled]="!(currentPhotoIndex > 0)"
+            >
                 <mat-icon class="carousel__prev__icon">arrow_back</mat-icon>
             </button>
             <div class="carousel__content">
-                <img class="carousel__img" alt="Current Photo" />
-                <div class="carousel__img__details"></div>
+                <img
+                    class="carousel__img"
+                    [src]="currentPhoto.url"
+                    alt="Current Photo"
+                />
+                <div class="carousel__img__details">
+                    <h2>{{ currentPhoto.title }}</h2>
+                    <p>{{ currentPhoto.description }}</p>
+                </div>
             </div>
-            <button mat-raised-button class="button--light carousel__next">
+            <button
+                (click)="nextPhoto()"
+                mat-raised-button
+                class="button--light carousel__next"
+                [disabled]="!(currentPhotoIndex < photos.length)"
+            >
                 <mat-icon class="carousel__next__icon">arrow_forward</mat-icon>
             </button>
         </div>
