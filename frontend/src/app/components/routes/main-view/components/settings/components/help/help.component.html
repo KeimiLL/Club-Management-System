@@ -12,6 +12,12 @@
             </button>
         </div>
 
+        <mat-progress-bar
+            *ngIf="showCarousel"
+            mode="determinate"
+            [value]="((currentPhotoIndex + 1) / photos.length) * 100"
+        ></mat-progress-bar>
+
         <div class="carousel flex-center" *ngIf="showCarousel">
             <button
                 (click)="previousPhoto()"
@@ -21,7 +27,7 @@
             >
                 <mat-icon class="carousel__prev__icon">arrow_back</mat-icon>
             </button>
-            <div class="carousel__content">
+            <div class="carousel__content" [@photoAnimation]="currentPhoto">
                 <img
                     class="carousel__img"
                     [src]="currentPhoto.url"
