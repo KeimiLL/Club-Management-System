@@ -6,7 +6,7 @@ from app.crud.crud_team import get_team_by_id
 from app.models.match import Match
 from app.models.player import Player
 from app.schemas.enums import MatchEvent
-from app.schemas.match import MatchCreate
+from app.schemas.match import MatchCreate, MatchScore
 from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -140,6 +140,35 @@ def update_match_state(
                 "has_ended": True,
             }
         db.execute(update(Match).where(Match.id == match_id).values(**match_update))
+        db.commit()
+        return match
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def update_match_score(
+    match_score: MatchScore,
+    match_id: int,
+    db: Session,
+) -> Match:
+    """Updates the score of the match with the given id.
+
+    Args:
+        match_score (MatchScore): Match score to be set.
+        match_id (int): Match's id.
+        db (Session): Database session.
+
+    Raises:
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        Match: The updated match.
+    """
+    try:
+        match = get_match_by_id(match_id=match_id, db=db)
+        db.execute(
+            update(Match).where(Match.id == match_id).values(**match_score.__dict__)
+        )
         db.commit()
         return match
     except SQLAlchemyError as exc:
