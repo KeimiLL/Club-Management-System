@@ -42,6 +42,18 @@ export default [
                 canActivate: [PermissionGuard],
             },
             {
+                path: "info",
+                loadComponent: () =>
+                    import("./components/info/info.component").then(
+                        (c) => c.InfoComponent
+                    ),
+                data: {
+                    modulesPermission: ModulesPermissions.Settings,
+                    requiredPermission: null,
+                },
+                canActivate: [PermissionGuard],
+            },
+            {
                 path: "modify",
                 loadComponent: () =>
                     import("./components/modify/modify.component").then(

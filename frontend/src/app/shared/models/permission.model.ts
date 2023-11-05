@@ -53,6 +53,7 @@ export enum SettingsPermission {
     Modify = "modify_users",
     Help = "help",
     General = "general",
+    Info = "info",
 }
 
 export const allPermissions: SubPermissions[] = [
@@ -72,6 +73,7 @@ const modulesBase: ModulesPermissions[] = [
 const subPermissionsBase: SubPermissions[] = [
     SettingsPermission.General,
     SettingsPermission.Help,
+    SettingsPermission.Info,
 ];
 
 export const RoleColorsMapping: Record<Roles, string> = {
