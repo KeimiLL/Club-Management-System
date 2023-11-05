@@ -64,5 +64,14 @@ class MatchInDBBase(MatchBase):
     match_events: list["MatchEvent"]
 
 
-class MatchStateUpdate(MatchBase):
-    """Match schema for returning a match with an updated state."""
+class MatchScore(BaseModel):
+    """Match schema for match score."""
+
+    goals_scored: NonNegativeInt
+    goals_conceded: NonNegativeInt
+
+
+class MatchScoreUpdate(MatchScore):
+    """Match schema for updating match score."""
+
+    id: int | None = Field(None, ge=1, le=10**7)

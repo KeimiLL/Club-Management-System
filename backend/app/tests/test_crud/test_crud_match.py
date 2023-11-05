@@ -1,6 +1,8 @@
 """File for testing match CRUD operations."""
 
 
+import itertools
+
 import pytest
 from app.core.exceptions import MissingException
 from app.crud.crud_coach import create_new_coach
@@ -8,6 +10,7 @@ from app.crud.crud_match import (
     create_match_with_player_ids,
     create_new_match,
     get_match_by_id,
+    update_match_score,
     update_match_state,
 )
 from app.crud.crud_player import create_new_player
@@ -15,7 +18,7 @@ from app.crud.crud_team import create_new_team
 from app.crud.crud_user import create_new_user
 from app.schemas.coach import CoachCreate
 from app.schemas.enums import MatchEvent
-from app.schemas.match import MatchCreate
+from app.schemas.match import MatchCreate, MatchScore
 from app.schemas.player import PlayerCreate
 from app.schemas.team import TeamCreate
 from app.schemas.user import UserCreate
@@ -245,7 +248,7 @@ def test_correct__update_match_state(
         coach (CoachCreate): Coach to be created.
         team (TeamCreate): Team to be created.
         match (MatchCreate): Match to be created.
-        match_events: list[MatchEvent],
+        match_events: list[MatchEvent]: The list of match events to be set.
         db_session (Session): Database session.
     """
     create_new_user(user, db_session)
@@ -262,3 +265,64 @@ def test_correct__update_match_state(
     if new_match.has_started:
         assert new_match.goals_scored == 0
         assert new_match.goals_conceded == 0
+
+
+@pytest.mark.parametrize(
+    "user,coach,team,match,goals_scored,goals_conceded",
+    [
+        (user_create_unique_1, coach_create, team_create, match_create, [0], [1]),
+        (user_create_unique_1, coach_create, team_create, match_create, [1], [0]),
+        (user_create_unique_1, coach_create, team_create, match_create, [1, 2], [0]),
+        (user_create_unique_1, coach_create, team_create, match_create, [0, 1], [1, 2]),
+        (user_create_unique_1, coach_create, team_create, match_create, [1, 2], [0, 1]),
+        (
+            user_create_unique_1,
+            coach_create,
+            team_create,
+            match_create,
+            [0, 1, 2],
+            [1, 2],
+        ),
+        (
+            user_create_unique_1,
+            coach_create,
+            team_create,
+            match_create,
+            [1, 2],
+            [0, 1, 2],
+        ),
+    ],
+)
+def test_correct__update_match_score(
+    user: UserCreate,
+    coach: CoachCreate,
+    team: TeamCreate,
+    match: MatchCreate,
+    goals_scored: list[int],
+    goals_conceded: list[int],
+    db_session: Session,
+) -> None:
+    """Tests updating match score.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        match (MatchCreate): Match to be created.
+        goals_scored (list[int]): Goals scored to be set.
+        goals_conceded (list[int]): Goals conceded to be set.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    create_new_coach(coach, db_session)
+    create_new_team(team, db_session)
+    new_match = create_new_match(match, db_session)
+    update_match_state(MatchEvent.START, new_match.id, db_session)
+    for goal_scored, goal_conceded in itertools.product(goals_scored, goals_conceded):
+        new_match = update_match_score(
+            MatchScore(goals_scored=goal_scored, goals_conceded=goal_conceded),
+            new_match.id,
+            db_session,
+        )
+    assert new_match.goals_scored == goals_scored[-1]
+    assert new_match.goals_conceded == goals_conceded[-1]
