@@ -40,7 +40,7 @@ def create_new_matchevent(matchevent: MatchEventCreate, db: Session) -> MatchEve
 
 
 def get_matchevent_by_id(matchevent_id: int, db: Session) -> MatchEvent:
-    """Gets the matchevent based on the given user id.
+    """Gets the matchevent based on the given id.
 
     Args:
         matchevent_id (int): MatchEvent id.
@@ -59,5 +59,26 @@ def get_matchevent_by_id(matchevent_id: int, db: Session) -> MatchEvent:
         ).scalar_one()
     except NoResultFound as exc:
         raise MissingException(MatchEvent.__name__) from exc
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def get_all_matchevents_by_match_id(match_id: int, db: Session) -> list[MatchEvent]:
+    """Gets all the matchevents with the given match_id.
+
+    Args:
+        match_id (int): Match id.
+        db (Session): Database session.
+
+    Raises:
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        list[MatchEvent}: All MatchEvent objects corresponding with the given match_id.
+    """
+    try:
+        get_match_by_id(match_id=match_id, db=db)
+        query = select(MatchEvent).where(MatchEvent.match_id == match_id)
+        return list(db.scalars(query.order_by(MatchEvent.minute.desc())).all())
     except SQLAlchemyError as exc:
         raise exc
