@@ -1,0 +1,42 @@
+@import "../../../../../../../../styles/variables";
+
+:host {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+
+    .info {
+        display: flex;
+        justify-content: flex-start;
+
+        &__question {
+            width: 40%;
+            padding: $large-spacing;
+
+            &__list {
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                background-color: $light-rose;
+
+                .item {
+                    display: flex;
+                    justify-content: space-between;
+                }
+            }
+        }
+
+        &__answer {
+            position: absolute;
+            top: 200px;
+            right: 25px;
+            width: 60%;
+            height: 50%;
+
+            &__header {
+                display: flex;
+                justify-content: flex-start;
+            }
+        }
+    }
+}
