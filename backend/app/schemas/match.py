@@ -75,3 +75,16 @@ class MatchScoreUpdate(MatchScore):
     """Match schema for updating match score."""
 
     id: int | None = Field(None, ge=1, le=10**7)
+
+
+class MatchInProgress(BaseModel):
+    """Match schema for returning a match in progress."""
+
+    id: int = Field(..., ge=1, le=10**7)
+    opponent: str = Field(..., min_length=3)
+    is_home: bool
+    goals_scored: NonNegativeInt
+    goals_conceded: NonNegativeInt
+    notes: str
+    date: datetime.date
+    team_name: str

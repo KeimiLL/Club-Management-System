@@ -10,6 +10,7 @@ from app.crud.crud_match import (
     create_match_with_player_ids,
     create_new_match,
     get_match_by_id,
+    get_matches_in_progress_with_limit,
     update_match_score,
     update_match_state,
 )
@@ -326,3 +327,87 @@ def test_correct__update_match_score(
         )
     assert new_match.goals_scored == goals_scored[-1]
     assert new_match.goals_conceded == goals_conceded[-1]
+
+
+@pytest.mark.parametrize(
+    "user,coach,team,match,match_events,total,limit",
+    [
+        (user_create_unique_1, coach_create, team_create, match_create, [], 0, 10),
+        (
+            user_create_unique_1,
+            coach_create,
+            team_create,
+            match_create,
+            [MatchEvent.START, MatchEvent.END],
+            3,
+            10,
+        ),
+        (
+            user_create_unique_1,
+            coach_create,
+            team_create,
+            match_create,
+            [MatchEvent.START, MatchEvent.END],
+            6,
+            10,
+        ),
+        (
+            user_create_unique_1,
+            coach_create,
+            team_create,
+            match_create,
+            [MatchEvent.START, MatchEvent.END],
+            10,
+            4,
+        ),
+        (
+            user_create_unique_1,
+            coach_create,
+            team_create,
+            match_create,
+            [MatchEvent.START, MatchEvent.END],
+            10,
+            None,
+        ),
+    ],
+)
+def test_correct__get_matches_in_progress_with_limit(
+    user: UserCreate,
+    coach: CoachCreate,
+    team: TeamCreate,
+    match: MatchCreate,
+    match_events: list[MatchEvent],
+    total: int,
+    limit: int | None,
+    db_session: Session,
+) -> None:
+    """Tests getting matches in progress with an optional limit.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        match (MatchCreate): Match to be created.
+        match_events: list[MatchEvent]: The list of match events to be set.
+        total (int): The total number of matches to be created.
+        limit (int | None): The optional limit of matches to be gotten from the database.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    create_new_coach(coach, db_session)
+    create_new_team(team, db_session)
+    for i in range(total):
+        new_match = create_new_match(match, db_session)
+        if i % 2:
+            for match_event in match_events:
+                update_match_state(match_event, new_match.id, db_session)
+        else:
+            update_match_state(match_events[0], new_match.id, db_session)
+    matches = get_matches_in_progress_with_limit(limit, db_session)
+    assert len(matches) == min(limit if limit else float("inf"), total // 2 + total % 2)
+    if matches:
+        first_match = matches[0]
+        assert first_match.notes == match.notes
+        assert first_match.date == match.date
+        assert first_match.goals_scored == 0
+        assert first_match.goals_conceded == 0
