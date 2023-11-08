@@ -173,3 +173,26 @@ def update_match_score(
         return match
     except SQLAlchemyError as exc:
         raise exc
+
+
+def get_matches_in_progress_with_limit(limit: int | None, db: Session) -> list[Match]:
+    """Gets all matches in progress, optionally limited by a given limit.
+
+    Args:
+        limit (int | None): The maximum number of requested matches.
+        db (Session): Database session.
+
+    Raises:
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        list[Match]: The list of all matches in progress, optionally limited.
+    """
+    try:
+        query = select(Match).where(
+            (Match.has_started == True)  # pylint: disable=singleton-comparison
+            & (Match.has_ended == False)  # pylint: disable=singleton-comparison
+        )
+        return list(db.scalars(query.order_by(Match.id.asc()).limit(limit)).all())
+    except SQLAlchemyError as exc:
+        raise exc

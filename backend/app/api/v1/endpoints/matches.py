@@ -3,16 +3,22 @@
 
 from typing import Annotated
 
-from app.api import player_not_allowed
+from app.api import player_not_allowed, viewer_not_allowed
 from app.core.exceptions import GenericException
 from app.crud import crud_match
 from app.db.session import get_db
 from app.models.user import User
 from app.schemas.enums import HTTPResponseMessage, MatchEvent
-from app.schemas.match import MatchBase, MatchCreate, MatchScoreUpdate
+from app.schemas.match import (
+    MatchBase,
+    MatchCreate,
+    MatchInProgress,
+    MatchScore,
+    MatchScoreUpdate,
+)
 from app.schemas.match_player import MatchPlayerCreatePlayerIdList
 from app.schemas.misc import Message, MessageFromEnum
-from fastapi import APIRouter, Depends, Path, status
+from fastapi import APIRouter, Depends, Path, Query, status
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -80,7 +86,7 @@ def update_match_state(
         GenericException: If the current state of the match is in conflict with the given one.
 
     Returns:
-        Match: The match with an updated state.
+        MatchBase: The match with an updated state.
     """
     match = crud_match.get_match_by_id(match_id=match_id, db=db)
     if (match_event == MatchEvent.START and match.has_started is True) or (
@@ -97,7 +103,7 @@ def update_match_state(
 
 @router.post(
     "/{match_id}/score",
-    response_model=MatchScoreUpdate,
+    response_model=MatchScore,
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
         status.HTTP_401_UNAUTHORIZED: {"model": Message},
@@ -124,7 +130,7 @@ def update_match_score(
         GenericException: If the current state of the match is in conflict with the given one.
 
     Returns:
-        Match: The match with an updated score.
+        MatchScore: The match with an updated score.
     """
     match = crud_match.get_match_by_id(match_id=match_id, db=db)
     if match.has_started is False or match.has_ended is True:
@@ -134,3 +140,36 @@ def update_match_score(
         match_id=match_id,
         db=db,
     )
+
+
+@router.get(
+    "/in_progress",
+    response_model=list[MatchInProgress],
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def get_matches_in_progress_with_limit(
+    _: Annotated[User, Depends(viewer_not_allowed)],
+    db: Annotated[Session, Depends(get_db)],
+    limit: Annotated[int | None, Query(ge=1, le=10)] = None,
+):
+    """Gets all matches that are in progress, with an optional limit.
+
+    Args:
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+        limit (Annotated[int | None, Query]): Optional query parameter for the limit of
+            the matches. Has to be greater than or equal to 1 and less than or equal to 10.
+            Defaults to None.
+
+    Returns:
+        list[MatchInProgress]: List of matches in progress.
+    """
+    matches = crud_match.get_matches_in_progress_with_limit(limit=limit, db=db)
+    return [
+        MatchInProgress(**match.__dict__, team_name=match.team.name)
+        for match in matches
+    ]
