@@ -5,7 +5,7 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
-import { Photo, photos } from "./help.data";
+import { HelpState, Photo, photos } from "./help.data";
 
 @Component({
     selector: "app-help",
@@ -26,21 +26,8 @@ export class HelpComponent {
     protected photos: Photo[] = photos;
     protected currentPhotoIndex = 0;
     protected currentPhoto: Photo = this.photos[this.currentPhotoIndex];
-    protected showWelcomeCard = true;
-    protected showGuide = false;
-    protected showFarewellCard = false;
-
-    protected startGuide(): void {
-        this.showWelcomeCard = false;
-        this.showGuide = true;
-    }
-
-    protected restartGuide(): void {
-        this.showFarewellCard = false;
-        this.currentPhotoIndex = 0;
-        this.currentPhoto = this.photos[this.currentPhotoIndex];
-        this.showGuide = true;
-    }
+    protected helpState: HelpState = HelpState.Start;
+    HelpState = HelpState;
 
     protected nextPhoto(): void {
         if (this.currentPhotoIndex < this.photos.length - 1) {
@@ -58,8 +45,17 @@ export class HelpComponent {
         }
     }
 
+    protected startGuide(): void {
+        this.helpState = HelpState.Guide;
+    }
+
+    protected restartGuide(): void {
+        this.helpState = HelpState.Guide;
+        this.currentPhotoIndex = 0;
+        this.currentPhoto = this.photos[this.currentPhotoIndex];
+    }
+
     private toggleFarewellCard(): void {
-        this.showGuide = false;
-        this.showFarewellCard = true;
+        this.helpState = HelpState.Finish;
     }
 }

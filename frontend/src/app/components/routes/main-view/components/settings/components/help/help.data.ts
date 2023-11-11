@@ -66,3 +66,9 @@ export const photos: Photo[] = [
         description: "Description for Photo 12",
     },
 ];
+
+export enum HelpState {
+    Start = "start",
+    Guide = "guide",
+    Finish = "finish",
+}

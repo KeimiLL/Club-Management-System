@@ -2,7 +2,7 @@
     <app-wide-card-header header name="Help"></app-wide-card-header>
 
     <ng-container content class="flex-center">
-        <div class="card flex-center" *ngIf="showWelcomeCard">
+        <div class="card flex-center" *ngIf="helpState === HelpState.Start">
             <h2 class="card__headline">
                 Welcome to the Club Management System!
             </h2>
@@ -17,12 +17,12 @@
         </div>
 
         <mat-progress-bar
-            *ngIf="showGuide"
+            *ngIf="helpState === HelpState.Guide"
             mode="determinate"
             [value]="((currentPhotoIndex + 1) / photos.length) * 100"
         ></mat-progress-bar>
 
-        <div class="guide flex-center" *ngIf="showGuide">
+        <div class="guide flex-center" *ngIf="helpState === HelpState.Guide">
             <button
                 (click)="previousPhoto()"
                 mat-raised-button
@@ -52,7 +52,7 @@
             </button>
         </div>
 
-        <div class="card flex-center" *ngIf="showFarewellCard">
+        <div class="card flex-center" *ngIf="helpState === HelpState.Finish">
             <h2 class="card__headline">Thank You for Exploring!</h2>
             <p class="card__text">
                 We hope you enjoyed the Club Management System!
