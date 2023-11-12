@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
 
 import { HelpState, Photo, photos } from "./help.data";
 
@@ -6,34 +7,48 @@ import { HelpState, Photo, photos } from "./help.data";
     providedIn: "root",
 })
 export class HelpRootService {
-    public helpState: HelpState = HelpState.Start;
-    public photos: Photo[] = photos;
-    public currentPhotoIndex = 0;
-    public currentPhoto: Photo = this.photos[this.currentPhotoIndex];
+    private currentPhotoIndex = 0;
+    private readonly photos: Photo[] = photos;
+    private readonly helpStateSubject = new BehaviorSubject<HelpState>(
+        HelpState.Start
+    );
+
+    helpState$ = this.helpStateSubject.asObservable();
 
     public startGuide(): void {
-        this.helpState = HelpState.Guide;
+        this.helpStateSubject.next(HelpState.Guide);
     }
 
     public restartGuide(): void {
         this.currentPhotoIndex = 0;
-        this.currentPhoto = this.photos[this.currentPhotoIndex];
-        this.helpState = HelpState.Guide;
+        this.helpStateSubject.next(HelpState.Guide);
     }
 
     public nextPhoto(): void {
         if (this.currentPhotoIndex < this.photos.length - 1) {
             this.currentPhotoIndex++;
-            this.currentPhoto = this.photos[this.currentPhotoIndex];
+            this.helpStateSubject.next(HelpState.Guide);
         } else {
-            this.helpState = HelpState.Finish;
+            this.helpStateSubject.next(HelpState.Finish);
         }
     }
 
     public previousPhoto(): void {
         if (this.currentPhotoIndex > 0) {
             this.currentPhotoIndex--;
-            this.currentPhoto = this.photos[this.currentPhotoIndex];
+            this.helpStateSubject.next(HelpState.Guide);
         }
+    }
+
+    public toggleFarewellCard(): void {
+        this.helpStateSubject.next(HelpState.Finish);
+    }
+
+    public getPhotos(): Photo[] {
+        return this.photos;
+    }
+
+    public getCurrentPhotoIndex(): number {
+        return this.currentPhotoIndex;
     }
 }
