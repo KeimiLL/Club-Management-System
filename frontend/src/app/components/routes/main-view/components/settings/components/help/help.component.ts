@@ -1,16 +1,24 @@
 import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
-import { HelpState, Photo, photos } from "./help.data";
+import { HelpState, Photo } from "./help.data";
+import { HelpCardComponent } from "./help-card/help-card.component";
+import { HelpRootService } from "./help-root.service";
 
 @Component({
     selector: "app-help",
     standalone: true,
-    imports: [CommonModule, CardsModule, MaterialModule, MatProgressBarModule],
+    imports: [
+        CommonModule,
+        CardsModule,
+        MaterialModule,
+        MatProgressBarModule,
+        HelpCardComponent,
+    ],
     templateUrl: "./help.component.html",
     styleUrls: ["./help.component.scss"],
     animations: [
@@ -22,40 +30,43 @@ import { HelpState, Photo, photos } from "./help.data";
         ]),
     ],
 })
-export class HelpComponent {
-    protected photos: Photo[] = photos;
-    protected currentPhotoIndex = 0;
-    protected currentPhoto: Photo = this.photos[this.currentPhotoIndex];
+export class HelpComponent implements OnInit {
     protected helpState: HelpState = HelpState.Start;
     HelpState = HelpState;
 
+    constructor(private readonly helpRootService: HelpRootService) {}
+
+    ngOnInit(): void {
+        this.helpRootService.helpState$.subscribe((state) => {
+            this.helpState = state;
+        });
+    }
+
+    protected get photos(): Photo[] {
+        return this.helpRootService.getPhotos();
+    }
+
+    protected get currentPhotoIndex(): number {
+        return this.helpRootService.getCurrentPhotoIndex();
+    }
+
     protected nextPhoto(): void {
-        if (this.currentPhotoIndex < this.photos.length - 1) {
-            this.currentPhotoIndex++;
-            this.currentPhoto = this.photos[this.currentPhotoIndex];
-        } else {
-            this.toggleFarewellCard();
-        }
+        this.helpRootService.nextPhoto();
     }
 
     protected previousPhoto(): void {
-        if (this.currentPhotoIndex > 0) {
-            this.currentPhotoIndex--;
-            this.currentPhoto = this.photos[this.currentPhotoIndex];
-        }
+        this.helpRootService.previousPhoto();
     }
 
     protected startGuide(): void {
-        this.helpState = HelpState.Guide;
+        this.helpRootService.startGuide();
     }
 
     protected restartGuide(): void {
-        this.helpState = HelpState.Guide;
-        this.currentPhotoIndex = 0;
-        this.currentPhoto = this.photos[this.currentPhotoIndex];
+        this.helpRootService.restartGuide();
     }
 
-    private toggleFarewellCard(): void {
-        this.helpState = HelpState.Finish;
+    protected toggleFarewellCard(): void {
+        this.helpRootService.toggleFarewellCard();
     }
 }
