@@ -5,4 +5,5 @@ export const settingsMenuItems: MenuItem[] = [
     { name: SettingsPermission.General, route: "/app/settings/general" },
     { name: SettingsPermission.Modify, route: "/app/settings/modify" },
     { name: SettingsPermission.Help, route: "/app/settings/help" },
+    { name: SettingsPermission.Info, route: "/app/settings/info" },
 ];

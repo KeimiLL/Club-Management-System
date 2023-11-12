@@ -1,0 +1,42 @@
+<app-content-card>
+    <app-wide-card-header header name="Info"></app-wide-card-header>
+
+    <ng-container content class="info">
+        <div class="info__question">
+            <mat-nav-list class="info__question__list">
+                <mat-list-item
+                    *ngFor="let item of faq"
+                    (click)="selectFaq(item)"
+                    [class.active]="item === selectedFaq"
+                >
+                    <div class="item">
+                        <div class="item__left flex-center">
+                            <mat-icon>{{ item.icon }}</mat-icon>
+                            <span class="item__left__text">{{
+                                item.question
+                            }}</span>
+                        </div>
+
+                        <div class="item__right">
+                            <mat-icon>keyboard_arrow_right</mat-icon>
+                        </div>
+                    </div>
+                </mat-list-item>
+            </mat-nav-list>
+        </div>
+        <div class="info__answer">
+            <ng-container *ngIf="selectedFaq">
+                <div class="info__answer__header">
+                    <mat-icon class="info__answer__icon">{{
+                        selectedFaq.icon
+                    }}</mat-icon>
+                    <h2 class="info__answer__heading">
+                        {{ selectedFaq.question }}
+                    </h2>
+                </div>
+
+                <p class="info__answer__text">{{ selectedFaq.answer }}</p>
+            </ng-container>
+        </div>
+    </ng-container>
+</app-content-card>
