@@ -8,7 +8,6 @@ import { PermissionColorDirective } from "../../../../../../../shared/directives
 import { Meeting } from "../../../../../../../shared/models/meeting.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
-import { LoaderService } from "../../../../../../../shared/services/loader.service";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 
 @Component({
@@ -22,7 +21,6 @@ import { SplitViewManagerService } from "../../../../../../../shared/services/sp
         PermissionColorDirective,
         SpinnerComponent,
     ],
-    providers: [LoaderService],
     templateUrl: "./current-meeting-content.component.html",
     styleUrls: ["./current-meeting-content.component.scss"],
 })

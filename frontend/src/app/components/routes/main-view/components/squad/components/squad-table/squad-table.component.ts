@@ -12,6 +12,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { Observable, of } from "rxjs";
 
 import { DateComponent } from "../../../../../../../shared/components/date/date.component";
+import { SpinnerComponent } from "../../../../../../../shared/components/spinner/spinner.component";
 import {
     Player,
     TablePlayer,
@@ -23,9 +24,15 @@ import { SquadRootService } from "../../services/squad-root.service";
 import { longPlayerColumns } from "../../squad-table.data";
 
 @Component({
-    selector: "app-squad-table",
+    selector: "app-squad-table[isUserPlayer]",
     standalone: true,
-    imports: [CommonModule, MaterialModule, MatIconModule, DateComponent],
+    imports: [
+        CommonModule,
+        MaterialModule,
+        MatIconModule,
+        DateComponent,
+        SpinnerComponent,
+    ],
     templateUrl: "./squad-table.component.html",
     styleUrls: ["./squad-table.component.scss"],
 })
@@ -35,6 +42,8 @@ export class SquadTableComponent implements OnInit, AfterViewInit {
         this.dataSource.data = data;
     }
 
+    @Input() public isUserPlayer: boolean;
+
     protected dataSource: MatTableDataSource<TablePlayer> =
         new MatTableDataSource<TablePlayer>();
 
@@ -42,6 +51,7 @@ export class SquadTableComponent implements OnInit, AfterViewInit {
     protected totalItems$: Observable<number>;
     protected itemsPerPage: number;
     protected index$: Observable<number>;
+    protected isPlayersLoading$: Observable<boolean>;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Player>,
@@ -53,7 +63,8 @@ export class SquadTableComponent implements OnInit, AfterViewInit {
         this.itemsPerPage = this.table.capacity;
         this.index$ = this.table.currentPageIndex$;
         this.totalItems$ = this.table.totalItems$;
-        // this.displayedColumns$ = this.root.displayedColumns$;
+        this.displayedColumns$ = this.root.displayedColumns$;
+        this.isPlayersLoading$ = this.table.isLoading$;
     }
 
     ngAfterViewInit(): void {
@@ -63,7 +74,7 @@ export class SquadTableComponent implements OnInit, AfterViewInit {
     }
 
     protected addParamsToURL(id: number): void {
-        this.splitView.addParamsToRouting(id);
+        if (!this.isUserPlayer) this.splitView.addParamsToRouting(id);
     }
 
     protected changePage(event: PageEvent): void {

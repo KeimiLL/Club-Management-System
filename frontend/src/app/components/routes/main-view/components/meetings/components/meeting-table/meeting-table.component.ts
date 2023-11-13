@@ -19,7 +19,6 @@ import {
     TableMeeting,
 } from "../../../../../../../shared/models/meeting.model";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
-import { LoaderService } from "../../../../../../../shared/services/loader.service";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../../shared/services/table.service";
 import { MeetingsRootService } from "../../services/meetings-root.service";
@@ -37,7 +36,6 @@ import { MeetingsRootService } from "../../services/meetings-root.service";
     ],
     templateUrl: "./meeting-table.component.html",
     styleUrls: ["./meeting-table.component.scss"],
-    providers: [LoaderService],
 })
 export class MeetingTableComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;

@@ -3,7 +3,7 @@
 
 from typing import Annotated
 
-from app.api import board_not_allowed, coach_not_allowed, viewer_not_allowed
+from app.api import coach_not_allowed, viewer_not_allowed
 from app.api.dependencies import paginate
 from app.core.exceptions import ForbiddenException, MissingException
 from app.crud import crud_team
@@ -68,14 +68,14 @@ def create_team_with_player_ids(
     },
 )
 def get_teams(
-    current_user: Annotated[User, Depends(board_not_allowed)],
+    current_user: Annotated[User, Depends(viewer_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Gets the list of all created teams depending on the current user's role.
 
     Args:
         current_user (Annotated[User, Depends]): Current user read from access token.
-            Defaults to Depends(board_not_allowed).
+            Defaults to Depends(viewer_not_allowed).
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Returns:

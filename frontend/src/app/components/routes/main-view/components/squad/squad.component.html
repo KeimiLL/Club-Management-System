@@ -4,14 +4,14 @@
         tablePlayers: tablePlayers$ | async,
         currentPlayer: currentPlayer$ | async,
         teams: teams$ | async,
-        teamId: teamId$ | async,
+        currentTeam: currentTeam$ | async,
         currentCoach: currentCoach$ | async
     } as vm"
 >
     <app-content-card>
         <app-wide-card-header
             header
-            [name]="(vm.teams | getItemById : vm.teamId).name"
+            [name]="vm.currentTeam?.name ?? ''"
             [subName]="vm.currentCoach?.user_full_name ?? null"
         >
             <app-button-container buttons>
@@ -21,7 +21,7 @@
                             mat-raised-button
                             class="button--light"
                             [matMenuTriggerFor]="roleMenu"
-                            *ngIf="vm.teamId"
+                            *ngIf="vm.isDetail === false && vm.currentTeam"
                         >
                             Select Team
                         </button>
@@ -30,13 +30,21 @@
                             <button
                                 mat-menu-item
                                 *ngFor="let team of vm.teams"
-                                (click)="setSelectedTeam(team.id)"
+                                (click)="setSelectedTeam(team)"
                             >
                                 {{ team.name }}
                             </button>
                         </mat-menu>
                     </ng-container>
                 </ng-container>
+                <button
+                    mat-raised-button
+                    class="button--light"
+                    (click)="openCurrentPlayerInfo()"
+                    *ngIf="vm.isDetail === false && currentPlayerAsUserId"
+                >
+                    Your Bio
+                </button>
             </app-button-container>
         </app-wide-card-header>
 
@@ -44,6 +52,7 @@
             <app-squad-table
                 *ngIf="vm.tablePlayers"
                 [data]="vm.tablePlayers"
+                [isUserPlayer]="currentPlayerAsUserId !== null"
             ></app-squad-table>
         </ng-container>
     </app-content-card>
@@ -66,11 +75,11 @@
         </app-half-card-right-header>
 
         <ng-container content>
-            <!-- <app-current-Player-content
+            <app-squad-content
                 *ngIf="vm.currentPlayer"
-                [Player]="vm.currentPlayer"
-            ></app-current-Player-content> -->
-            <app-squad-content></app-squad-content>
+                [player]="vm.currentPlayer"
+            ></app-squad-content
+            >F
         </ng-container>
     </app-content-card>
 </ng-container>

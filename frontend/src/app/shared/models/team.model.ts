@@ -21,6 +21,6 @@ export interface TableTeam extends ShortTeam {
 }
 
 export interface Team extends ShortTeam {
-    coach: ShortCoach;
+    coach: ShortCoach | null;
     players: ShortPlayer[];
 }
