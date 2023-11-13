@@ -63,6 +63,19 @@ export default [
             },
 
             {
+                path: "schedule",
+                loadComponent: () =>
+                    import("./components/schedule/schedule.component").then(
+                        (c) => c.ScheduleComponent
+                    ),
+                data: {
+                    modulesPermission: ModulesPermissions.Schedule,
+                    requiredPermission: null,
+                },
+                canActivate: [PermissionGuard],
+            },
+
+            {
                 path: "settings",
                 loadChildren: () => import("./components/settings/routes"),
                 canActivate: [PermissionGuard],
