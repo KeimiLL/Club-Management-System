@@ -1,1 +1,70 @@
-<p>schedule works!</p>
+<ng-container
+    *ngIf="{
+        isDetail: isDetail$ | async,
+        tableMatches: tableMatches$ | async,
+        currentMatch: currentMatch$ | async,
+        teams: teams$ | async,
+        currentTeam: currentTeam$ | async,
+    } as vm"
+>
+    <app-content-card>
+        <app-wide-card-header
+            header
+            name="Schedule"
+            [subName]="vm.currentTeam?.name ?? ''"
+        >
+            <app-button-container buttons>
+                <ng-container *ngIf="vm.teams">
+                    <ng-container *ngIf="vm.teams.length > 1">
+                        <button
+                            mat-raised-button
+                            class="button--light"
+                            [matMenuTriggerFor]="roleMenu"
+                            *ngIf="vm.isDetail === false && vm.currentTeam"
+                        >
+                            Select Team
+                        </button>
+
+                        <mat-menu #roleMenu="matMenu">
+                            <button
+                                mat-menu-item
+                                *ngFor="let team of vm.teams"
+                                (click)="setSelectedTeam(team)"
+                            >
+                                {{ team.name }}
+                            </button>
+                        </mat-menu>
+                    </ng-container>
+                </ng-container>
+            </app-button-container>
+        </app-wide-card-header>
+
+        <ng-container content>
+            <app-schedule-table *ngIf="vm.tableMatches"></app-schedule-table>
+        </ng-container>
+    </app-content-card>
+
+    <app-content-card *ngIf="vm.isDetail">
+        <app-half-card-right-header
+            header
+            name=""
+            (closedClicked)="switchDetail()"
+        >
+            <app-button-container buttons>
+                <!-- <button
+                    mat-raised-button
+                    class="button--light"
+                    (click)="onModifyPlayerClick()"
+                >
+                    Modify Player
+                </button> -->
+            </app-button-container>
+        </app-half-card-right-header>
+
+        <ng-container content>
+            <app-schedule-content
+                *ngIf="vm.currentMatch"
+            ></app-schedule-content>
+        </ng-container>
+    </app-content-card>
+</ng-container>
