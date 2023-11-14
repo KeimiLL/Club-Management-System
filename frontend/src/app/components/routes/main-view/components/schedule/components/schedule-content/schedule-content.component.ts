@@ -6,11 +6,21 @@ import { MatchContentType } from "../../../../../../../shared/models/match.model
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { ScheduleContentService } from "../../services/schedule-content.service";
+import { MatchDetailsComponent } from "./components/match-details/match-details.component";
+import { MatchEventsComponent } from "./components/match-events/match-events.component";
+import { MatchSquadComponent } from "./components/match-squad/match-squad.component";
 
 @Component({
     selector: "app-schedule-content",
     standalone: true,
-    imports: [CommonModule, MaterialModule, CardsModule],
+    imports: [
+        CommonModule,
+        MaterialModule,
+        CardsModule,
+        MatchEventsComponent,
+        MatchSquadComponent,
+        MatchDetailsComponent,
+    ],
     templateUrl: "./schedule-content.component.html",
     styleUrls: ["./schedule-content.component.scss"],
 })

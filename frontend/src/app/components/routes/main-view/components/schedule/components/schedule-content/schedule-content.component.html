@@ -2,7 +2,7 @@
     <button
         class="button--dark button-show-hide"
         mat-raised-button
-        (click)="toggleContentType(contentTypes.Basic)"
+        (click)="toggleContentType(contentTypes.Details)"
     >
         Basic
     </button>
@@ -23,7 +23,7 @@
 </app-button-container>
 
 <div [ngSwitch]="contentType$ | async" class="auth">
-    <ng-container *ngSwitchCase="contentTypes.Basic">xd</ng-container>
-    <ng-container *ngSwitchCase="contentTypes.Squad">dx</ng-container>
-    <ng-container *ngSwitchCase="contentTypes.Events">bla</ng-container>
+    <app-match-details *ngSwitchCase="contentTypes.Details"></app-match-details>
+    <app-match-squad *ngSwitchCase="contentTypes.Squad"></app-match-squad>
+    <app-match-events *ngSwitchCase="contentTypes.Events"></app-match-events>
 </div>

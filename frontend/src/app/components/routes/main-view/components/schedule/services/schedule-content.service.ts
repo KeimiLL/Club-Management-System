@@ -6,7 +6,7 @@ import { MatchContentType } from "../../../../../../shared/models/match.model";
 @Injectable()
 export class ScheduleContentService {
     private readonly contentTypeStore$ = new BehaviorSubject<MatchContentType>(
-        MatchContentType.Basic
+        MatchContentType.Details
     );
 
     public get contentType$(): Observable<MatchContentType> {

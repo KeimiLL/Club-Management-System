@@ -25,7 +25,7 @@ export interface TableMatch extends MatchBase {}
 export interface Match extends MatchBase {}
 
 export enum MatchContentType {
-    Basic = "basic",
+    Details = "details",
     Squad = "squad",
     Events = "events",
 }
