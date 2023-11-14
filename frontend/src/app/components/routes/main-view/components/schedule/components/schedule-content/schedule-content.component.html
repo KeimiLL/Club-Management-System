@@ -1,24 +1,26 @@
-<app-button-container>
+<app-score></app-score>
+
+<app-button-container class="button-container">
     <button
         class="button--dark button-show-hide"
         mat-raised-button
         (click)="toggleContentType(contentTypes.Details)"
     >
-        Basic
+        Details
     </button>
     <button
         class="button--dark button-show-hide"
         mat-raised-button
         (click)="toggleContentType(contentTypes.Squad)"
     >
-        Basic
+        Squad
     </button>
     <button
         class="button--dark button-show-hide"
         mat-raised-button
         (click)="toggleContentType(contentTypes.Events)"
     >
-        Basic
+        Events
     </button>
 </app-button-container>
 

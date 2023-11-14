@@ -1,1 +1,12 @@
-@import "../../../../../../../styles/variables";
+@import "../../../../../../../../styles/variables";
+
+:host {
+    display: flex;
+    flex-direction: column;
+    gap: $medium-spacing;
+
+    .button-container {
+        width: 80%;
+        margin: 0 auto;
+    }
+}

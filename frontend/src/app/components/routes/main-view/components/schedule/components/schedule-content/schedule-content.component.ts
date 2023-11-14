@@ -9,6 +9,7 @@ import { ScheduleContentService } from "../../services/schedule-content.service"
 import { MatchDetailsComponent } from "./components/match-details/match-details.component";
 import { MatchEventsComponent } from "./components/match-events/match-events.component";
 import { MatchSquadComponent } from "./components/match-squad/match-squad.component";
+import { ScoreComponent } from "./components/score/score.component";
 
 @Component({
     selector: "app-schedule-content",
@@ -20,6 +21,7 @@ import { MatchSquadComponent } from "./components/match-squad/match-squad.compon
         MatchEventsComponent,
         MatchSquadComponent,
         MatchDetailsComponent,
+        ScoreComponent,
     ],
     templateUrl: "./schedule-content.component.html",
     styleUrls: ["./schedule-content.component.scss"],
