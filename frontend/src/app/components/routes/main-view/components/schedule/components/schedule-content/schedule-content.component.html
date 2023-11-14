@@ -1,1 +1,29 @@
-<p>schedule-content works!</p>
+<app-button-container>
+    <button
+        class="button--dark button-show-hide"
+        mat-raised-button
+        (click)="toggleContentType(contentTypes.Basic)"
+    >
+        Basic
+    </button>
+    <button
+        class="button--dark button-show-hide"
+        mat-raised-button
+        (click)="toggleContentType(contentTypes.Squad)"
+    >
+        Basic
+    </button>
+    <button
+        class="button--dark button-show-hide"
+        mat-raised-button
+        (click)="toggleContentType(contentTypes.Events)"
+    >
+        Basic
+    </button>
+</app-button-container>
+
+<div [ngSwitch]="contentType$ | async" class="auth">
+    <ng-container *ngSwitchCase="contentTypes.Basic">xd</ng-container>
+    <ng-container *ngSwitchCase="contentTypes.Squad">dx</ng-container>
+    <ng-container *ngSwitchCase="contentTypes.Events">bla</ng-container>
+</div>
