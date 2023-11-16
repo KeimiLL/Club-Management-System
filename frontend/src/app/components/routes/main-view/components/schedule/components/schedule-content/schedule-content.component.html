@@ -1,4 +1,4 @@
-<app-score></app-score>
+<app-score [score]="scoreMock"></app-score>
 
 <app-button-container class="button-container">
     <button
@@ -24,7 +24,7 @@
     </button>
 </app-button-container>
 
-<div [ngSwitch]="contentType$ | async" class="auth">
+<div [ngSwitch]="contentType$ | async">
     <app-match-details *ngSwitchCase="contentTypes.Details"></app-match-details>
     <app-match-squad *ngSwitchCase="contentTypes.Squad"></app-match-squad>
     <app-match-events *ngSwitchCase="contentTypes.Events"></app-match-events>

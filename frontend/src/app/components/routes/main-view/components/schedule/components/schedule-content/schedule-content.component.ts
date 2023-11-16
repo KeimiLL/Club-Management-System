@@ -2,7 +2,10 @@ import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { MatchContentType } from "../../../../../../../shared/models/match.model";
+import {
+    MatchContentType,
+    MatchScore,
+} from "../../../../../../../shared/models/match.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { ScheduleContentService } from "../../services/schedule-content.service";
@@ -29,6 +32,13 @@ import { ScoreComponent } from "./components/score/score.component";
 export class ScheduleContentComponent {
     protected readonly contentTypes = MatchContentType;
     protected readonly contentType$: Observable<MatchContentType>;
+
+    protected scoreMock: MatchScore = {
+        opponent: "testowy opp",
+        is_home: true,
+        goals_scored: 10,
+        goals_conceded: 0,
+    };
 
     constructor(private readonly content: ScheduleContentService) {
         this.contentType$ = this.content.contentType$;
