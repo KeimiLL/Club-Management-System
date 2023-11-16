@@ -36,7 +36,7 @@ import { ScheduleRootService } from "./services/schedule-root.service";
 })
 export class ScheduleComponent {
     protected teams$: Observable<ShortTeam[]>;
-    protected currentTeam$: Observable<ShortTeam | null>;
+    protected currentTeam$: Observable<ShortTeam>;
     protected tableMatches$: Observable<TableMatch[]>;
     protected currentMatch$: Observable<Match | null>;
     protected isDetail$: Observable<boolean>;

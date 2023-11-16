@@ -35,8 +35,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 140%;
-        aspect-ratio: 1 / 1;
+        height: 120%;
         padding: $small-spacing;
 
         font-size: $large-font;
@@ -44,5 +43,7 @@
         border: 1px $white solid;
         border-radius: 100%;
         background-color: $dark-btn-back;
+
+        aspect-ratio: 1 / 1;
     }
 }

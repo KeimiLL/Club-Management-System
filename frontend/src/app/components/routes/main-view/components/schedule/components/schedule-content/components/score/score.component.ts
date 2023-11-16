@@ -1,12 +1,13 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit } from "@angular/core";
+import { take, tap } from "rxjs";
 
 import { MatchScore } from "../../../../../../../../../shared/models/match.model";
 import { MaterialModule } from "../../../../../../../../../shared/modules/material.module";
 import { DropdownViewManagerService } from "../../../../../../../../../shared/services/dropdown-view-manager.service";
 
 @Component({
-    selector: "app-score[score][teamName]",
+    selector: "app-score[score]",
     standalone: true,
     imports: [CommonModule, MaterialModule],
     templateUrl: "./score.component.html",
@@ -15,8 +16,8 @@ import { DropdownViewManagerService } from "../../../../../../../../../shared/se
 export class ScoreComponent implements OnInit {
     @Input() public score: MatchScore;
 
-    protected homeName: string | undefined;
-    protected awayName: string | undefined;
+    protected homeName: string;
+    protected awayName: string;
     protected homeGoals: number;
     protected awayGoals: number;
 
@@ -30,11 +31,21 @@ export class ScoreComponent implements OnInit {
         this.awayName = this.score.opponent;
         this.homeGoals = this.score.goals_scored;
         this.awayGoals = this.score.goals_conceded;
-        this.homeName = this.dropdown.currentTeam?.name;
+        this.dropdown.currentTeam$
+            .pipe(
+                take(1),
+                tap((team) => (this.homeName = team.name))
+            )
+            .subscribe();
     }
 
     private isAway(): void {
-        this.awayName = this.dropdown.currentTeam?.name;
+        this.dropdown.currentTeam$
+            .pipe(
+                take(1),
+                tap((team) => (this.awayName = team.name))
+            )
+            .subscribe();
         this.homeName = this.score.opponent;
         this.awayGoals = this.score.goals_scored;
         this.homeGoals = this.score.goals_conceded;
