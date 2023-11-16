@@ -19,13 +19,13 @@ export const menuItems: MainMenuItem[] = [
         icon: "directions_run",
         route: "/app/squad",
     },
-    // {
-    //     name: ModulesPermissions.Schedule,
-    //     icon: "event_available",
-    //     route: "/app",
-    // },
+    {
+        name: ModulesPermissions.Schedule,
+        icon: "event_available",
+        route: "/app/schedule",
+    },
     { name: "finances", icon: "savings", route: "/app" },
-    { name: "medic", icon: "local_hospital", route: "/app" },
+    // { name: "medic", icon: "local_hospital", route: "/app" },
     {
         name: ModulesPermissions.Settings,
         icon: "settings",
