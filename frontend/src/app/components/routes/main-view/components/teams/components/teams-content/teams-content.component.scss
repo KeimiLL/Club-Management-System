@@ -16,4 +16,22 @@
         font-size: $large-font;
         width: 30%;
     }
+
+    .container {
+        &__left {
+            flex-basis: 15%;
+
+            &__icon {
+                transform: scale(2);
+                color: $light-blue-icon;
+                background-color: $blue-icon;
+                border-radius: 5px;
+                padding: $small-spacing;
+            }
+        }
+
+        &__right {
+            flex-basis: 85%;
+        }
+    }
 }
