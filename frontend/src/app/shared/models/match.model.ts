@@ -9,6 +9,11 @@ export interface MatchScore {
     goals_conceded: number;
 }
 
+export interface MatchDetails {
+    notes: string;
+    date: string;
+}
+
 export enum MatchEvents {
     Goal = "start",
     YellowCard = "red_card",

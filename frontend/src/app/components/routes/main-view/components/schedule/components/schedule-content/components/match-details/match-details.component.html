@@ -1,1 +1,29 @@
-<p>match-details works!</p>
+<div class="container flex-center">
+    <div class="container__left flex-center">
+        <mat-icon class="container__left__icon">date_range</mat-icon>
+    </div>
+    <app-half-card-section class="container__right">
+        <app-section-header name="Date of match" sectionHeader>
+        </app-section-header>
+        <ng-container sectionContent>
+            <div class="date">{{ matchDetails.date.toString() }}</div>
+        </ng-container>
+    </app-half-card-section>
+</div>
+
+<div class="container flex-center">
+    <div class="container__left flex-center">
+        <mat-icon class="container__left__icon">description</mat-icon>
+    </div>
+    <app-half-card-section class="container__right">
+        <app-section-header name="Description" sectionHeader>
+        </app-section-header>
+        <ng-container sectionContent>
+            <div>
+                {{
+                    matchDetails.notes !== "" ? matchDetails.notes : "No notes"
+                }}
+            </div>
+        </ng-container>
+    </app-half-card-section>
+</div>
