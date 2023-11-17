@@ -25,7 +25,13 @@
 </app-button-container>
 
 <div [ngSwitch]="contentType$ | async">
-    <app-match-details *ngSwitchCase="contentTypes.Details"></app-match-details>
-    <app-match-squad *ngSwitchCase="contentTypes.Squad"></app-match-squad>
+    <app-match-details
+        *ngSwitchCase="contentTypes.Details"
+        [matchDetails]="{ date: 'dzisiaj', notes: '5notatek' }"
+    ></app-match-details>
+    <app-match-squad
+        *ngSwitchCase="contentTypes.Squad"
+        [squad]="['zdzichu', 'ferdek', 'tracz', 'boczek']"
+    ></app-match-squad>
     <app-match-events *ngSwitchCase="contentTypes.Events"></app-match-events>
 </div>
