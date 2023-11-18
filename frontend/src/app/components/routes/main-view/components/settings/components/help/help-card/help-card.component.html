@@ -1,0 +1,13 @@
+<div class="card flex-center">
+    <h2 class="card__headline">
+        {{ cardHeadline }}
+    </h2>
+    <p class="card__text">{{ cardText }}</p>
+    <button
+        class="button--light card__button"
+        mat-raised-button
+        (click)="handleButtonClick()"
+    >
+        {{ buttonText }}
+    </button>
+</div>

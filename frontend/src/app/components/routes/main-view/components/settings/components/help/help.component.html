@@ -1,1 +1,64 @@
-<p>help works!</p>
+<app-content-card>
+    <app-wide-card-header header name="Help"></app-wide-card-header>
+
+    <ng-container content class="flex-center">
+        <app-help-card
+            *ngIf="helpState === HelpState.Start"
+            cardHeadline="Welcome to the Club Management System!"
+            cardText="Click the button below to get started."
+            buttonText="I Want to Get to Know the System"
+            (buttonClick)="helpRootService.startGuide()"
+        >
+        </app-help-card>
+
+        <mat-progress-bar
+            *ngIf="helpState === HelpState.Guide"
+            mode="determinate"
+            [value]="((currentPhotoIndex + 1) / photos.length) * 100"
+        ></mat-progress-bar>
+
+        <div class="guide flex-center" *ngIf="helpState === HelpState.Guide">
+            <button
+                (click)="helpRootService.previousPhoto()"
+                mat-raised-button
+                class="button--light guide__prev"
+                [disabled]="currentPhotoIndex === 0"
+            >
+                <mat-icon class="guide__prev__icon">arrow_back</mat-icon>
+            </button>
+            <div
+                class="guide__content"
+                [@photoAnimation]="'photo' + currentPhotoIndex"
+            >
+                <ng-container *ngIf="currentPhotoIndex < photos.length">
+                    <img
+                        class="guide__img"
+                        [src]="photos[currentPhotoIndex].url"
+                        alt="Current Photo"
+                    />
+                    <div class="guide__img__details">
+                        <h2>{{ photos[currentPhotoIndex].title }}</h2>
+                        <p>{{ photos[currentPhotoIndex].description }}</p>
+                    </div>
+                </ng-container>
+            </div>
+            <button
+                (click)="helpRootService.nextPhoto()"
+                mat-raised-button
+                class="button--light guide__next"
+                [disabled]="currentPhotoIndex >= photos.length"
+            >
+                <mat-icon class="guide__next__icon">arrow_forward</mat-icon>
+            </button>
+        </div>
+
+        <app-help-card
+            *ngIf="helpState === HelpState.Finish"
+            cardHeadline="Thank You for Exploring!"
+            cardText="We hope you enjoyed the Club Management System!"
+            buttonText="I Want to Start Guide Again"
+            (buttonClick)="helpRootService.restartGuide()"
+        >
+        </app-help-card>
+    </ng-container>
+</app-content-card>

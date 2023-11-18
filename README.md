@@ -48,6 +48,11 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
    yarn install --frozen-lockfile
    ```
 
+1. To create and start Docker containers defined in a `docker-compose.yml` file. The `-V` option recreate anonymous volumes instead of retrieving data from the previous containers:
+
+   ```bash
+   docker compose up -V```
+
 ### Working with the database
 
 1. Run `psql` inside the database container to be able to work with the database and connect to it:
