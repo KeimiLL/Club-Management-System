@@ -4,7 +4,7 @@ import { formatDateFromInputForBackend } from "../../../../../../../shared/utils
 
 export interface MatchControls {
     match: FormGroup<BasicControls>;
-    player_ids: FormControl<number[] | null>;
+    player_ids: FormControl<number[]>;
 }
 
 export interface BasicControls {
@@ -45,8 +45,9 @@ export const newMatchDataFormBuilder = {
                     nonNullable: false,
                 }),
             }),
-            player_ids: new FormControl<number[] | null>(null, {
-                nonNullable: false,
+            player_ids: new FormControl<number[]>([], {
+                nonNullable: true,
+                validators: [Validators.required],
             }),
         }),
 };

@@ -35,10 +35,12 @@
                                         formControlName="opponent"
                                     />
                                 </mat-form-field>
+
                                 <mat-form-field
                                     appearance="fill"
                                     class="popup__basic--control"
                                 >
+                                    <mat-label>Choose a date</mat-label>
                                     <input
                                         formControlName="date"
                                         required
@@ -58,9 +60,13 @@
                                     ></mat-datepicker>
                                 </mat-form-field>
 
-                                <div class="popup__basic--control">
+                                <div
+                                    class="popup__basic--control popup__basic--checkbox"
+                                >
+                                    <mat-label class="popup__checkbox-label"
+                                        >Is Home Match:</mat-label
+                                    >
                                     <mat-checkbox formControlName="is_home" />
-                                    <mat-label>Is Home Match</mat-label>
                                 </div>
                             </div>
                         </ng-container>
@@ -148,7 +154,7 @@
                             class="button--light"
                             buttons
                         >
-                            Create new Team
+                            Create new Match
                         </button>
                     </div>
                 </form>

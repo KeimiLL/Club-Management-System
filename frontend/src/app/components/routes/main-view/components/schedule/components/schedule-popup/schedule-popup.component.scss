@@ -1,8 +1,13 @@
 @import "../../../../../../../../styles/component-styles/components";
+// @import "../../../../../../../../styles/variables";
 
 .popup {
     .card__content {
         padding: 1rem 0;
+    }
+
+    &__checkbox-label {
+        font-size: $normal-font;
     }
 
     &__basic {
@@ -12,6 +17,15 @@
 
         &--control {
             width: 30%;
+        }
+
+        &--checkbox {
+            background-color: $field;
+            display: flex;
+            padding: $small-spacing;
+            justify-content: space-around;
+            flex-direction: row;
+            align-items: center;
         }
     }
 
