@@ -30,12 +30,12 @@ import { SchedulePopupRootService } from "./services/schedule-popup-root.service
         FilterUsingArrayPipe,
         FilterUsingPropControlPipe,
     ],
+    providers: [SchedulePopupFormsService, SchedulePopupRootService],
     templateUrl: "./schedule-popup.component.html",
     styleUrls: ["./schedule-popup.component.scss"],
 })
 export class SchedulePopupComponent {
     protected matchForm: FormGroup<MatchControls>;
-    protected coachInputControl = new FormControl<string>("");
     protected playerInputControl = new FormControl<string>("");
 
     protected allPlayers$: Observable<ShortPlayer[]>;
@@ -72,6 +72,8 @@ export class SchedulePopupComponent {
     }
 
     protected onSubmit(): void {
-        this.root.createMatch(this.matchForm.value as MatchCreate);
+        const newMatch = this.matchForm.value as MatchCreate;
+        newMatch.match.team_id = this.data.teamId;
+        this.root.createMatch(newMatch);
     }
 }

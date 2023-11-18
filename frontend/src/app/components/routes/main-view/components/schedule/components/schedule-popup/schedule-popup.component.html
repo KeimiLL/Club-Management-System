@@ -28,14 +28,6 @@
                                     appearance="fill"
                                     class="popup__basic--control"
                                 >
-                                    <mat-label>Is Home Match</mat-label>
-                                    <mat-checkbox formControlName="is_home" />
-                                </mat-form-field>
-
-                                <mat-form-field
-                                    appearance="fill"
-                                    class="popup__basic--control"
-                                >
                                     <mat-label>Opponent name</mat-label>
                                     <input
                                         matInput
@@ -65,6 +57,11 @@
                                         #picker
                                     ></mat-datepicker>
                                 </mat-form-field>
+
+                                <div class="popup__basic--control">
+                                    <mat-checkbox formControlName="is_home" />
+                                    <mat-label>Is Home Match</mat-label>
+                                </div>
                             </div>
                         </ng-container>
                     </app-half-card-section>

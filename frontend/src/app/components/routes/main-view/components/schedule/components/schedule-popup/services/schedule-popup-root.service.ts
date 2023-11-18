@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
 import { BehaviorSubject, map, Observable, tap } from "rxjs";
 
+import { MatchesHttpService } from "../../../../../../../../shared/api/matches-http.service";
 import { TeamsHttpService } from "../../../../../../../../shared/api/teams-http.service";
 import { MatchCreate } from "../../../../../../../../shared/models/match.model";
 import { ShortPlayer } from "../../../../../../../../shared/models/player.model";
@@ -37,6 +38,7 @@ export class SchedulePopupRootService {
 
     constructor(
         private readonly httpTeams: TeamsHttpService,
+        private readonly httpMatches: MatchesHttpService,
         private readonly dialogRef: MatDialogRef<SchedulePopupComponent>,
         private readonly forms: SchedulePopupFormsService
     ) {}
@@ -66,14 +68,14 @@ export class SchedulePopupRootService {
     }
 
     public createMatch(match: MatchCreate): void {
-        // this.httpMatch
-        //     .postNewMatch(team)
-        //     .pipe(
-        //         tap(() => {
-        //             this.closePopup(team);
-        //         })
-        //     )
-        //     .subscribe();
+        this.httpMatches
+            .postNewMatch(match)
+            .pipe(
+                tap(() => {
+                    this.closePopup(match);
+                })
+            )
+            .subscribe();
     }
 
     public closePopup(team: MatchCreate | false): void {
