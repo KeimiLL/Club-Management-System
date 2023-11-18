@@ -11,6 +11,7 @@ import { SplitViewManagerService } from "./../../../../../shared/services/split-
 import { TableService } from "./../../../../../shared/services/table.service";
 import { ScheduleContentComponent } from "./components/schedule-content/schedule-content.component";
 import { ScheduleTableComponent } from "./components/schedule-table/schedule-table.component";
+import { ScheduleContentService } from "./services/schedule-content.service";
 import { ScheduleRootService } from "./services/schedule-root.service";
 
 @Component({
@@ -30,11 +31,12 @@ import { ScheduleRootService } from "./services/schedule-root.service";
         SplitViewManagerService,
         TableService,
         ScheduleRootService,
+        ScheduleContentService,
     ],
 })
 export class ScheduleComponent {
     protected teams$: Observable<ShortTeam[]>;
-    protected currentTeam$: Observable<ShortTeam | null>;
+    protected currentTeam$: Observable<ShortTeam>;
     protected tableMatches$: Observable<TableMatch[]>;
     protected currentMatch$: Observable<Match | null>;
     protected isDetail$: Observable<boolean>;

@@ -2,10 +2,27 @@ interface MatchBase {
     date: string;
 }
 
+export interface MatchScore {
+    opponent: string;
+    is_home: boolean;
+    goals_scored: number;
+    goals_conceded: number;
+}
+
+export interface MatchDetails {
+    notes: string;
+    date: string;
+}
+
 export enum MatchEvents {
-    start = 0,
-    goal = 1,
-    end = 2,
+    Goal = "start",
+    YellowCard = "red_card",
+    RedCard = "yellow_card",
+}
+
+export enum MatchContinuity {
+    Start = "start",
+    End = "end",
 }
 
 export interface MatchEvent {
@@ -23,3 +40,9 @@ export interface MatchCreate extends MatchBase {}
 export interface TableMatch extends MatchBase {}
 
 export interface Match extends MatchBase {}
+
+export enum MatchContentType {
+    Details = "details",
+    Squad = "squad",
+    Events = "events",
+}

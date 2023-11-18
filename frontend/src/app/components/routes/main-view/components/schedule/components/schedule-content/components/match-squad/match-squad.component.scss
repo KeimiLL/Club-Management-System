@@ -1,0 +1,14 @@
+@import "../../../../../../../../../../styles/variables";
+
+:host {
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .player {
+        padding: $small-spacing;
+        font-size: $large-font;
+        width: 50%;
+    }
+}

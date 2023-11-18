@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
+import { BehaviorSubject, filter, Observable, switchMap, tap } from "rxjs";
 
 import { TeamsHttpService } from "../api/teams-http.service";
 import { MainRoutes } from "../models/misc.model";
@@ -31,8 +31,10 @@ export class DropdownViewManagerService extends DestroyClass {
         return this.currentTeamStore$.value;
     }
 
-    public get currentTeam$(): Observable<ShortTeam | null> {
-        return this.currentTeamStore$.asObservable();
+    public get currentTeam$(): Observable<ShortTeam> {
+        return this.currentTeamStore$
+            .asObservable()
+            .pipe(filter((team): team is ShortTeam => team !== null));
     }
 
     private set teams(teams: ShortTeam[]) {

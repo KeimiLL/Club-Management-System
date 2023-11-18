@@ -1,0 +1,49 @@
+@import "../../../../../../../../../../styles/variables";
+
+:host {
+    width: 90%;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    background-color: $dark-btn-back-on-hover;
+    padding: $medium-spacing;
+    margin: $medium-spacing auto;
+    border-radius: 5rem;
+    color: $white;
+    position: relative;
+    border: 1px $white solid;
+
+    .team {
+        display: flex;
+        width: 33%;
+        font-size: $large-font;
+
+        &__left {
+            justify-content: left;
+        }
+        &__right {
+            justify-content: right;
+        }
+    }
+
+    .numbers {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 120%;
+        padding: $small-spacing;
+
+        font-size: $large-font;
+        font-weight: $bold-weight;
+        border: 1px $white solid;
+        border-radius: 100%;
+        background-color: $dark-btn-back;
+
+        aspect-ratio: 1 / 1;
+    }
+}

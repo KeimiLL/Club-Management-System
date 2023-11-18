@@ -39,7 +39,7 @@ import { SquadRootService } from "./services/squad-root.service";
 })
 export class SquadComponent implements OnInit {
     protected teams$: Observable<ShortTeam[]>;
-    protected currentTeam$: Observable<ShortTeam | null>;
+    protected currentTeam$: Observable<ShortTeam>;
     protected isDetail$: Observable<boolean>;
     protected tablePlayers$: Observable<TablePlayer[]>;
     protected currentPlayer$: Observable<Player | null>;

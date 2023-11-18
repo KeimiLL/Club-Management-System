@@ -1,20 +1,9 @@
-@import "../../../../../../../../styles/variables";
+@import "../../../../../../../../../../styles/variables";
 
 :host {
-    .coach {
+    .date {
         padding: $small-spacing;
-        font-size: $very-large-font;
-    }
-
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .player {
-        padding: $small-spacing;
-        font-size: $large-font;
-        width: 30%;
+        font-size: $normal-font;
     }
 
     .container {
