@@ -22,7 +22,7 @@
                 (click)="helpRootService.previousPhoto()"
                 mat-raised-button
                 class="button--light guide__prev"
-                [disabled]="currentPhotoIndex <= 0"
+                [disabled]="currentPhotoIndex === 0"
             >
                 <mat-icon class="guide__prev__icon">arrow_back</mat-icon>
             </button>

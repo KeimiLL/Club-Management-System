@@ -37,6 +37,7 @@ export class HelpRootService {
     public nextPhoto(): void {
         if (this.currentPhotoIndex < this.photos.length - 1) {
             this.currentPhotoIndex++;
+            console.log(this.currentPhotoIndex);
             this.helpState = HelpState.Guide;
         } else {
             this.helpState = HelpState.Finish;
@@ -46,6 +47,7 @@ export class HelpRootService {
     public previousPhoto(): void {
         if (this.currentPhotoIndex > 0) {
             this.currentPhotoIndex--;
+            console.log(this.currentPhotoIndex);
             this.helpState = HelpState.Guide;
         }
     }
