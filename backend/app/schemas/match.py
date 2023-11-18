@@ -8,7 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field, NonNegativeInt
 
 if TYPE_CHECKING:
     from app.schemas.matchevent import MatchEvent
-    from app.schemas.player import Player
+    from app.schemas.player import Player, PlayerOnlyBaseInfo
     from app.schemas.team import Team
 
 
@@ -105,4 +105,4 @@ class MatchTableView(BaseModel):
 class MatchSideView(MatchInProgress):
     """Match schema for displaying data in the side panel."""
 
-    players: list[str]
+    players: list["PlayerOnlyBaseInfo"]
