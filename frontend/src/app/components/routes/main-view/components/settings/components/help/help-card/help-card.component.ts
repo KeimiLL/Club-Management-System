@@ -1,10 +1,12 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
+import { MaterialModule } from "../../../../../../../../shared/modules/material.module";
+
 @Component({
     selector: "app-help-card",
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, MaterialModule],
     templateUrl: "./help-card.component.html",
     styleUrls: ["./help-card.component.scss"],
 })

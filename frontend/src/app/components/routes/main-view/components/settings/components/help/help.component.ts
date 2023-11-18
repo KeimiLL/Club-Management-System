@@ -34,7 +34,7 @@ export class HelpComponent implements OnInit {
     protected helpState: HelpState = HelpState.Start;
     HelpState = HelpState;
 
-    constructor(private readonly helpRootService: HelpRootService) {}
+    constructor(protected helpRootService: HelpRootService) {}
 
     ngOnInit(): void {
         this.helpRootService.helpState$.subscribe((state) => {
@@ -48,25 +48,5 @@ export class HelpComponent implements OnInit {
 
     protected get currentPhotoIndex(): number {
         return this.helpRootService.getCurrentPhotoIndex();
-    }
-
-    protected nextPhoto(): void {
-        this.helpRootService.nextPhoto();
-    }
-
-    protected previousPhoto(): void {
-        this.helpRootService.previousPhoto();
-    }
-
-    protected startGuide(): void {
-        this.helpRootService.startGuide();
-    }
-
-    protected restartGuide(): void {
-        this.helpRootService.restartGuide();
-    }
-
-    protected toggleFarewellCard(): void {
-        this.helpRootService.toggleFarewellCard();
     }
 }

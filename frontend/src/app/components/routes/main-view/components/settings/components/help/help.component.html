@@ -7,7 +7,7 @@
             cardHeadline="Welcome to the Club Management System!"
             cardText="Click the button below to get started."
             buttonText="I Want to Get to Know the System"
-            (buttonClick)="startGuide()"
+            (buttonClick)="helpRootService.startGuide()"
         >
         </app-help-card>
 
@@ -19,7 +19,7 @@
 
         <div class="guide flex-center" *ngIf="helpState === HelpState.Guide">
             <button
-                (click)="previousPhoto()"
+                (click)="helpRootService.previousPhoto()"
                 mat-raised-button
                 class="button--light guide__prev"
                 [disabled]="currentPhotoIndex <= 0"
@@ -43,7 +43,7 @@
                 </ng-container>
             </div>
             <button
-                (click)="nextPhoto()"
+                (click)="helpRootService.nextPhoto()"
                 mat-raised-button
                 class="button--light guide__next"
                 [disabled]="currentPhotoIndex >= photos.length"
@@ -57,7 +57,7 @@
             cardHeadline="Thank You for Exploring!"
             cardText="We hope you enjoyed the Club Management System!"
             buttonText="I Want to Start Guide Again"
-            (buttonClick)="restartGuide()"
+            (buttonClick)="helpRootService.restartGuide()"
         >
         </app-help-card>
     </ng-container>
