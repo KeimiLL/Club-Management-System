@@ -86,7 +86,7 @@ class MatchInProgress(BaseModel):
     is_home: bool
     goals_scored: NonNegativeInt
     goals_conceded: NonNegativeInt
-    notes: str
+    notes: str | None = None
     date: datetime.date
 
 
@@ -100,3 +100,9 @@ class MatchTableView(BaseModel):
     goals_scored: NonNegativeInt | None = None
     goals_conceded: NonNegativeInt | None = None
     date: datetime.date
+
+
+class MatchSideView(MatchInProgress):
+    """Match schema for displaying data in the side panel."""
+
+    players: list[str]

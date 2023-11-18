@@ -16,6 +16,7 @@ from app.schemas.match import (
     MatchInProgress,
     MatchScore,
     MatchScoreUpdate,
+    MatchSideView,
     MatchTableView,
 )
 from app.schemas.match_player import MatchPlayerCreatePlayerIdList
@@ -230,5 +231,67 @@ def get_matches_with_pagination_by_team_id(
                 for match in matches
             ],
             total=total,
+        )
+    raise ForbiddenException()
+
+
+@router.get(
+    "/{match_id}",
+    response_model=MatchSideView,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def get_match_by_id(
+    match_id: Annotated[int, Path(ge=1, le=10**7)],
+    current_user: Annotated[User, Depends(viewer_not_allowed)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Returns the match by the given id.
+
+    Args:
+        match_id (Annotated[int, Path]): The requested match's id. Has to be greater than
+            or equal to 1 and less than or equal to 10**7.
+        current_user (Annotated[User, Depends]): Current user read from access token.
+            Defaults to Depends(viewer_not_allowed).
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+    Raises:
+        ForbiddenException: If the current user does not have sufficient permissions.
+
+    Returns:
+        MatchSideView: The requested match.
+    """
+    if current_user.role == Roles.PLAYER:
+        match = crud_match.get_match_by_id(match_id=match_id, db=db)
+        if current_user.player.team_id != match.team_id:
+            raise ForbiddenException()
+        match_dict = match.__dict__
+        return MatchSideView(
+            **match_dict,
+            team_name=match.team.name,
+            players=[player.user.full_name for player in match.players]
+        )
+    if current_user.role in (Roles.ADMIN, Roles.BOARD):
+        match = crud_match.get_match_by_id(match_id=match_id, db=db)
+        match_dict = match.__dict__
+        return MatchSideView(
+            **match_dict,
+            team_name=match.team.name,
+            players=[player.user.full_name for player in match.players]
+        )
+    if current_user.role == Roles.COACH:
+        match = crud_match.get_match_by_id(match_id=match_id, db=db)
+        if current_user.id != match.team.coach_id:
+            raise ForbiddenException()
+        match_dict = match.__dict__
+        return MatchSideView(
+            **match_dict,
+            team_name=match.team.name,
+            players=[player.user.full_name for player in match.players]
         )
     raise ForbiddenException()
