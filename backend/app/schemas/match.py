@@ -81,10 +81,22 @@ class MatchInProgress(BaseModel):
     """Match schema for returning a match in progress."""
 
     id: int = Field(..., ge=1, le=10**7)
+    team_name: str = Field(..., min_length=3)
     opponent: str = Field(..., min_length=3)
     is_home: bool
     goals_scored: NonNegativeInt
     goals_conceded: NonNegativeInt
     notes: str
     date: datetime.date
-    team_name: str
+
+
+class MatchTableView(BaseModel):
+    """Match schema for returning data to be shown in the matches' table."""
+
+    id: int = Field(..., ge=1, le=10**7)
+    team_name: str = Field(..., min_length=3)
+    opponent: str = Field(..., min_length=3)
+    is_home: bool = True
+    goals_scored: NonNegativeInt | None = None
+    goals_conceded: NonNegativeInt | None = None
+    date: datetime.date

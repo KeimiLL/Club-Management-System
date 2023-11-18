@@ -11,6 +11,7 @@ from app.crud.crud_match import (
     create_new_match,
     get_match_by_id,
     get_matches_in_progress_with_limit,
+    get_matches_with_pagination_by_team_id,
     update_match_score,
     update_match_state,
 )
@@ -411,3 +412,101 @@ def test_correct__get_matches_in_progress_with_limit(
         assert first_match.date == match.date
         assert first_match.goals_scored == 0
         assert first_match.goals_conceded == 0
+
+
+@pytest.mark.parametrize(
+    "user,coach,team,matches,page,per_page,team_ids",
+    [
+        (
+            user_create_unique_1,
+            coach_create,
+            team_create,
+            [match_create, match_create],
+            0,
+            1,
+            [1, 1],
+        ),
+        (
+            user_create_unique_1,
+            coach_create,
+            team_create,
+            [match_create, match_create],
+            0,
+            2,
+            [1, 2],
+        ),
+        (
+            user_create_unique_1,
+            coach_create,
+            team_create,
+            [match_create, match_create, match_create],
+            1,
+            1,
+            [1, 2, 1],
+        ),
+        (
+            user_create_unique_1,
+            coach_create,
+            team_create,
+            [match_create, match_create, match_create],
+            1,
+            2,
+            [1, 2, 2],
+        ),
+        (
+            user_create_unique_1,
+            coach_create,
+            team_create,
+            [match_create, match_create, match_create],
+            2,
+            1,
+            [1, 2, 2],
+        ),
+    ],
+)
+def test_correct__get_matches_with_pagination_by_team_id(
+    user: UserCreate,
+    coach: CoachCreate,
+    team: TeamCreate,
+    matches: list[MatchCreate],
+    page: int,
+    per_page: int,
+    team_ids: list[int],
+    db_session: Session,
+) -> None:
+    """Tests getting all matches that meet the filtering criteria.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        matches (list[MatchCreate]): Matches to be created and read.
+        page (int): The page index to be retrieved.
+        per_page (int): The number of items per page.
+        team_ids (list[int]): The team ids to read.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    create_new_coach(coach, db_session)
+    for _ in team_ids:
+        create_new_team(
+            team,
+            db_session,
+        )
+    new_matches = [
+        create_new_match(
+            match.model_copy(update={"team_id": team_id}),
+            db_session,
+        )
+        for match, team_id in zip(matches, team_ids)
+    ]
+    for team_id in set(team_ids):
+        all_matches, new_total = get_matches_with_pagination_by_team_id(
+            page, per_page, team_id, db_session
+        )
+        assert new_total == sum(t == team_id for t in team_ids)
+        for index, new_match in enumerate(
+            [m for m in new_matches if m.team_id == team_id]
+        ):
+            if page * per_page <= index < page * per_page + per_page:
+                assert all_matches[index - page * per_page] == new_match

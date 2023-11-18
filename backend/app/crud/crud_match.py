@@ -1,15 +1,19 @@
 """File responsible for implementing matches related CRUD operations."""
 
 
+from typing import Callable
+
 from app.core.exceptions import DuplicateException, MissingException
 from app.crud.crud_team import get_team_by_id
 from app.models.match import Match
 from app.models.player import Player
 from app.schemas.enums import MatchEvent
 from app.schemas.match import MatchCreate, MatchScore
-from sqlalchemy import select, update
+from sqlalchemy import func, select, update
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
+
+func: Callable
 
 
 def create_new_match(match: MatchCreate, db: Session) -> Match:
@@ -194,5 +198,41 @@ def get_matches_in_progress_with_limit(limit: int | None, db: Session) -> list[M
             & (Match.has_ended == False)  # pylint: disable=singleton-comparison
         )
         return list(db.scalars(query.order_by(Match.id.asc()).limit(limit)).all())
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def get_matches_with_pagination_by_team_id(
+    page: int, per_page: int, team_id: int, db: Session
+) -> tuple[list[Match], int]:
+    """Gets all matches that were played by the given team.
+
+    Args:
+        page (int): The current page number.
+        per_page (int): The number of items per page.
+        team_id (int): The team's id.
+        db (Session): Database session.
+
+    Raises:
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        tuple[list[Match], int]: The filtered list of matches alongside the total number of
+            matches that meet the criteria.
+    """
+    try:
+        get_team_by_id(team_id, db)
+        query = select(Match).where(Match.team_id == team_id)
+        total = db.scalar(select(func.count()).select_from(query))
+        return (
+            list(
+                db.scalars(
+                    query.order_by(Match.date.asc())
+                    .offset(page * per_page)
+                    .limit(per_page)
+                ).all()
+            ),
+            total,
+        )
     except SQLAlchemyError as exc:
         raise exc
