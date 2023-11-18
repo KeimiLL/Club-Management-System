@@ -7,18 +7,18 @@ export interface TableMeeting {
     date: Date;
 }
 
-export interface PrimaryDataMeeting {
+export interface MeetingBase {
     notes: string | null;
     name: string;
     date: string;
 }
 
-export interface NewMeeting {
-    meeting: PrimaryDataMeeting;
+export interface MeetingCreate {
+    meeting: MeetingBase;
     user_ids: number[];
 }
 
-export interface Meeting extends PrimaryDataMeeting {
+export interface Meeting extends MeetingBase {
     id: number;
     created_by_user: ShortUser;
     users: ShortUser[];

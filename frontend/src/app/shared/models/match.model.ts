@@ -1,3 +1,5 @@
+import { ShortPlayer } from "./player.model";
+
 export enum MatchContentType {
     Details = "details",
     Squad = "squad",
@@ -32,4 +34,16 @@ export interface MatchBase extends MatchScoreBase, MatchDetails {
 export interface MatchCreate {
     match: MatchBase;
     player_ids: number[];
+}
+
+export interface Match extends MatchDetails, MatchScore {
+    id: number;
+    team_name: string;
+    players: ShortPlayer[];
+}
+
+export interface TableMatch extends MatchScore {
+    id: number;
+    team_name: string;
+    date: string;
 }

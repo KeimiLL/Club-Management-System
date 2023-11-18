@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { MatDialogRef } from "@angular/material/dialog";
-import { BehaviorSubject, Observable, tap } from "rxjs";
+import { BehaviorSubject, map, Observable, tap } from "rxjs";
 
-import { PlayersHttpService } from "../../../../../../../../shared/api/players-http.service";
+import { TeamsHttpService } from "../../../../../../../../shared/api/teams-http.service";
 import { MatchCreate } from "../../../../../../../../shared/models/match.model";
 import { ShortPlayer } from "../../../../../../../../shared/models/player.model";
 import { SchedulePopupComponent } from "../schedule-popup.component";
@@ -36,17 +36,16 @@ export class SchedulePopupRootService {
     }
 
     constructor(
-        private readonly httpPlayers: PlayersHttpService,
+        private readonly httpTeams: TeamsHttpService,
         private readonly dialogRef: MatDialogRef<SchedulePopupComponent>,
         private readonly forms: SchedulePopupFormsService
-    ) {
-        this.initData();
-    }
+    ) {}
 
-    private initData(): void {
-        this.httpPlayers
-            .getAllPlayers()
+    public initData(teamId: number): void {
+        this.httpTeams
+            .getTeamById(teamId)
             .pipe(
+                map((team) => team.players),
                 tap((players) => {
                     this.allPlayers = players;
                 })

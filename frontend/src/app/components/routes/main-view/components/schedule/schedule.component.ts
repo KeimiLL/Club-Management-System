@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { Observable } from "rxjs";
 
+import { Match, TableMatch } from "../../../../../shared/models/match.model";
 import { ShortTeam } from "../../../../../shared/models/team.model";
 import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
@@ -36,15 +37,15 @@ import { ScheduleRootService } from "./services/schedule-root.service";
 export class ScheduleComponent {
     protected teams$: Observable<ShortTeam[]>;
     protected currentTeam$: Observable<ShortTeam>;
-    protected tableMatches$: Observable<unknown[]>;
-    protected currentMatch$: Observable<unknown>;
+    protected tableMatches$: Observable<TableMatch[]>;
+    protected currentMatch$: Observable<Match | null>;
     protected isDetail$: Observable<boolean>;
 
     constructor(
-        private readonly splitView: SplitViewManagerService<unknown>,
+        private readonly splitView: SplitViewManagerService<Match>,
         private readonly dropdown: DropdownViewManagerService,
         private readonly root: ScheduleRootService,
-        private readonly table: TableService<unknown>
+        private readonly table: TableService<TableMatch>
     ) {
         this.teams$ = this.dropdown.teams$;
         this.currentTeam$ = this.dropdown.currentTeam$;

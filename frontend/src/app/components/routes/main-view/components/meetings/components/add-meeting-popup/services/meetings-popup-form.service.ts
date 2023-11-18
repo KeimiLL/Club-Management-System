@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 
 import {
     Meeting,
-    NewMeeting,
+    MeetingCreate,
 } from "../../../../../../../../shared/models/meeting.model";
 import { ShortUser } from "../../../../../../../../shared/models/user.model";
 import { formatDateFromInputForBackend } from "../../../../../../../../shared/utils/dateHelpers";
@@ -28,7 +28,7 @@ export class MeetingsPopupFormService extends DestroyClass {
         this.meetingForm.patchValue(this.meetingMapper(meeting));
     }
 
-    private meetingMapper(meeting: Meeting): NewMeeting {
+    private meetingMapper(meeting: Meeting): MeetingCreate {
         return {
             meeting: {
                 name: meeting.name,
@@ -50,7 +50,7 @@ export class MeetingsPopupFormService extends DestroyClass {
         );
     }
 
-    public getFormData(): NewMeeting {
-        return this.meetingForm.value as NewMeeting;
+    public getFormData(): MeetingCreate {
+        return this.meetingForm.value as MeetingCreate;
     }
 }
