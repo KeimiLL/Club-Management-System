@@ -67,7 +67,7 @@ export class SchedulePopupRootService {
 
     public createMatch(match: MatchCreate): void {
         // this.httpMatch
-        //     .createTeam(team)
+        //     .postNewMatch(team)
         //     .pipe(
         //         tap(() => {
         //             this.closePopup(team);
