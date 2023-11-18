@@ -21,6 +21,7 @@ from app.schemas.match import (
 )
 from app.schemas.match_player import MatchPlayerCreatePlayerIdList
 from app.schemas.misc import ItemsListWithTotal, Message, MessageFromEnum
+from app.schemas.player import PlayerOnlyBaseInfo
 from fastapi import APIRouter, Depends, Path, Query, status
 from sqlalchemy.orm import Session
 
@@ -274,7 +275,12 @@ def get_match_by_id(
         return MatchSideView(
             **match_dict,
             team_name=match.team.name,
-            players=[player.user.full_name for player in match.players]
+            players=[
+                PlayerOnlyBaseInfo(
+                    user_id=player.user_id, user_full_name=player.user.full_name
+                )
+                for player in match.players
+            ]
         )
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
         match = crud_match.get_match_by_id(match_id=match_id, db=db)
@@ -282,7 +288,12 @@ def get_match_by_id(
         return MatchSideView(
             **match_dict,
             team_name=match.team.name,
-            players=[player.user.full_name for player in match.players]
+            players=[
+                PlayerOnlyBaseInfo(
+                    user_id=player.user_id, user_full_name=player.user.full_name
+                )
+                for player in match.players
+            ]
         )
     if current_user.role == Roles.COACH:
         match = crud_match.get_match_by_id(match_id=match_id, db=db)
@@ -292,6 +303,11 @@ def get_match_by_id(
         return MatchSideView(
             **match_dict,
             team_name=match.team.name,
-            players=[player.user.full_name for player in match.players]
+            players=[
+                PlayerOnlyBaseInfo(
+                    user_id=player.user_id, user_full_name=player.user.full_name
+                )
+                for player in match.players
+            ]
         )
     raise ForbiddenException()
