@@ -3,7 +3,7 @@
 
 from app.db.base_class import Base
 from app.schemas.enums import EventType
-from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy import Boolean, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 
@@ -28,3 +28,4 @@ class MatchEvent(Base):
     minute: Mapped[int] = mapped_column(Integer, nullable=False)
     event_type: Mapped[EventType] = mapped_column(String, nullable=False)
     description: Mapped[str] = mapped_column(String, nullable=False)
+    is_own_event: Mapped[bool] = mapped_column(Boolean, nullable=False)
