@@ -1,5 +1,9 @@
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
+import { SettingsRootService } from "../../services/settings-root.service";
 import { GeneralComponent } from "./general.component";
 
 describe("GeneralComponent", () => {
@@ -8,7 +12,13 @@ describe("GeneralComponent", () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [GeneralComponent],
+            imports: [
+                GeneralComponent,
+                HttpClientTestingModule,
+                MatSnackBarModule,
+                BrowserAnimationsModule,
+            ],
+            providers: [SettingsRootService],
         });
         fixture = TestBed.createComponent(GeneralComponent);
         component = fixture.componentInstance;

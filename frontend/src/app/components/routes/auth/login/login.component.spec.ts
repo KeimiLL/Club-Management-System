@@ -12,7 +12,7 @@ import { UserService } from "../../../../shared/api/user.service";
 })
 class MockLoginComponent {}
 
-xdescribe("LoginComponent", () => {
+describe("LoginComponent", () => {
     let fixture: ComponentFixture<MockLoginComponent>;
     let component: MockLoginComponent;
 

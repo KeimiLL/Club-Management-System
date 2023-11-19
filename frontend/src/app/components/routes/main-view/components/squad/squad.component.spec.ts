@@ -1,4 +1,8 @@
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ActivatedRoute } from "@angular/router";
+import { of } from "rxjs";
 
 import { SquadComponent } from "./squad.component";
 
@@ -8,7 +12,19 @@ describe("SquadComponent", () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [SquadComponent],
+            imports: [
+                SquadComponent,
+                HttpClientTestingModule,
+                BrowserAnimationsModule,
+            ],
+            providers: [
+                {
+                    provide: ActivatedRoute,
+                    useValue: {
+                        queryParams: of({}),
+                    },
+                },
+            ],
         });
         fixture = TestBed.createComponent(SquadComponent);
         component = fixture.componentInstance;

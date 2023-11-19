@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { CreateCoachPopupComponent } from "./create-coach-popup.component";
 
@@ -8,7 +10,14 @@ describe("CreateCoachPopupComponent", () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [CreateCoachPopupComponent],
+            imports: [CreateCoachPopupComponent, BrowserAnimationsModule],
+            providers: [
+                { provide: MatDialogRef, useValue: {} },
+                {
+                    provide: MAT_DIALOG_DATA,
+                    useValue: {},
+                },
+            ],
         });
         fixture = TestBed.createComponent(CreateCoachPopupComponent);
         component = fixture.componentInstance;

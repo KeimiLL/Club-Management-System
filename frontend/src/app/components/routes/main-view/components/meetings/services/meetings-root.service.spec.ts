@@ -3,10 +3,10 @@ import { TestBed } from "@angular/core/testing";
 import { MatDialogModule } from "@angular/material/dialog";
 import { of } from "rxjs";
 
+import { MeetingsHttpService } from "../../../../../../shared/api/meetings-http.service";
 import { TableMeeting } from "../../../../../../shared/models/meeting.model";
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
-import { MeetingsHttpService } from "./meetings-http.service";
 import { MeetingsRootService } from "./meetings-root.service";
 
 const mockTableMeeting: TableMeeting[] = [];
@@ -23,7 +23,7 @@ describe("MeetingsRootService", () => {
                 {
                     provide: TableService,
                     useValue: {
-                        refreshTableItems$$: () => of(mockTableMeeting),
+                        refreshTableItems$: () => of(mockTableMeeting),
                         currentPageIndex$: of(1),
                         currentPageIndex: 1,
                         capacity: 1,

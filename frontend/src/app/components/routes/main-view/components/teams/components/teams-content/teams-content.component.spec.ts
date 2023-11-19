@@ -12,6 +12,12 @@ describe("TeamsContentComponent", () => {
         });
         fixture = TestBed.createComponent(TeamsContentComponent);
         component = fixture.componentInstance;
+        component.team = {
+            name: "name",
+            id: 1,
+            coach: { user_id: 1, user_full_name: "Full Name" },
+            players: [{ user_id: 1, user_full_name: "Full Name" }],
+        };
         fixture.detectChanges();
     });
 

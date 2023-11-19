@@ -6,7 +6,9 @@ describe("ScheduleContentService", () => {
     let service: ScheduleContentService;
 
     beforeEach(() => {
-        TestBed.configureTestingModule({});
+        TestBed.configureTestingModule({
+            providers: [ScheduleContentService],
+        });
         service = TestBed.inject(ScheduleContentService);
     });
 
