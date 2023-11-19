@@ -11,6 +11,7 @@ class MatchEventBase(BaseModel):
     minute: int | None = Field(None, ge=1, le=120)
     event_type: EventType | None = None
     description: str | None = None
+    is_own_event: bool | None = None
 
 
 class MatchEventCreate(MatchEventBase):
@@ -20,6 +21,7 @@ class MatchEventCreate(MatchEventBase):
     minute: int = Field(..., ge=1, le=120)
     event_type: EventType
     description: str
+    is_own_event: bool
 
 
 class MatchEvent(MatchEventBase):
@@ -28,6 +30,7 @@ class MatchEvent(MatchEventBase):
     minute: int = Field(..., ge=1, le=120)
     event_type: EventType
     description: str
+    is_own_event: bool
 
 
 class MatchEventInDBBase(MatchEventBase):
