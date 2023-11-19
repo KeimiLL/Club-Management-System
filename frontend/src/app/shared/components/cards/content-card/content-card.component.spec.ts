@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
+import { DropdownViewManagerService } from "../../../services/dropdown-view-manager.service";
 import { ContentCardComponent } from "./content-card.component";
 
 describe("ContentCardComponent", () => {
@@ -9,6 +10,7 @@ describe("ContentCardComponent", () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [ContentCardComponent],
+            providers: [DropdownViewManagerService],
         });
         fixture = TestBed.createComponent(ContentCardComponent);
         component = fixture.componentInstance;

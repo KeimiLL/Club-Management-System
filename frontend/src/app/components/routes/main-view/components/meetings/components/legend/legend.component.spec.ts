@@ -7,9 +7,7 @@ describe("LegendComponent", () => {
     let fixture: ComponentFixture<LegendComponent>;
 
     beforeEach(() => {
-        TestBed.configureTestingModule({
-            imports: [LegendComponent],
-        });
+        TestBed.configureTestingModule({});
         fixture = TestBed.createComponent(LegendComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();

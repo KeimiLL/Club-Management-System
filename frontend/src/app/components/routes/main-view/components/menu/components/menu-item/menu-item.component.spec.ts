@@ -15,7 +15,7 @@ class MockMenuItemComponent {
     @Input() public isCollapsed: boolean;
 }
 
-xdescribe("MenuItemComponent", () => {
+describe("MenuItemComponent", () => {
     let fixture: ComponentFixture<MockMenuItemComponent>;
 
     beforeEach(() => {

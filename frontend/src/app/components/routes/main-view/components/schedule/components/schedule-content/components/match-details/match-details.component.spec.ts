@@ -12,6 +12,10 @@ describe("MatchDetailsComponent", () => {
         });
         fixture = TestBed.createComponent(MatchDetailsComponent);
         component = fixture.componentInstance;
+        component.matchDetails = {
+            notes: "notes",
+            date: "2023-11-19",
+        };
         fixture.detectChanges();
     });
 

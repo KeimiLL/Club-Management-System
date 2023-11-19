@@ -69,12 +69,9 @@ export class AuthService extends DestroyClass {
             .subscribe((response: BackendResponse | null) => {
                 if (response !== null) {
                     this.router.navigate(["/auth/login"]);
-                    // some info about a correct register, can be extracted from the response
                 } else {
                     this.registerForm.reset();
                     this.registerForm.markAllAsTouched();
-
-                    // dialog about an incorrect register
                 }
             });
     }

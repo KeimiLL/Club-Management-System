@@ -1,14 +1,19 @@
-import { UserService } from "../../../../../../../shared/api/user.service";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+
 import { SettingsMenuComponent } from "./settings-menu.component";
 
 describe("SettingsMenuComponent", () => {
     let component: SettingsMenuComponent;
-    let userService: jasmine.SpyObj<UserService>;
+    let fixture: ComponentFixture<SettingsMenuComponent>;
 
     beforeEach(() => {
-        userService = jasmine.createSpyObj("UserService", ["get currentUser"]);
-
-        component = new SettingsMenuComponent(userService);
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule],
+        });
+        fixture = TestBed.createComponent(SettingsMenuComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
     });
 
     it("should create the component", () => {

@@ -1,15 +1,32 @@
-import { TemplateRef, ViewContainerRef } from "@angular/core";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { Component } from "@angular/core";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { UserService } from "../api/user.service";
+import { TeamPermission } from "../models/permission.model";
 import { PermissionDirective } from "./permission.directive";
 
-xdescribe("PermissionDirective", () => {
-    it("should create an instance", () => {
-        const directive = new PermissionDirective(
-            {} as TemplateRef<unknown>,
-            {} as ViewContainerRef,
-            {} as UserService
-        );
-        expect(directive).toBeTruthy();
+@Component({
+    template: "<div *appPermission='permission'></div>",
+})
+class TestComponent {
+    permission: TeamPermission;
+}
+
+describe("PermissionDirective", () => {
+    let fixture: ComponentFixture<TestComponent>;
+    let testComponent: TestComponent;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations: [TestComponent],
+            imports: [PermissionDirective, HttpClientTestingModule],
+        });
+        fixture = TestBed.createComponent(TestComponent);
+        testComponent = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it("should create the component", () => {
+        expect(testComponent).toBeTruthy();
     });
 });
