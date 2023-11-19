@@ -12,7 +12,9 @@
     z-index: 9999;
 
     &__spinner {
-        transition: display 0s linear 0.1s, opacity 0.1s linear;
+        transition:
+            display 0s linear 0.1s,
+            opacity 0.1s linear;
     }
 
     &__message {

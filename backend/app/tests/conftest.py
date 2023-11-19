@@ -208,5 +208,9 @@ match_create = MatchCreate(
 )
 
 matchevent_create = MatchEventCreate(
-    match_id=1, minute=10, event_type=EventType.GOAL, description="Goal"
+    match_id=1,
+    minute=10,
+    event_type=EventType.GOAL,
+    description="Goal",
+    is_own_event=True,
 )

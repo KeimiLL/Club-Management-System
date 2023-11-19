@@ -65,6 +65,7 @@ def test_correct__create_new_matchevent(
     assert new_matchevent.minute == matchevent.minute
     assert new_matchevent.description == matchevent.description
     assert new_matchevent.event_type == matchevent.event_type
+    assert new_matchevent.is_own_event == matchevent.is_own_event
 
 
 @pytest.mark.parametrize(
@@ -106,6 +107,7 @@ def test_correct__get_matchevent_by_user_id(
     assert matchevent_user_by_id.minute == matchevent.minute
     assert matchevent_user_by_id.description == matchevent.description
     assert matchevent_user_by_id.event_type == matchevent.event_type
+    assert matchevent_user_by_id.is_own_event == matchevent.is_own_event
 
 
 @pytest.mark.parametrize(
@@ -170,3 +172,4 @@ def test_correct__get_all_matchevents_by_match_id(
         assert matchevent_by_match_id.minute == index
         assert matchevent_by_match_id.description == matchevent.description
         assert matchevent_by_match_id.event_type == matchevent.event_type
+        assert matchevent_by_match_id.is_own_event == matchevent.is_own_event
