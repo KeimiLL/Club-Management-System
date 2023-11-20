@@ -9,7 +9,7 @@ from app.models.meeting import Meeting
 from app.models.meeting_user import MeetingUser
 from app.models.user import User
 from app.schemas.meeting import MeetingCreate, MeetingUpdate
-from sqlalchemy import func, or_, select, update
+from sqlalchemy import delete, func, or_, select, update
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -232,5 +232,27 @@ def update_meeting_with_user_ids(
         return meeting
     except NoResultFound as exc:
         raise MissingException(Meeting.__name__) from exc
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def delete_meeting(meeting_id: int, db: Session) -> None:
+    """Deletes the meeting that matches the given id.
+
+    Args:
+        meeting_id (int): Meeting's id.
+        db (Session): Database session.
+
+    Raises:
+        MissingException: If no meeting matches the given meeting id.
+        SQLAlchemyError: If there is a database error.
+    """
+    try:
+        affected_rows = db.execute(
+            delete(Meeting).where(Meeting.id == meeting_id)
+        ).rowcount
+        if affected_rows == 0:
+            raise MissingException(Meeting.__name__)
+        db.commit()
     except SQLAlchemyError as exc:
         raise exc

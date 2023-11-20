@@ -200,3 +200,47 @@ def update_meeting_with_user_ids(
             db=db,
         )
     raise ForbiddenException()
+
+
+@router.delete(
+    "/{meeting_id}",
+    response_model=Message,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def delete_meeting(
+    meeting_id: Annotated[int, Path(ge=1, le=10**7)],
+    current_user: Annotated[User, Depends(all_allowed)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Deletes the meeting that matches the given id.
+
+    Args:
+        meeting_id (Annotated[int, Path]): The given meeting's id. Has to be greater than
+            or equal to 1 and less than or equal to 10**7.
+        current_user (Annotated[User, Depends]): Current user read from access token.
+            Defaults to Depends(all_allowed).
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+    Raises:
+        ForbiddenException: If the current user does not have sufficient permissions.
+
+    Returns:
+        Message: The response signalling a successful operation.
+    """
+    meeting = crud_meeting.get_meeting_by_id(meeting_id=meeting_id, db=db)
+    if (
+        current_user.role in (Roles.ADMIN, Roles.BOARD)
+        or current_user.id == meeting.user_id
+    ):
+        crud_meeting.delete_meeting(
+            meeting_id=meeting_id,
+            db=db,
+        )
+        return Message(message=HTTPResponseMessage.SUCCESS)
+    raise ForbiddenException()
