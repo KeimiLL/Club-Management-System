@@ -6,6 +6,7 @@ from app.core.exceptions import GenericException, MissingException
 from app.crud.crud_meeting import (
     create_meeting_with_user_ids,
     create_new_meeting,
+    delete_meeting,
     get_all_meetings_with_pagination,
     get_meeting_by_id,
     get_meetings_with_pagination_by_user_id,
@@ -513,3 +514,51 @@ def test_incorrect_missing__update_meeting_with_user_ids(
 
     with pytest.raises(MissingException):
         update_meeting_with_user_ids(meeting_data, meeting_id, user_ids, db_session)
+
+
+@pytest.mark.parametrize(
+    "user,meeting",
+    [(user_create_unique_1, meeting_create)],
+)
+def test_correct__delete_meeting(
+    user: UserCreate,
+    meeting: MeetingCreate,
+    db_session: Session,
+) -> None:
+    """Tests deleting the meeting with the given id.
+
+    Args:
+        user (UserCreate): User to be created.
+        meeting (MeetingCreate): Meeting to be created.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    new_meeting = create_new_meeting(meeting, db_session)
+    meeting_by_id = get_meeting_by_id(new_meeting.id, db_session)
+    assert meeting_by_id.name == meeting.name
+    assert meeting_by_id.notes == meeting.notes
+    assert meeting_by_id.date == meeting.date
+
+    delete_meeting(new_meeting.id, db_session)
+    with pytest.raises(MissingException) as excinfo:
+        get_meeting_by_id(new_meeting.id, db_session)
+    assert "Meeting" == str(excinfo.value)
+
+
+@pytest.mark.parametrize(
+    "meeting_id",
+    [0, 1000000],
+)
+def test_incorrect__delete_meeting(
+    meeting_id: int,
+    db_session: Session,
+) -> None:
+    """Tests deleting a missing meeting.
+
+    Args:
+        meeting_id (int): Meeting id to be read.
+        db_session (Session): Database session.
+    """
+    with pytest.raises(MissingException) as excinfo:
+        delete_meeting(meeting_id, db_session)
+    assert "Meeting" == str(excinfo.value)
