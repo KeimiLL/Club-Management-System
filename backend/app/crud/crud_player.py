@@ -9,7 +9,7 @@ from app.crud.crud_user import get_user_by_id
 from app.models.player import Player
 from app.models.user import User
 from app.schemas.player import PlayerCreate
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -127,5 +127,27 @@ def get_players_with_pagination_by_team_id(
             ),
             total,
         )
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def delete_player(user_id: int, db: Session) -> None:
+    """Deletes the player that matches the given user id.
+
+    Args:
+        user_id (int): Player's id.
+        db (Session): Database session.
+
+    Raises:
+        MissingException: If no player matches the given user id.
+        SQLAlchemyError: If there is a database error.
+    """
+    try:
+        affected_rows = db.execute(
+            delete(Player).where(Player.user_id == user_id)
+        ).rowcount
+        if affected_rows == 0:
+            raise MissingException(Player.__name__)
+        db.commit()
     except SQLAlchemyError as exc:
         raise exc

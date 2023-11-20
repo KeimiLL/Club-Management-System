@@ -6,6 +6,7 @@ from app.core.exceptions import MissingException
 from app.crud.crud_coach import create_new_coach
 from app.crud.crud_player import (
     create_new_player,
+    delete_player,
     get_all_players,
     get_player_by_user_id,
     get_players_with_pagination_by_team_id,
@@ -254,3 +255,60 @@ def test_correct__get_players_with_pagination_by_team_id(
         ):
             if page * per_page <= index < page * per_page + per_page:
                 assert all_players[index - page * per_page] == new_player
+
+
+@pytest.mark.parametrize(
+    "user,coach,team,player",
+    [(user_create_unique_1, coach_create, team_create, player_create)],
+)
+def test_correct__delete_player(
+    user: UserCreate,
+    coach: CoachCreate,
+    team: TeamCreate,
+    player: PlayerCreate,
+    db_session: Session,
+) -> None:
+    """Tests deleting the player with the given user id.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        player (PlayerCreate): Player to be created.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    create_new_coach(coach, db_session)
+    create_new_team(team, db_session)
+    new_player = create_new_player(player, db_session)
+    player_by_user_id = get_player_by_user_id(new_player.user_id, db_session)
+    assert player_by_user_id.user.full_name == user.full_name
+    if player_by_user_id.team is not None:
+        assert player_by_user_id.team.name == team.name
+        if player_by_user_id.team.coach is not None:
+            assert player_by_user_id.team.coach.date_of_birth == coach.date_of_birth
+    assert player_by_user_id.date_of_birth == player.date_of_birth
+
+    delete_player(new_player.user_id, db_session)
+    with pytest.raises(MissingException) as excinfo:
+        delete_player(new_player.user_id, db_session)
+    assert "Player" == str(excinfo.value)
+
+
+@pytest.mark.parametrize(
+    "user_id",
+    [0, 1000000],
+)
+def test_incorrect__delete_player(
+    user_id: int,
+    db_session: Session,
+) -> None:
+    """Tests deleting a missing player.
+
+    Args:
+        user_id (int): User id to be read.
+        db_session (Session): Database session.
+    """
+    with pytest.raises(MissingException) as excinfo:
+        delete_player(user_id, db_session)
+    assert "Player" == str(excinfo.value)
