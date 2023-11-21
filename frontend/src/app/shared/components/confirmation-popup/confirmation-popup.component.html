@@ -1,0 +1,32 @@
+<div class="popup">
+    <mat-card class="card">
+        <mat-card-header class="card__header">
+            <app-half-card-left-header name="Confirmation">
+            </app-half-card-left-header>
+        </mat-card-header>
+        <app-half-card-section>
+            <div>
+                {{ data }}
+            </div>
+        </app-half-card-section>
+
+        <div class="button-container">
+            <button
+                type="submit"
+                mat-raised-button
+                class="button--light"
+                (click)="onCloseClick(true)"
+            >
+                Yes
+            </button>
+            <button
+                type="submit"
+                mat-raised-button
+                class="button--dark"
+                (click)="onCloseClick(false)"
+            >
+                No
+            </button>
+        </div>
+    </mat-card>
+</div>
