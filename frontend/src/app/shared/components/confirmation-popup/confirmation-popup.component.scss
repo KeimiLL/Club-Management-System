@@ -1,0 +1,20 @@
+@import "../../../../styles/component-styles/components";
+
+:host {
+    .popup {
+        &__data {
+            margin: 1rem auto;
+            padding-left: $medium-spacing;
+            font-size: $normal-font;
+            font-weight: $normal-weight;
+        }
+
+        .button-container {
+            width: 50%;
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem auto;
+            gap: 1rem;
+        }
+    }
+}

@@ -4,29 +4,31 @@
             <app-half-card-left-header name="Confirmation">
             </app-half-card-left-header>
         </mat-card-header>
-        <app-half-card-section>
-            <div>
-                {{ data }}
-            </div>
-        </app-half-card-section>
+        <div class="card__content">
+            <ng-container content>
+                <div class="popup__data">
+                    {{ data }}
+                </div>
 
-        <div class="button-container">
-            <button
-                type="submit"
-                mat-raised-button
-                class="button--light"
-                (click)="onCloseClick(true)"
-            >
-                Yes
-            </button>
-            <button
-                type="submit"
-                mat-raised-button
-                class="button--dark"
-                (click)="onCloseClick(false)"
-            >
-                No
-            </button>
+                <div class="button-container">
+                    <button
+                        type="submit"
+                        mat-raised-button
+                        class="button--light"
+                        (click)="onCloseClick(true)"
+                    >
+                        Yes
+                    </button>
+                    <button
+                        type="submit"
+                        mat-raised-button
+                        class="button--dark"
+                        (click)="onCloseClick(false)"
+                    >
+                        No
+                    </button>
+                </div>
+            </ng-container>
         </div>
     </mat-card>
 </div>
