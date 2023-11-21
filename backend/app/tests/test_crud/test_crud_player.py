@@ -291,7 +291,7 @@ def test_correct__delete_player(
 
     delete_player(new_player.user_id, db_session)
     with pytest.raises(MissingException) as excinfo:
-        delete_player(new_player.user_id, db_session)
+        get_player_by_user_id(new_player.user_id, db_session)
     assert "Player" == str(excinfo.value)
 
 

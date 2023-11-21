@@ -5,6 +5,7 @@ import pytest
 from app.core.exceptions import MissingException
 from app.crud.crud_coach import (
     create_new_coach,
+    delete_coach,
     get_all_coaches,
     get_coach_by_team_id,
     get_coach_by_user_id,
@@ -162,3 +163,51 @@ def test_correct__get_coach_by_team_id(
         assert new_coach.date_of_joining == coach_by_team_id.date_of_joining
     else:
         assert coach_id is None
+
+
+@pytest.mark.parametrize(
+    "user,coach",
+    [(user_create_unique_1, coach_create)],
+)
+def test_correct__delete_coach(
+    user: UserCreate,
+    coach: CoachCreate,
+    db_session: Session,
+) -> None:
+    """Tests deleting the coach with the given user id.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    new_coach = create_new_coach(coach, db_session)
+    coach_user_by_id = get_coach_by_user_id(new_coach.user_id, db_session)
+    assert coach_user_by_id.user.full_name == user.full_name
+    assert coach_user_by_id.date_of_birth == coach.date_of_birth
+    assert coach_user_by_id.date_of_joining == coach.date_of_joining
+
+    delete_coach(new_coach.user_id, db_session)
+    with pytest.raises(MissingException) as excinfo:
+        get_coach_by_user_id(new_coach.user_id, db_session)
+    assert "Coach" == str(excinfo.value)
+
+
+@pytest.mark.parametrize(
+    "user_id",
+    [0, 1000000],
+)
+def test_incorrect__delete_coach(
+    user_id: int,
+    db_session: Session,
+) -> None:
+    """Tests deleting a missing coach.
+
+    Args:
+        user_id (int): User id to be read.
+        db_session (Session): Database session.
+    """
+    with pytest.raises(MissingException) as excinfo:
+        delete_coach(user_id, db_session)
+    assert "Coach" == str(excinfo.value)

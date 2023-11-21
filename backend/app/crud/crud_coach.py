@@ -6,7 +6,7 @@ from app.crud.crud_user import get_user_by_id
 from app.models.coach import Coach
 from app.models.team import Team
 from app.schemas.coach import CoachCreate
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -103,5 +103,27 @@ def get_coach_by_team_id(team_id: int, db: Session) -> Coach | None:
             raise MissingException(Team.__name__) from exc
         query = select(Coach).join(Team).where(Team.id == team_id)
         return db.execute(query).scalar_one_or_none()
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def delete_coach(user_id: int, db: Session) -> None:
+    """Deletes the coach that matches the given user id.
+
+    Args:
+        user_id (int): Coach's id.
+        db (Session): Database session.
+
+    Raises:
+        MissingException: If no coach matches the given user id.
+        SQLAlchemyError: If there is a database error.
+    """
+    try:
+        affected_rows = db.execute(
+            delete(Coach).where(Coach.user_id == user_id)
+        ).rowcount
+        if affected_rows == 0:
+            raise MissingException(Coach.__name__)
+        db.commit()
     except SQLAlchemyError as exc:
         raise exc
