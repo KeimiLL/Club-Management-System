@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { MatchEvent, MatchEventCreate } from "../models/match.model";
+import { MatchEvent, MatchEventCreate } from "../models/match-event.model";
 import { BackendResponse } from "../models/misc.model";
 
 @Injectable({

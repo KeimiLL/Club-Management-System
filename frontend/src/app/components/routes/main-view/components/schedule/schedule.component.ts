@@ -61,4 +61,8 @@ export class ScheduleComponent {
     protected setSelectedTeam(team: ShortTeam): void {
         this.dropdown.changeTeam(team);
     }
+
+    protected onNewMatchClick(): void {
+        this.root.openNewMatchDialog();
+    }
 }
