@@ -9,6 +9,7 @@ from app.crud.crud_coach import create_new_coach
 from app.crud.crud_match import (
     create_match_with_player_ids,
     create_new_match,
+    delete_match,
     get_match_by_id,
     get_matches_in_progress_with_limit,
     get_matches_with_pagination_by_team_id,
@@ -510,3 +511,60 @@ def test_correct__get_matches_with_pagination_by_team_id(
         ):
             if page * per_page <= index < page * per_page + per_page:
                 assert all_matches[index - page * per_page] == new_match
+
+
+@pytest.mark.parametrize(
+    "user,coach,team,match",
+    [(user_create_unique_1, coach_create, team_create, match_create)],
+)
+def test_correct__delete_match(
+    user: UserCreate,
+    coach: CoachCreate,
+    team: TeamCreate,
+    match: MatchCreate,
+    db_session: Session,
+) -> None:
+    """Tests getting the match with the given id.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        match (MatchCreate): Match to be created.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    create_new_coach(coach, db_session)
+    create_new_team(team, db_session)
+    new_match = create_new_match(match, db_session)
+    match_by_id = get_match_by_id(new_match.id, db_session)
+    assert match_by_id.notes == match.notes
+    assert match_by_id.date == match.date
+    assert new_match.has_started is False
+    assert match_by_id.team.name == team.name
+    if match_by_id.team.coach is not None:
+        assert match_by_id.team.coach.date_of_birth == coach.date_of_birth
+
+    delete_match(new_match.id, db_session)
+    with pytest.raises(MissingException) as excinfo:
+        get_match_by_id(new_match.id, db_session)
+    assert "Match" == str(excinfo.value)
+
+
+@pytest.mark.parametrize(
+    "match_id",
+    [0, 1000000],
+)
+def test_incorrect__delete_match(
+    match_id: int,
+    db_session: Session,
+) -> None:
+    """Tests deleting a missing match.
+
+    Args:
+        match_id (int): Match id to be read.
+        db_session (Session): Database session.
+    """
+    with pytest.raises(MissingException) as excinfo:
+        delete_match(match_id, db_session)
+    assert "Match" == str(excinfo.value)
