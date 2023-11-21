@@ -62,4 +62,8 @@ export class MeetingsComponent implements OnInit {
     protected onModifyMeetingClick(): void {
         this.root.openEditMeetingDialog();
     }
+
+    protected onMeetingDelete(): void {
+        this.root.deleteCurrentMeeting();
+    }
 }

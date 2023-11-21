@@ -35,4 +35,8 @@ export class MeetingsHttpService {
     public getMeetingById(id: number): Observable<Meeting> {
         return this.http.get<Meeting>(`api/v1/meetings/${id}`);
     }
+
+    public deleteMeetingById(id: number): Observable<BackendResponse> {
+        return this.http.delete<BackendResponse>(`api/v1/meetings/${id}`);
+    }
 }
