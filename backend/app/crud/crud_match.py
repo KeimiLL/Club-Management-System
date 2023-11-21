@@ -9,7 +9,7 @@ from app.models.match import Match
 from app.models.player import Player
 from app.schemas.enums import MatchEvent
 from app.schemas.match import MatchCreate, MatchScore
-from sqlalchemy import func, select, update
+from sqlalchemy import delete, func, select, update
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -234,5 +234,25 @@ def get_matches_with_pagination_by_team_id(
             ),
             total,
         )
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def delete_match(match_id: int, db: Session) -> None:
+    """Deletes the match that matches the given id.
+
+    Args:
+        match_id (int): Match's id.
+        db (Session): Database session.
+
+    Raises:
+        MissingException: If no match matches the given id.
+        SQLAlchemyError: If there is a database error.
+    """
+    try:
+        affected_rows = db.execute(delete(Match).where(Match.id == match_id)).rowcount
+        if affected_rows == 0:
+            raise MissingException(Match.__name__)
+        db.commit()
     except SQLAlchemyError as exc:
         raise exc

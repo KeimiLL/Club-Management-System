@@ -30,6 +30,7 @@ def create_new_matchevent(matchevent: MatchEventCreate, db: Session) -> MatchEve
             minute=matchevent.minute,
             event_type=matchevent.event_type,
             description=matchevent.description,
+            is_own_event=matchevent.is_own_event,
         )
         db.add(new_matchevent)
         db.commit()

@@ -311,3 +311,36 @@ def get_match_by_id(
             ]
         )
     raise ForbiddenException()
+
+
+@router.delete(
+    "/{match_id}",
+    response_model=Message,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def delete_match(
+    match_id: Annotated[int, Path(ge=1, le=10**7)],
+    _: Annotated[User, Depends(player_not_allowed)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Deletes the match that matches the given id.
+
+    Args:
+        match_id (Annotated[int, Path]): The given match's id. Has to be greater than
+            or equal to 1 and less than or equal to 10**7.
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+    Returns:
+        Message: The response signalling a successful operation.
+    """
+    crud_match.delete_match(
+        match_id=match_id,
+        db=db,
+    )
+    return Message(message=HTTPResponseMessage.SUCCESS)
