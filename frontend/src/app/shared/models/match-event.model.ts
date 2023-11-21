@@ -2,6 +2,7 @@ export interface MatchEvent {
     minute: number;
     event_type: MatchEvents;
     description: string;
+    is_own_event: boolean;
 }
 
 export interface MatchEventCreate extends MatchEvent {

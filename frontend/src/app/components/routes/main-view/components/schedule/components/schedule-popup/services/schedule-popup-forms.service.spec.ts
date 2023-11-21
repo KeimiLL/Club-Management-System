@@ -6,7 +6,9 @@ describe("SchedulePopupFormsService", () => {
     let service: SchedulePopupFormsService;
 
     beforeEach(() => {
-        TestBed.configureTestingModule({});
+        TestBed.configureTestingModule({
+            providers: [SchedulePopupFormsService],
+        });
         service = TestBed.inject(SchedulePopupFormsService);
     });
 

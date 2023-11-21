@@ -24,7 +24,6 @@ export interface MatchScoreBase {
 export interface MatchScore extends MatchScoreBase {
     goals_scored: number;
     goals_conceded: number;
-    is_own_event: boolean;
 }
 
 export interface MatchBase extends MatchScoreBase, MatchDetails {
