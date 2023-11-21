@@ -8,6 +8,7 @@ from app.crud.crud_player import create_new_player
 from app.crud.crud_team import (
     create_new_team,
     create_team_with_player_ids,
+    delete_team,
     get_all_teams,
     get_all_teams_by_coach_id,
     get_all_teams_with_pagination,
@@ -356,3 +357,55 @@ def test_correct__get_all_teams_by_coach_id(
     new_teams = get_all_teams_by_coach_id(1, db_session)
     assert len(teams) == len(new_teams)
     assert all((team.name == new_team.name for team, new_team in zip(teams, new_teams)))
+
+
+@pytest.mark.parametrize(
+    "user,coach,team",
+    [(user_create_unique_1, coach_create, team_create)],
+)
+def test_correct__delete_team(
+    user: UserCreate,
+    coach: CoachCreate,
+    team: TeamCreate,
+    db_session: Session,
+) -> None:
+    """Tests deleting the team with the given id.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    create_new_coach(coach, db_session)
+    new_team = create_new_team(team, db_session)
+    team_by_id = get_team_by_id(new_team.id, db_session)
+    if team_by_id.coach is not None:
+        assert team_by_id.coach.user.full_name == user.full_name
+        assert team_by_id.coach.date_of_birth == coach.date_of_birth
+    assert team_by_id.name == team.name
+
+    delete_team(new_team.id, db_session)
+    with pytest.raises(MissingException) as excinfo:
+        get_team_by_id(new_team.id, db_session)
+    assert "Team" == str(excinfo.value)
+
+
+@pytest.mark.parametrize(
+    "team_id",
+    [0, 1000000],
+)
+def test_incorrect__delete_team(
+    team_id: int,
+    db_session: Session,
+) -> None:
+    """Tests deleting a missing team.
+
+    Args:
+        team_id (int): Team id to be read.
+        db_session (Session): Database session.
+    """
+    with pytest.raises(MissingException) as excinfo:
+        delete_team(team_id, db_session)
+    assert "Team" == str(excinfo.value)

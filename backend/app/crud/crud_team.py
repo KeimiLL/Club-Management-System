@@ -8,7 +8,7 @@ from app.crud.crud_coach import get_coach_by_user_id
 from app.models.player import Player
 from app.models.team import Team
 from app.schemas.team import TeamCreate
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -208,5 +208,25 @@ def get_all_teams_by_coach_id(user_id: int, db: Session) -> list[Team]:
     try:
         query = select(Team).where(Team.coach_id == user_id)
         return list(db.scalars(query.order_by(Team.name.desc())).all())
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def delete_team(team_id: int, db: Session) -> None:
+    """Deletes the team that matches the given id.
+
+    Args:
+        team_id (int): Teams's id.
+        db (Session): Database session.
+
+    Raises:
+        MissingException: If no team matches the given id.
+        SQLAlchemyError: If there is a database error.
+    """
+    try:
+        affected_rows = db.execute(delete(Team).where(Team.id == team_id)).rowcount
+        if affected_rows == 0:
+            raise MissingException(Team.__name__)
+        db.commit()
     except SQLAlchemyError as exc:
         raise exc
