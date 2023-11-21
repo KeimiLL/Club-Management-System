@@ -9,7 +9,7 @@ import {
     tap,
 } from "rxjs";
 
-import { MainRoutes } from "../models/misc.model";
+import { BackendResponse, MainRoutes } from "../models/misc.model";
 import { DestroyClass } from "../utils/destroyClass";
 
 @Injectable()
@@ -127,5 +127,15 @@ export class SplitViewManagerService<T> extends DestroyClass {
         }
         this.isLoading = false;
         return of(null);
+    }
+
+    public deleteCurrentItem$(
+        request: Observable<BackendResponse>
+    ): Observable<BackendResponse> {
+        return request.pipe(
+            finalize(() => {
+                this.changeDetailState();
+            })
+        );
     }
 }
