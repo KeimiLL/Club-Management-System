@@ -115,15 +115,34 @@ def test_incorrect__get_player_by_user_id(
 
 
 @pytest.mark.parametrize(
-    "users,coach,team,players",
+    "users,coach,team,players,team_id",
     [
-        ([user_create_unique_1], coach_create, team_create, []),
-        ([user_create_unique_1], coach_create, team_create, [player_create]),
+        ([user_create_unique_1], coach_create, team_create, [], None),
+        ([user_create_unique_1], coach_create, team_create, [], 1),
+        ([user_create_unique_1], coach_create, team_create, [], 2),
+        ([user_create_unique_1], coach_create, team_create, [player_create], None),
+        ([user_create_unique_1], coach_create, team_create, [player_create], 1),
+        ([user_create_unique_1], coach_create, team_create, [player_create], 2),
         (
             [user_create_unique_1, user_create_unique_2, user_create_with_role],
             coach_create,
             team_create,
             [player_create, player_create, player_create],
+            None,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2, user_create_with_role],
+            coach_create,
+            team_create,
+            [player_create, player_create, player_create],
+            1,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2, user_create_with_role],
+            coach_create,
+            team_create,
+            [player_create, player_create, player_create],
+            2,
         ),
     ],
 )
@@ -132,6 +151,7 @@ def test_correct__get_all_players(
     coach: CoachCreate,
     team: TeamCreate,
     players: list[PlayerCreate],
+    team_id: int | None,
     db_session: Session,
 ) -> None:
     """Tests getting all players.
@@ -141,23 +161,27 @@ def test_correct__get_all_players(
         coach (CoachCreate): Coach to be created.
         team (TeamCreate): Team to be created.
         players (list[PlayerCreate]): Players to be created and read.
+        team_id (int | None): Team id to optionally filter players by.
         db_session (Session): Database session.
     """
     for user in users:
         create_new_user(user, db_session)
     create_new_coach(coach, db_session)
-    create_new_team(team, db_session)
+    new_team = create_new_team(team, db_session)
     for index, player in enumerate(players):
         create_new_player(player.model_copy(update={"user_id": index + 1}), db_session)
-    new_players = get_all_players(db_session)
-    assert len(players) == len(new_players)
-    assert all(
-        (
-            player.date_of_birth == new_player.date_of_birth
-            and player.height == new_player.height
-            for player, new_player in zip(players, new_players)
+    new_players = get_all_players(db_session, team_id)
+    if team_id == new_team.id or team_id is None:
+        assert len(players) == len(new_players)
+        assert all(
+            (
+                player.date_of_birth == new_player.date_of_birth
+                and player.height == new_player.height
+                for player, new_player in zip(players, new_players)
+            )
         )
-    )
+    else:
+        assert len(new_players) == 0
 
 
 @pytest.mark.parametrize(

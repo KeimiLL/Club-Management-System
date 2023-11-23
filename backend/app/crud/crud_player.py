@@ -77,11 +77,12 @@ def get_player_by_user_id(user_id: int, db: Session) -> Player:
         raise exc
 
 
-def get_all_players(db: Session) -> list[Player]:
+def get_all_players(db: Session, team_id: int | None = None) -> list[Player]:
     """Gets all players.
 
     Args:
         db (Session): Database session.
+        team_id (int | None, optional): Team id to filter by. Defaults to None.
 
     Raises:
         SQLAlchemyError: If there is a database error.
@@ -89,8 +90,12 @@ def get_all_players(db: Session) -> list[Player]:
     Returns:
         list[Player]: A list of all Player objects.
     """
+
     try:
-        return list(db.scalars(select(Player)).all())
+        query = select(Player)
+        if team_id is not None:
+            query = query.where(Player.team_id == team_id)
+        return list(db.scalars(query).all())
     except SQLAlchemyError as exc:
         raise exc
 
