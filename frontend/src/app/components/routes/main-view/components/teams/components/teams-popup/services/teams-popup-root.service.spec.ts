@@ -6,21 +6,21 @@ import { TeamsPopupFormsService } from "./teams-popup-forms.service";
 import { TeamsPopupRootService } from "./teams-popup-root.service";
 
 describe("TeamsPopupRootService", () => {
-    let service: TeamsPopupRootService;
+    let teamsPopupRootService: TeamsPopupRootService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
             providers: [
-                TeamsPopupRootService,
                 TeamsPopupFormsService,
+                TeamsPopupRootService,
                 { provide: MatDialogRef, useValue: {} },
             ],
         });
-        service = TestBed.inject(TeamsPopupRootService);
+        teamsPopupRootService = TestBed.inject(TeamsPopupRootService);
     });
 
     it("should be created", () => {
-        expect(service).toBeTruthy();
+        expect(teamsPopupRootService).toBeTruthy();
     });
 });

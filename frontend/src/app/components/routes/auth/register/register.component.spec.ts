@@ -1,40 +1,38 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { ActivatedRoute, convertToParamMap } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 
+import { ActivatedRouteParamMap } from "../../../../shared/test-mocks/test-mocks";
 import { AuthService } from "../auth.service";
 import { RegisterComponent } from "./register.component";
 
 describe("RegisterComponent", () => {
-    let component: RegisterComponent;
     let fixture: ComponentFixture<RegisterComponent>;
+    let component: RegisterComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
+            imports: [
+                BrowserAnimationsModule,
+                HttpClientTestingModule,
+                RegisterComponent,
+            ],
             providers: [
                 AuthService,
                 {
                     provide: ActivatedRoute,
-                    useValue: {
-                        snapshot: {
-                            paramMap: convertToParamMap({}),
-                        },
-                    },
+                    useClass: ActivatedRouteParamMap,
                 },
             ],
-            imports: [
-                RegisterComponent,
-                HttpClientTestingModule,
-                BrowserAnimationsModule,
-            ],
         });
+
         fixture = TestBed.createComponent(RegisterComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });

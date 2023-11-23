@@ -1,13 +1,13 @@
 import { GetItemByIdPipe } from "./get-item-by-id.pipe";
 
-interface TestDto {
+interface TestItem {
     id: number;
     name: string;
 }
 
 describe("GetItemByIdPipe", () => {
-    let pipe: GetItemByIdPipe<TestDto>;
-    const testArray: TestDto[] = [
+    let pipe: GetItemByIdPipe<TestItem>;
+    const testArray: TestItem[] = [
         { id: 1, name: "Item 1" },
         { id: 2, name: "Item 2" },
         { id: 3, name: "Item 3" },
@@ -17,7 +17,7 @@ describe("GetItemByIdPipe", () => {
         pipe = new GetItemByIdPipe();
     });
 
-    it("should create an instance", () => {
+    it("should be created", () => {
         expect(pipe).toBeTruthy();
     });
 

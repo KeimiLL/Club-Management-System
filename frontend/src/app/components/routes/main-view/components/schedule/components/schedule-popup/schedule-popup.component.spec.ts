@@ -10,31 +10,32 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SchedulePopupComponent } from "./schedule-popup.component";
 
 describe("SchedulePopupComponent", () => {
-    let component: SchedulePopupComponent;
     let fixture: ComponentFixture<SchedulePopupComponent>;
+    let component: SchedulePopupComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
-                SchedulePopupComponent,
+                BrowserAnimationsModule,
                 HttpClientTestingModule,
                 MatDialogModule,
-                BrowserAnimationsModule,
+                SchedulePopupComponent,
             ],
             providers: [
-                { provide: MatDialogRef, useValue: {} },
                 {
                     provide: MAT_DIALOG_DATA,
                     useValue: {},
                 },
+                { provide: MatDialogRef, useValue: {} },
             ],
         });
+
         fixture = TestBed.createComponent(SchedulePopupComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });

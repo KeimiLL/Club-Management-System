@@ -8,7 +8,7 @@ import { SnackbarService } from "../../../../../shared/services/snackbar.service
 import { MenuRootService } from "./menu-root.service";
 
 describe("MenuRootService", () => {
-    let service: MenuRootService;
+    let menuRootService: MenuRootService;
     let mockUserService: UserService;
     let mockRouter: Router;
     let mockSnackbarService: SnackbarService;
@@ -19,13 +19,6 @@ describe("MenuRootService", () => {
         TestBed.configureTestingModule({
             providers: [
                 MenuRootService,
-                {
-                    provide: UserService,
-                    useValue: {
-                        logout: () => of(null),
-                        currentUser: null,
-                    },
-                },
                 {
                     provide: Router,
                     useValue: {
@@ -38,17 +31,24 @@ describe("MenuRootService", () => {
                         showSnackBar: jasmine.createSpy("showSnackBar"),
                     },
                 },
+                {
+                    provide: UserService,
+                    useValue: {
+                        logout: () => of(null),
+                        currentUser: null,
+                    },
+                },
             ],
         });
 
-        service = TestBed.inject(MenuRootService);
+        menuRootService = TestBed.inject(MenuRootService);
         mockUserService = TestBed.inject(UserService);
         mockRouter = TestBed.inject(Router);
         mockSnackbarService = TestBed.inject(SnackbarService);
     });
 
     it("should log out the user successfully", () => {
-        service.logout();
+        menuRootService.logout();
 
         expect(mockUserService.currentUser).toBeNull();
         expect(mockRouter.navigate).toHaveBeenCalledWith(["/auth/login"]);

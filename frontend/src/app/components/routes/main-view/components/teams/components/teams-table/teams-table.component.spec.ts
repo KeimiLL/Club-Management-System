@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
-import { of } from "rxjs";
 
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../../shared/services/table.service";
+import { ActivatedRouteQueryParams } from "../../../../../../../shared/test-mocks/test-mocks";
 import { TeamsTableComponent } from "./teams-table.component";
 
 describe("TeamsTableComponent", () => {
-    let component: TeamsTableComponent;
     let fixture: ComponentFixture<TeamsTableComponent>;
+    let component: TeamsTableComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -18,18 +18,17 @@ describe("TeamsTableComponent", () => {
                 TableService,
                 {
                     provide: ActivatedRoute,
-                    useValue: {
-                        queryParams: of({}),
-                    },
+                    useClass: ActivatedRouteQueryParams,
                 },
             ],
         });
+
         fixture = TestBed.createComponent(TeamsTableComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });

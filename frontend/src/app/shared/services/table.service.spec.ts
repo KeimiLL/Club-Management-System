@@ -9,6 +9,7 @@ describe("TableService", () => {
         TestBed.configureTestingModule({
             providers: [TableService],
         });
+
         service = TestBed.inject(TableService);
     });
 

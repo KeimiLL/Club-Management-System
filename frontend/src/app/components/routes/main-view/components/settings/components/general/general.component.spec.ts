@@ -7,25 +7,26 @@ import { SettingsRootService } from "../../services/settings-root.service";
 import { GeneralComponent } from "./general.component";
 
 describe("GeneralComponent", () => {
-    let component: GeneralComponent;
     let fixture: ComponentFixture<GeneralComponent>;
+    let component: GeneralComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
+                BrowserAnimationsModule,
                 GeneralComponent,
                 HttpClientTestingModule,
                 MatSnackBarModule,
-                BrowserAnimationsModule,
             ],
             providers: [SettingsRootService],
         });
+
         fixture = TestBed.createComponent(GeneralComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });

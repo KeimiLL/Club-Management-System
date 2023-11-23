@@ -6,10 +6,11 @@ import { TestBed } from "@angular/core/testing";
 
 import { BackendResponse } from "../models/misc.model";
 import { UserCreate } from "../models/user.model";
+import { mockUser } from "./../test-mocks/test-mocks";
 import { UserService } from "./user.service";
 
 describe("UserService", () => {
-    let service: UserService;
+    let userService: UserService;
     let httpMock: HttpTestingController;
 
     beforeEach(() => {
@@ -17,7 +18,7 @@ describe("UserService", () => {
             imports: [HttpClientTestingModule],
             providers: [UserService],
         });
-        service = TestBed.inject(UserService);
+        userService = TestBed.inject(UserService);
         httpMock = TestBed.inject(HttpTestingController);
     });
 
@@ -26,13 +27,12 @@ describe("UserService", () => {
     });
 
     it("should be created", () => {
-        expect(service).toBeTruthy();
+        expect(userService).toBeTruthy();
     });
 
     it("should register a user", () => {
         const userCreate: UserCreate = {
-            full_name: "Janusz Tracz",
-            email: "janusz.tracz@plebania.com",
+            ...mockUser,
             password: "12345678",
         };
 
@@ -40,7 +40,7 @@ describe("UserService", () => {
             message: "User registered successfully",
         };
 
-        service.register(userCreate).subscribe((response) => {
+        userService.register(userCreate).subscribe((response) => {
             expect(response).toEqual(mockResponse);
         });
 

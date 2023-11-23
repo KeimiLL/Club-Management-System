@@ -1,12 +1,12 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
-import { of } from "rxjs";
 
+import { ActivatedRouteQueryParams } from "../test-mocks/test-mocks";
 import { DropdownViewManagerService } from "./dropdown-view-manager.service";
 
 describe("DropdownViewManagerService", () => {
-    let service: DropdownViewManagerService;
+    let dropdownViewManagerService: DropdownViewManagerService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -15,16 +15,14 @@ describe("DropdownViewManagerService", () => {
                 DropdownViewManagerService,
                 {
                     provide: ActivatedRoute,
-                    useValue: {
-                        queryParams: of({}),
-                    },
+                    useClass: ActivatedRouteQueryParams,
                 },
             ],
         });
-        service = TestBed.inject(DropdownViewManagerService);
+        dropdownViewManagerService = TestBed.inject(DropdownViewManagerService);
     });
 
     it("should be created", () => {
-        expect(service).toBeTruthy();
+        expect(dropdownViewManagerService).toBeTruthy();
     });
 });

@@ -4,26 +4,23 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { of } from "rxjs";
 
 import { MeetingsHttpService } from "../../../../../../shared/api/meetings-http.service";
-import { TableMeeting } from "../../../../../../shared/models/meeting.model";
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
 import { MeetingsRootService } from "./meetings-root.service";
 
-const mockTableMeeting: TableMeeting[] = [];
-
 describe("MeetingsRootService", () => {
-    let mockService: MeetingsRootService;
+    let meetingsRootService: MeetingsRootService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule, MatDialogModule],
             providers: [
-                MeetingsRootService,
                 MeetingsHttpService,
+                MeetingsRootService,
                 {
                     provide: TableService,
                     useValue: {
-                        refreshTableItems$: () => of(mockTableMeeting),
+                        refreshTableItems$: () => of([]),
                         currentPageIndex$: of(1),
                         currentPageIndex: 1,
                         capacity: 1,
@@ -38,10 +35,11 @@ describe("MeetingsRootService", () => {
                 },
             ],
         });
-        mockService = TestBed.inject(MeetingsRootService);
+
+        meetingsRootService = TestBed.inject(MeetingsRootService);
     });
 
     it("should be created", () => {
-        expect(mockService).toBeTruthy();
+        expect(meetingsRootService).toBeTruthy();
     });
 });

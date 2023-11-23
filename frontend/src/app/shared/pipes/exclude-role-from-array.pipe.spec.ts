@@ -8,7 +8,7 @@ describe("ExcludeRoleFromArrayPipe", () => {
         pipe = new ExcludeRoleFromArrayPipe();
     });
 
-    it("should create an instance", () => {
+    it("should be created", () => {
         expect(pipe).toBeTruthy();
     });
 

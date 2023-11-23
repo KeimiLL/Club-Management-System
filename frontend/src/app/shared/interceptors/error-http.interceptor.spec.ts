@@ -1,27 +1,22 @@
 import { TestBed } from "@angular/core/testing";
-import { ActivatedRoute, Router } from "@angular/router";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { ActivatedRoute } from "@angular/router";
 
-import { SnackbarService } from "../services/snackbar.service";
+import { ActivatedRouteQueryParams } from "../test-mocks/test-mocks";
 import { ErrorHttpInterceptor } from "./error-http.interceptor";
 
 describe("ErrorHttpInterceptor", () => {
     let interceptor: ErrorHttpInterceptor;
-    let snackService: jasmine.SpyObj<SnackbarService>;
-    let router: jasmine.SpyObj<Router>;
-    let activatedRoute: ActivatedRoute;
 
     beforeEach(() => {
-        snackService = jasmine.createSpyObj("SnackbarService", [
-            "showHttpErrorSnackBar",
-        ]);
-        router = jasmine.createSpyObj("Router", ["parseUrl"]);
-
         TestBed.configureTestingModule({
+            imports: [MatSnackBarModule],
             providers: [
                 ErrorHttpInterceptor,
-                { provide: SnackbarService, useValue: snackService },
-                { provide: Router, useValue: router },
-                { provide: ActivatedRoute, useValue: activatedRoute },
+                {
+                    provide: ActivatedRoute,
+                    useClass: ActivatedRouteQueryParams,
+                },
             ],
         });
 

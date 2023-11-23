@@ -1,36 +1,30 @@
-import { CommonModule } from "@angular/common";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { of } from "rxjs";
 
 import { UserService } from "../../../../../../../shared/api/user.service";
-import { Roles } from "../../../../../../../shared/models/user.model";
-import { MaterialModule } from "../../../../../../../shared/modules/material.module";
+import { mockUser } from "../../../../../../../shared/test-mocks/test-mocks";
 import { MenuHeaderComponent } from "./menu-header.component";
 
 describe("MenuHeaderComponent", () => {
     let fixture: ComponentFixture<MenuHeaderComponent>;
-
-    const userServiceMock = {
-        currentUser: {
-            full_name: "Janusz Tracz",
-            email: "janusz.tracz@plebania.com",
-            role: Roles.Admin,
-            id: 1,
-        },
-        getCurrentUser: () => of(userServiceMock.currentUser),
-    };
+    let component: MenuHeaderComponent;
+    let mockUserService: Partial<UserService>;
 
     beforeEach(() => {
+        mockUserService = {
+            currentUser: mockUser,
+            getCurrentUser: () => of(mockUser),
+        };
+
         TestBed.configureTestingModule({
-            imports: [CommonModule, MaterialModule],
-            providers: [{ provide: UserService, useValue: userServiceMock }],
+            providers: [{ provide: UserService, useValue: mockUserService }],
         });
 
         fixture = TestBed.createComponent(MenuHeaderComponent);
+        component = fixture.componentInstance;
     });
 
     it("should be created", () => {
-        const component = fixture.componentInstance;
         expect(component).toBeTruthy();
     });
 });

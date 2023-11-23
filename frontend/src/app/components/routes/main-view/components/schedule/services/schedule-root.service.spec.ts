@@ -2,33 +2,31 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
-import { of } from "rxjs";
 
 import { DropdownViewManagerService } from "../../../../../../shared/services/dropdown-view-manager.service";
+import { ActivatedRouteQueryParams } from "../../../../../../shared/test-mocks/test-mocks";
 import { ScheduleRootService } from "./schedule-root.service";
 
 describe("ScheduleRootService", () => {
-    let service: ScheduleRootService;
+    let scheduleRootService: ScheduleRootService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [MatDialogModule, HttpClientTestingModule],
+            imports: [HttpClientTestingModule, MatDialogModule],
             providers: [
-                ScheduleRootService,
                 DropdownViewManagerService,
+                ScheduleRootService,
                 {
                     provide: ActivatedRoute,
-                    useValue: {
-                        queryParams: of({}),
-                    },
+                    useClass: ActivatedRouteQueryParams,
                 },
                 { provide: MatDialog, useValue: {} },
             ],
         });
-        service = TestBed.inject(ScheduleRootService);
+        scheduleRootService = TestBed.inject(ScheduleRootService);
     });
 
     it("should be created", () => {
-        expect(service).toBeTruthy();
+        expect(scheduleRootService).toBeTruthy();
     });
 });

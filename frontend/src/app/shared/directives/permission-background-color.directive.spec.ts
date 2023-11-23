@@ -1,20 +1,9 @@
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { Component } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { UserService } from "../api/user.service";
-import { Roles, User } from "../models/user.model";
+import { Roles } from "../models/user.model";
 import { PermissionBackgroundColorDirective } from "./permission-background-color.directive";
-
-const mockUser: User = {
-    full_name: "admin",
-    id: 1,
-    role: Roles.Admin,
-    email: "test@cms.com",
-};
-
-class MockUserService {
-    currentUser = mockUser;
-}
 
 @Component({
     template:
@@ -26,20 +15,23 @@ class TestComponent {
 
 describe("PermissionBackgroundColorDirective", () => {
     let fixture: ComponentFixture<TestComponent>;
-    let testComponent: TestComponent;
+    let component: TestComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TestComponent],
-            imports: [PermissionBackgroundColorDirective],
-            providers: [{ provide: UserService, useClass: MockUserService }],
+            imports: [
+                PermissionBackgroundColorDirective,
+                HttpClientTestingModule,
+            ],
         });
+
         fixture = TestBed.createComponent(TestComponent);
-        testComponent = fixture.componentInstance;
+        component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
-    it("should create the component", () => {
-        expect(testComponent).toBeTruthy();
+    it("should be created", () => {
+        expect(component).toBeTruthy();
     });
 });

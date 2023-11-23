@@ -1,37 +1,29 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { ReactiveFormsModule } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 
-import { UserService } from "../../../../shared/api/user.service";
-
-@Component({
-    selector: "app-login",
-    template: "",
-})
-class MockLoginComponent {}
+import { ActivatedRouteQueryParams } from "../../../../shared/test-mocks/test-mocks";
+import { AuthService } from "../auth.service";
+import { LoginComponent } from "./login.component";
 
 describe("LoginComponent", () => {
-    let fixture: ComponentFixture<MockLoginComponent>;
-    let component: MockLoginComponent;
+    let fixture: ComponentFixture<LoginComponent>;
+    let component: LoginComponent;
 
     beforeEach(() => {
-        const userServiceSpyObj = jasmine.createSpyObj("UserService", [
-            "login",
-        ]);
-        const routerSpyObj = jasmine.createSpyObj("Router", ["navigate"]);
-
         TestBed.configureTestingModule({
-            declarations: [MockLoginComponent],
-            imports: [CommonModule, ReactiveFormsModule],
+            imports: [CommonModule, HttpClientTestingModule],
             providers: [
-                { provide: UserService, useValue: userServiceSpyObj },
-                { provide: Router, useValue: routerSpyObj },
+                AuthService,
+                {
+                    provide: ActivatedRoute,
+                    useClass: ActivatedRouteQueryParams,
+                },
             ],
         });
 
-        fixture = TestBed.createComponent(MockLoginComponent);
+        fixture = TestBed.createComponent(LoginComponent);
         component = fixture.componentInstance;
     });
 

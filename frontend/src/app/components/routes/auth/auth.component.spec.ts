@@ -11,7 +11,6 @@ describe("AuthComponent", () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [CommonModule, RouterModule],
-            declarations: [],
         });
 
         fixture = TestBed.createComponent(AuthComponent);

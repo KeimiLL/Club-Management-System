@@ -1,57 +1,37 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { ActivatedRoute, convertToParamMap } from "@angular/router";
-import { of } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
 
-import { Meeting } from "../../../../../../../shared/models/meeting.model";
-import {
-    Roles,
-    ShortUser,
-} from "../../../../../../../shared/models/user.model";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
+import {
+    ActivatedRouteQueryParams,
+    mockMeeting,
+} from "./../../../../../../../shared/test-mocks/test-mocks";
 import { CurrentMeetingContentComponent } from "./current-meeting-content.component";
 
-const mockShortUser: ShortUser = {
-    full_name: "Janusz Tracz",
-    id: 1,
-    role: Roles.Admin,
-};
-
-const mockMeeting: Meeting = {
-    notes: null,
-    name: "xyz",
-    date: "123",
-    id: 1,
-    created_by_user: mockShortUser,
-    users: [mockShortUser],
-};
-
 describe("CurrentMeetingContentComponent", () => {
-    let component: CurrentMeetingContentComponent;
     let fixture: ComponentFixture<CurrentMeetingContentComponent>;
+    let component: CurrentMeetingContentComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
+            imports: [CurrentMeetingContentComponent, HttpClientTestingModule],
             providers: [
                 SplitViewManagerService,
                 {
                     provide: ActivatedRoute,
-                    useValue: {
-                        snapshot: {
-                            paramMap: convertToParamMap({}),
-                        },
-                        queryParams: of({ test: "test" }),
-                    },
+                    useClass: ActivatedRouteQueryParams,
                 },
             ],
-            imports: [HttpClientTestingModule, CurrentMeetingContentComponent],
         });
+
         fixture = TestBed.createComponent(CurrentMeetingContentComponent);
         component = fixture.componentInstance;
         component.meeting = mockMeeting;
+        fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });

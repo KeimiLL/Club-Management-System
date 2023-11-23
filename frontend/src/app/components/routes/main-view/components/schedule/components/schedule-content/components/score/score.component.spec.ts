@@ -1,25 +1,23 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
-import { of } from "rxjs";
 
 import { DropdownViewManagerService } from "../../../../../../../../../shared/services/dropdown-view-manager.service";
+import { ActivatedRouteQueryParams } from "../../../../../../../../../shared/test-mocks/test-mocks";
 import { ScoreComponent } from "./score.component";
 
 describe("ScoreComponent", () => {
-    let component: ScoreComponent;
     let fixture: ComponentFixture<ScoreComponent>;
+    let component: ScoreComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [ScoreComponent, HttpClientTestingModule],
+            imports: [HttpClientTestingModule, ScoreComponent],
             providers: [
                 DropdownViewManagerService,
                 {
                     provide: ActivatedRoute,
-                    useValue: {
-                        queryParams: of({}),
-                    },
+                    useClass: ActivatedRouteQueryParams,
                 },
             ],
         });
@@ -34,7 +32,7 @@ describe("ScoreComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });

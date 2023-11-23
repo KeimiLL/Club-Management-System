@@ -8,15 +8,7 @@ describe("CsrfHttpInterceptor", () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [
-                CsrfHttpInterceptor,
-                {
-                    provide: HttpXsrfTokenExtractor,
-                    useValue: {
-                        getToken: jasmine.createSpy("getToken"),
-                    },
-                },
-            ],
+            providers: [CsrfHttpInterceptor, HttpXsrfTokenExtractor],
         });
 
         interceptor = TestBed.inject(CsrfHttpInterceptor);

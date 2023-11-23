@@ -2,34 +2,33 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { MatDialogModule } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
-import { of } from "rxjs";
 
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
+import { ActivatedRouteQueryParams } from "../../../../../../shared/test-mocks/test-mocks";
 import { TeamsRootService } from "./teams-root.service";
 
 describe("TeamsRootService", () => {
-    let service: TeamsRootService;
+    let teamsRootService: TeamsRootService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule, MatDialogModule],
             providers: [
-                TeamsRootService,
-                TableService,
                 SplitViewManagerService,
+                TableService,
+                TeamsRootService,
                 {
                     provide: ActivatedRoute,
-                    useValue: {
-                        queryParams: of({}),
-                    },
+                    useClass: ActivatedRouteQueryParams,
                 },
             ],
         });
-        service = TestBed.inject(TeamsRootService);
+
+        teamsRootService = TestBed.inject(TeamsRootService);
     });
 
     it("should be created", () => {
-        expect(service).toBeTruthy();
+        expect(teamsRootService).toBeTruthy();
     });
 });
