@@ -102,7 +102,8 @@ class MatchTableView(BaseModel):
     date: datetime.date
 
 
-class MatchSideView(MatchInProgress):
+class MatchSideView(MatchTableView):
     """Match schema for displaying data in the side panel."""
 
+    notes: str | None = None
     players: list["PlayerOnlyBaseInfo"]
