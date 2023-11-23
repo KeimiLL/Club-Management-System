@@ -18,12 +18,17 @@ class CoachBase(BaseModel):
     date_of_birth: datetime.date | None = None
 
 
-class CoachCreate(CoachBase):
+class CoachUpdate(CoachBase):
+    """Coach schema for updating."""
+
+    date_of_joining: datetime.date
+    date_of_birth: datetime.date
+
+
+class CoachCreate(CoachUpdate):
     """Coach schema for creation."""
 
     user_id: int = Field(..., ge=1, le=10**7)
-    date_of_joining: datetime.date
-    date_of_birth: datetime.date
 
 
 class Coach(CoachBase):
@@ -33,10 +38,6 @@ class Coach(CoachBase):
     date_of_birth: datetime.date
     user: "User"
     teams: list["Team"]
-
-
-class CoachUpdate(CoachBase):
-    """Coach schema for updating."""
 
 
 class CoachInDBBase(CoachBase):

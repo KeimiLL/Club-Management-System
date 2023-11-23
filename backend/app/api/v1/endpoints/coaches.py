@@ -15,6 +15,7 @@ from app.schemas.coach import (
     CoachOnlyBaseInfo,
     CoachOnlyName,
     CoachPopupView,
+    CoachUpdate,
 )
 from app.schemas.enums import HTTPResponseMessage, Roles
 from app.schemas.misc import Message, MessageFromEnum
@@ -236,3 +237,39 @@ def delete_coach(
         db=db,
     )
     return Message(message=HTTPResponseMessage.SUCCESS)
+
+
+@router.put(
+    "/{coach_id}",
+    response_model=CoachPopupView,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def update_coach(
+    coach_id: Annotated[int, Path(ge=1, le=10**7)],
+    coach: CoachUpdate,
+    _: Annotated[User, Depends(board_not_allowed)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Updates coach data with the given data.
+
+    Args:
+        coach_id (Annotated[int, Path]): The given coach's id. Has to be greater than
+            or equal to 1 and less than or equal to 10**7.
+        coach (CoachUpdate): Coach data to update.
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+    Returns:
+        CoachPopupView: The updated coach.
+    """
+    updated_coach = crud_coach.update_coach(user_id=coach_id, coach_update=coach, db=db)
+    return CoachPopupView(
+        **updated_coach.__dict__,
+        user_full_name=updated_coach.user.full_name,
+        teams=[TeamOnlyBaseInfo(**team.__dict__) for team in updated_coach.teams]
+    )
