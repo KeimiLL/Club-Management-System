@@ -210,7 +210,6 @@ def update_meeting_with_user_ids(
     """
     try:
         meeting = get_meeting_by_id(meeting_id=meeting_id, db=db)
-
         if meeting.user_id in user_ids:
             raise GenericException(
                 "The list of user ids cannot contain the creator's id."
