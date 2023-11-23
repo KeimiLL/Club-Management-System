@@ -6,30 +6,31 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CreatePlayerPopupComponent } from "./create-player-popup.component";
 
 describe("CreatePlayerPopupComponent", () => {
-    let component: CreatePlayerPopupComponent;
     let fixture: ComponentFixture<CreatePlayerPopupComponent>;
+    let component: CreatePlayerPopupComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
+                BrowserAnimationsModule,
                 CreatePlayerPopupComponent,
                 HttpClientTestingModule,
-                BrowserAnimationsModule,
             ],
             providers: [
-                { provide: MatDialogRef, useValue: {} },
                 {
                     provide: MAT_DIALOG_DATA,
                     useValue: {},
                 },
+                { provide: MatDialogRef, useValue: {} },
             ],
         });
+
         fixture = TestBed.createComponent(CreatePlayerPopupComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });

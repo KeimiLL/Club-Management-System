@@ -19,14 +19,15 @@ describe("PermissionDirective", () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TestComponent],
-            imports: [PermissionDirective, HttpClientTestingModule],
+            imports: [HttpClientTestingModule, PermissionDirective],
         });
+
         fixture = TestBed.createComponent(TestComponent);
         testComponent = fixture.componentInstance;
         fixture.detectChanges();
     });
 
-    it("should create the component", () => {
+    it("should be created", () => {
         expect(testComponent).toBeTruthy();
     });
 });

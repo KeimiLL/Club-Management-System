@@ -1,29 +1,21 @@
-import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
-import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { MenuRootService } from "../../menu-root.service";
-
-@Component({
-    selector: "app-logout",
-    template: "",
-})
-class MockLogoutComponent {
-    @Input() public isCollapsed = false;
-}
+import { LogoutComponent } from "./logout.component";
 
 describe("LogoutComponent", () => {
-    let fixture: ComponentFixture<MockLogoutComponent>;
-    let component: MockLogoutComponent;
+    let fixture: ComponentFixture<LogoutComponent>;
+    let component: LogoutComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [MockLogoutComponent],
-            imports: [CommonModule, MaterialModule],
+            imports: [HttpClientTestingModule, MatSnackBarModule],
             providers: [MenuRootService],
         });
-        fixture = TestBed.createComponent(MockLogoutComponent);
+
+        fixture = TestBed.createComponent(LogoutComponent);
         component = fixture.componentInstance;
     });
 

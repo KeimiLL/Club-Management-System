@@ -8,25 +8,25 @@ import { of } from "rxjs";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../../shared/services/table.service";
+import { ActivatedRouteQueryParams } from "../../../../../../../shared/test-mocks/test-mocks";
 import { MeetingsRootService } from "../../services/meetings-root.service";
 import { MeetingTableComponent } from "./meeting-table.component";
 
-class MockActivatedRoute {
-    queryParams = of({});
-}
-
 describe("MeetingTableComponent", () => {
-    let component: MeetingTableComponent;
     let fixture: ComponentFixture<MeetingTableComponent>;
+    let component: MeetingTableComponent;
     const mockEvent: PageEvent = { pageIndex: 0, pageSize: 2, length: 2 };
 
     beforeEach(async () => {
-        await TestBed.configureTestingModule({
-            imports: [CommonModule, MaterialModule, HttpClientModule],
-            declarations: [],
+        TestBed.configureTestingModule({
+            imports: [CommonModule, HttpClientModule, MaterialModule],
             providers: [
                 MatPaginator,
                 SplitViewManagerService,
+                {
+                    provide: ActivatedRoute,
+                    useClass: ActivatedRouteQueryParams,
+                },
                 {
                     provide: MeetingsRootService,
                     useValue: {
@@ -34,7 +34,6 @@ describe("MeetingTableComponent", () => {
                         displayedColumns$: of([]),
                     },
                 },
-                { provide: ActivatedRoute, useClass: MockActivatedRoute },
                 {
                     provide: TableService,
                     useValue: {
@@ -44,10 +43,8 @@ describe("MeetingTableComponent", () => {
                     },
                 },
             ],
-        }).compileComponents();
-    });
+        });
 
-    beforeEach(() => {
         fixture = TestBed.createComponent(MeetingTableComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();

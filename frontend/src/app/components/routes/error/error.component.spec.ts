@@ -1,30 +1,30 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
-import { of } from "rxjs";
 
+import { ActivatedRouteQueryParams } from "../../../shared/test-mocks/test-mocks";
 import { ErrorComponent } from "./error.component";
 
-class MockActivatedRoute {
-    queryParams = of({});
-}
-
 describe("ErrorComponent", () => {
-    let component: ErrorComponent;
     let fixture: ComponentFixture<ErrorComponent>;
+    let component: ErrorComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [ErrorComponent],
             providers: [
-                { provide: ActivatedRoute, useClass: MockActivatedRoute },
+                {
+                    provide: ActivatedRoute,
+                    useClass: ActivatedRouteQueryParams,
+                },
             ],
         });
+
         fixture = TestBed.createComponent(ErrorComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });

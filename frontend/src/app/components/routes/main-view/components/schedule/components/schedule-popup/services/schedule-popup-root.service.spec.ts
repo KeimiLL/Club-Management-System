@@ -6,21 +6,22 @@ import { SchedulePopupFormsService } from "./schedule-popup-forms.service";
 import { SchedulePopupRootService } from "./schedule-popup-root.service";
 
 describe("SchedulePopupRootService", () => {
-    let service: SchedulePopupRootService;
+    let schedulePopupRootService: SchedulePopupRootService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule, MatDialogModule],
             providers: [
-                SchedulePopupRootService,
                 SchedulePopupFormsService,
+                SchedulePopupRootService,
                 { provide: MatDialogRef, useValue: {} },
             ],
         });
-        service = TestBed.inject(SchedulePopupRootService);
+
+        schedulePopupRootService = TestBed.inject(SchedulePopupRootService);
     });
 
     it("should be created", () => {
-        expect(service).toBeTruthy();
+        expect(schedulePopupRootService).toBeTruthy();
     });
 });

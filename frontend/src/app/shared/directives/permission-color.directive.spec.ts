@@ -14,19 +14,20 @@ class TestComponent {
 
 describe("PermissionColorDirective", () => {
     let fixture: ComponentFixture<TestComponent>;
-    let testComponent: TestComponent;
+    let component: TestComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TestComponent],
-            imports: [PermissionColorDirective, HttpClientTestingModule],
+            imports: [HttpClientTestingModule, PermissionColorDirective],
         });
+
         fixture = TestBed.createComponent(TestComponent);
-        testComponent = fixture.componentInstance;
+        component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
-    it("should create the component", () => {
-        expect(testComponent).toBeTruthy();
+    it("should be created", () => {
+        expect(component).toBeTruthy();
     });
 });

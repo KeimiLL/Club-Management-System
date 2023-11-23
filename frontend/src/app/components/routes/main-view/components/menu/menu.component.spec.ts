@@ -3,30 +3,24 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 import { UserService } from "../../../../../shared/api/user.service";
-import { Roles } from "../../../../../shared/models/user.model";
+import { mockUser } from "../../../../../shared/test-mocks/test-mocks";
 import { MenuComponent } from "./menu.component";
 
 describe("MenuComponent", () => {
-    let component: MenuComponent;
     let fixture: ComponentFixture<MenuComponent>;
-    const userServiceMock = {
-        currentUser: {
-            full_name: "Janusz Tracz",
-            email: "janusz.tracz@plebania.com",
-            role: Roles.Admin,
-            id: 1,
-        },
-    };
+    let component: MenuComponent;
+    let mockUserService: Partial<UserService>;
 
     beforeEach(async () => {
-        await TestBed.configureTestingModule({
-            declarations: [],
-            imports: [HttpClientTestingModule, MatSnackBarModule],
-            providers: [{ provide: UserService, useValue: userServiceMock }],
-        }).compileComponents();
-    });
+        mockUserService = {
+            currentUser: mockUser,
+        };
 
-    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule, MatSnackBarModule],
+            providers: [{ provide: UserService, useValue: mockUserService }],
+        });
+
         fixture = TestBed.createComponent(MenuComponent);
         component = fixture.componentInstance;
     });

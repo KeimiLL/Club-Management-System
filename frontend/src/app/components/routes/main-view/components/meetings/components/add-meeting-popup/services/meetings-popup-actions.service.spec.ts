@@ -7,21 +7,24 @@ import { MeetingsPopupActionsService } from "./meetings-popup-actions.service";
 import { MeetingsPopupFormService } from "./meetings-popup-form.service";
 
 describe("MeetingsPopupActionsService", () => {
-    let service: MeetingsPopupActionsService;
+    let meetingsPopupActionsService: MeetingsPopupActionsService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule, MatSnackBarModule],
             providers: [
                 MeetingsPopupActionsService,
                 MeetingsPopupFormService,
                 { provide: MatDialogRef, useValue: {} },
             ],
-            imports: [HttpClientTestingModule, MatSnackBarModule],
         });
-        service = TestBed.inject(MeetingsPopupActionsService);
+
+        meetingsPopupActionsService = TestBed.inject(
+            MeetingsPopupActionsService
+        );
     });
 
     it("should be created", () => {
-        expect(service).toBeTruthy();
+        expect(meetingsPopupActionsService).toBeTruthy();
     });
 });

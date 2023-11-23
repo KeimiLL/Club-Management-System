@@ -4,16 +4,17 @@ import { TestBed } from "@angular/core/testing";
 import { CoachesHttpService } from "./coaches-http.service";
 
 describe("CoachesHttpService", () => {
-    let service: CoachesHttpService;
+    let coachesHttpService: CoachesHttpService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
         });
-        service = TestBed.inject(CoachesHttpService);
+
+        coachesHttpService = TestBed.inject(CoachesHttpService);
     });
 
     it("should be created", () => {
-        expect(service).toBeTruthy();
+        expect(coachesHttpService).toBeTruthy();
     });
 });

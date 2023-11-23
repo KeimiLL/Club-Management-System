@@ -2,15 +2,9 @@ import { Component } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { UserService } from "../api/user.service";
-import { Roles, User } from "../models/user.model";
+import { Roles } from "../models/user.model";
+import { mockUser } from "../test-mocks/test-mocks";
 import { RoleDirective } from "./role.directive";
-
-const mockUser: User = {
-    full_name: "admin",
-    id: 1,
-    role: Roles.Admin,
-    email: "test@cms.com",
-};
 
 @Component({
     template: "<div *appRole='requiredRole' class='content'>Content</div>",
@@ -30,14 +24,14 @@ describe("RoleDirective", () => {
 
         TestBed.configureTestingModule({
             declarations: [TestComponent],
-            providers: [{ provide: UserService, useValue: mockUserService }],
             imports: [RoleDirective],
+            providers: [{ provide: UserService, useValue: mockUserService }],
         });
 
         fixture = TestBed.createComponent(TestComponent);
     });
 
-    it("should create the component", () => {
+    it("should be created", () => {
         expect(fixture.componentInstance).toBeTruthy();
     });
 

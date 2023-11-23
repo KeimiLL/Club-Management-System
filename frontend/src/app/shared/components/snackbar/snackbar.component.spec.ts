@@ -27,7 +27,7 @@ describe("SnackbarComponent", () => {
         component = fixture.componentInstance;
     });
 
-    it("should create the component", () => {
+    it("should be created the component", () => {
         expect(component).toBeTruthy();
     });
 

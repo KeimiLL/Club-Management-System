@@ -7,7 +7,7 @@ describe("LowerSnakeToUpperNormal", () => {
         pipe = new LowerSnakeToUpperNormal();
     });
 
-    it("should create an instance", () => {
+    it("should be created", () => {
         expect(pipe).toBeTruthy();
     });
 

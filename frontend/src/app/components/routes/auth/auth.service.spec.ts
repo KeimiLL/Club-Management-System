@@ -5,17 +5,18 @@ import { UserService } from "../../../shared/api/user.service";
 import { AuthService } from "./auth.service";
 
 describe("AuthService", () => {
-    let service: AuthService;
+    let authService: AuthService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [AuthService, UserService],
             imports: [HttpClientTestingModule],
+            providers: [AuthService, UserService],
         });
-        service = TestBed.inject(AuthService);
+
+        authService = TestBed.inject(AuthService);
     });
 
     it("should be created", () => {
-        expect(service).toBeTruthy();
+        expect(authService).toBeTruthy();
     });
 });

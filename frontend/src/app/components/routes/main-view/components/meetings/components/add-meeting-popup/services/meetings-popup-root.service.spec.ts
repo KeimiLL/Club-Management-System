@@ -5,17 +5,18 @@ import { MeetingsPopupFormService } from "./meetings-popup-form.service";
 import { MeetingsPopupRootService } from "./meetings-popup-root.service";
 
 describe("MeetingsPopupRootService", () => {
-    let service: MeetingsPopupRootService;
+    let meetingsPopupRootService: MeetingsPopupRootService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [MeetingsPopupRootService, MeetingsPopupFormService],
+            providers: [MeetingsPopupFormService, MeetingsPopupRootService],
             imports: [HttpClientTestingModule],
         });
-        service = TestBed.inject(MeetingsPopupRootService);
+
+        meetingsPopupRootService = TestBed.inject(MeetingsPopupRootService);
     });
 
     it("should be created", () => {
-        expect(service).toBeTruthy();
+        expect(meetingsPopupRootService).toBeTruthy();
     });
 });

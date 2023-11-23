@@ -9,29 +9,30 @@ import { SettingsModifyRootService } from "../../services/settings-modify-root.s
 import { UserTableComponent } from "./user-table.component";
 
 describe("UserTableComponent", () => {
-    let component: UserTableComponent;
     let fixture: ComponentFixture<UserTableComponent>;
+    let component: UserTableComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
-                UserTableComponent,
                 HttpClientTestingModule,
                 MatSnackBarModule,
+                UserTableComponent,
             ],
             providers: [
-                TableService,
-                SettingsModifyRootService,
                 ModifyUsersPopupService,
                 SettingsRootService,
+                SettingsModifyRootService,
+                TableService,
             ],
         });
+
         fixture = TestBed.createComponent(UserTableComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });

@@ -11,7 +11,7 @@ describe("AppComponent", () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [AppComponent],
-            imports: [RouterTestingModule, FooterComponent],
+            imports: [FooterComponent, RouterTestingModule],
         });
 
         fixture = TestBed.createComponent(AppComponent);

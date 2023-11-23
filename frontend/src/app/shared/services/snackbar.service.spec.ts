@@ -5,29 +5,26 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { SnackbarService } from "./snackbar.service";
 
 describe("SnackbarService", () => {
-    let mockService: SnackbarService;
+    let snackBarService: SnackbarService;
     let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
 
     beforeEach(() => {
-        const snackBarSpyObj = jasmine.createSpyObj("MatSnackBar", [
+        snackBarSpy = jasmine.createSpyObj("MatSnackBar", [
             "openFromComponent",
         ]);
 
         TestBed.configureTestingModule({
             providers: [
                 SnackbarService,
-                { provide: MatSnackBar, useValue: snackBarSpyObj },
+                { provide: MatSnackBar, useValue: snackBarSpy },
             ],
         });
 
-        mockService = TestBed.inject(SnackbarService);
-        snackBarSpy = TestBed.inject(
-            MatSnackBar
-        ) as jasmine.SpyObj<MatSnackBar>;
+        snackBarService = TestBed.inject(SnackbarService);
     });
 
     it("should be created", () => {
-        expect(mockService).toBeTruthy();
+        expect(snackBarService).toBeTruthy();
     });
 
     it("should call snackBar.openFromComponent with the correct parameters for showSnackBar", () => {
@@ -35,7 +32,7 @@ describe("SnackbarService", () => {
         const variant = "normal";
         const time = 3000;
 
-        mockService.showSnackBar(message, variant, time);
+        snackBarService.showSnackBar(message, variant, time);
 
         expect(snackBarSpy.openFromComponent).toHaveBeenCalledWith(
             jasmine.any(Function),
@@ -53,7 +50,7 @@ describe("SnackbarService", () => {
         });
         const time = 3000;
 
-        mockService.showHttpErrorSnackBar(response, time);
+        snackBarService.showHttpErrorSnackBar(response, time);
 
         expect(snackBarSpy.openFromComponent).toHaveBeenCalledWith(
             jasmine.any(Function),

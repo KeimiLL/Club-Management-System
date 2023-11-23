@@ -5,26 +5,27 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CreateCoachPopupComponent } from "./create-coach-popup.component";
 
 describe("CreateCoachPopupComponent", () => {
-    let component: CreateCoachPopupComponent;
     let fixture: ComponentFixture<CreateCoachPopupComponent>;
+    let component: CreateCoachPopupComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [CreateCoachPopupComponent, BrowserAnimationsModule],
+            imports: [BrowserAnimationsModule, CreateCoachPopupComponent],
             providers: [
-                { provide: MatDialogRef, useValue: {} },
                 {
                     provide: MAT_DIALOG_DATA,
                     useValue: {},
                 },
+                { provide: MatDialogRef, useValue: {} },
             ],
         });
+
         fixture = TestBed.createComponent(CreateCoachPopupComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });

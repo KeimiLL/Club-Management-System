@@ -8,25 +8,25 @@ import { ModifyUsersPopupService } from "./modify-users-popup.service";
 import { SettingsModifyRootService } from "./settings-modify-root.service";
 
 describe("SettingsModifyRootService", () => {
-    let service: SettingsModifyRootService;
+    let settingsModifyRootService: SettingsModifyRootService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
                 HttpClientTestingModule,
-                MatSnackBarModule,
                 MatDialogModule,
+                MatSnackBarModule,
             ],
             providers: [
+                ModifyUsersPopupService,
                 SettingsModifyRootService,
                 TableService,
-                ModifyUsersPopupService,
             ],
         });
-        service = TestBed.inject(SettingsModifyRootService);
+        settingsModifyRootService = TestBed.inject(SettingsModifyRootService);
     });
 
     it("should be created", () => {
-        expect(service).toBeTruthy();
+        expect(settingsModifyRootService).toBeTruthy();
     });
 });

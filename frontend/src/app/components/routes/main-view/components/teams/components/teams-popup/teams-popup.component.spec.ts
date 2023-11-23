@@ -10,31 +10,33 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TeamsPopupComponent } from "./teams-popup.component";
 
 describe("TeamsPopupComponent", () => {
-    let component: TeamsPopupComponent;
     let fixture: ComponentFixture<TeamsPopupComponent>;
+    let component: TeamsPopupComponent;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
-                TeamsPopupComponent,
+                BrowserAnimationsModule,
+
                 HttpClientTestingModule,
                 MatDialogModule,
-                BrowserAnimationsModule,
+                TeamsPopupComponent,
             ],
             providers: [
-                { provide: MatDialogRef, useValue: {} },
                 {
                     provide: MAT_DIALOG_DATA,
                     useValue: {},
                 },
+                { provide: MatDialogRef, useValue: {} },
             ],
         });
+
         fixture = TestBed.createComponent(TeamsPopupComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("should be created", () => {
         expect(component).toBeTruthy();
     });
 });

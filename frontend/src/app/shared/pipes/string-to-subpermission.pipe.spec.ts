@@ -8,11 +8,11 @@ describe("StringToSubpermissionPipe", () => {
         pipe = new StringToSubpermissionPipe();
     });
 
-    it("should create an instance", () => {
+    it("should be created", () => {
         expect(pipe).toBeTruthy();
     });
 
-    it("should transform a valid string to SubPermissions", () => {
+    it("should transform a valid string to SubPermission", () => {
         const result = pipe.transform("see_all");
         expect(result).toBe(MeetingsPermission.SeeAll);
     });

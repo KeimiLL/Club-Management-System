@@ -20,7 +20,7 @@ describe("FilterUsingPropControlPipe", () => {
         pipe = new FilterUsingPropControlPipe();
     });
 
-    it("should create an instance", () => {
+    it("should be created", () => {
         expect(pipe).toBeTruthy();
     });
 
