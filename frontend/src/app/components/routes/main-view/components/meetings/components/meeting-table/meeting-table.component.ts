@@ -6,7 +6,6 @@ import {
     OnInit,
     ViewChild,
 } from "@angular/core";
-import { MatIconModule } from "@angular/material/icon";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { Observable } from "rxjs";
@@ -29,7 +28,6 @@ import { MeetingsRootService } from "../../services/meetings-root.service";
     imports: [
         CommonModule,
         MaterialModule,
-        MatIconModule,
         PermissionDirective,
         DateComponent,
         SpinnerComponent,

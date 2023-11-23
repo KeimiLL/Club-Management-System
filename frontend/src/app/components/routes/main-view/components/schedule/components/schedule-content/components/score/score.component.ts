@@ -18,8 +18,8 @@ export class ScoreComponent implements OnInit {
 
     protected homeName: string;
     protected awayName: string;
-    protected homeGoals: number;
-    protected awayGoals: number;
+    protected homeGoals: number | null;
+    protected awayGoals: number | null;
 
     constructor(private readonly dropdown: DropdownViewManagerService) {}
 

@@ -21,7 +21,7 @@
                             class="button--light"
                             (click)="onNewMatchClick()"
                         >
-                            Add Team
+                            Add Match
                         </button>
                         <button
                             mat-raised-button
@@ -47,7 +47,10 @@
         </app-wide-card-header>
 
         <ng-container content>
-            <app-schedule-table *ngIf="vm.tableMatches"></app-schedule-table>
+            <app-schedule-table
+                *ngIf="vm.tableMatches"
+                [data]="vm.tableMatches"
+            ></app-schedule-table>
         </ng-container>
     </app-content-card>
 

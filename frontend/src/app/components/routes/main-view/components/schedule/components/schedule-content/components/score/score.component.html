@@ -1,3 +1,5 @@
 <div class="team team__left">{{ homeName }}</div>
-<div class="numbers">{{ homeGoals }} : {{ awayGoals }}</div>
+<div class="numbers">
+    {{ homeGoals ? homeGoals : 0 }} : {{ awayGoals ? awayGoals : 0 }}
+</div>
 <div class="team team__right">{{ awayName }}</div>
