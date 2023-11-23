@@ -3,7 +3,7 @@
 
 from typing import Annotated
 
-from app.api import board_not_allowed, viewer_not_allowed
+from app.api import board_not_allowed, player_not_allowed, viewer_not_allowed
 from app.api.dependencies import paginate
 from app.core.exceptions import ForbiddenException, MissingException
 from app.crud import crud_player
@@ -68,18 +68,21 @@ def create_new_player(
     },
 )
 def get_all_players(
-    _: Annotated[User, Depends(board_not_allowed)],
+    _: Annotated[User, Depends(player_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
+    team_id: Annotated[int | None, Query(ge=1, lt=10000)] = None,
 ):
-    """Gets the list of all registered players.
+    """Gets the list of all registered players, optionally filtered by their team_id.
 
     Args:
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+        team_id (Annotated[int | None, Query], optional): The given team's id.
+            Has to be greater than 1 and less than or equal to 10**7. Defaults to None.
 
     Returns:
         list[PlayerOnlyBaseInfo]: The list of all players.
     """
-    players = crud_player.get_all_players(db=db)
+    players = crud_player.get_all_players(db=db, team_id=team_id)
     return [
         PlayerOnlyBaseInfo(**player.__dict__, user_full_name=player.user.full_name)
         for player in players
