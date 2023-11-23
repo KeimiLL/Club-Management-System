@@ -17,7 +17,7 @@ from app.schemas.enums import EventType, Roles
 from app.schemas.match import MatchCreate
 from app.schemas.matchevent import MatchEventCreate
 from app.schemas.meeting import MeetingCreate, MeetingUpdate
-from app.schemas.player import PlayerCreate
+from app.schemas.player import PlayerCreate, PlayerUpdate
 from app.schemas.team import TeamCreate
 from app.schemas.user import UserCreate, UserCreateWithRole
 from fastapi import FastAPI
@@ -206,6 +206,16 @@ player_create = PlayerCreate(
     weight=90,
     notes="GOAT",
     is_injured=True,
+)
+
+player_update = PlayerUpdate(
+    team_id=1,
+    date_of_joining=datetime.date.today() - datetime.timedelta(days=10),
+    date_of_birth=datetime.date.today() - datetime.timedelta(days=10),
+    height=19,
+    weight=9,
+    notes="not GOAT",
+    is_injured=False,
 )
 
 match_create = MatchCreate(

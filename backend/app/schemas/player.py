@@ -26,16 +26,22 @@ class PlayerBase(BaseModel):
     diet: str | None = None
 
 
-class PlayerCreate(PlayerBase):
-    """Player schema for creation."""
+class PlayerUpdate(PlayerBase):
+    """Player schema for updating."""
 
-    user_id: int = Field(..., ge=1, le=10**7)
     team_id: int | None = Field(None, ge=1, le=10**7)
     date_of_joining: datetime.date
     date_of_birth: datetime.date
     height: PositiveInt
     weight: PositiveInt
     is_injured: bool = False
+
+
+class PlayerCreate(PlayerBase):
+    """Player schema for creation."""
+
+    user_id: int = Field(..., ge=1, le=10**7)
+    team_id: int | None = Field(None, ge=1, le=10**7)
 
 
 class Player(PlayerBase):
@@ -51,10 +57,6 @@ class Player(PlayerBase):
     injuries: list["Injury"]
     matches: list["Match"]
     trainings: list["Training"]
-
-
-class PlayerUpdate(PlayerBase):
-    """Player schema for updating."""
 
 
 class PlayerInDBBase(PlayerBase):
@@ -94,4 +96,4 @@ class PlayerSideView(PlayerOnlyBaseInfo):
     weight: PositiveInt
     is_injured: bool = False
     diet: str | None = None
-    team: "TeamOnlyBaseInfo"
+    team: "TeamOnlyBaseInfo | None"
