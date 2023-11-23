@@ -55,26 +55,23 @@
     </app-content-card>
 
     <app-content-card *ngIf="vm.isDetail">
-        <!-- <app-content-card *ngIf="true"> -->
         <app-half-card-right-header
             header
             name="Test Match"
             (closedClicked)="switchDetail()"
         >
             <app-button-container buttons>
-                <!-- <button
-                    mat-raised-button
-                    class="button--light"
-                    (click)="onModifyPlayerClick()"
-                >
-                    Modify Player
-                </button> -->
+                <button mat-raised-button class="button--light">
+                    Modify Match
+                </button>
             </app-button-container>
         </app-half-card-right-header>
 
         <ng-container content>
-            <!-- <app-schedule-content *ngIf="vm.currentMatch"></app-schedule-content> -->
-            <app-schedule-content></app-schedule-content>
+            <app-schedule-content
+                *ngIf="vm.currentMatch"
+                [match]="vm.currentMatch"
+            ></app-schedule-content>
         </ng-container>
     </app-content-card>
 </ng-container>

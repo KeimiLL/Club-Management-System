@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { filter, map, Observable, switchMap, tap } from "rxjs";
+import { filter, map, Observable, of, switchMap, tap } from "rxjs";
 
 import { MatchesHttpService } from "../../../../../../shared/api/matches-http.service";
 import {
@@ -9,6 +9,7 @@ import {
     TableMatch,
 } from "../../../../../../shared/models/match.model";
 import { DropdownViewManagerService } from "../../../../../../shared/services/dropdown-view-manager.service";
+import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
 import { DestroyClass } from "../../../../../../shared/utils/destroyClass";
 import { SchedulePopupComponent } from "../components/schedule-popup/schedule-popup.component";
@@ -19,7 +20,8 @@ export class ScheduleRootService extends DestroyClass {
         private readonly dialog: MatDialog,
         private readonly dropdown: DropdownViewManagerService,
         private readonly table: TableService<TableMatch>,
-        private readonly http: MatchesHttpService
+        private readonly http: MatchesHttpService,
+        private readonly splitView: SplitViewManagerService<Match>
     ) {
         super();
         this.initData();
@@ -37,14 +39,12 @@ export class ScheduleRootService extends DestroyClass {
             )
             .subscribe();
 
-        // this.splitView.currentId$
-        //     .pipe(
-        //         switchMap((id: number | null) =>
-        //             this.refreshCurrentPlayer$(id)
-        //         ),
-        //         this.untilDestroyed()
-        //     )
-        //     .subscribe();
+        this.splitView.currentId$
+            .pipe(
+                switchMap((id: number | null) => this.refreshCurrentMatch$(id)),
+                this.untilDestroyed()
+            )
+            .subscribe();
 
         this.table.currentPageIndex$
             .pipe(
@@ -103,6 +103,11 @@ export class ScheduleRootService extends DestroyClass {
                 this.table.capacity
             )
         );
+    }
+
+    private refreshCurrentMatch$(id: number | null): Observable<Match | null> {
+        if (id === null) return of(null);
+        return this.splitView.refreshCurrentItem$(this.http.getMatchById(id));
     }
 
     private openDialog(

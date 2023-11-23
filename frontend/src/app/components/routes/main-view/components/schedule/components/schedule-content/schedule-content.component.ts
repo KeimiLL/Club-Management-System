@@ -1,13 +1,15 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Observable } from "rxjs";
 
 import {
+    Match,
     MatchContentType,
     MatchScore,
 } from "../../../../../../../shared/models/match.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
+import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 import { ScheduleContentService } from "../../services/schedule-content.service";
 import { MatchDetailsComponent } from "./components/match-details/match-details.component";
 import { MatchEventsComponent } from "./components/match-events/match-events.component";
@@ -30,6 +32,11 @@ import { ScoreComponent } from "./components/score/score.component";
     styleUrls: ["./schedule-content.component.scss"],
 })
 export class ScheduleContentComponent {
+    @Input() public match: Match;
+
+    // protected isCurrentMeetingLoading$: Observable<boolean>;
+    // protected spinnerMessage = "Loading selected match...";
+
     protected readonly contentTypes = MatchContentType;
     protected readonly contentType$: Observable<MatchContentType>;
 
@@ -40,7 +47,10 @@ export class ScheduleContentComponent {
         goals_conceded: 0,
     };
 
-    constructor(private readonly content: ScheduleContentService) {
+    constructor(
+        private readonly content: ScheduleContentService,
+        private readonly split: SplitViewManagerService<Match>
+    ) {
         this.contentType$ = this.content.contentType$;
     }
 
