@@ -8,8 +8,8 @@ from app.crud.crud_team import get_team_by_id
 from app.crud.crud_user import get_user_by_id
 from app.models.player import Player
 from app.models.user import User
-from app.schemas.player import PlayerCreate
-from sqlalchemy import delete, func, select
+from app.schemas.player import PlayerCreate, PlayerUpdate
+from sqlalchemy import delete, func, select, update
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -149,5 +149,39 @@ def delete_player(user_id: int, db: Session) -> None:
         if affected_rows == 0:
             raise MissingException(Player.__name__)
         db.commit()
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def update_player(
+    player_update: PlayerUpdate,
+    user_id: int,
+    db: Session,
+) -> Player:
+    """Updates player data with the given data.
+
+    Args:
+        player_update (PlayerUpdate): Player data to update.
+        user_id (int): Player's id.
+        db (Session): Database session.
+
+    Raises:
+        MissingException: If no player matches the given user id.
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        Player: The updated Player object.
+    """
+    try:
+        player = get_player_by_user_id(user_id=user_id, db=db)
+        db.execute(
+            update(Player)
+            .where(Player.user_id == user_id)
+            .values(**player_update.__dict__)
+        )
+        db.commit()
+        return player
+    except NoResultFound as exc:
+        raise MissingException(Player.__name__) from exc
     except SQLAlchemyError as exc:
         raise exc

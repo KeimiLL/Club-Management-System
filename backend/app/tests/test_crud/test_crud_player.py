@@ -10,16 +10,18 @@ from app.crud.crud_player import (
     get_all_players,
     get_player_by_user_id,
     get_players_with_pagination_by_team_id,
+    update_player,
 )
 from app.crud.crud_team import create_new_team
 from app.crud.crud_user import create_new_user
 from app.schemas.coach import CoachCreate
-from app.schemas.player import PlayerCreate
+from app.schemas.player import PlayerCreate, PlayerUpdate
 from app.schemas.team import TeamCreate
 from app.schemas.user import UserCreate, UserCreateWithRole
 from app.tests.conftest import (
     coach_create,
     player_create,
+    player_update,
     team_create,
     user_create_unique_1,
     user_create_unique_2,
@@ -312,3 +314,38 @@ def test_incorrect__delete_player(
     with pytest.raises(MissingException) as excinfo:
         delete_player(user_id, db_session)
     assert "Player" == str(excinfo.value)
+
+
+@pytest.mark.parametrize(
+    "user,coach,team,player,player_data",
+    [(user_create_unique_1, coach_create, team_create, player_create, player_update)],
+)
+def test_correct__update_player(
+    user: UserCreate,
+    coach: CoachCreate,
+    team: TeamCreate,
+    player: PlayerCreate,
+    player_data: PlayerUpdate,
+    db_session: Session,
+) -> None:
+    """Tests updating a player.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        player (PlayerCreate): Player to be created.
+        player_data (PlayerUpdate): Player data to be updated.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    create_new_coach(coach, db_session)
+    create_new_team(team, db_session)
+    new_player = create_new_player(player, db_session)
+    updated_player = update_player(player_data, new_player.user_id, db_session)
+    assert updated_player.user.full_name == user.full_name
+    if updated_player.team is not None:
+        assert updated_player.team.name == team.name
+        if updated_player.team.coach is not None:
+            assert updated_player.team.coach.date_of_birth == coach.date_of_birth
+    assert updated_player.date_of_birth == player_data.date_of_birth

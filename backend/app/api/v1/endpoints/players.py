@@ -17,6 +17,7 @@ from app.schemas.player import (
     PlayerOnlyBaseInfo,
     PlayerSideView,
     PlayerTableView,
+    PlayerUpdate,
 )
 from app.schemas.team import TeamOnlyBaseInfo
 from fastapi import APIRouter, Depends, Path, Query, status
@@ -245,3 +246,43 @@ def delete_player(
         db=db,
     )
     return Message(message=HTTPResponseMessage.SUCCESS)
+
+
+@router.put(
+    "/{player_id}",
+    response_model=PlayerSideView,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def update_player(
+    player_id: Annotated[int, Path(ge=1, le=10**7)],
+    player: PlayerUpdate,
+    _: Annotated[User, Depends(board_not_allowed)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Updates player data with the given data.
+
+    Args:
+        player_id (Annotated[int, Path]): The given player's id. Has to be greater than
+            or equal to 1 and less than or equal to 10**7.
+        player (PlayerUpdate): Player data to update.
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+    Returns:
+        PlayerSideView: The updated player.
+    """
+    updated_player = crud_player.update_player(
+        user_id=player_id, player_update=player, db=db
+    )
+    return PlayerSideView(
+        **updated_player.__dict__,
+        user_full_name=updated_player.user.full_name,
+        team=TeamOnlyBaseInfo(**updated_player.team.__dict__)
+        if updated_player.team is not None
+        else None
+    )

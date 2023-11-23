@@ -219,7 +219,7 @@ def test_incorrect__delete_coach(
     "user,coach,coach_data",
     [(user_create_unique_1, coach_create, coach_update)],
 )
-def test_correct__update_meeting_with_user_ids(
+def test_correct__update_coach(
     user: UserCreate,
     coach: CoachCreate,
     coach_data: CoachUpdate,
