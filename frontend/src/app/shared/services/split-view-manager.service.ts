@@ -1,15 +1,19 @@
 import { Injectable } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
     BehaviorSubject,
     catchError,
+    filter,
     finalize,
     Observable,
     of,
+    switchMap,
     tap,
 } from "rxjs";
 
-import { MainRoutes } from "../models/misc.model";
+import { ConfirmationPopupComponent } from "../components/confirmation-popup/confirmation-popup.component";
+import { BackendResponse, MainRoutes } from "../models/misc.model";
 import { DestroyClass } from "../utils/destroyClass";
 
 @Injectable()
@@ -21,7 +25,8 @@ export class SplitViewManagerService<T> extends DestroyClass {
 
     constructor(
         private readonly activatedRoute: ActivatedRoute,
-        private readonly router: Router
+        private readonly router: Router,
+        private readonly dialog: MatDialog
     ) {
         super();
         this.urlChecker();
@@ -127,5 +132,29 @@ export class SplitViewManagerService<T> extends DestroyClass {
         }
         this.isLoading = false;
         return of(null);
+    }
+
+    public deleteCurrentItem$(
+        request: Observable<BackendResponse>,
+        message?: string
+    ): Observable<BackendResponse> {
+        const popup = this.dialog.open(ConfirmationPopupComponent, {
+            width: "30vw",
+            disableClose: true,
+            data:
+                message ??
+                "Are you sure you want to permanently remove this item",
+        });
+
+        return popup.afterClosed().pipe(
+            filter((result) => result === true),
+            switchMap(() =>
+                request.pipe(
+                    finalize(() => {
+                        this.changeDetailState();
+                    })
+                )
+            )
+        );
     }
 }

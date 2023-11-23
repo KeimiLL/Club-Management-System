@@ -1,7 +1,7 @@
 <ng-container
     *ngIf="{
         allPlayers: allPlayers$ | async,
-        selectedPlayers: selectedPlayers$ | async,
+        selectedPlayers: selectedPlayers$ | async
     } as vm"
 >
     <ng-container *ngIf="vm.allPlayers && vm.selectedPlayers">

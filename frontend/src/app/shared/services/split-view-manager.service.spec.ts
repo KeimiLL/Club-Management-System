@@ -1,4 +1,5 @@
 import { TestBed } from "@angular/core/testing";
+import { MatDialogModule } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
 
@@ -18,6 +19,7 @@ describe("SplitViewManagerService", () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
+            imports: [MatDialogModule],
             providers: [
                 SplitViewManagerService,
                 { provide: ActivatedRoute, useClass: MockActivatedRoute },

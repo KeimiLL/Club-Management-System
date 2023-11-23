@@ -126,4 +126,15 @@ export class MeetingsRootService extends DestroyClass {
         if (id === null) return of(null);
         return this.splitView.refreshCurrentItem$(this.http.getMeetingById(id));
     }
+
+    public deleteCurrentMeeting(): void {
+        if (this.splitView.currentId === null) return;
+
+        this.splitView
+            .deleteCurrentItem$(
+                this.http.deleteMeetingById(this.splitView.currentId)
+            )
+            .pipe(switchMap(() => this.refreshMeetings$()))
+            .subscribe();
+    }
 }

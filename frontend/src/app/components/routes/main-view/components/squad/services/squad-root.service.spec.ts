@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
+import { MatDialogModule } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
 import { of } from "rxjs";
 
@@ -13,7 +14,7 @@ describe("SquadRootService", () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule],
+            imports: [HttpClientTestingModule, MatDialogModule],
             providers: [
                 SquadRootService,
                 SplitViewManagerService,
