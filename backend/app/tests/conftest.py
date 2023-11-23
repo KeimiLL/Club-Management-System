@@ -12,7 +12,7 @@ from app.core.config import get_settings
 from app.db.base import Base
 from app.db.session import get_db
 from app.main import include_exception_handlers, include_middleware
-from app.schemas.coach import CoachCreate
+from app.schemas.coach import CoachCreate, CoachUpdate
 from app.schemas.enums import EventType, Roles
 from app.schemas.match import MatchCreate
 from app.schemas.matchevent import MatchEventCreate
@@ -175,12 +175,21 @@ meeting_create = MeetingCreate(
     date=datetime.date.today(),
 )
 
-meeting_update = MeetingUpdate(**meeting_create.__dict__)
+meeting_update = MeetingUpdate(
+    name="test_name_updated",
+    notes="test_note_updated",
+    date=datetime.date.today() - datetime.timedelta(days=10),
+)
 
 coach_create = CoachCreate(
     user_id=1,
     date_of_birth=datetime.date.today(),
     date_of_joining=datetime.date.today(),
+)
+
+coach_update = CoachUpdate(
+    date_of_birth=datetime.date.today() - datetime.timedelta(days=10),
+    date_of_joining=datetime.date.today() - datetime.timedelta(days=10),
 )
 
 team_create = TeamCreate(

@@ -9,14 +9,16 @@ from app.crud.crud_coach import (
     get_all_coaches,
     get_coach_by_team_id,
     get_coach_by_user_id,
+    update_coach,
 )
 from app.crud.crud_team import create_new_team
 from app.crud.crud_user import create_new_user
-from app.schemas.coach import CoachCreate
+from app.schemas.coach import CoachCreate, CoachUpdate
 from app.schemas.team import TeamCreate
 from app.schemas.user import UserCreate, UserCreateWithRole
 from app.tests.conftest import (
     coach_create,
+    coach_update,
     team_create,
     user_create_unique_1,
     user_create_unique_2,
@@ -211,3 +213,29 @@ def test_incorrect__delete_coach(
     with pytest.raises(MissingException) as excinfo:
         delete_coach(user_id, db_session)
     assert "Coach" == str(excinfo.value)
+
+
+@pytest.mark.parametrize(
+    "user,coach,coach_data",
+    [(user_create_unique_1, coach_create, coach_update)],
+)
+def test_correct__update_meeting_with_user_ids(
+    user: UserCreate,
+    coach: CoachCreate,
+    coach_data: CoachUpdate,
+    db_session: Session,
+) -> None:
+    """Tests updating a coach.
+
+    Args:
+        user (UserCreate): User to be created.
+        coach (CoachCreate): Coach to be created.
+        coach_data (CoachUpdate): Coach data to be updated.
+        db_session (Session): Database session.
+    """
+    create_new_user(user, db_session)
+    new_coach = create_new_coach(coach, db_session)
+    updated_coach = update_coach(coach_data, new_coach.user_id, db_session)
+    assert updated_coach.user.full_name == user.full_name
+    assert updated_coach.date_of_birth == coach_data.date_of_birth
+    assert updated_coach.date_of_joining == coach_data.date_of_joining

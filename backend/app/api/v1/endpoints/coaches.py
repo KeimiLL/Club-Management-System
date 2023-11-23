@@ -7,6 +7,7 @@ from app.api import board_not_allowed, viewer_not_allowed
 from app.core.exceptions import ForbiddenException, MissingException
 from app.crud import crud_coach
 from app.db.session import get_db
+from app.models.coach import Coach
 from app.models.team import Team
 from app.models.user import User
 from app.schemas.coach import (
@@ -14,6 +15,7 @@ from app.schemas.coach import (
     CoachOnlyBaseInfo,
     CoachOnlyName,
     CoachPopupView,
+    CoachUpdate,
 )
 from app.schemas.enums import HTTPResponseMessage, Roles
 from app.schemas.misc import Message, MessageFromEnum
@@ -167,10 +169,8 @@ def get_coach_by_user_id(
             raise ForbiddenException()
         if not current_user.coach.teams:
             raise MissingException(Team.__name__)
-        coach_dict = current_user.coach.__dict__
-        del coach_dict["teams"]
         return CoachPopupView(
-            **coach_dict,
+            **current_user.coach.__dict__,
             user_full_name=current_user.full_name,
             teams=[
                 TeamOnlyBaseInfo(**team.__dict__) for team in current_user.coach.teams
@@ -178,14 +178,10 @@ def get_coach_by_user_id(
         )
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
         coach = crud_coach.get_coach_by_user_id(user_id=coach_id, db=db)
-        coach_dict = coach.__dict__
-        del coach_dict["team"]
         return CoachPopupView(
-            **coach_dict,
+            **coach.__dict__,
             user_full_name=current_user.full_name,
-            teams=[
-                TeamOnlyBaseInfo(**team.__dict__) for team in current_user.coach.teams
-            ]
+            teams=[TeamOnlyBaseInfo(**team.__dict__) for team in coach.teams]
         )
     if current_user.role == Roles.PLAYER:
         team_coach_id = (
@@ -195,15 +191,16 @@ def get_coach_by_user_id(
         )
         if current_user.player.team is None:
             raise MissingException(Team.__name__)
+        if current_user.player.team.coach is None:
+            raise MissingException(Coach.__name__)
         if coach_id != team_coach_id:
             raise ForbiddenException()
-        coach_dict = current_user.player.team.coach.__dict__
-        del coach_dict["team"]
         return CoachPopupView(
-            **coach_dict,
+            **current_user.player.team.coach.__dict__,
             user_full_name=current_user.full_name,
             teams=[
-                TeamOnlyBaseInfo(**team.__dict__) for team in current_user.coach.teams
+                TeamOnlyBaseInfo(**team.__dict__)
+                for team in current_user.player.team.coach.teams
             ]
         )
     raise ForbiddenException()
@@ -240,3 +237,39 @@ def delete_coach(
         db=db,
     )
     return Message(message=HTTPResponseMessage.SUCCESS)
+
+
+@router.put(
+    "/{coach_id}",
+    response_model=CoachPopupView,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def update_coach(
+    coach_id: Annotated[int, Path(ge=1, le=10**7)],
+    coach: CoachUpdate,
+    _: Annotated[User, Depends(board_not_allowed)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Updates coach data with the given data.
+
+    Args:
+        coach_id (Annotated[int, Path]): The given coach's id. Has to be greater than
+            or equal to 1 and less than or equal to 10**7.
+        coach (CoachUpdate): Coach data to update.
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+    Returns:
+        CoachPopupView: The updated coach.
+    """
+    updated_coach = crud_coach.update_coach(user_id=coach_id, coach_update=coach, db=db)
+    return CoachPopupView(
+        **updated_coach.__dict__,
+        user_full_name=updated_coach.user.full_name,
+        teams=[TeamOnlyBaseInfo(**team.__dict__) for team in updated_coach.teams]
+    )
