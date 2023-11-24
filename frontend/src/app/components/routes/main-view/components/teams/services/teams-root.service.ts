@@ -94,4 +94,15 @@ export class TeamsRootService extends DestroyClass {
             data: dialogData,
         });
     }
+
+    public deleteCurrentTeam(): void {
+        if (this.splitView.currentId === null) return;
+
+        this.splitView
+            .deleteCurrentItem$(
+                this.http.deleteTeamById(this.splitView.currentId)
+            )
+            .pipe(switchMap(() => this.refreshTeams$()))
+            .subscribe();
+    }
 }
