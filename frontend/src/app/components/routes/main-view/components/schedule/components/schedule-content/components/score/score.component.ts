@@ -4,12 +4,13 @@ import { take, tap } from "rxjs";
 
 import { MatchScore } from "../../../../../../../../../shared/models/match.model";
 import { MaterialModule } from "../../../../../../../../../shared/modules/material.module";
+import { ScorePipe } from "../../../../../../../../../shared/pipes/score.pipe";
 import { DropdownViewManagerService } from "../../../../../../../../../shared/services/dropdown-view-manager.service";
 
 @Component({
     selector: "app-score[score]",
     standalone: true,
-    imports: [CommonModule, MaterialModule],
+    imports: [CommonModule, MaterialModule, ScorePipe],
     templateUrl: "./score.component.html",
     styleUrls: ["./score.component.scss"],
 })
@@ -18,8 +19,6 @@ export class ScoreComponent implements OnInit {
 
     protected homeName: string;
     protected awayName: string;
-    protected homeGoals: number | null;
-    protected awayGoals: number | null;
 
     constructor(private readonly dropdown: DropdownViewManagerService) {}
 
@@ -29,8 +28,6 @@ export class ScoreComponent implements OnInit {
 
     private isHome(): void {
         this.awayName = this.score.opponent;
-        this.homeGoals = this.score.goals_scored;
-        this.awayGoals = this.score.goals_conceded;
         this.dropdown.currentTeam$
             .pipe(
                 take(1),
@@ -47,7 +44,5 @@ export class ScoreComponent implements OnInit {
             )
             .subscribe();
         this.homeName = this.score.opponent;
-        this.awayGoals = this.score.goals_scored;
-        this.homeGoals = this.score.goals_conceded;
     }
 }

@@ -13,9 +13,15 @@ import { SplitViewManagerService } from "../../../../../../shared/services/split
 import { TableService } from "../../../../../../shared/services/table.service";
 import { DestroyClass } from "../../../../../../shared/utils/destroyClass";
 import { SchedulePopupComponent } from "../components/schedule-popup/schedule-popup.component";
+import {
+    longMatchesColumns,
+    shortMatchesColumns,
+} from "../schedule-table.data";
 
 @Injectable()
 export class ScheduleRootService extends DestroyClass {
+    public displayedColumns$: Observable<string[]>;
+
     constructor(
         private readonly dialog: MatDialog,
         private readonly dropdown: DropdownViewManagerService,
@@ -56,9 +62,9 @@ export class ScheduleRootService extends DestroyClass {
             )
             .subscribe();
 
-        // this.displayedColumns$ = this.splitView.isDetail$.pipe(
-        //     map((value) => (value ? shortPlayerColumns : longPlayerColumns))
-        // );
+        this.displayedColumns$ = this.splitView.isDetail$.pipe(
+            map((value) => (value ? shortMatchesColumns : longMatchesColumns))
+        );
     }
 
     public openNewMatchDialog(): void {

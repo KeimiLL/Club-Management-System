@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 
 import { DateComponent } from "../../../../../../../shared/components/date/date.component";
 import { SpinnerComponent } from "../../../../../../../shared/components/spinner/spinner.component";
@@ -50,7 +50,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit {
     protected itemsPerPage: number;
     protected index$: Observable<number>;
     protected isTableLoading$: Observable<boolean>;
-    protected spinnerMessage = "Loading meetings...";
+    protected spinnerMessage = "Loading matches...";
 
     constructor(
         private readonly splitView: SplitViewManagerService<Match>,
@@ -62,7 +62,7 @@ export class ScheduleTableComponent implements OnInit, AfterViewInit {
         this.itemsPerPage = this.table.capacity;
         this.index$ = this.table.currentPageIndex$;
         this.totalItems$ = this.table.totalItems$;
-        this.displayedColumns$ = of(["Opponent", "Score", "Date", "Home"]);
+        this.displayedColumns$ = this.root.displayedColumns$;
         this.isTableLoading$ = this.table.isLoading$;
     }
 
