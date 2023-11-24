@@ -31,4 +31,8 @@ export class TeamsHttpService {
     public getTeamById(id: number): Observable<Team> {
         return this.http.get<Team>(`api/v1/teams/${id}`);
     }
+
+    public deleteTeamById(id: number): Observable<BackendResponse> {
+        return this.http.delete<BackendResponse>(`api/v1/teams/${id}`);
+    }
 }
