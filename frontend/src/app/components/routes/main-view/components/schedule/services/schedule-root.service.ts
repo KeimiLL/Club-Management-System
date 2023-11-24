@@ -136,9 +136,7 @@ export class ScheduleRootService extends DestroyClass {
             .pipe(
                 switchMap(() => {
                     if (this.dropdown.currentTeam === null) return of(null);
-                    return this.refreshCurrentMatch$(
-                        this.dropdown.currentTeam.id
-                    );
+                    return this.refreshMatches$(this.dropdown.currentTeam.id);
                 })
             )
             .subscribe();

@@ -65,4 +65,8 @@ export class ScheduleComponent {
     protected onNewMatchClick(): void {
         this.root.openNewMatchDialog();
     }
+
+    protected onMatchDelete(): void {
+        this.root.deleteCurrentMatch();
+    }
 }

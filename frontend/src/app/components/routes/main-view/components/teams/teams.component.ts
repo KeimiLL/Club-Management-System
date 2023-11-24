@@ -49,4 +49,8 @@ export class TeamsComponent implements OnInit {
     protected onNewTeamClick(): void {
         this.root.openNewMeetingDialog();
     }
+
+    protected onTeamDelete(): void {
+        this.root.deleteCurrentTeam();
+    }
 }

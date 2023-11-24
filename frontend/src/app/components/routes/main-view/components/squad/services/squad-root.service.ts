@@ -121,9 +121,7 @@ export class SquadRootService extends DestroyClass {
             .pipe(
                 switchMap(() => {
                     if (this.dropdown.currentTeam === null) return of(null);
-                    return this.refreshCurrentPlayer$(
-                        this.dropdown.currentTeam.id
-                    );
+                    return this.refreshPlayers$(this.dropdown.currentTeam.id);
                 })
             )
             .subscribe();
