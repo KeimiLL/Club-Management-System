@@ -19,7 +19,7 @@ from app.schemas.match import (
     MatchSideView,
     MatchTableView,
 )
-from app.schemas.match_player import MatchPlayerCreatePlayerIdList
+from app.schemas.match_player import MatchPlayerCreatePlayerIdList, MatchPlayerUpdate
 from app.schemas.misc import ItemsListWithTotal, Message, MessageFromEnum
 from app.schemas.player import PlayerOnlyBaseInfo
 from fastapi import APIRouter, Depends, Path, Query, status
@@ -271,9 +271,8 @@ def get_match_by_id(
         match = crud_match.get_match_by_id(match_id=match_id, db=db)
         if current_user.player.team_id != match.team_id:
             raise ForbiddenException()
-        match_dict = match.__dict__
         return MatchSideView(
-            **match_dict,
+            **match.__dict__,
             team_name=match.team.name,
             players=[
                 PlayerOnlyBaseInfo(
@@ -284,9 +283,8 @@ def get_match_by_id(
         )
     if current_user.role in (Roles.ADMIN, Roles.BOARD):
         match = crud_match.get_match_by_id(match_id=match_id, db=db)
-        match_dict = match.__dict__
         return MatchSideView(
-            **match_dict,
+            **match.__dict__,
             team_name=match.team.name,
             players=[
                 PlayerOnlyBaseInfo(
@@ -299,9 +297,8 @@ def get_match_by_id(
         match = crud_match.get_match_by_id(match_id=match_id, db=db)
         if current_user.id != match.team.coach_id:
             raise ForbiddenException()
-        match_dict = match.__dict__
         return MatchSideView(
-            **match_dict,
+            **match.__dict__,
             team_name=match.team.name,
             players=[
                 PlayerOnlyBaseInfo(
@@ -344,3 +341,49 @@ def delete_match(
         db=db,
     )
     return Message(message=HTTPResponseMessage.SUCCESS)
+
+
+@router.put(
+    "/{match_id}",
+    response_model=MatchSideView,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def update_match_with_user_ids(
+    match_id: Annotated[int, Path(ge=1, le=10**7)],
+    match_player: MatchPlayerUpdate,
+    _: Annotated[User, Depends(player_not_allowed)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Updates match data with the given data.
+
+    Args:
+        match_id (Annotated[int, Path]): The given match's id. Has to be greater than
+            or equal to 1 and less than or equal to 10**7.
+        match_player (MatchPlayerUpdate): Match data to update.
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+    Returns:
+        MatchSideView: The updated match.
+    """
+    match = crud_match.update_match_with_player_ids(
+        match_update=match_player.match,
+        match_id=match_id,
+        player_ids=match_player.player_ids,
+        db=db,
+    )
+    return MatchSideView(
+        **match.__dict__,
+        team_name=match.team.name,
+        players=[
+            PlayerOnlyBaseInfo(
+                user_id=player.user_id, user_full_name=player.user.full_name
+            )
+            for player in match.players
+        ]
+    )

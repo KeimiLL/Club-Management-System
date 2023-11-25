@@ -14,7 +14,7 @@ from app.db.session import get_db
 from app.main import include_exception_handlers, include_middleware
 from app.schemas.coach import CoachCreate, CoachUpdate
 from app.schemas.enums import EventType, Roles
-from app.schemas.match import MatchCreate
+from app.schemas.match import MatchCreate, MatchUpdate
 from app.schemas.matchevent import MatchEventCreate
 from app.schemas.meeting import MeetingCreate, MeetingUpdate
 from app.schemas.player import PlayerCreate, PlayerUpdate
@@ -171,13 +171,13 @@ user_create_with_role = UserCreateWithRole(
 meeting_create = MeetingCreate(
     user_id=1,
     name="test_name",
-    notes="test_note",
+    notes="test_notes",
     date=datetime.date.today(),
 )
 
 meeting_update = MeetingUpdate(
     name="test_name_updated",
-    notes="test_note_updated",
+    notes="test_notes_updated",
     date=datetime.date.today() - datetime.timedelta(days=10),
 )
 
@@ -224,6 +224,14 @@ match_create = MatchCreate(
     is_home=True,
     notes="test_notes",
     date=datetime.date.today(),
+)
+
+match_update = MatchUpdate(
+    team_id=1,
+    opponent="test_opponent_updated",
+    is_home=False,
+    notes="test_notes_updated",
+    date=datetime.date.today() - datetime.timedelta(days=10),
 )
 
 matchevent_create = MatchEventCreate(

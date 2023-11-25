@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict, Field, NonNegativeInt, conint, conset
 
 if TYPE_CHECKING:
-    from app.schemas.match import Match, MatchCreate
+    from app.schemas.match import Match, MatchCreate, MatchUpdate
     from app.schemas.player import Player
 
 
@@ -32,8 +32,11 @@ class MatchPlayer(MatchPlayerBase):
     player: "Player"
 
 
-class MatchPlayerUpdate(MatchPlayerBase):
+class MatchPlayerUpdate(BaseModel):
     """MatchPlayer schema for updating."""
+
+    match: "MatchUpdate"
+    player_ids: conset(conint(ge=1, lt=10**7), min_length=1)
 
 
 class MatchPlayerInDBBase(MatchPlayerBase):
