@@ -22,8 +22,8 @@ export interface MatchScoreBase {
 }
 
 export interface MatchScore extends MatchScoreBase {
-    goals_scored: number;
-    goals_conceded: number;
+    goals_scored: number | null;
+    goals_conceded: number | null;
 }
 
 export interface MatchBase extends MatchScoreBase, MatchDetails {

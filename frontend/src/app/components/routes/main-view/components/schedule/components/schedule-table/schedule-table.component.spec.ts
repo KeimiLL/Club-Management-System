@@ -1,5 +1,13 @@
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ActivatedRoute } from "@angular/router";
 
+import { DropdownViewManagerService } from "../../../../../../../shared/services/dropdown-view-manager.service";
+import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
+import { TableService } from "../../../../../../../shared/services/table.service";
+import { ActivatedRouteQueryParams } from "../../../../../../../shared/test-mocks/test-mocks";
+import { ScheduleRootService } from "../../services/schedule-root.service";
 import { ScheduleTableComponent } from "./schedule-table.component";
 
 describe("ScheduleTableComponent", () => {
@@ -8,7 +16,21 @@ describe("ScheduleTableComponent", () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [ScheduleTableComponent],
+            imports: [
+                ScheduleTableComponent,
+                HttpClientTestingModule,
+                BrowserAnimationsModule,
+            ],
+            providers: [
+                SplitViewManagerService,
+                TableService,
+                DropdownViewManagerService,
+                ScheduleRootService,
+                {
+                    provide: ActivatedRoute,
+                    useClass: ActivatedRouteQueryParams,
+                },
+            ],
         });
 
         fixture = TestBed.createComponent(ScheduleTableComponent);

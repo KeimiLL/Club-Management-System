@@ -1,4 +1,4 @@
-<app-score [score]="scoreMock"></app-score>
+<app-score [score]="matchScore"></app-score>
 
 <app-button-container class="button-container">
     <button
@@ -27,11 +27,16 @@
 <div [ngSwitch]="contentType$ | async">
     <app-match-details
         *ngSwitchCase="contentTypes.Details"
-        [matchDetails]="{ date: 'dzisiaj', notes: '5notatek' }"
+        [matchDetails]="matchBase"
     ></app-match-details>
     <app-match-squad
         *ngSwitchCase="contentTypes.Squad"
-        [squad]="['zdzichu', 'ferdek', 'tracz', 'boczek']"
+        [squad]="matchSquad"
     ></app-match-squad>
     <app-match-events *ngSwitchCase="contentTypes.Events"></app-match-events>
 </div>
+
+<app-spinner
+    [spinnerMessage]="spinnerMessage"
+    *ngIf="isCurrentMatchLoading$ | async"
+></app-spinner>

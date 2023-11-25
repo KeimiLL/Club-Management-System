@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { BehaviorSubject, filter, Observable, switchMap, tap } from "rxjs";
+import { BehaviorSubject, filter, Observable, of, switchMap, tap } from "rxjs";
 
 import { TeamsHttpService } from "../api/teams-http.service";
 import { MainRoutes } from "../models/misc.model";
@@ -75,7 +75,9 @@ export class DropdownViewManagerService extends DestroyClass {
                 switchMap((params) => {
                     if ("teamId" in params) {
                         const { teamId } = params;
-                        return this.initTeams$(Number(teamId));
+                        const id = Number(teamId);
+                        if (id === this.currentTeam?.id) return of(null);
+                        return this.initTeams$(id);
                     }
                     return this.initTeams$(null);
                 }),

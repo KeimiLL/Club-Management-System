@@ -1,30 +1,82 @@
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { filter, map, Observable, of, switchMap, tap } from "rxjs";
 
-import { Match } from "../../../../../../shared/models/match.model";
+import { MatchesHttpService } from "../../../../../../shared/api/matches-http.service";
+import {
+    Match,
+    MatchCreate,
+    TableMatch,
+} from "../../../../../../shared/models/match.model";
 import { DropdownViewManagerService } from "../../../../../../shared/services/dropdown-view-manager.service";
+import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
+import { TableService } from "../../../../../../shared/services/table.service";
 import { DestroyClass } from "../../../../../../shared/utils/destroyClass";
 import { SchedulePopupComponent } from "../components/schedule-popup/schedule-popup.component";
+import {
+    longMatchesColumns,
+    shortMatchesColumns,
+} from "../schedule-table.data";
 
 @Injectable()
 export class ScheduleRootService extends DestroyClass {
+    public displayedColumns$: Observable<string[]>;
+
     constructor(
         private readonly dialog: MatDialog,
-        private readonly dropdown: DropdownViewManagerService
+        private readonly dropdown: DropdownViewManagerService,
+        private readonly table: TableService<TableMatch>,
+        private readonly http: MatchesHttpService,
+        private readonly splitView: SplitViewManagerService<Match>
     ) {
         super();
+        this.initData();
+    }
+
+    private initData(): void {
+        this.dropdown.currentTeam$
+            .pipe(
+                filter(Boolean),
+                map((team) => team.id),
+                tap(() => {
+                    this.table.changePage(0);
+                }),
+                this.untilDestroyed()
+            )
+            .subscribe();
+
+        this.splitView.currentId$
+            .pipe(
+                switchMap((id: number | null) => this.refreshCurrentMatch$(id)),
+                this.untilDestroyed()
+            )
+            .subscribe();
+
+        this.table.currentPageIndex$
+            .pipe(
+                map(() => this.dropdown.currentTeam),
+                filter(Boolean),
+                map((team) => team.id),
+                switchMap((id) => this.refreshMatches$(id)),
+                this.untilDestroyed()
+            )
+            .subscribe();
+
+        this.displayedColumns$ = this.splitView.isDetail$.pipe(
+            map((value) => (value ? shortMatchesColumns : longMatchesColumns))
+        );
     }
 
     public openNewMatchDialog(): void {
         this.openDialog(null)
             .afterClosed()
-            .pipe
-            // switchMap((result: boolean) => {
-            //     // if (result) return this.refreshMatches$();
-            //     // return of(null);
-            // }),
-            // this.untilDestroyed()
-            ()
+            .pipe(
+                filter(Boolean),
+                switchMap((result: MatchCreate) =>
+                    this.refreshMatches$(result.match.team_id)
+                ),
+                this.untilDestroyed()
+            )
             .subscribe();
     }
 
@@ -48,6 +100,21 @@ export class ScheduleRootService extends DestroyClass {
     //         )
     //         .subscribe();
     // }
+
+    private refreshMatches$(id: number): Observable<TableMatch[]> {
+        return this.table.refreshTableItems$(
+            this.http.getMatchesByTeamId(
+                id,
+                this.table.currentPageIndex,
+                this.table.capacity
+            )
+        );
+    }
+
+    private refreshCurrentMatch$(id: number | null): Observable<Match | null> {
+        if (id === null) return of(null);
+        return this.splitView.refreshCurrentItem$(this.http.getMatchById(id));
+    }
 
     private openDialog(
         dialogData: Match | null

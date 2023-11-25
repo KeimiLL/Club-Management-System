@@ -1,0 +1,16 @@
+@import "../../../../../../../../styles/component-styles/components";
+
+:host {
+    mat-row {
+        cursor: pointer;
+    }
+
+    .no-records {
+        font-size: $large-font;
+        margin: $medium-spacing auto;
+    }
+}
+
+.div-container {
+    position: relative;
+}

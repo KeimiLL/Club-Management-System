@@ -1,6 +1,7 @@
 import { convertToParamMap } from "@angular/router";
 import { of } from "rxjs";
 
+import { Match } from "../models/match.model";
 import { Meeting } from "../models/meeting.model";
 import { Player } from "../models/player.model";
 import { Team } from "../models/team.model";
@@ -21,6 +22,18 @@ export const mockUser: User = {
     full_name: "admin",
     email: "admin@cms.com",
     role: Roles.Admin,
+};
+
+export const mockMatch: Match = {
+    id: 1,
+    team_name: "Our Team",
+    players: [{ user_id: 0, user_full_name: "player" }],
+    notes: "No notes",
+    date: "today",
+    goals_scored: 1,
+    goals_conceded: 0,
+    opponent: "Opponent",
+    is_home: true,
 };
 
 export const mockMeeting: Meeting = {

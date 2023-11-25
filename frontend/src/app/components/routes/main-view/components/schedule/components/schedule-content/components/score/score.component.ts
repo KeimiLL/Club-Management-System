@@ -1,53 +1,42 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
-import { take, tap } from "rxjs";
+import { Component, Input } from "@angular/core";
+import { tap } from "rxjs";
 
 import { MatchScore } from "../../../../../../../../../shared/models/match.model";
 import { MaterialModule } from "../../../../../../../../../shared/modules/material.module";
+import { ScorePipe } from "../../../../../../../../../shared/pipes/score.pipe";
 import { DropdownViewManagerService } from "../../../../../../../../../shared/services/dropdown-view-manager.service";
 
 @Component({
-    selector: "app-score[score]",
+    selector: "app-score",
     standalone: true,
-    imports: [CommonModule, MaterialModule],
+    imports: [CommonModule, MaterialModule, ScorePipe],
     templateUrl: "./score.component.html",
     styleUrls: ["./score.component.scss"],
 })
-export class ScoreComponent implements OnInit {
-    @Input() public score: MatchScore;
+export class ScoreComponent {
+    @Input() public set score(score: MatchScore) {
+        this.matchScore = score;
+        score.is_home ? this.isHome() : this.isAway();
+    }
 
+    protected matchScore: MatchScore;
     protected homeName: string;
     protected awayName: string;
-    protected homeGoals: number;
-    protected awayGoals: number;
 
     constructor(private readonly dropdown: DropdownViewManagerService) {}
 
-    ngOnInit(): void {
-        this.score.is_home ? this.isHome() : this.isAway();
-    }
-
     private isHome(): void {
-        this.awayName = this.score.opponent;
-        this.homeGoals = this.score.goals_scored;
-        this.awayGoals = this.score.goals_conceded;
+        this.awayName = this.matchScore.opponent;
         this.dropdown.currentTeam$
-            .pipe(
-                take(1),
-                tap((team) => (this.homeName = team.name))
-            )
+            .pipe(tap((team) => (this.homeName = team.name)))
             .subscribe();
     }
 
     private isAway(): void {
         this.dropdown.currentTeam$
-            .pipe(
-                take(1),
-                tap((team) => (this.awayName = team.name))
-            )
+            .pipe(tap((team) => (this.awayName = team.name)))
             .subscribe();
-        this.homeName = this.score.opponent;
-        this.awayGoals = this.score.goals_scored;
-        this.homeGoals = this.score.goals_conceded;
+        this.homeName = this.matchScore.opponent;
     }
 }
