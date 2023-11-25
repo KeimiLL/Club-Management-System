@@ -8,7 +8,7 @@ from app.crud.crud_team import get_team_by_id
 from app.models.match import Match
 from app.models.player import Player
 from app.schemas.enums import MatchEvent
-from app.schemas.match import MatchCreate, MatchScore
+from app.schemas.match import MatchCreate, MatchScore, MatchUpdate
 from sqlalchemy import delete, func, select, update
 from sqlalchemy.exc import IntegrityError, NoResultFound, SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -254,5 +254,50 @@ def delete_match(match_id: int, db: Session) -> None:
         if affected_rows == 0:
             raise MissingException(Match.__name__)
         db.commit()
+    except SQLAlchemyError as exc:
+        raise exc
+
+
+def update_match_with_player_ids(
+    match_update: MatchUpdate,
+    match_id: int,
+    player_ids: set[int],
+    db: Session,
+) -> Match:
+    """Updates match data with the given data.
+
+    Args:
+        match_update (MatchUpdate): Match data to update.
+        match_id (int): Match's id.
+        player_ids (set[int]): Player ids to be added.
+        db (Session): Database session.
+
+    Raises:
+        MissingException: If any of the provided player ids does not match an existing player.
+        MissingException: If no match matches the given match id.
+        SQLAlchemyError: If there is a database error.
+
+    Returns:
+        Match: The updated Match object.
+    """
+    try:
+        match = get_match_by_id(match_id=match_id, db=db)
+        players = list(
+            db.scalars(select(Player).where(Player.user_id.in_(player_ids))).all()
+        )
+        if not players or len(players) != len(player_ids):
+            raise MissingException(Player.__name__)
+        players_to_add = [player for player in players if player not in match.players]
+        players_to_update = [
+            player for player in match.players if player in players
+        ] + players_to_add
+        match.players = players_to_update
+        db.execute(
+            update(Match).where(Match.id == match_id).values(**match_update.__dict__)
+        )
+        db.commit()
+        return match
+    except NoResultFound as exc:
+        raise MissingException(Match.__name__) from exc
     except SQLAlchemyError as exc:
         raise exc

@@ -18,19 +18,17 @@ class MeetingBase(BaseModel):
     date: datetime.date | None = None
 
 
-class MeetingCreate(MeetingBase):
-    """Meeting schema for creation."""
-
-    user_id: int = Field(..., ge=1, le=10**7)
-    name: str = Field(..., min_length=4)
-    date: datetime.date
-
-
 class MeetingCreateNoUserId(MeetingBase):
     """Meeting schema for creation with no user id."""
 
     name: str = Field(..., min_length=4)
     date: datetime.date
+
+
+class MeetingCreate(MeetingCreateNoUserId):
+    """Meeting schema for creation."""
+
+    user_id: int = Field(..., ge=1, le=10**7)
 
 
 class Meeting(MeetingCreateNoUserId):

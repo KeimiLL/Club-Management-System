@@ -4,11 +4,18 @@
 # pylint: disable=unused-import
 from app.schemas.coach import Coach, CoachInDBBase, CoachOnlyBaseInfo, CoachPopupView
 from app.schemas.injury import Injury, InjuryInDBBase
-from app.schemas.match import Match, MatchCreate, MatchInDBBase, MatchSideView
+from app.schemas.match import (
+    Match,
+    MatchCreate,
+    MatchInDBBase,
+    MatchSideView,
+    MatchUpdate,
+)
 from app.schemas.match_player import (
     MatchPlayer,
     MatchPlayerCreatePlayerIdList,
     MatchPlayerInDBBase,
+    MatchPlayerUpdate,
 )
 from app.schemas.matchevent import MatchEvent
 from app.schemas.meeting import (
@@ -44,6 +51,7 @@ MatchSideView.model_rebuild()
 MatchPlayer.model_rebuild()
 MatchPlayerCreatePlayerIdList.model_rebuild()
 MatchPlayerInDBBase.model_rebuild()
+MatchPlayerUpdate.model_rebuild()
 Meeting.model_rebuild()
 MeetingInDBBase.model_rebuild()
 MeetingSideView.model_rebuild()

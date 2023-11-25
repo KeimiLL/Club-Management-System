@@ -48,7 +48,7 @@ class Match(MatchBase):
     match_events: list["MatchEvent"]
 
 
-class MatchUpdate(MatchBase):
+class MatchUpdate(MatchCreate):
     """Match schema for updating."""
 
 
