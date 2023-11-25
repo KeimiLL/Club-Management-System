@@ -22,4 +22,8 @@ export class CoachesHttpService {
     public getCoachByTeamId(teamId: number): Observable<CoachName> {
         return this.http.get<CoachName>(`/api/v1/coaches?team_id=${teamId}`);
     }
+
+    public deleteCoachById(id: number): Observable<BackendResponse> {
+        return this.http.delete<BackendResponse>(`api/v1/coaches/${id}`);
+    }
 }

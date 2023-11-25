@@ -82,4 +82,8 @@ export class SquadComponent implements OnInit {
         if (this.currentPlayerAsUserId === null) return;
         this.splitView.addParamsToRouting(this.currentPlayerAsUserId);
     }
+
+    protected onPlayerDelete(): void {
+        this.root.deleteCurrentPlayer();
+    }
 }

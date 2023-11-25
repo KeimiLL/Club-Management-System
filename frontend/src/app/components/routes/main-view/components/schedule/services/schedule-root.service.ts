@@ -125,4 +125,20 @@ export class ScheduleRootService extends DestroyClass {
             data: { data: dialogData, teamId: this.dropdown.currentTeam?.id },
         });
     }
+
+    public deleteCurrentMatch(): void {
+        if (this.splitView.currentId === null) return;
+
+        this.splitView
+            .deleteCurrentItem$(
+                this.http.deleteMatchById(this.splitView.currentId)
+            )
+            .pipe(
+                switchMap(() => {
+                    if (this.dropdown.currentTeam === null) return of(null);
+                    return this.refreshMatches$(this.dropdown.currentTeam.id);
+                })
+            )
+            .subscribe();
+    }
 }

@@ -110,4 +110,20 @@ export class SquadRootService extends DestroyClass {
             this.httpPlayer.getPlayerById(id)
         );
     }
+
+    public deleteCurrentPlayer(): void {
+        if (this.splitView.currentId === null) return;
+
+        this.splitView
+            .deleteCurrentItem$(
+                this.httpPlayer.deletePlayerById(this.splitView.currentId)
+            )
+            .pipe(
+                switchMap(() => {
+                    if (this.dropdown.currentTeam === null) return of(null);
+                    return this.refreshPlayers$(this.dropdown.currentTeam.id);
+                })
+            )
+            .subscribe();
+    }
 }

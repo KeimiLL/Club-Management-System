@@ -37,4 +37,8 @@ export class PlayersHttpService {
     public getPlayerById(id: number): Observable<Player> {
         return this.http.get<Player>(`api/v1/players/${id}`);
     }
+
+    public deletePlayerById(id: number): Observable<BackendResponse> {
+        return this.http.delete<BackendResponse>(`api/v1/players/${id}`);
+    }
 }

@@ -28,4 +28,8 @@ export class MatchesHttpService {
     public getMatchById(id: number): Observable<Match> {
         return this.http.get<Match>(`api/v1/matches/${id}`);
     }
+
+    public deleteMatchById(id: number): Observable<BackendResponse> {
+        return this.http.delete<BackendResponse>(`api/v1/matches/${id}`);
+    }
 }
