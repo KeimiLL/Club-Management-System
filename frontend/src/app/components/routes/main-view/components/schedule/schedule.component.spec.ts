@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ActivatedRoute } from "@angular/router";
 
 import { ActivatedRouteQueryParams } from "../../../../../shared/test-mocks/test-mocks";
@@ -11,7 +12,11 @@ describe("ScheduleComponent", () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [ScheduleComponent, HttpClientTestingModule],
+            imports: [
+                ScheduleComponent,
+                HttpClientTestingModule,
+                BrowserAnimationsModule,
+            ],
             providers: [
                 {
                     provide: ActivatedRoute,

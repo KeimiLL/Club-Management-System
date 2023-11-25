@@ -4,6 +4,8 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
 
 import { DropdownViewManagerService } from "../../../../../../shared/services/dropdown-view-manager.service";
+import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
+import { TableService } from "../../../../../../shared/services/table.service";
 import { ActivatedRouteQueryParams } from "../../../../../../shared/test-mocks/test-mocks";
 import { ScheduleRootService } from "./schedule-root.service";
 
@@ -15,6 +17,8 @@ describe("ScheduleRootService", () => {
             imports: [HttpClientTestingModule, MatDialogModule],
             providers: [
                 DropdownViewManagerService,
+                TableService,
+                SplitViewManagerService,
                 ScheduleRootService,
                 {
                     provide: ActivatedRoute,
