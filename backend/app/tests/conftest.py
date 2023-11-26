@@ -18,7 +18,7 @@ from app.schemas.match import MatchCreate, MatchUpdate
 from app.schemas.matchevent import MatchEventCreate
 from app.schemas.meeting import MeetingCreate, MeetingUpdate
 from app.schemas.player import PlayerCreate, PlayerUpdate
-from app.schemas.team import TeamCreate
+from app.schemas.team import TeamCreate, TeamUpdate
 from app.schemas.user import UserCreate, UserCreateWithRole
 from fastapi import FastAPI
 from sqlalchemy import create_engine
@@ -195,6 +195,11 @@ coach_update = CoachUpdate(
 team_create = TeamCreate(
     coach_id=1,
     name="U21",
+)
+
+team_update = TeamUpdate(
+    coach_id=1,
+    name="U21-updated",
 )
 
 player_create = PlayerCreate(

@@ -19,6 +19,7 @@ from app.schemas.team import (
     TeamOnlyBaseInfo,
     TeamSideView,
     TeamTableView,
+    TeamUpdatePlayerIdList,
 )
 from fastapi import APIRouter, Depends, Path, status
 from sqlalchemy.orm import Session
@@ -252,3 +253,55 @@ def delete_team(
         db=db,
     )
     return Message(message=HTTPResponseMessage.SUCCESS)
+
+
+@router.put(
+    "/{team_id}",
+    response_model=TeamSideView,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_401_UNAUTHORIZED: {"model": Message},
+        status.HTTP_403_FORBIDDEN: {"model": MessageFromEnum},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+        status.HTTP_409_CONFLICT: {"model": MessageFromEnum},
+    },
+)
+def update_team_with_player_ids(
+    team_id: Annotated[int, Path(ge=1, le=10**7)],
+    team_update: TeamUpdatePlayerIdList,
+    _: Annotated[User, Depends(coach_not_allowed)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Updates team data with the given data.
+
+    Args:
+        team_id (Annotated[int, Path]): The given team's id. Has to be greater than
+            or equal to 1 and less than or equal to 10**7.
+        team_update (TeamUpdatePlayerIdList): Team data to update.
+        db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
+
+    Returns:
+        TeamSideView: The updated team.
+    """
+    team = crud_team.update_team_with_player_ids(
+        team_update=team_update.team,
+        team_id=team_id,
+        player_ids=team_update.player_ids,
+        db=db,
+    )
+    return TeamSideView(
+        id=team.id,
+        name=team.name,
+        players=[
+            PlayerOnlyBaseInfo(
+                user_id=player.user_id, user_full_name=player.user.full_name
+            )
+            for player in team.players
+        ],
+        coach=CoachOnlyBaseInfo(
+            user_id=team.coach.user.id,
+            user_full_name=team.coach.user.full_name,
+        )
+        if team.coach is not None
+        else None,
+    )

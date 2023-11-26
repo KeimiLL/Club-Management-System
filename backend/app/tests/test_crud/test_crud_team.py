@@ -14,18 +14,21 @@ from app.crud.crud_team import (
     get_all_teams_with_pagination,
     get_team_by_id,
     get_teams_with_pagination_by_coach_id,
+    update_team_with_player_ids,
 )
 from app.crud.crud_user import create_new_user
 from app.schemas.coach import CoachCreate
 from app.schemas.player import PlayerCreate
-from app.schemas.team import TeamCreate
+from app.schemas.team import TeamCreate, TeamUpdate
 from app.schemas.user import UserCreate
 from app.tests.conftest import (
     coach_create,
     player_create,
     team_create,
+    team_update,
     user_create_unique_1,
     user_create_unique_2,
+    user_create_with_role,
 )
 from sqlalchemy.orm import Session
 
@@ -409,3 +412,252 @@ def test_incorrect__delete_team(
     with pytest.raises(MissingException) as excinfo:
         delete_team(team_id, db_session)
     assert "Team" == str(excinfo.value)
+
+
+@pytest.mark.parametrize(
+    "users,coach,team,player,team_data,player_ids",
+    [
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            [2],
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2, user_create_with_role],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            [3],
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2, user_create_with_role],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            [2, 3],
+        ),
+    ],
+)
+def test_correct__update_team_with_player_ids(
+    users: list[UserCreate],
+    coach: CoachCreate,
+    team: TeamCreate,
+    player: PlayerCreate,
+    team_data: TeamUpdate,
+    player_ids: list[int],
+    db_session: Session,
+) -> None:
+    """Tests updating a team.
+
+    Args:
+        users (list[UserCreate]): Users to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        player (PlayerCreate): Player to be created.
+        team_data (TeamUpdate): Team data to be updated.
+        player_ids (list[int]): Player ids to be added to the match.
+        db_session (Session): Database session.
+    """
+    user_ids = []
+    for user in users:
+        user_ids.append(create_new_user(user, db_session).id)
+    create_new_coach(coach, db_session)
+    new_team = create_new_team(team, db_session)
+    for user_id in user_ids:
+        create_new_player(player.model_copy(update={"user_id": user_id}), db_session)
+    updated_team = update_team_with_player_ids(
+        team_data, new_team.id, player_ids, db_session
+    )
+    assert updated_team.coach_id == team_data.coach_id
+    assert updated_team.name == team_data.name
+    assert len(updated_team.players) == len(player_ids)
+    for updated_player, player_id in zip(updated_team.players, player_ids):
+        assert updated_player.user_id == player_id
+
+
+@pytest.mark.parametrize(
+    "users,coach,team,player,team_data,team_id,player_ids,should_create_team",
+    [
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            1,
+            [2],
+            False,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            2,
+            [2],
+            False,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            1,
+            [3],
+            True,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            2,
+            [3],
+            True,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            1,
+            [3],
+            False,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            2,
+            [3],
+            False,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            1,
+            [],
+            True,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            2,
+            [],
+            True,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            1,
+            [],
+            False,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            2,
+            [],
+            False,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            1,
+            [3, 3],
+            True,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            2,
+            [3, 3],
+            True,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            1,
+            [3, 3],
+            False,
+        ),
+        (
+            [user_create_unique_1, user_create_unique_2],
+            coach_create,
+            team_create,
+            player_create,
+            team_update,
+            2,
+            [3, 3],
+            False,
+        ),
+    ],
+)
+def test_incorrect_missing__update_team_with_player_ids(
+    users: list[UserCreate],
+    coach: CoachCreate,
+    team: TeamCreate,
+    player: PlayerCreate,
+    team_data: TeamUpdate,
+    team_id: int,
+    player_ids: list[int],
+    should_create_team: bool,
+    db_session: Session,
+) -> None:
+    """Tests updating a team.
+
+    Args:
+        users (list[UserCreate]): Users to be created.
+        coach (CoachCreate): Coach to be created.
+        team (TeamCreate): Team to be created.
+        player (PlayerCreate): Player to be created.
+        team_data (TeamUpdate): Team data to be updated.
+        team_id (int): Team id to be updated.
+        player_ids (list[int]): Player ids to be added to the match.
+        should_create_team (bool): Whether the provided team should be created.
+        db_session (Session): Database session.
+    """
+    user_ids = []
+    for user in users:
+        user_ids.append(create_new_user(user, db_session).id)
+    create_new_coach(coach, db_session)
+    new_team = create_new_team(team, db_session)
+    for user_id in user_ids:
+        create_new_player(player.model_copy(update={"user_id": user_id}), db_session)
+    if not should_create_team:
+        delete_team(new_team.id, db_session)
+
+    with pytest.raises(MissingException):
+        update_team_with_player_ids(team_data, team_id, player_ids, db_session)

@@ -42,8 +42,14 @@ class Team(TeamBase):
     trainings: list["Training"]
 
 
-class TeamUpdate(TeamBase):
+class TeamUpdate(TeamCreate):
     """Team schema for updating."""
+
+
+class TeamUpdatePlayerIdList(TeamCreatePlayerIdList):
+    """Team schema for updating with a set of player ids."""
+
+    team: TeamUpdate
 
 
 class TeamInDBBase(TeamBase):
