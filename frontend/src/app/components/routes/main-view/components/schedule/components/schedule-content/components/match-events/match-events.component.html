@@ -1,1 +1,16 @@
-<p>match-events works!</p>
+<div class="event">
+    <div class="event__icon" [ngSwitch]="event.event_type">
+        <mat-icon class="event__icon__gol" *ngSwitchCase="MatchEventType.Goal">
+            sports_soccer</mat-icon
+        >
+
+        <mat-icon
+            class="event__icon__card"
+            *ngSwitchCase="MatchEventType.YellowCard || MatchEventType.RedCard"
+        >
+            crop_portrait
+        </mat-icon>
+    </div>
+    <div class="event__time"></div>
+    <div class="event__description"></div>
+</div>
