@@ -34,7 +34,7 @@
         [squad]="matchSquad"
     ></app-match-squad>
 
-    <div *ngSwitchCase="contentTypes.Events">
+    <div class="events" *ngSwitchCase="contentTypes.Events">
         <app-match-events
             *ngFor="let singleEvent of dumbEventsArray"
             [event]="singleEvent"

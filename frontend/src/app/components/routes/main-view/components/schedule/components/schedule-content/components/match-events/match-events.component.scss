@@ -7,8 +7,8 @@
     gap: $medium-spacing;
 
     .event {
-        width: 80%;
-        margin: 0 auto;
+        width: 90%;
+        margin: 0 auto 15px auto;
         display: flex;
         align-items: center;
 
@@ -24,18 +24,25 @@
         }
 
         &__icon {
-            margin: $medium-spacing;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 60px;
 
             &__goal {
                 transform: scale(2);
-                background-color: black;
-                color: white;
-                border-radius: 30px;
+                box-shadow:
+                    rgba(0, 0, 0, 0.07) 0px 1px 1px,
+                    rgba(0, 0, 0, 0.07) 0px 2px 2px,
+                    rgba(0, 0, 0, 0.07) 0px 4px 4px,
+                    rgba(0, 0, 0, 0.07) 0px 8px 8px,
+                    rgba(0, 0, 0, 0.07) 0px 16px 16px;
+                border-radius: 45px;
             }
 
             &__card {
-                height: 45px;
-                width: 30px;
+                height: 48px;
+                width: 33px;
                 border-radius: 7px;
                 box-shadow:
                     rgba(0, 0, 0, 0.07) 0px 1px 1px,
@@ -58,8 +65,8 @@
             background-color: #efefef;
             border-radius: 30px;
             padding: $medium-spacing;
-            margin: $medium-spacing;
-            font-size: $large-font;
+            margin: 0 $medium-spacing;
+            font-size: $normal-font;
             box-shadow:
                 rgba(0, 0, 0, 0.07) 0px 1px 1px,
                 rgba(0, 0, 0, 0.07) 0px 2px 2px,
