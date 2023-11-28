@@ -8,10 +8,6 @@ import {
     MatchContentType,
     MatchScore,
 } from "../../../../../../../shared/models/match.model";
-import {
-    MatchEvent,
-    MatchEventType,
-} from "../../../../../../../shared/models/match-event.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
@@ -19,41 +15,9 @@ import { ScheduleContentService } from "../../services/schedule-content.service"
 import { MatchDetails } from "../schedule-popup/newMatchFormBuilder";
 import { MatchDetailsComponent } from "./components/match-details/match-details.component";
 import { MatchEventsComponent } from "./components/match-events/match-events.component";
+import { dumbEventsArray } from "./components/match-events/match-events.data";
 import { MatchSquadComponent } from "./components/match-squad/match-squad.component";
 import { ScoreComponent } from "./components/score/score.component";
-
-const dumbEventsArray: MatchEvent[] = [
-    {
-        minute: 10,
-        event_type: MatchEventType.Goal,
-        description: "To jest opis zdarzenia 1",
-        is_own_event: true,
-    },
-    {
-        minute: 20,
-        event_type: MatchEventType.RedCard,
-        description: "To jest opis zdarzenia 2",
-        is_own_event: true,
-    },
-    {
-        minute: 48,
-        event_type: MatchEventType.Goal,
-        description: "To jest opis zdarzenia 3",
-        is_own_event: false,
-    },
-    {
-        minute: 70,
-        event_type: MatchEventType.YellowCard,
-        description: "To jest opis zdarzenia 4",
-        is_own_event: false,
-    },
-    {
-        minute: 88,
-        event_type: MatchEventType.Goal,
-        description: "To jest opis zdarzenia 5",
-        is_own_event: true,
-    },
-];
 
 @Component({
     selector: "app-schedule-content",

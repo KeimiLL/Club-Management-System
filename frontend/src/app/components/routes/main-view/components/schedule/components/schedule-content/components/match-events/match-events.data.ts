@@ -1,3 +1,8 @@
+import {
+    MatchEvent,
+    MatchEventType,
+} from "../../../../../../../../../shared/models/match-event.model";
+
 export const goalIconSvg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="194" height="194" version="1.1">
     <circle fill="#000000" cx="97" cy="97" r="97" />
@@ -11,3 +16,127 @@ export const goalIconSvg = `
     0 0 46.4,-36.6 l -7,-4 z"/>
     </svg>
 `;
+
+// TODO: Remove after connecting the functionality.
+export const dumbEventsArray: MatchEvent[] = [
+    {
+        minute: 10,
+        event_type: MatchEventType.Goal,
+        description: "To jest opis zdarzenia 1",
+        is_own_event: true,
+    },
+    {
+        minute: 15,
+        event_type: MatchEventType.RedCard,
+        description: "To jest opis zdarzenia 2",
+        is_own_event: true,
+    },
+    {
+        minute: 20,
+        event_type: MatchEventType.Goal,
+        description: "To jest opis zdarzenia 3",
+        is_own_event: false,
+    },
+    {
+        minute: 25,
+        event_type: MatchEventType.YellowCard,
+        description: "To jest opis zdarzenia 4",
+        is_own_event: false,
+    },
+    {
+        minute: 30,
+        event_type: MatchEventType.Goal,
+        description: "To jest opis zdarzenia 5",
+        is_own_event: true,
+    },
+    {
+        minute: 35,
+        event_type: MatchEventType.Goal,
+        description: "To jest opis zdarzenia 6",
+        is_own_event: true,
+    },
+    {
+        minute: 40,
+        event_type: MatchEventType.YellowCard,
+        description: "To jest opis zdarzenia 7",
+        is_own_event: true,
+    },
+    {
+        minute: 44,
+        event_type: MatchEventType.Goal,
+        description: "To jest opis zdarzenia 8",
+        is_own_event: false,
+    },
+    {
+        minute: 52,
+        event_type: MatchEventType.RedCard,
+        description: "To jest opis zdarzenia 9",
+        is_own_event: false,
+    },
+    {
+        minute: 60,
+        event_type: MatchEventType.Goal,
+        description: "To jest opis zdarzenia 10",
+        is_own_event: true,
+    },
+    {
+        minute: 66,
+        event_type: MatchEventType.Goal,
+        description: "To jest opis zdarzenia 11",
+        is_own_event: true,
+    },
+    {
+        minute: 67,
+        event_type: MatchEventType.RedCard,
+        description: "To jest opis zdarzenia 12",
+        is_own_event: true,
+    },
+    {
+        minute: 68,
+        event_type: MatchEventType.Goal,
+        description: "To jest opis zdarzenia 13",
+        is_own_event: false,
+    },
+    {
+        minute: 72,
+        event_type: MatchEventType.RedCard,
+        description: "To jest opis zdarzenia 14",
+        is_own_event: false,
+    },
+    {
+        minute: 77,
+        event_type: MatchEventType.Goal,
+        description: "To jest opis zdarzenia 15",
+        is_own_event: true,
+    },
+    {
+        minute: 78,
+        event_type: MatchEventType.Goal,
+        description: "To jest opis zdarzenia 16",
+        is_own_event: true,
+    },
+    {
+        minute: 80,
+        event_type: MatchEventType.YellowCard,
+        description: "To jest opis zdarzenia 17",
+        is_own_event: true,
+    },
+    {
+        minute: 82,
+        event_type: MatchEventType.Goal,
+        description: "To jest opis zdarzenia 18",
+        is_own_event: false,
+    },
+    {
+        minute: 88,
+        event_type: MatchEventType.YellowCard,
+        description: "To jest opis zdarzenia 19",
+        is_own_event: false,
+    },
+    {
+        minute: 90,
+        event_type: MatchEventType.Goal,
+        description: "To jest opis zdarzenia 20",
+        is_own_event: true,
+    },
+];
