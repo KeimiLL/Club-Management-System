@@ -74,11 +74,20 @@
                 rgba(0, 0, 0, 0.07) 0px 8px 8px,
                 rgba(0, 0, 0, 0.07) 0px 16px 16px;
         }
+    }
 
-        &__time {
-        }
+    .divider {
+        font-size: $small-font;
+        display: flex;
+        align-items: center;
+    }
 
-        &__description {
-        }
+    .divider::before,
+    .divider::after {
+        flex: 1;
+        content: "";
+        padding: 1px;
+        background-color: $dark-grey;
+        margin: 2px;
     }
 }
