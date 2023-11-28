@@ -3,8 +3,11 @@
     [ngClass]="event.is_own_event ? 'event-own' : 'event-not-own'"
 >
     <div class="event__icon" [ngSwitch]="event.event_type">
-        <mat-icon class="event__icon__goal" *ngSwitchCase="MatchEventType.Goal">
-            sports_soccer
+        <mat-icon
+            svgIcon="goal-icon"
+            class="event__icon__goal"
+            *ngSwitchCase="MatchEventType.Goal"
+        >
         </mat-icon>
 
         <div

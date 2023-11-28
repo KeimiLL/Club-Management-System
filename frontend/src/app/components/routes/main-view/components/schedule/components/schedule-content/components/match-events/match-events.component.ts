@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
-import { MatIconModule } from "@angular/material/icon";
+import { Component, inject, Input, OnInit } from "@angular/core";
+import { MatIconModule, MatIconRegistry } from "@angular/material/icon";
+import { DomSanitizer } from "@angular/platform-browser";
 
 import {
     MatchEvent,
@@ -21,8 +22,20 @@ const dumbEvent: MatchEvent = {
     templateUrl: "./match-events.component.html",
     styleUrls: ["./match-events.component.scss"],
 })
-export class MatchEventsComponent {
+export class MatchEventsComponent implements OnInit {
     MatchEventType = MatchEventType;
     dumbEvent = dumbEvent;
     @Input() public event: MatchEvent;
+
+    readonly #matIconRegistry = inject(MatIconRegistry);
+    readonly #sanitizer = inject(DomSanitizer);
+
+    ngOnInit(): void {
+        this.#matIconRegistry.addSvgIcon(
+            "goal-icon",
+            this.#sanitizer.bypassSecurityTrustResourceUrl(
+                "../../../../../../../../../../assets/icons/soccer_ball.svg"
+            )
+        );
+    }
 }
