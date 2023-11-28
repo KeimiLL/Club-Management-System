@@ -1,16 +1,21 @@
-<div class="event">
+<div
+    class="event"
+    [ngClass]="event.is_own_event ? 'event-own' : 'event-not-own'"
+>
     <div class="event__icon" [ngSwitch]="event.event_type">
-        <mat-icon class="event__icon__gol" *ngSwitchCase="MatchEventType.Goal">
-            sports_soccer</mat-icon
-        >
-
-        <mat-icon
-            class="event__icon__card"
-            *ngSwitchCase="MatchEventType.YellowCard || MatchEventType.RedCard"
-        >
-            crop_portrait
+        <mat-icon class="event__icon__goal" *ngSwitchCase="MatchEventType.Goal">
+            sports_soccer
         </mat-icon>
+
+        <div
+            class="event__icon__card event__icon__card--yellow"
+            *ngSwitchCase="MatchEventType.YellowCard"
+        ></div>
+        <div
+            class="event__icon__card event__icon__card--red"
+            *ngSwitchCase="MatchEventType.RedCard"
+        ></div>
     </div>
-    <div class="event__time"></div>
-    <div class="event__description"></div>
+    <div class="event__time">{{ event.minute }}'</div>
+    <div class="event__description">{{ event.description }}</div>
 </div>
