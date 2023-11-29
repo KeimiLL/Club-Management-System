@@ -17,6 +17,7 @@ import {
     longMatchesColumns,
     shortMatchesColumns,
 } from "../schedule-table.data";
+import { ScheduleContentService } from "./schedule-content.service";
 
 @Injectable()
 export class ScheduleRootService extends DestroyClass {
@@ -27,7 +28,8 @@ export class ScheduleRootService extends DestroyClass {
         private readonly dropdown: DropdownViewManagerService,
         private readonly table: TableService<TableMatch>,
         private readonly http: MatchesHttpService,
-        private readonly splitView: SplitViewManagerService<Match>
+        private readonly splitView: SplitViewManagerService<Match>,
+        private readonly content: ScheduleContentService
     ) {
         super();
         this.initData();
@@ -47,7 +49,10 @@ export class ScheduleRootService extends DestroyClass {
 
         this.splitView.currentId$
             .pipe(
-                switchMap((id: number | null) => this.refreshCurrentMatch$(id)),
+                switchMap((id: number | null) => {
+                    this.content.setEvents(id);
+                    return this.refreshCurrentMatch$(id);
+                }),
                 this.untilDestroyed()
             )
             .subscribe();
