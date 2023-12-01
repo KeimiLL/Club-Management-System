@@ -1,0 +1,101 @@
+<div class="popup">
+    <mat-card class="card">
+        <mat-card-header class="card__header">
+            <app-half-card-right-header name="Add new Event">
+            </app-half-card-right-header>
+        </mat-card-header>
+        <form [formGroup]="eventsForm" (ngSubmit)="onSubmit()">
+            <app-half-card-section>
+                <app-section-header name="Events data" sectionHeader>
+                </app-section-header>
+
+                <ng-container sectionContent>
+                    <mat-form-field
+                        appearance="fill"
+                        class="popup__basic--name"
+                    >
+                        <mat-label>Select a Event</mat-label>
+                        <mat-select formControlName="event_type">
+                            <mat-option
+                                *ngFor="let type of types"
+                                [value]="type"
+                            >
+                                {{ type }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </ng-container>
+
+                <ng-container sectionContent>
+                    <mat-form-field
+                        appearance="fill"
+                        class="popup__basic--name"
+                    >
+                        <mat-label>Minute</mat-label>
+                        <input
+                            formControlName="minute"
+                            type="number"
+                            required
+                            matInput
+                            placeholder="Minute.."
+                        />
+                    </mat-form-field>
+                </ng-container>
+
+                <ng-container sectionContent>
+                    <mat-form-field
+                        appearance="fill"
+                        class="popup__basic--name"
+                    >
+                        <mat-label>Minute</mat-label>
+                        <input
+                            formControlName="minute"
+                            type="number"
+                            required
+                            matInput
+                            placeholder="Minute.."
+                        />
+                    </mat-form-field>
+                </ng-container>
+            </app-half-card-section>
+
+            <app-half-card-section>
+                <app-section-header name="Date of joining" sectionHeader>
+                </app-section-header>
+            </app-half-card-section>
+
+            <app-half-card-section>
+                <app-section-header name="Description" sectionHeader>
+                </app-section-header>
+
+                <ng-container sectionContent>
+                    <mat-form-field
+                        appearance="fill"
+                        class="popup__basic--name"
+                    >
+                        <mat-label>Minute</mat-label>
+                        <input
+                            formControlName="description"
+                            type="text"
+                            required
+                            matInput
+                            placeholder="Description.."
+                        />
+                    </mat-form-field>
+                </ng-container>
+            </app-half-card-section>
+
+            <div class="button-container">
+                <button
+                    [disabled]="eventsForm.invalid"
+                    type="submit"
+                    mat-raised-button
+                    class="button--light"
+                    buttons
+                >
+                    Add Event
+                </button>
+            </div>
+        </form>
+    </mat-card>
+</div>
