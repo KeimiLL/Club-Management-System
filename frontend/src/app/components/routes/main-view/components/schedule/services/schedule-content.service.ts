@@ -27,7 +27,7 @@ export class ScheduleContentService {
         this.contentType = contentType;
     }
 
-    private set events(matchEvents: MatchEvent[]) {
+    public set events(matchEvents: MatchEvent[]) {
         this.eventsStore$.next(matchEvents);
     }
 
@@ -35,15 +35,11 @@ export class ScheduleContentService {
         return this.eventsStore$.asObservable();
     }
 
-    public setEvents(matchId: number | null): void {
-        if (matchId === null) return;
-        this.httpEvents
-            .getAllMatchEventsByMatchId(matchId)
-            .pipe(
-                tap((matchEvents) => {
-                    this.events = matchEvents;
-                })
-            )
-            .subscribe();
+    public getMatchEvents$(matchId: number): Observable<MatchEvent[]> {
+        return this.httpEvents.getAllMatchEventsByMatchId(matchId).pipe(
+            tap((matchEvents) => {
+                this.events = matchEvents;
+            })
+        );
     }
 }

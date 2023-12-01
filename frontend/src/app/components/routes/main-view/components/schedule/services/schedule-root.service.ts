@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { filter, map, Observable, of, switchMap, tap } from "rxjs";
+import { filter, forkJoin, map, Observable, of, switchMap, tap } from "rxjs";
 
 import { MatchesHttpService } from "../../../../../../shared/api/matches-http.service";
 import {
@@ -49,10 +49,14 @@ export class ScheduleRootService extends DestroyClass {
 
         this.splitView.currentId$
             .pipe(
-                switchMap((id: number | null) => {
-                    this.content.setEvents(id);
-                    return this.refreshCurrentMatch$(id);
-                }),
+                filter(Boolean),
+                switchMap((id: number) =>
+                    forkJoin([
+                        this.refreshCurrentMatch$(id),
+                        this.content.getMatchEvents$(id),
+                    ])
+                ),
+                tap(([match, events]) => (this.content.events = events)),
                 this.untilDestroyed()
             )
             .subscribe();
@@ -116,8 +120,7 @@ export class ScheduleRootService extends DestroyClass {
         );
     }
 
-    private refreshCurrentMatch$(id: number | null): Observable<Match | null> {
-        if (id === null) return of(null);
+    private refreshCurrentMatch$(id: number): Observable<Match | null> {
         return this.splitView.refreshCurrentItem$(this.http.getMatchById(id));
     }
 

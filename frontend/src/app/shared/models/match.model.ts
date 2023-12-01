@@ -6,7 +6,7 @@ export enum MatchContentType {
     Events = "events",
 }
 
-export enum MatchContinuity {
+export enum MatchState {
     Start = "start",
     End = "end",
 }
