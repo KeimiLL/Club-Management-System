@@ -33,13 +33,11 @@
         *ngSwitchCase="contentTypes.Squad"
         [squad]="matchSquad"
     ></app-match-squad>
-
-    <div class="events" *ngSwitchCase="contentTypes.Events">
-        <app-match-events
-            *ngFor="let singleEvent of dumbEventsArray"
-            [event]="singleEvent"
-        ></app-match-events>
-    </div>
+    <app-match-events
+        class="events"
+        *ngSwitchCase="contentTypes.Events"
+        [events]="dumbEventsArray"
+    ></app-match-events>
 </div>
 
 <app-spinner
