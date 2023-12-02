@@ -10,7 +10,7 @@ export interface MatchEventCreate extends MatchEvent {
 }
 
 export enum MatchEventType {
-    Goal = "start",
+    Goal = "goal",
     YellowCard = "red_card",
     RedCard = "yellow_card",
 }

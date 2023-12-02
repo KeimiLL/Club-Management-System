@@ -21,13 +21,20 @@ export class MatchEventPopupComponent {
 
     constructor(
         private readonly dialogRef: MatDialogRef<MatchEventPopupComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: unknown
+        @Inject(MAT_DIALOG_DATA) public data: number
     ) {
         this.eventsForm = newEventFormBuilder.buildFormGroup();
         this.types = Object.values(MatchEventType);
     }
 
+    protected onClose(): void {
+        this.dialogRef.close(false);
+    }
+
     protected onSubmit(): void {
-        console.log(this.eventsForm);
+        this.dialogRef.close({
+            ...this.eventsForm.getRawValue(),
+            match_id: this.data,
+        });
     }
 }

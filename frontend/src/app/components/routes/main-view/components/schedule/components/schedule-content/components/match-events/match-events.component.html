@@ -1,3 +1,21 @@
+<div class="button-container">
+    <button
+        class="button--dark button-show-hide"
+        mat-raised-button
+        (click)="toggleAddEventPopup()"
+    >
+        Add Events
+    </button>
+
+    <button
+        class="button--dark button-show-hide"
+        mat-raised-button
+        (click)="changeState()"
+    >
+        state change
+    </button>
+</div>
+
 <app-match-events-container
     class="events-container"
     [events]="events"

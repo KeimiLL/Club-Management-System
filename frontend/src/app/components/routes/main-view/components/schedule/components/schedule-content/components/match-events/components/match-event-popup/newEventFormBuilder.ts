@@ -22,6 +22,7 @@ export const newEventFormBuilder = {
             }),
             description: new FormControl<string>("", {
                 nonNullable: true,
+                validators: [Validators.required, Validators.maxLength(30)],
             }),
             minute: new FormControl<number>(1, {
                 nonNullable: true,
