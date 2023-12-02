@@ -106,4 +106,6 @@ class MatchSideView(MatchTableView):
     """Match schema for displaying data in the side panel."""
 
     notes: str | None = None
+    has_started: bool = False
+    has_ended: bool = False
     players: list["PlayerOnlyBaseInfo"]
