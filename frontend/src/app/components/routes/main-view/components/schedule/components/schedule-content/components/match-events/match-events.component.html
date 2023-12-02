@@ -10,9 +10,16 @@
     <button
         class="button--dark button-show-hide"
         mat-raised-button
+        [disabled]="hasEnded"
         (click)="changeState()"
     >
-        state change
+        {{
+            hasEnded
+                ? "Match ended"
+                : hasStarted
+                  ? "End the match"
+                  : "Start the match"
+        }}
     </button>
 </div>
 

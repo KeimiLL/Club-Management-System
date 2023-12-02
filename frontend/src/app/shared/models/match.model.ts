@@ -39,6 +39,8 @@ export interface Match extends MatchDetails, MatchScore {
     id: number;
     team_name: string;
     players: ShortPlayer[];
+    has_started: boolean;
+    has_ended: boolean;
 }
 
 export interface TableMatch extends MatchScore {
