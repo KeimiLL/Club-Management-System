@@ -16,6 +16,7 @@ alembic = "==1.11.1"
 pydantic-settings = "==2.0.1"
 tenacity = "==8.2.2"
 anyio = "==3.7.1"
+cryptography = "==41.0.6"
 
 [dev-packages]
 fastapi = {extras = ["all"], version = "==0.100.1"}
