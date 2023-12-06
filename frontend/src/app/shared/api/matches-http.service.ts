@@ -2,7 +2,12 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { Match, MatchCreate, TableMatch } from "../models/match.model";
+import {
+    Match,
+    MatchCreate,
+    MatchScoreGoals,
+    TableMatch,
+} from "../models/match.model";
 import { BackendResponse, TableResponse } from "../models/misc.model";
 import { MatchState } from "./../models/match.model";
 
@@ -38,6 +43,19 @@ export class MatchesHttpService {
         matchId: number,
         state: MatchState
     ): Observable<Match> {
-        return this.http.post<Match>(`api/v1/matches/${matchId}/${state}`, {});
+        return this.http.post<Match>(
+            `api/v1/matches/${matchId}/event/${state}`,
+            {}
+        );
+    }
+
+    public updateMatchScore(
+        matchId: number,
+        matchScore: MatchScoreGoals
+    ): Observable<MatchScoreGoals> {
+        return this.http.post<MatchScoreGoals>(
+            `api/v1/matches/${matchId}/score`,
+            matchScore
+        );
     }
 }

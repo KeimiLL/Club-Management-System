@@ -1,16 +1,30 @@
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { filter, forkJoin, map, Observable, of, switchMap, tap } from "rxjs";
+import {
+    filter,
+    forkJoin,
+    map,
+    mergeMap,
+    Observable,
+    of,
+    switchMap,
+    tap,
+} from "rxjs";
 
 import { MatchEventHttpService } from "../../../../../../shared/api/match-event-http.service";
 import { MatchesHttpService } from "../../../../../../shared/api/matches-http.service";
 import {
     Match,
     MatchCreate,
+    MatchScoreGoals,
     MatchState,
     TableMatch,
 } from "../../../../../../shared/models/match.model";
-import { MatchEventCreate } from "../../../../../../shared/models/match-event.model";
+import {
+    MatchEvent,
+    MatchEventCreate,
+    MatchEventType,
+} from "../../../../../../shared/models/match-event.model";
 import { DropdownViewManagerService } from "../../../../../../shared/services/dropdown-view-manager.service";
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
@@ -55,13 +69,7 @@ export class ScheduleRootService extends DestroyClass {
         this.splitView.currentId$
             .pipe(
                 filter(Boolean),
-                switchMap((id: number) =>
-                    forkJoin([
-                        this.refreshCurrentMatch$(id),
-                        this.content.getMatchEvents$(id),
-                    ])
-                ),
-                tap(([match, events]) => (this.content.events = events)),
+                switchMap((id: number) => this.refreshCurrentMatch$(id)),
                 this.untilDestroyed()
             )
             .subscribe();
@@ -125,10 +133,10 @@ export class ScheduleRootService extends DestroyClass {
         );
     }
 
-    private refreshCurrentMatch$(id: number): Observable<Match | null> {
-        return this.splitView.refreshCurrentItem$(
-            this.httpMatches.getMatchById(id)
-        );
+    private refreshCurrentMatch$(id: number): Observable<MatchEvent[]> {
+        return this.splitView
+            .refreshCurrentItem$(this.httpMatches.getMatchById(id))
+            .pipe(mergeMap(() => this.content.getMatchEvents$(id)));
     }
 
     private openDialog(
@@ -158,25 +166,59 @@ export class ScheduleRootService extends DestroyClass {
     }
 
     public openAddEventPopup(): void {
-        const matchId = this.splitView.currentId;
+        const match = this.splitView.currentItem;
+        const teamId = this.dropdown.currentTeam?.id;
 
-        if (matchId === null) return;
+        if (match === null || teamId === undefined) return;
         this.dialog
             .open(MatchEventPopupComponent, {
                 width: "40vw",
                 disableClose: true,
-                data: matchId,
+                data: match.id,
             })
             .afterClosed()
             .pipe(
-                switchMap((event: MatchEventCreate | false) => {
-                    if (event === false) return of(null);
-
+                filter(Boolean),
+                switchMap((event: MatchEventCreate) => {
+                    if (event.event_type === MatchEventType.Goal) {
+                        return this.postScoreUpdateEvent(event, match);
+                    }
                     return this.httpEvents.postMatchEventToMatch(event);
                 }),
-                switchMap(() => this.refreshCurrentMatch$(matchId))
+                switchMap(() =>
+                    forkJoin([
+                        this.refreshCurrentMatch$(match.id),
+                        this.refreshMatches$(teamId),
+                    ])
+                )
             )
             .subscribe();
+    }
+
+    private postScoreUpdateEvent(
+        event: MatchEventCreate,
+        currentMatch: Match
+    ): Observable<unknown> {
+        const goalsScored =
+            (currentMatch.goals_scored ?? 0) + (event.is_own_event ? 1 : 0);
+        const goalsConceded =
+            (currentMatch.goals_conceded ?? 0) + (event.is_own_event ? 0 : 1);
+
+        const matchScore: MatchScoreGoals = {
+            goals_conceded: goalsConceded,
+            goals_scored: goalsScored,
+        };
+
+        return this.httpEvents
+            .postMatchEventToMatch(event)
+            .pipe(
+                switchMap(() =>
+                    this.httpMatches.updateMatchScore(
+                        currentMatch.id,
+                        matchScore
+                    )
+                )
+            );
     }
 
     public changeMatchState(hasStarted: boolean, hasEnded: boolean): void {

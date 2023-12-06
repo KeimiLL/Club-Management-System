@@ -21,6 +21,11 @@ export interface MatchScoreBase {
     is_home: boolean;
 }
 
+export interface MatchScoreGoals {
+    goals_scored: number;
+    goals_conceded: number;
+}
+
 export interface MatchScore extends MatchScoreBase {
     goals_scored: number | null;
     goals_conceded: number | null;
