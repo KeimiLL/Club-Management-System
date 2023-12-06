@@ -15,7 +15,6 @@ from app.schemas.match import (
     MatchCreate,
     MatchInProgress,
     MatchScore,
-    MatchScoreUpdate,
     MatchSideView,
     MatchTableView,
 )
@@ -118,7 +117,7 @@ def update_match_state(
 )
 def update_match_score(
     match_id: Annotated[int, Path(ge=1, le=10**7)],
-    match_score_update: MatchScoreUpdate,
+    match_score_update: MatchScore,
     _: Annotated[User, Depends(player_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
@@ -127,7 +126,7 @@ def update_match_score(
     Args:
         match_id (Annotated[int, Path]): The given match's id. Has to be greater than
             or equal to 1 and less than or equal to 10**7.
-        match_score_update (MatchScoreUpdate): The match score to be set.
+        match_score_update (MatchScore): The match score to be set.
         db (Annotated[Session, Depends]): Database session. Defaults to Depends(get_db).
 
     Raises:
