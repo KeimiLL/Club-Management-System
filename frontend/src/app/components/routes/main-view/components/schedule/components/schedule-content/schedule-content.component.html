@@ -33,11 +33,15 @@
         *ngSwitchCase="contentTypes.Squad"
         [squad]="matchSquad"
     ></app-match-squad>
-    <app-match-events
-        class="events"
-        *ngSwitchCase="contentTypes.Events"
-        [events]="dumbEventsArray"
-    ></app-match-events>
+    <ng-container *ngSwitchCase="contentTypes.Events">
+        <app-match-events
+            *ngIf="events$ | async as events"
+            class="events"
+            [events]="events"
+            [hasEnded]="matchEnded"
+            [hasStarted]="matchStarted"
+        ></app-match-events>
+    </ng-container>
 </div>
 
 <app-spinner
