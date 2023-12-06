@@ -61,7 +61,7 @@ def create_match_with_player_ids(
 
 
 @router.post(
-    "/{match_id}/{match_event}",
+    "/{match_id}/event/{match_event}",
     response_model=MatchBase,
     responses={
         status.HTTP_400_BAD_REQUEST: {"model": Message},
