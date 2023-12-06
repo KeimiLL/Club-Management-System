@@ -71,12 +71,6 @@ class MatchScore(BaseModel):
     goals_conceded: NonNegativeInt
 
 
-class MatchScoreUpdate(MatchScore):
-    """Match schema for updating match score."""
-
-    id: int | None = Field(None, ge=1, le=10**7)
-
-
 class MatchInProgress(BaseModel):
     """Match schema for returning a match in progress."""
 
