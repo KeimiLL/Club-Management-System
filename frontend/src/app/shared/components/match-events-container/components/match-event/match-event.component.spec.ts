@@ -1,6 +1,7 @@
 import { HttpClientModule } from "@angular/common/http";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatIconModule, MatIconRegistry } from "@angular/material/icon";
+import { DomSanitizer } from "@angular/platform-browser";
 
 import {
     MatchEvent,
@@ -17,6 +18,8 @@ describe("MatchEventComponent", () => {
         description: "Test goal",
         is_own_event: true,
     };
+    let matIconRegistry: MatIconRegistry;
+    let domSanitizer: DomSanitizer;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -27,6 +30,11 @@ describe("MatchEventComponent", () => {
         fixture = TestBed.createComponent(MatchEventComponent);
         component = fixture.componentInstance;
         component.event = mockEvent;
+
+        matIconRegistry = TestBed.inject(MatIconRegistry);
+        domSanitizer = TestBed.inject(DomSanitizer);
+
+        spyOn(matIconRegistry, "addSvgIcon");
         fixture.detectChanges();
     });
 
@@ -42,5 +50,34 @@ describe("MatchEventComponent", () => {
         expect(eventDescriptionElement.textContent).toContain(
             mockEvent.description
         );
+    });
+
+    it("should display proper event icon", () => {
+        const eventIconElement =
+            fixture.nativeElement.querySelector(".event__icon");
+
+        expect(eventIconElement).toBeTruthy();
+
+        const matIconElement =
+            eventIconElement.querySelector(".event__icon__goal");
+
+        expect(matIconElement).toBeTruthy();
+        expect(matIconElement.getAttribute("svgIcon")).toContain("goal-icon");
+    });
+
+    it("should add the goal icon to MatIconRegistry", () => {
+        expect(matIconRegistry.addSvgIcon).toHaveBeenCalledWith(
+            "goal-icon",
+            domSanitizer.bypassSecurityTrustResourceUrl(
+                "../../../../../../assets/icons/soccer_ball.svg"
+            )
+        );
+    });
+
+    it("should display the event time", () => {
+        const eventTimeElement =
+            fixture.nativeElement.querySelector(".event__time");
+        expect(eventTimeElement).toBeTruthy();
+        expect(eventTimeElement.textContent).toContain(mockEvent.minute);
     });
 });
