@@ -48,10 +48,11 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
    yarn install --frozen-lockfile
    ```
 
-1. To create and start Docker containers defined in a `docker-compose.yml` file. The `-V` option recreate anonymous volumes instead of retrieving data from the previous containers:
+1. To launch the app locally, you need create and start Docker containers defined in the `docker-compose.yml` file (the `-V` option recreates anonymous volumes instead of retrieving data from the previous containers):
 
    ```bash
-   docker compose up -V```
+   docker compose up -V
+   ```
 
 ### Working with the database
 
@@ -68,6 +69,7 @@ Club Management System is a project for BSc thesis developed by Dominik Sigulski
    ```
 
 1. Describe a table:
+
    ```
    \d+ <table name>
    ```
