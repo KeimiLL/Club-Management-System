@@ -1,12 +1,8 @@
-@import "../../../../../../../../../../styles/variables";
+@import "../../../../styles/variables";
 
 :host {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: $medium-spacing;
-
-    .events-container {
-        height: 100%;
-    }
 }

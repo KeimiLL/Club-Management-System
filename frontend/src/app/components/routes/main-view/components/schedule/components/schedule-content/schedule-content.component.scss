@@ -9,4 +9,11 @@
         width: 80%;
         margin: 0 auto;
     }
+
+    .events {
+        padding: $medium-spacing;
+        margin: 0 $medium-spacing;
+        overflow-y: scroll;
+        height: 60vh;
+    }
 }
