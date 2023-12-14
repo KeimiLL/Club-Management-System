@@ -1,7 +1,8 @@
-<div class="button-container">
+<div class="button-container" *ngIf="!hasEnded">
     <button
         class="button--dark button-show-hide"
         mat-raised-button
+        [disabled]="!hasStarted"
         (click)="toggleAddEventPopup()"
     >
         Add Events
@@ -13,13 +14,7 @@
         [disabled]="hasEnded"
         (click)="changeState()"
     >
-        {{
-            hasEnded
-                ? "Match ended"
-                : hasStarted
-                  ? "End the match"
-                  : "Start the match"
-        }}
+        {{ hasStarted ? "End the match" : "Start the match" }}
     </button>
 </div>
 

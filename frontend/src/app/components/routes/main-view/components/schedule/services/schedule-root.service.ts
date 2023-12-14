@@ -233,7 +233,7 @@ export class ScheduleRootService extends DestroyClass {
 
         this.httpMatches
             .changeMatchState(matchId, state)
-            .pipe(tap(() => this.refreshCurrentMatch$(matchId)))
+            .pipe(switchMap(() => this.refreshCurrentMatch$(matchId)))
             .subscribe();
     }
 }
