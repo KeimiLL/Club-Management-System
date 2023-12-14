@@ -2,11 +2,11 @@ import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
 import { Observable } from "rxjs";
 
+import { ScoreComponent } from "../../../../../../../shared/components/score/score.component";
 import { SpinnerComponent } from "../../../../../../../shared/components/spinner/spinner.component";
 import {
     Match,
     MatchContentType,
-    MatchScore,
 } from "../../../../../../../shared/models/match.model";
 import { MatchEvent } from "../../../../../../../shared/models/match-event.model";
 import { CardsModule } from "../../../../../../../shared/modules/cards.module";
@@ -17,7 +17,6 @@ import { MatchDetails } from "../schedule-popup/newMatchFormBuilder";
 import { MatchDetailsComponent } from "./components/match-details/match-details.component";
 import { MatchEventsComponent } from "./components/match-events/match-events.component";
 import { MatchSquadComponent } from "./components/match-squad/match-squad.component";
-import { ScoreComponent } from "./components/score/score.component";
 
 @Component({
     selector: "app-schedule-content",
@@ -37,7 +36,7 @@ import { ScoreComponent } from "./components/score/score.component";
 })
 export class ScheduleContentComponent {
     @Input() public set match(match: Match) {
-        this.matchScore = { ...match };
+        this.matchState = match;
         this.matchSquad = match.players.map((player) => player.user_full_name);
         this.matchBase = { ...match };
         this.matchStarted = match.has_started;
@@ -46,7 +45,7 @@ export class ScheduleContentComponent {
 
     protected matchEnded: boolean;
     protected matchStarted: boolean;
-    protected matchScore: MatchScore;
+    protected matchState: Match;
     protected matchSquad: string[];
     protected matchBase: MatchDetails;
     protected events$: Observable<MatchEvent[]>;

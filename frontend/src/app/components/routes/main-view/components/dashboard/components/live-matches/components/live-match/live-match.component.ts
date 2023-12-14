@@ -1,5 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
+
+import { LiveMatch } from "../../../../../../../../../shared/models/match.model";
 
 @Component({
     selector: "app-live-match",
@@ -8,4 +10,6 @@ import { Component } from "@angular/core";
     templateUrl: "./live-match.component.html",
     styleUrls: ["./live-match.component.scss"],
 })
-export class LiveMatchComponent {}
+export class LiveMatchComponent {
+    @Input() public match: LiveMatch;
+}
