@@ -16,7 +16,6 @@ import { MatchesHttpService } from "../../../../../../shared/api/matches-http.se
 import {
     Match,
     MatchCreate,
-    MatchScoreGoals,
     MatchState,
     TableMatch,
 } from "../../../../../../shared/models/match.model";
@@ -181,7 +180,7 @@ export class ScheduleRootService extends DestroyClass {
                 filter(Boolean),
                 switchMap((event: MatchEventCreate) => {
                     if (event.event_type === MatchEventType.Goal) {
-                        return this.postScoreUpdateEvent(event, match);
+                        return this.content.postScoreUpdateEvent(event, match);
                     }
                     return this.httpEvents.postMatchEventToMatch(event);
                 }),
@@ -193,32 +192,6 @@ export class ScheduleRootService extends DestroyClass {
                 )
             )
             .subscribe();
-    }
-
-    private postScoreUpdateEvent(
-        event: MatchEventCreate,
-        currentMatch: Match
-    ): Observable<unknown> {
-        const goalsScored =
-            (currentMatch.goals_scored ?? 0) + (event.is_own_event ? 1 : 0);
-        const goalsConceded =
-            (currentMatch.goals_conceded ?? 0) + (event.is_own_event ? 0 : 1);
-
-        const matchScore: MatchScoreGoals = {
-            goals_conceded: goalsConceded,
-            goals_scored: goalsScored,
-        };
-
-        return this.httpEvents
-            .postMatchEventToMatch(event)
-            .pipe(
-                switchMap(() =>
-                    this.httpMatches.updateMatchScore(
-                        currentMatch.id,
-                        matchScore
-                    )
-                )
-            );
     }
 
     public changeMatchState(hasStarted: boolean, hasEnded: boolean): void {
