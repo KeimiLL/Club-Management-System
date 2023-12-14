@@ -7,6 +7,7 @@ import { DropdownViewManagerService } from "../../../../../../../shared/services
 import { SplitViewManagerService } from "../../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../../shared/services/table.service";
 import { ActivatedRouteQueryParams } from "../../../../../../../shared/test-mocks/test-mocks";
+import { ScheduleContentService } from "../../services/schedule-content.service";
 import { ScheduleRootService } from "../../services/schedule-root.service";
 import { ScheduleTableComponent } from "./schedule-table.component";
 
@@ -26,6 +27,7 @@ describe("ScheduleTableComponent", () => {
                 TableService,
                 DropdownViewManagerService,
                 ScheduleRootService,
+                ScheduleContentService,
                 {
                     provide: ActivatedRoute,
                     useClass: ActivatedRouteQueryParams,
