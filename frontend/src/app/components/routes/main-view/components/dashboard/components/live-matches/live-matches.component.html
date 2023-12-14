@@ -1,3 +1,12 @@
-<app-live-match></app-live-match>
-<app-live-match></app-live-match>
-<app-live-match></app-live-match>
+<ng-container *ngIf="matches$ | async as matches">
+    <ng-container *ngIf="matches.length === 0; else matchBoard">
+        <div>There is no matches :[</div>
+    </ng-container>
+
+    <ng-template #matchBoard>
+        <app-live-match
+            *ngFor="let match of matches"
+            [match]="match"
+        ></app-live-match>
+    </ng-template>
+</ng-container>

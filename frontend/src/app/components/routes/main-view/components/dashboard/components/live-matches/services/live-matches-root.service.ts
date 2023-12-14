@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, tap } from "rxjs";
+import { BehaviorSubject, mergeMap, Observable, tap, timer } from "rxjs";
 
 import { MatchEventHttpService } from "../../../../../../../../shared/api/match-event-http.service";
 import { MatchesHttpService } from "../../../../../../../../shared/api/matches-http.service";
 import { LiveMatch } from "../../../../../../../../shared/models/match.model";
+import { MatchEvent } from "../../../../../../../../shared/models/match-event.model";
 
 @Injectable()
 export class LiveMatchesRootService {
@@ -26,9 +27,18 @@ export class LiveMatchesRootService {
     }
 
     private initData(): void {
-        this.httpMatches
-            .getLiveMatches(this.limit)
-            .pipe(tap((matches) => (this.liveMatches = matches)))
+        timer(0, 10000)
+            .pipe(
+                mergeMap(() =>
+                    this.httpMatches
+                        .getLiveMatches(this.limit)
+                        .pipe(tap((matches) => (this.liveMatches = matches)))
+                )
+            )
             .subscribe();
+    }
+
+    public getMatchEventsByMatchId$(matchId: number): Observable<MatchEvent[]> {
+        return this.httpEvents.getAllMatchEventsByMatchId(matchId);
     }
 }

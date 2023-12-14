@@ -1,1 +1,5 @@
-<p>live-match works!</p>
+<app-score [match]="match"></app-score>
+<app-match-events-container
+    *ngIf="events$ | async as events"
+    [events]="events"
+></app-match-events-container>

@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
+import { Observable } from "rxjs";
 
 import { LiveMatch } from "../../../../../../../shared/models/match.model";
 import { LiveMatchComponent } from "./components/live-match/live-match.component";
@@ -14,9 +15,9 @@ import { LiveMatchesRootService } from "./services/live-matches-root.service";
     providers: [LiveMatchesRootService],
 })
 export class LiveMatchesComponent {
+    protected matches$: Observable<LiveMatch[]>;
+
     constructor(private readonly root: LiveMatchesRootService) {
-        this.root.liveMatches$.subscribe((matches: LiveMatch[]) => {
-            console.log(matches);
-        });
+        this.matches$ = this.root.liveMatches$;
     }
 }
