@@ -3,6 +3,7 @@ import { Component } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { LiveMatch } from "../../../../../../../shared/models/match.model";
+import { MatchEvent } from "../../../../../../../shared/models/match-event.model";
 import { LiveMatchComponent } from "./components/live-match/live-match.component";
 import { LiveMatchesRootService } from "./services/live-matches-root.service";
 
@@ -16,8 +17,10 @@ import { LiveMatchesRootService } from "./services/live-matches-root.service";
 })
 export class LiveMatchesComponent {
     protected matches$: Observable<LiveMatch[]>;
+    protected events$: Observable<MatchEvent[][]>;
 
     constructor(private readonly root: LiveMatchesRootService) {
         this.matches$ = this.root.liveMatches$;
+        this.events$ = this.root.liveMatchesEvents$;
     }
 }

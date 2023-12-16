@@ -4,7 +4,6 @@
     </mat-card-header>
     <div class="card__content">
         <app-match-events-container
-            *ngIf="events$ | async as events"
             [events]="events"
         ></app-match-events-container>
     </div>

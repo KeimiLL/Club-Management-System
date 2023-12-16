@@ -1,5 +1,12 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, mergeMap, Observable, tap, timer } from "rxjs";
+import {
+    BehaviorSubject,
+    forkJoin,
+    mergeMap,
+    Observable,
+    tap,
+    timer,
+} from "rxjs";
 
 import { MatchEventHttpService } from "../../../../../../../../shared/api/match-event-http.service";
 import { MatchesHttpService } from "../../../../../../../../shared/api/matches-http.service";
@@ -9,6 +16,10 @@ import { MatchEvent } from "../../../../../../../../shared/models/match-event.mo
 @Injectable()
 export class LiveMatchesRootService {
     private readonly liveMatchesStore$ = new BehaviorSubject<LiveMatch[]>([]);
+    private readonly liveMatchesEventsStore$ = new BehaviorSubject<
+        MatchEvent[][]
+    >([]);
+
     private readonly limit = 3;
 
     public get liveMatches$(): Observable<LiveMatch[]> {
@@ -17,6 +28,14 @@ export class LiveMatchesRootService {
 
     private set liveMatches(matches: LiveMatch[]) {
         this.liveMatchesStore$.next(matches);
+    }
+
+    public get liveMatchesEvents$(): Observable<MatchEvent[][]> {
+        return this.liveMatchesEventsStore$.asObservable();
+    }
+
+    private set liveMatchesEvents(events: MatchEvent[][]) {
+        this.liveMatchesEventsStore$.next(events);
     }
 
     constructor(
@@ -34,6 +53,23 @@ export class LiveMatchesRootService {
                         .getLiveMatches(this.limit)
                         .pipe(tap((matches) => (this.liveMatches = matches)))
                 )
+            )
+            .subscribe();
+
+        this.liveMatches$
+            .pipe(
+                mergeMap((matches) => {
+                    const matchesCalls: Array<Observable<MatchEvent[]>> = [];
+                    matches.forEach((match) =>
+                        matchesCalls.push(
+                            this.getMatchEventsByMatchId$(match.id)
+                        )
+                    );
+                    return forkJoin(matchesCalls);
+                }),
+                tap((matchesEvents) => {
+                    this.liveMatchesEvents = matchesEvents;
+                })
             )
             .subscribe();
     }
