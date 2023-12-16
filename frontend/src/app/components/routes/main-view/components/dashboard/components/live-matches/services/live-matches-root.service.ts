@@ -12,9 +12,10 @@ import { MatchEventHttpService } from "../../../../../../../../shared/api/match-
 import { MatchesHttpService } from "../../../../../../../../shared/api/matches-http.service";
 import { LiveMatch } from "../../../../../../../../shared/models/match.model";
 import { MatchEvent } from "../../../../../../../../shared/models/match-event.model";
+import { DestroyClass } from "../../../../../../../../shared/utils/destroyClass";
 
 @Injectable()
-export class LiveMatchesRootService {
+export class LiveMatchesRootService extends DestroyClass {
     private readonly liveMatchesStore$ = new BehaviorSubject<LiveMatch[]>([]);
     private readonly liveMatchesEventsStore$ = new BehaviorSubject<
         MatchEvent[][]
@@ -42,6 +43,7 @@ export class LiveMatchesRootService {
         private readonly httpMatches: MatchesHttpService,
         private readonly httpEvents: MatchEventHttpService
     ) {
+        super();
         this.initData();
     }
 
@@ -52,7 +54,8 @@ export class LiveMatchesRootService {
                     this.httpMatches
                         .getLiveMatches(this.limit)
                         .pipe(tap((matches) => (this.liveMatches = matches)))
-                )
+                ),
+                this.untilDestroyed()
             )
             .subscribe();
 
@@ -69,7 +72,8 @@ export class LiveMatchesRootService {
                 }),
                 tap((matchesEvents) => {
                     this.liveMatchesEvents = matchesEvents;
-                })
+                }),
+                this.untilDestroyed()
             )
             .subscribe();
     }
