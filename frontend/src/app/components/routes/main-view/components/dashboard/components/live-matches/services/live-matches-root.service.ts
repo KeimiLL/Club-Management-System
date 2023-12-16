@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import {
     BehaviorSubject,
+    filter,
     forkJoin,
     mergeMap,
     Observable,
@@ -61,6 +62,7 @@ export class LiveMatchesRootService extends DestroyClass {
 
         this.liveMatches$
             .pipe(
+                filter((matches) => matches.length > 0),
                 mergeMap((matches) => {
                     const matchesCalls: Array<Observable<MatchEvent[]>> = [];
                     matches.forEach((match) =>
