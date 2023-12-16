@@ -1,5 +1,9 @@
 <div class="team team__left">
-    {{ match.is_home ? match.team_name : match.opponent }}
+    {{
+        match.is_home
+            ? match.team_name
+            : (match.opponent | tooLongSentence: maxChars)
+    }}
 </div>
 <div class="numbers">
     {{ match | score }}
