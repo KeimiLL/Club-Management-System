@@ -1,0 +1,9 @@
+@import "../../../../../../../../../../styles/component-styles/components";
+
+:host {
+    width: 30%;
+
+    .card__content {
+        padding-top: 1rem;
+    }
+}

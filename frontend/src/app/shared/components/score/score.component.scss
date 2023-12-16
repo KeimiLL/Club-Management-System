@@ -17,6 +17,7 @@
         display: flex;
         width: 33%;
         font-size: $large-font;
+        white-space: nowrap;
 
         &__left {
             justify-content: left;

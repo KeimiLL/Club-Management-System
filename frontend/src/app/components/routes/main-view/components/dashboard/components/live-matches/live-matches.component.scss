@@ -1,4 +1,8 @@
+@import "../../../../../../../../styles/component-styles/components";
+
 :host {
     display: flex;
-    gap: 2rem;
+    justify-content: space-evenly;
+    width: 70vw;
+    height: 80%;
 }
