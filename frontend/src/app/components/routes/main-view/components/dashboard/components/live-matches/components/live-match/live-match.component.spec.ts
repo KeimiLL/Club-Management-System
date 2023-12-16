@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
+import { mockMatch } from "../../../../../../../../../shared/test-mocks/test-mocks";
 import { LiveMatchComponent } from "./live-match.component";
 
 describe("LiveMatchComponent", () => {
@@ -12,6 +13,7 @@ describe("LiveMatchComponent", () => {
         });
         fixture = TestBed.createComponent(LiveMatchComponent);
         component = fixture.componentInstance;
+        component.match = mockMatch;
         fixture.detectChanges();
     });
 

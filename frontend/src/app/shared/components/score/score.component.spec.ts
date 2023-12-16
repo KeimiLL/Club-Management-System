@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
+import { mockMatch } from "../../test-mocks/test-mocks";
 import { ScoreComponent } from "./score.component";
 
 describe("ScoreComponent", () => {
@@ -12,6 +13,7 @@ describe("ScoreComponent", () => {
         });
         fixture = TestBed.createComponent(ScoreComponent);
         component = fixture.componentInstance;
+        component.match = mockMatch;
         fixture.detectChanges();
     });
 
