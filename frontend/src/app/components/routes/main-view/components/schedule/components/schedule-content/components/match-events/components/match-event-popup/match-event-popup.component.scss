@@ -1,0 +1,42 @@
+@import "../../../../../../../../../../../../styles/component-styles/components";
+
+.popup {
+    .card__content {
+        padding: 1rem 0;
+    }
+
+    &__checkbox-label {
+        font-size: $normal-font;
+    }
+
+    &__basic {
+        display: flex;
+        justify-content: space-between;
+        width: calc(100% - 1rem);
+
+        &--control {
+            width: 30%;
+        }
+
+        &--checkbox {
+            background-color: $field;
+            display: flex;
+            padding: $small-spacing;
+            justify-content: space-around;
+            flex-direction: row;
+            align-items: center;
+        }
+    }
+
+    &__description {
+        width: calc(100% - 1rem);
+        textarea {
+            resize: none;
+        }
+    }
+
+    .button-container {
+        width: 20%;
+        margin: 10px auto;
+    }
+}

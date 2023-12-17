@@ -1,22 +1,40 @@
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { filter, map, Observable, of, switchMap, tap } from "rxjs";
+import {
+    filter,
+    forkJoin,
+    map,
+    mergeMap,
+    Observable,
+    of,
+    switchMap,
+    tap,
+} from "rxjs";
 
+import { MatchEventHttpService } from "../../../../../../shared/api/match-event-http.service";
 import { MatchesHttpService } from "../../../../../../shared/api/matches-http.service";
 import {
     Match,
     MatchCreate,
+    MatchState,
     TableMatch,
 } from "../../../../../../shared/models/match.model";
+import {
+    MatchEvent,
+    MatchEventCreate,
+    MatchEventType,
+} from "../../../../../../shared/models/match-event.model";
 import { DropdownViewManagerService } from "../../../../../../shared/services/dropdown-view-manager.service";
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../../shared/services/table.service";
 import { DestroyClass } from "../../../../../../shared/utils/destroyClass";
+import { MatchEventPopupComponent } from "../components/schedule-content/components/match-events/components/match-event-popup/match-event-popup.component";
 import { SchedulePopupComponent } from "../components/schedule-popup/schedule-popup.component";
 import {
     longMatchesColumns,
     shortMatchesColumns,
 } from "../schedule-table.data";
+import { ScheduleContentService } from "./schedule-content.service";
 
 @Injectable()
 export class ScheduleRootService extends DestroyClass {
@@ -24,10 +42,12 @@ export class ScheduleRootService extends DestroyClass {
 
     constructor(
         private readonly dialog: MatDialog,
+        private readonly httpEvents: MatchEventHttpService,
         private readonly dropdown: DropdownViewManagerService,
         private readonly table: TableService<TableMatch>,
-        private readonly http: MatchesHttpService,
-        private readonly splitView: SplitViewManagerService<Match>
+        private readonly httpMatches: MatchesHttpService,
+        private readonly splitView: SplitViewManagerService<Match>,
+        private readonly content: ScheduleContentService
     ) {
         super();
         this.initData();
@@ -47,7 +67,8 @@ export class ScheduleRootService extends DestroyClass {
 
         this.splitView.currentId$
             .pipe(
-                switchMap((id: number | null) => this.refreshCurrentMatch$(id)),
+                filter(Boolean),
+                switchMap((id: number) => this.refreshCurrentMatch$(id)),
                 this.untilDestroyed()
             )
             .subscribe();
@@ -103,7 +124,7 @@ export class ScheduleRootService extends DestroyClass {
 
     private refreshMatches$(id: number): Observable<TableMatch[]> {
         return this.table.refreshTableItems$(
-            this.http.getMatchesByTeamId(
+            this.httpMatches.getMatchesByTeamId(
                 id,
                 this.table.currentPageIndex,
                 this.table.capacity
@@ -111,9 +132,10 @@ export class ScheduleRootService extends DestroyClass {
         );
     }
 
-    private refreshCurrentMatch$(id: number | null): Observable<Match | null> {
-        if (id === null) return of(null);
-        return this.splitView.refreshCurrentItem$(this.http.getMatchById(id));
+    private refreshCurrentMatch$(id: number): Observable<MatchEvent[]> {
+        return this.splitView
+            .refreshCurrentItem$(this.httpMatches.getMatchById(id))
+            .pipe(mergeMap(() => this.content.getMatchEvents$(id)));
     }
 
     private openDialog(
@@ -131,7 +153,7 @@ export class ScheduleRootService extends DestroyClass {
 
         this.splitView
             .deleteCurrentItem$(
-                this.http.deleteMatchById(this.splitView.currentId)
+                this.httpMatches.deleteMatchById(this.splitView.currentId)
             )
             .pipe(
                 switchMap(() => {
@@ -139,6 +161,52 @@ export class ScheduleRootService extends DestroyClass {
                     return this.refreshMatches$(this.dropdown.currentTeam.id);
                 })
             )
+            .subscribe();
+    }
+
+    public openAddEventPopup(): void {
+        const match = this.splitView.currentItem;
+        const teamId = this.dropdown.currentTeam?.id;
+
+        if (match === null || teamId === undefined) return;
+        this.dialog
+            .open(MatchEventPopupComponent, {
+                width: "40vw",
+                disableClose: true,
+                data: match.id,
+            })
+            .afterClosed()
+            .pipe(
+                filter(Boolean),
+                switchMap((event: MatchEventCreate) => {
+                    if (event.event_type === MatchEventType.Goal) {
+                        return this.content.postScoreUpdateEvent(event, match);
+                    }
+                    return this.httpEvents.postMatchEventToMatch(event);
+                }),
+                switchMap(() =>
+                    forkJoin([
+                        this.refreshCurrentMatch$(match.id),
+                        this.refreshMatches$(teamId),
+                    ])
+                )
+            )
+            .subscribe();
+    }
+
+    public changeMatchState(hasStarted: boolean, hasEnded: boolean): void {
+        const matchId = this.splitView.currentId;
+
+        if (hasEnded) return;
+        if (matchId === null) return;
+
+        const state: MatchState = hasStarted
+            ? MatchState.End
+            : MatchState.Start;
+
+        this.httpMatches
+            .changeMatchState(matchId, state)
+            .pipe(switchMap(() => this.refreshCurrentMatch$(matchId)))
             .subscribe();
     }
 }

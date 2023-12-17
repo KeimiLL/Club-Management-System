@@ -34,6 +34,8 @@ export const mockMatch: Match = {
     goals_conceded: 0,
     opponent: "Opponent",
     is_home: true,
+    has_ended: false,
+    has_started: true,
 };
 
 export const mockMeeting: Meeting = {

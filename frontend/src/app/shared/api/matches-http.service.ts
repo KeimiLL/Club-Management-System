@@ -2,8 +2,14 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { Match, MatchCreate, TableMatch } from "../models/match.model";
+import {
+    Match,
+    MatchCreate,
+    MatchScoreGoals,
+    TableMatch,
+} from "../models/match.model";
 import { BackendResponse, TableResponse } from "../models/misc.model";
+import { MatchState } from "./../models/match.model";
 
 @Injectable({
     providedIn: "root",
@@ -16,20 +22,40 @@ export class MatchesHttpService {
     }
 
     public getMatchesByTeamId(
-        id: number,
+        teamId: number,
         page: number,
         capacity: number
     ): Observable<TableResponse<TableMatch>> {
         return this.http.get<TableResponse<TableMatch>>(
-            `api/v1/matches?team_id=${id}&page=${page}&per_page=${capacity}`
+            `api/v1/matches?team_id=${teamId}&page=${page}&per_page=${capacity}`
         );
     }
 
-    public getMatchById(id: number): Observable<Match> {
-        return this.http.get<Match>(`api/v1/matches/${id}`);
+    public getMatchById(matchId: number): Observable<Match> {
+        return this.http.get<Match>(`api/v1/matches/${matchId}`);
     }
 
-    public deleteMatchById(id: number): Observable<BackendResponse> {
-        return this.http.delete<BackendResponse>(`api/v1/matches/${id}`);
+    public deleteMatchById(matchId: number): Observable<BackendResponse> {
+        return this.http.delete<BackendResponse>(`api/v1/matches/${matchId}`);
+    }
+
+    public changeMatchState(
+        matchId: number,
+        state: MatchState
+    ): Observable<Match> {
+        return this.http.post<Match>(
+            `api/v1/matches/${matchId}/event/${state}`,
+            {}
+        );
+    }
+
+    public updateMatchScore(
+        matchId: number,
+        matchScore: MatchScoreGoals
+    ): Observable<MatchScoreGoals> {
+        return this.http.post<MatchScoreGoals>(
+            `api/v1/matches/${matchId}/score`,
+            matchScore
+        );
     }
 }

@@ -6,6 +6,12 @@
     justify-content: center;
     gap: $medium-spacing;
 
+    .button-container {
+        width: 80%;
+        display: flex;
+        margin: 0 auto;
+    }
+
     .events-container {
         height: 100%;
     }

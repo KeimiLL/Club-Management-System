@@ -6,7 +6,7 @@ export enum MatchContentType {
     Events = "events",
 }
 
-export enum MatchContinuity {
+export enum MatchState {
     Start = "start",
     End = "end",
 }
@@ -19,6 +19,11 @@ export interface MatchDetails {
 export interface MatchScoreBase {
     opponent: string;
     is_home: boolean;
+}
+
+export interface MatchScoreGoals {
+    goals_scored: number;
+    goals_conceded: number;
 }
 
 export interface MatchScore extends MatchScoreBase {
@@ -39,6 +44,8 @@ export interface Match extends MatchDetails, MatchScore {
     id: number;
     team_name: string;
     players: ShortPlayer[];
+    has_started: boolean;
+    has_ended: boolean;
 }
 
 export interface TableMatch extends MatchScore {
