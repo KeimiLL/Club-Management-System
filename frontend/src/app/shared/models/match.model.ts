@@ -40,6 +40,12 @@ export interface MatchCreate {
     player_ids: number[];
 }
 
+export interface LiveMatch extends MatchDetails, MatchScore {
+    id: number;
+    team_name: string;
+    players: ShortPlayer[];
+}
+
 export interface Match extends MatchDetails, MatchScore {
     id: number;
     team_name: string;

@@ -1,0 +1,10 @@
+<mat-card class="card">
+    <mat-card-header class="card__header">
+        <app-score [match]="match" [maxChars]="9"></app-score>
+    </mat-card-header>
+    <div class="card__content">
+        <app-match-events-container
+            [events]="events"
+        ></app-match-events-container>
+    </div>
+</mat-card>

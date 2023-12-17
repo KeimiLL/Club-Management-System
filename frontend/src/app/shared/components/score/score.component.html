@@ -1,0 +1,13 @@
+<div class="team team__left">
+    {{
+        match.is_home
+            ? match.team_name
+            : (match.opponent | tooLongSentence: maxChars)
+    }}
+</div>
+<div class="numbers">
+    {{ match | score }}
+</div>
+<div class="team team__right">
+    {{ match.is_home ? match.opponent : match.team_name }}
+</div>

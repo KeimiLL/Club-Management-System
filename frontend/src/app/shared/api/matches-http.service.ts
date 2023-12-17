@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 import {
+    LiveMatch,
     Match,
     MatchCreate,
     MatchScoreGoals,
@@ -56,6 +57,12 @@ export class MatchesHttpService {
         return this.http.post<MatchScoreGoals>(
             `api/v1/matches/${matchId}/score`,
             matchScore
+        );
+    }
+
+    public getLiveMatches(limit: number): Observable<LiveMatch[]> {
+        return this.http.get<LiveMatch[]>(
+            `/api/v1/matches/in_progress?limit=${limit}`
         );
     }
 }
