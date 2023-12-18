@@ -7,6 +7,7 @@ import { PermissionDirective } from "../../../../../shared/directives/permission
 import { CoachName } from "../../../../../shared/models/coach.model";
 import { Player, TablePlayer } from "../../../../../shared/models/player.model";
 import { ShortTeam } from "../../../../../shared/models/team.model";
+import { Roles } from "../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
 import { GetItemByIdPipe } from "../../../../../shared/pipes/get-item-by-id.pipe";
@@ -46,7 +47,7 @@ export class SquadComponent implements OnInit {
     protected currentPlayer$: Observable<Player | null>;
     protected currentCoach$: Observable<CoachName | null>;
 
-    protected currentPlayerAsUserId: number;
+    protected currentPlayerAsUserId: number | null = null;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Player>,
@@ -66,7 +67,9 @@ export class SquadComponent implements OnInit {
     ngOnInit(): void {
         const { currentUser } = this.userService;
         if (currentUser === null) return;
-        this.currentPlayerAsUserId = currentUser.id;
+        if (currentUser.role === Roles.Player) {
+            this.currentPlayerAsUserId = currentUser.id;
+        }
     }
 
     protected switchDetail(): void {
@@ -78,6 +81,7 @@ export class SquadComponent implements OnInit {
     }
 
     protected openCurrentPlayerInfo(): void {
+        if (this.currentPlayerAsUserId === null) return;
         this.splitView.addParamsToRouting(this.currentPlayerAsUserId);
     }
 

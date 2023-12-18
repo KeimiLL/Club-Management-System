@@ -61,20 +61,25 @@
                 vm.currentTeam
                     ? vm.currentMatch?.is_home
                         ? vm.currentMatch?.team_name +
-                          '-' +
+                          ' vs ' +
                           vm.currentMatch?.opponent
                         : vm.currentMatch?.opponent +
-                          '-' +
+                          ' vs ' +
                           vm.currentMatch?.team_name
                     : 'Match'
             }}"
             (closedClicked)="switchDetail()"
         >
             <app-button-container buttons>
-                <button mat-raised-button class="button--light">
+                <button
+                    *appPermission="'edit_match'"
+                    mat-raised-button
+                    class="button--light"
+                >
                     Modify Match
                 </button>
                 <button
+                    *appPermission="'delete_match'"
                     mat-raised-button
                     class="button--dark"
                     (click)="onMatchDelete()"

@@ -49,7 +49,7 @@ export const matchPermissions = {
     CreateMatch: "create_match",
     DeleteMatch: "delete_match",
     EditMatch: "edit_match",
-    MatchActions: "match_actions",
+    MatchEvents: "match_events",
 } as const;
 
 export type MatchPermissions =
@@ -118,7 +118,7 @@ export const RoleDefinitions: Record<Roles, RolePermission> = {
         ],
         permissions: [
             meetingsPermissions.EditMeeting,
-            matchPermissions.MatchActions,
+            matchPermissions.MatchEvents,
         ],
     },
 
