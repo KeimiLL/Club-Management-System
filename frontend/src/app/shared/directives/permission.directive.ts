@@ -17,27 +17,18 @@ export class PermissionDirective {
     @Input() public set appPermission(
         requiredPermission: SubPermissions | null
     ) {
-        this.checkPermission(requiredPermission, false);
-    }
-
-    @Input() public set appPermissionReverse(
-        excludedPermission: SubPermissions | null
-    ) {
-        this.checkPermission(excludedPermission, true);
-    }
-
-    private checkPermission(
-        permission: SubPermissions | null,
-        isReverse: boolean
-    ): void {
-        if (permission === null) return;
         if (this.userService.currentUser === null) return;
+
+        if (requiredPermission === null) {
+            this.viewContainer.createEmbeddedView(this.templateRef);
+            return;
+        }
 
         const userRole = this.userService.currentUser.role;
         const rolePermissions = RoleDefinitions[userRole].permissions;
-        const hasPermission = rolePermissions.includes(permission);
+        const hasPermission = rolePermissions.includes(requiredPermission);
 
-        if (isReverse ? !hasPermission : hasPermission) {
+        if (hasPermission) {
             this.viewContainer.createEmbeddedView(this.templateRef);
         } else {
             this.viewContainer.clear();

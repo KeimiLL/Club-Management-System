@@ -39,16 +39,14 @@
                         </ng-container>
                     </ng-container>
                 </ng-container>
-                <ng-container *appPermissionReverse="'more_teams'">
-                    <button
-                        mat-raised-button
-                        class="button--light"
-                        (click)="openCurrentPlayerInfo()"
-                        *ngIf="vm.isDetail === false"
-                    >
-                        Your Bio
-                    </button>
-                </ng-container>
+                <button
+                    mat-raised-button
+                    class="button--light"
+                    (click)="openCurrentPlayerInfo()"
+                    *ngIf="vm.isDetail === false && currentPlayerAsUserId"
+                >
+                    Your Bio
+                </button>
             </app-button-container>
         </app-wide-card-header>
 
@@ -76,6 +74,7 @@
                     Modify Player
                 </button>
                 <button
+                    *appPermission="'delete_player'"
                     mat-raised-button
                     class="button--dark"
                     (click)="onPlayerDelete()"
