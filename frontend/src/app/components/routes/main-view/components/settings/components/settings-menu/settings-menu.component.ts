@@ -2,11 +2,10 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
 
-import { MenuItem } from "../../../../../../..//shared/models/misc.model";
+import { SettingsMenuItem } from "../../../../../../..//shared/models/misc.model";
 import { UserService } from "../../../../../../../shared/api/user.service";
 import { PermissionDirective } from "../../../../../../../shared/directives/permission.directive";
 import { LowerSnakeToUpperNormal } from "../../../../../../../shared/pipes/lower-snake-to-upper-normal.pipe";
-import { StringToSubpermissionPipe } from "../../../../../../../shared/pipes/string-to-subpermission.pipe";
 import { settingsMenuItems } from "./settings-menu.data";
 
 @Component({
@@ -17,13 +16,12 @@ import { settingsMenuItems } from "./settings-menu.data";
         RouterModule,
         LowerSnakeToUpperNormal,
         PermissionDirective,
-        StringToSubpermissionPipe,
     ],
     templateUrl: "./settings-menu.component.html",
     styleUrls: ["./settings-menu.component.scss"],
 })
 export class SettingsMenuComponent implements OnInit {
-    protected menuItems: MenuItem[] = [];
+    protected menuItems: SettingsMenuItem[] = [];
 
     constructor(private readonly userService: UserService) {}
 

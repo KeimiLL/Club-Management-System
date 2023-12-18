@@ -2,8 +2,8 @@ import { Routes } from "@angular/router";
 
 import { PermissionGuard } from "../../../../../shared/guards/permission.guard";
 import {
-    ModulesPermissions,
-    SettingsPermission,
+    modulesPermissions,
+    settingsPermissions,
 } from "../../../../../shared/models/permission.model";
 import { SettingsComponent } from "./settings.component";
 
@@ -24,7 +24,7 @@ export default [
                         (c) => c.GeneralComponent
                     ),
                 data: {
-                    modulesPermission: ModulesPermissions.Settings,
+                    modulesPermission: modulesPermissions.Settings,
                     requiredPermission: null,
                 },
                 canActivate: [PermissionGuard],
@@ -36,7 +36,7 @@ export default [
                         (c) => c.HelpComponent
                     ),
                 data: {
-                    modulesPermission: ModulesPermissions.Settings,
+                    modulesPermission: modulesPermissions.Settings,
                     requiredPermission: null,
                 },
                 canActivate: [PermissionGuard],
@@ -48,7 +48,7 @@ export default [
                         (c) => c.InfoComponent
                     ),
                 data: {
-                    modulesPermission: ModulesPermissions.Settings,
+                    modulesPermission: modulesPermissions.Settings,
                     requiredPermission: null,
                 },
                 canActivate: [PermissionGuard],
@@ -60,8 +60,8 @@ export default [
                         (c) => c.ModifyComponent
                     ),
                 data: {
-                    modulesPermission: ModulesPermissions.Settings,
-                    requiredPermission: SettingsPermission.Modify,
+                    modulesPermission: modulesPermissions.Settings,
+                    requiredPermission: settingsPermissions.Modify,
                 },
                 canActivate: [PermissionGuard],
             },
