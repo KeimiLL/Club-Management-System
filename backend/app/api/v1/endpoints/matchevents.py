@@ -3,7 +3,7 @@
 
 from typing import Annotated
 
-from app.api import player_not_allowed
+from app.api import all_allowed, viewer_not_allowed
 from app.core.exceptions import GenericException
 from app.crud import crud_matchevent
 from app.crud.crud_match import get_match_by_id
@@ -31,7 +31,7 @@ router = APIRouter()
 )
 def create_new_matchevent(
     matchevent: MatchEventCreate,
-    _: Annotated[User, Depends(player_not_allowed)],
+    _: Annotated[User, Depends(viewer_not_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Creates a new matchevent based on data from a POST request.
@@ -69,7 +69,7 @@ def create_new_matchevent(
 )
 def get_all_matchevents_by_match_id(
     match_id: Annotated[int, Query(ge=1, lt=10000)],
-    _: Annotated[User, Depends(player_not_allowed)],
+    _: Annotated[User, Depends(all_allowed)],
     db: Annotated[Session, Depends(get_db)],
 ):
     """Gets all the matchevents that are assigned to the match with the given id.
