@@ -35,6 +35,8 @@ export const teamPermissions = {
     CreateTeam: "create_team",
     DeleteTeam: "delete_team",
     EditTeam: "edit_team",
+    DeletePlayer: "delete_player",
+    EditPlayer: "edit_player",
     MoreTeams: "more_teams",
     MorePlayers: "more_players",
     EditCoach: "edit_coach",

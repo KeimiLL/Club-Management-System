@@ -3,10 +3,10 @@ import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { UserService } from "../../../../../shared/api/user.service";
+import { PermissionDirective } from "../../../../../shared/directives/permission.directive";
 import { CoachName } from "../../../../../shared/models/coach.model";
 import { Player, TablePlayer } from "../../../../../shared/models/player.model";
 import { ShortTeam } from "../../../../../shared/models/team.model";
-import { Roles } from "../../../../../shared/models/user.model";
 import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
 import { GetItemByIdPipe } from "../../../../../shared/pipes/get-item-by-id.pipe";
@@ -27,6 +27,7 @@ import { SquadRootService } from "./services/squad-root.service";
         SquadTableComponent,
         SquadContentComponent,
         GetItemByIdPipe,
+        PermissionDirective,
     ],
     templateUrl: "./squad.component.html",
     styleUrls: ["./squad.component.scss"],
@@ -45,7 +46,7 @@ export class SquadComponent implements OnInit {
     protected currentPlayer$: Observable<Player | null>;
     protected currentCoach$: Observable<CoachName | null>;
 
-    protected currentPlayerAsUserId: number | null = null;
+    protected currentPlayerAsUserId: number;
 
     constructor(
         private readonly splitView: SplitViewManagerService<Player>,
@@ -65,9 +66,7 @@ export class SquadComponent implements OnInit {
     ngOnInit(): void {
         const { currentUser } = this.userService;
         if (currentUser === null) return;
-        if (currentUser.role === Roles.Player) {
-            this.currentPlayerAsUserId = currentUser.id;
-        }
+        this.currentPlayerAsUserId = currentUser.id;
     }
 
     protected switchDetail(): void {
@@ -79,7 +78,6 @@ export class SquadComponent implements OnInit {
     }
 
     protected openCurrentPlayerInfo(): void {
-        if (this.currentPlayerAsUserId === null) return;
         this.splitView.addParamsToRouting(this.currentPlayerAsUserId);
     }
 
