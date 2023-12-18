@@ -33,14 +33,24 @@ export type MeetingsPermissions =
 
 export const teamPermissions = {
     CreateTeam: "create_team",
+    DeleteTeam: "delete_match",
     EditTeam: "edit_team",
     MoreTeams: "more_teams",
-    MatchActions: "match_actions",
     MorePlayers: "more_players",
 } as const;
 
 export type TeamsPermissions =
     (typeof teamPermissions)[keyof typeof teamPermissions];
+
+export const matchPermissions = {
+    CreateMatch: "create_team",
+    DeleteMatch: "delete_match",
+    EditMatch: "edit_team",
+    MatchActions: "match_actions",
+} as const;
+
+export type MatchPermissions =
+    (typeof matchPermissions)[keyof typeof matchPermissions];
 
 export const settingsPermissions = {
     Modify: "modify_users",
@@ -52,7 +62,8 @@ export type SettingsPermissions =
 export type SubPermissions =
     | SettingsPermissions
     | MeetingsPermissions
-    | TeamsPermissions;
+    | TeamsPermissions
+    | MatchPermissions;
 
 export const RoleColorsMapping: Record<Roles, string> = {
     [Roles.Admin]: "#ef436b",
@@ -65,39 +76,33 @@ export const RoleColorsMapping: Record<Roles, string> = {
 
 export const RoleDefinitions: Record<Roles, RolePermission> = {
     [Roles.Admin]: {
-        modules: [
-            modulesPermissions.Dashboard,
-            modulesPermissions.Settings,
-            modulesPermissions.Meetings,
-            modulesPermissions.Squad,
-            modulesPermissions.Schedule,
-            modulesPermissions.Teams,
+        modules: [...Object.values(modulesPermissions)],
+        permissions: [
+            ...Object.values(meetingsPermissions),
+            ...Object.values(teamPermissions),
+            ...Object.values(matchPermissions),
+            ...Object.values(settingsPermissions),
         ],
-        permissions: [],
     },
 
     [Roles.Board]: {
-        modules: [
-            modulesPermissions.Dashboard,
-            modulesPermissions.Settings,
-            modulesPermissions.Meetings,
-            modulesPermissions.Squad,
-            modulesPermissions.Schedule,
-            modulesPermissions.Teams,
+        modules: [...Object.values(modulesPermissions)],
+        permissions: [
+            ...Object.values(meetingsPermissions),
+            ...Object.values(matchPermissions),
+            ...Object.values(teamPermissions),
         ],
-        permissions: [],
     },
 
     [Roles.Coach]: {
-        modules: [
-            modulesPermissions.Dashboard,
-            modulesPermissions.Settings,
-            modulesPermissions.Meetings,
-            modulesPermissions.Squad,
-            modulesPermissions.Schedule,
-            modulesPermissions.Teams,
+        modules: [...Object.values(modulesPermissions)],
+        permissions: [
+            ...Object.values(meetingsPermissions),
+            ...Object.values(matchPermissions),
+            teamPermissions.EditTeam,
+            teamPermissions.MorePlayers,
+            teamPermissions.MoreTeams,
         ],
-        permissions: [],
     },
 
     [Roles.Player]: {
@@ -108,7 +113,10 @@ export const RoleDefinitions: Record<Roles, RolePermission> = {
             modulesPermissions.Squad,
             modulesPermissions.Schedule,
         ],
-        permissions: [],
+        permissions: [
+            meetingsPermissions.EditMeeting,
+            matchPermissions.MatchActions,
+        ],
     },
 
     [Roles.Viewer]: {
