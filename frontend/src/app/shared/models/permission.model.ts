@@ -33,19 +33,20 @@ export type MeetingsPermissions =
 
 export const teamPermissions = {
     CreateTeam: "create_team",
-    DeleteTeam: "delete_match",
+    DeleteTeam: "delete_team",
     EditTeam: "edit_team",
     MoreTeams: "more_teams",
     MorePlayers: "more_players",
+    EditCoach: "edit_coach",
 } as const;
 
 export type TeamsPermissions =
     (typeof teamPermissions)[keyof typeof teamPermissions];
 
 export const matchPermissions = {
-    CreateMatch: "create_team",
+    CreateMatch: "create_match",
     DeleteMatch: "delete_match",
-    EditMatch: "edit_team",
+    EditMatch: "edit_match",
     MatchActions: "match_actions",
 } as const;
 

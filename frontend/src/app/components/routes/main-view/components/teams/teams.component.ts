@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 
+import { PermissionDirective } from "../../../../../shared/directives/permission.directive";
 import { TableTeam, Team } from "../../../../../shared/models/team.model";
 import { CardsModule } from "../../../../../shared/modules/cards.module";
 import { MaterialModule } from "../../../../../shared/modules/material.module";
@@ -20,6 +21,7 @@ import { TeamsRootService } from "./services/teams-root.service";
         MaterialModule,
         TeamsContentComponent,
         TeamsTableComponent,
+        PermissionDirective,
     ],
     templateUrl: "./teams.component.html",
     styleUrls: ["./teams.component.scss"],
