@@ -35,6 +35,7 @@
         >
             <app-button-container buttons>
                 <button
+                    *appPermission="'edit_meeting'"
                     mat-raised-button
                     class="button--light"
                     (click)="onModifyMeetingClick()"
@@ -43,6 +44,7 @@
                     Modify Meeting
                 </button>
                 <button
+                    *appPermission="'delete_meeting'"
                     mat-raised-button
                     class="button--dark"
                     (click)="onMeetingDelete()"
