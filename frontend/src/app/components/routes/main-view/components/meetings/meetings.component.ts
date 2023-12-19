@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 
+import { PermissionDirective } from "../../../../../shared/directives/permission.directive";
 import {
     Meeting,
     TableMeeting,
@@ -11,7 +12,6 @@ import { MaterialModule } from "../../../../../shared/modules/material.module";
 import { SplitViewManagerService } from "../../../../../shared/services/split-view-manager.service";
 import { TableService } from "../../../../../shared/services/table.service";
 import { CurrentMeetingContentComponent } from "./components/current-meeting-content/current-meeting-content.component";
-import { LegendComponent } from "./components/legend/legend.component";
 import { MeetingTableComponent } from "./components/meeting-table/meeting-table.component";
 import { MeetingsRootService } from "./services/meetings-root.service";
 
@@ -22,9 +22,9 @@ import { MeetingsRootService } from "./services/meetings-root.service";
         CommonModule,
         CardsModule,
         MaterialModule,
-        LegendComponent,
         MeetingTableComponent,
         CurrentMeetingContentComponent,
+        PermissionDirective,
     ],
     templateUrl: "./meetings.component.html",
     styleUrls: ["./meetings.component.scss"],

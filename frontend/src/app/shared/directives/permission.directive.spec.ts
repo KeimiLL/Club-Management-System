@@ -2,14 +2,14 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { Component } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { TeamPermission } from "../models/permission.model";
+import { SubPermissions } from "../models/permission.model";
 import { PermissionDirective } from "./permission.directive";
 
 @Component({
     template: "<div *appPermission='permission'></div>",
 })
 class TestComponent {
-    permission: TeamPermission;
+    permission: SubPermissions;
 }
 
 describe("PermissionDirective", () => {

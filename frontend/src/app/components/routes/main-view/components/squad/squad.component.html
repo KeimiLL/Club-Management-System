@@ -15,26 +15,28 @@
             [subName]="vm.currentCoach?.user_full_name ?? null"
         >
             <app-button-container buttons>
-                <ng-container *ngIf="vm.teams">
-                    <ng-container *ngIf="vm.teams.length > 1">
-                        <button
-                            mat-raised-button
-                            class="button--light"
-                            [matMenuTriggerFor]="roleMenu"
-                            *ngIf="vm.isDetail === false && vm.currentTeam"
-                        >
-                            Select Team
-                        </button>
-
-                        <mat-menu #roleMenu="matMenu">
+                <ng-container *appPermission="'more_teams'">
+                    <ng-container *ngIf="vm.teams">
+                        <ng-container *ngIf="vm.teams.length > 1">
                             <button
-                                mat-menu-item
-                                *ngFor="let team of vm.teams"
-                                (click)="setSelectedTeam(team)"
+                                mat-raised-button
+                                class="button--light"
+                                [matMenuTriggerFor]="roleMenu"
+                                *ngIf="vm.isDetail === false && vm.currentTeam"
                             >
-                                {{ team.name }}
+                                Select Team
                             </button>
-                        </mat-menu>
+
+                            <mat-menu #roleMenu="matMenu">
+                                <button
+                                    mat-menu-item
+                                    *ngFor="let team of vm.teams"
+                                    (click)="setSelectedTeam(team)"
+                                >
+                                    {{ team.name }}
+                                </button>
+                            </mat-menu>
+                        </ng-container>
                     </ng-container>
                 </ng-container>
                 <button
@@ -64,14 +66,15 @@
             (closedClicked)="switchDetail()"
         >
             <app-button-container buttons>
-                <!-- <button
+                <button
+                    *appPermission="'edit_player'"
                     mat-raised-button
                     class="button--light"
-                    (click)="onModifyPlayerClick()"
                 >
                     Modify Player
-                </button> -->
+                </button>
                 <button
+                    *appPermission="'delete_player'"
                     mat-raised-button
                     class="button--dark"
                     (click)="onPlayerDelete()"

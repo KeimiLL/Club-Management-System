@@ -1,3 +1,5 @@
+import { SubPermissions } from "./permission.model";
+
 export interface BackendResponse {
     message: string;
 }
@@ -9,6 +11,10 @@ export interface MenuItem {
 
 export interface MainMenuItem extends MenuItem {
     icon: string;
+}
+
+export interface SettingsMenuItem extends MenuItem {
+    permission: SubPermissions | null;
 }
 
 export interface TableResponse<T> {

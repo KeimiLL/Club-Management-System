@@ -1,33 +1,30 @@
-import { ModulesPermissions } from "../../../../..//shared/models/permission.model";
+import { modulesPermissions } from "../../../../..//shared/models/permission.model";
 import { MainMenuItem } from "../../../../../shared/models/misc.model";
 
 export const menuItems: MainMenuItem[] = [
     {
-        name: ModulesPermissions.Dashboard,
+        name: modulesPermissions.Dashboard,
         icon: "dashboard",
         route: "/app/dashboard",
     },
-    // { name: "calendar", icon: "calendar_month", route: "/app" },
     {
-        name: ModulesPermissions.Meetings,
+        name: modulesPermissions.Meetings,
         icon: "question_answer",
         route: "/app/meetings",
     },
-    { name: ModulesPermissions.Teams, icon: "groups", route: "/app/teams" },
+    { name: modulesPermissions.Teams, icon: "groups", route: "/app/teams" },
     {
-        name: ModulesPermissions.Squad,
+        name: modulesPermissions.Squad,
         icon: "directions_run",
         route: "/app/squad",
     },
     {
-        name: ModulesPermissions.Schedule,
+        name: modulesPermissions.Schedule,
         icon: "event_available",
         route: "/app/schedule",
     },
-    { name: "finances", icon: "savings", route: "/app" },
-    // { name: "medic", icon: "local_hospital", route: "/app" },
     {
-        name: ModulesPermissions.Settings,
+        name: modulesPermissions.Settings,
         icon: "settings",
         route: "/app/settings",
     },

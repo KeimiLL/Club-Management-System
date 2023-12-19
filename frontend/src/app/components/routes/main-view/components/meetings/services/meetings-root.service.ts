@@ -10,7 +10,7 @@ import {
     TableMeeting,
 } from "../../../../../../shared/models/meeting.model";
 import {
-    MeetingsPermission,
+    meetingsPermissions,
     RoleDefinitions,
 } from "../../../../../../shared/models/permission.model";
 import { SplitViewManagerService } from "../../../../../../shared/services/split-view-manager.service";
@@ -58,7 +58,7 @@ export class MeetingsRootService extends DestroyClass {
                 const userRole = this.userService.currentUser.role;
                 const rolePermissions = RoleDefinitions[userRole].permissions;
                 const hasPermission = rolePermissions.includes(
-                    MeetingsPermission.SeeAll
+                    meetingsPermissions.SeeAll
                 );
 
                 if (hasPermission) return value;

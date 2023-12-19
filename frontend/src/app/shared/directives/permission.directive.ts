@@ -17,8 +17,12 @@ export class PermissionDirective {
     @Input() public set appPermission(
         requiredPermission: SubPermissions | null
     ) {
-        if (requiredPermission === null) return;
         if (this.userService.currentUser === null) return;
+
+        if (requiredPermission === null) {
+            this.viewContainer.createEmbeddedView(this.templateRef);
+            return;
+        }
 
         const userRole = this.userService.currentUser.role;
         const rolePermissions = RoleDefinitions[userRole].permissions;

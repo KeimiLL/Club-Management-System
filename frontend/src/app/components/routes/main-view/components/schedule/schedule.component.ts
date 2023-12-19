@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { Observable } from "rxjs";
 
+import { PermissionDirective } from "../../../../../shared/directives/permission.directive";
 import { Match, TableMatch } from "../../../../../shared/models/match.model";
 import { ShortTeam } from "../../../../../shared/models/team.model";
 import { CardsModule } from "../../../../../shared/modules/cards.module";
@@ -23,6 +24,7 @@ import { ScheduleRootService } from "./services/schedule-root.service";
         MaterialModule,
         ScheduleContentComponent,
         ScheduleTableComponent,
+        PermissionDirective,
     ],
     templateUrl: "./schedule.component.html",
     styleUrls: ["./schedule.component.scss"],

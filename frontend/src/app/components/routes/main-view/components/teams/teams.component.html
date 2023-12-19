@@ -33,10 +33,22 @@
             (closedClicked)="switchDetail()"
         >
             <app-button-container buttons>
-                <button mat-raised-button class="button--light">
+                <button
+                    *appPermission="'edit_coach'"
+                    mat-raised-button
+                    class="button--light"
+                >
+                    Edit Coach
+                </button>
+                <button
+                    *appPermission="'edit_team'"
+                    mat-raised-button
+                    class="button--light"
+                >
                     Modify Team
                 </button>
                 <button
+                    *appPermission="'delete_team'"
                     mat-raised-button
                     class="button--dark"
                     (click)="onTeamDelete()"

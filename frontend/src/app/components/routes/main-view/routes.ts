@@ -1,6 +1,6 @@
 import { Routes } from "@angular/router";
 
-import { ModulesPermissions } from "../../../shared/models/permission.model";
+import { modulesPermissions } from "../../../shared/models/permission.model";
 import { PermissionGuard } from "./../../../shared/guards/permission.guard";
 import { MainViewComponent } from "./main-view.component";
 
@@ -17,7 +17,7 @@ export default [
                         (c) => c.DashboardComponent
                     ),
                 data: {
-                    modulesPermission: ModulesPermissions.Dashboard,
+                    modulesPermission: modulesPermissions.Dashboard,
                     requiredPermission: null,
                 },
                 canActivate: [PermissionGuard],
@@ -30,7 +30,7 @@ export default [
                         (c) => c.MeetingsComponent
                     ),
                 data: {
-                    modulesPermission: ModulesPermissions.Meetings,
+                    modulesPermission: modulesPermissions.Meetings,
                     requiredPermission: null,
                 },
                 canActivate: [PermissionGuard],
@@ -43,7 +43,7 @@ export default [
                         (c) => c.TeamsComponent
                     ),
                 data: {
-                    modulesPermission: ModulesPermissions.Teams,
+                    modulesPermission: modulesPermissions.Teams,
                     requiredPermission: null,
                 },
                 canActivate: [PermissionGuard],
@@ -56,7 +56,7 @@ export default [
                         (c) => c.SquadComponent
                     ),
                 data: {
-                    modulesPermission: ModulesPermissions.Squad,
+                    modulesPermission: modulesPermissions.Squad,
                     requiredPermission: null,
                 },
                 canActivate: [PermissionGuard],
@@ -69,7 +69,7 @@ export default [
                         (c) => c.ScheduleComponent
                     ),
                 data: {
-                    modulesPermission: ModulesPermissions.Schedule,
+                    modulesPermission: modulesPermissions.Schedule,
                     requiredPermission: null,
                 },
                 canActivate: [PermissionGuard],
@@ -80,7 +80,7 @@ export default [
                 loadChildren: () => import("./components/settings/routes"),
                 canActivate: [PermissionGuard],
                 data: {
-                    modulesPermission: ModulesPermissions.Settings,
+                    modulesPermission: modulesPermissions.Settings,
                     requiredPermission: null,
                 },
             },
