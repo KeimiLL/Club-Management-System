@@ -3,6 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 
 import { UserService } from "../../../../../shared/api/user.service";
+import { PermissionDirective } from "../../../../../shared/directives/permission.directive";
 import { CoachName } from "../../../../../shared/models/coach.model";
 import { Player, TablePlayer } from "../../../../../shared/models/player.model";
 import { ShortTeam } from "../../../../../shared/models/team.model";
@@ -27,6 +28,7 @@ import { SquadRootService } from "./services/squad-root.service";
         SquadTableComponent,
         SquadContentComponent,
         GetItemByIdPipe,
+        PermissionDirective,
     ],
     templateUrl: "./squad.component.html",
     styleUrls: ["./squad.component.scss"],

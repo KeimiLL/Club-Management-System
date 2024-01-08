@@ -10,71 +10,63 @@ export interface RolePermission {
     permissions: SubPermissions[];
 }
 
-export enum ModulesPermissions {
-    Settings = "settings",
-    Dashboard = "dashboard",
-    Meetings = "meetings",
-    Teams = "teams",
-    Squad = "squad",
-    Schedule = "schedule",
-}
+export const modulesPermissions = {
+    Settings: "settings",
+    Dashboard: "dashboard",
+    Meetings: "meetings",
+    Teams: "teams",
+    Squad: "squad",
+    Schedule: "schedule",
+} as const;
+
+export type ModulesPermissions =
+    (typeof modulesPermissions)[keyof typeof modulesPermissions];
+
+export const meetingsPermissions = {
+    SeeAll: "see_all",
+    EditMeeting: "edit_meeting",
+    DeleteMeeting: "delete_meeting",
+} as const;
+
+export type MeetingsPermissions =
+    (typeof meetingsPermissions)[keyof typeof meetingsPermissions];
+
+export const teamPermissions = {
+    CreateTeam: "create_team",
+    DeleteTeam: "delete_team",
+    EditTeam: "edit_team",
+    DeletePlayer: "delete_player",
+    EditPlayer: "edit_player",
+    MoreTeams: "more_teams",
+    MorePlayers: "more_players",
+    EditCoach: "edit_coach",
+} as const;
+
+export type TeamsPermissions =
+    (typeof teamPermissions)[keyof typeof teamPermissions];
+
+export const matchPermissions = {
+    CreateMatch: "create_match",
+    DeleteMatch: "delete_match",
+    EditMatch: "edit_match",
+    MatchEvents: "match_events",
+} as const;
+
+export type MatchPermissions =
+    (typeof matchPermissions)[keyof typeof matchPermissions];
+
+export const settingsPermissions = {
+    Modify: "modify_users",
+} as const;
+
+export type SettingsPermissions =
+    (typeof settingsPermissions)[keyof typeof settingsPermissions];
 
 export type SubPermissions =
-    | TeamPermission
-    | MeetingsPermission
-    | SettingsPermission
-    | SquadPermissions
-    | SchedulePermission;
-
-export enum MeetingsPermission {
-    SeeAll = "see_all",
-    EditMeeting = "edit_meeting",
-    DeleteMeeting = "delete_meeting",
-}
-
-export enum TeamPermission {
-    CreateTeam = "create_team",
-    EditTeam = "edit_team",
-}
-
-export enum SquadPermissions {
-    Stats = "stats",
-    MoreTeams = "more_teams",
-}
-
-export enum SchedulePermission {
-    Marks = "marks",
-    AddEvent = "add_event",
-    CheckPresent = "check_present",
-    AddSquad = "add_squad",
-}
-
-export enum SettingsPermission {
-    Modify = "modify_users",
-    Help = "help",
-    General = "general",
-    Info = "info",
-}
-
-export const allPermissions: SubPermissions[] = [
-    ...Object.values(TeamPermission),
-    ...Object.values(MeetingsPermission),
-    ...Object.values(SettingsPermission),
-    ...Object.values(SchedulePermission),
-    ...Object.values(SquadPermissions),
-];
-
-const modulesBase: ModulesPermissions[] = [
-    ModulesPermissions.Dashboard,
-    ModulesPermissions.Settings,
-    ModulesPermissions.Meetings,
-];
-
-const subPermissionsBase: SubPermissions[] = [
-    SettingsPermission.General,
-    SettingsPermission.Help,
-    SettingsPermission.Info,
-];
+    | SettingsPermissions
+    | MeetingsPermissions
+    | TeamsPermissions
+    | MatchPermissions;
 
 export const RoleColorsMapping: Record<Roles, string> = {
     [Roles.Admin]: "#ef436b",
@@ -87,51 +79,60 @@ export const RoleColorsMapping: Record<Roles, string> = {
 
 export const RoleDefinitions: Record<Roles, RolePermission> = {
     [Roles.Admin]: {
-        modules: Object.values(ModulesPermissions),
-        permissions: [...allPermissions],
+        modules: [...Object.values(modulesPermissions)],
+        permissions: [
+            ...Object.values(meetingsPermissions),
+            ...Object.values(teamPermissions),
+            ...Object.values(matchPermissions),
+            ...Object.values(settingsPermissions),
+        ],
     },
 
     [Roles.Board]: {
-        modules: Object.values(ModulesPermissions),
+        modules: [...Object.values(modulesPermissions)],
         permissions: [
-            ...subPermissionsBase,
-            ...Object.values(MeetingsPermission),
-            ...Object.values(TeamPermission),
-            ...Object.values(SquadPermissions),
-            SchedulePermission.AddEvent,
+            ...Object.values(meetingsPermissions),
+            ...Object.values(matchPermissions),
+            ...Object.values(teamPermissions),
         ],
     },
 
     [Roles.Coach]: {
-        modules: [
-            ...modulesBase,
-            ModulesPermissions.Teams,
-            ModulesPermissions.Squad,
-            ModulesPermissions.Schedule,
-        ],
+        modules: [...Object.values(modulesPermissions)],
         permissions: [
-            ...subPermissionsBase,
-            ...Object.values(SquadPermissions),
-            ...Object.values(SchedulePermission),
+            ...Object.values(meetingsPermissions),
+            ...Object.values(matchPermissions),
+            teamPermissions.EditTeam,
+            teamPermissions.MorePlayers,
+            teamPermissions.MoreTeams,
         ],
     },
 
     [Roles.Player]: {
         modules: [
-            ...modulesBase,
-            ModulesPermissions.Squad,
-            ModulesPermissions.Schedule,
+            modulesPermissions.Dashboard,
+            modulesPermissions.Settings,
+            modulesPermissions.Meetings,
+            modulesPermissions.Squad,
+            modulesPermissions.Schedule,
         ],
-        permissions: [...subPermissionsBase],
+        permissions: [
+            meetingsPermissions.EditMeeting,
+            matchPermissions.MatchEvents,
+        ],
     },
 
     [Roles.Viewer]: {
-        modules: [...modulesBase],
-        permissions: [...subPermissionsBase],
+        modules: [
+            modulesPermissions.Dashboard,
+            modulesPermissions.Settings,
+            modulesPermissions.Meetings,
+        ],
+        permissions: [],
     },
 
     [Roles.None]: {
-        modules: [ModulesPermissions.Dashboard],
+        modules: [],
         permissions: [],
     },
 };

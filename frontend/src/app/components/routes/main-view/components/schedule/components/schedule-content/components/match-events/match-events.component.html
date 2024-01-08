@@ -1,22 +1,24 @@
-<div class="button-container" *ngIf="!hasEnded">
-    <button
-        class="button--dark button-show-hide"
-        mat-raised-button
-        [disabled]="!hasStarted"
-        (click)="toggleAddEventPopup()"
-    >
-        Add Events
-    </button>
+<ng-container *appPermission="'match_events'">
+    <div class="button-container" *ngIf="!hasEnded">
+        <button
+            class="button--dark button-show-hide"
+            mat-raised-button
+            [disabled]="!hasStarted"
+            (click)="toggleAddEventPopup()"
+        >
+            Add Events
+        </button>
 
-    <button
-        class="button--dark button-show-hide"
-        mat-raised-button
-        [disabled]="hasEnded"
-        (click)="changeState()"
-    >
-        {{ hasStarted ? "End the match" : "Start the match" }}
-    </button>
-</div>
+        <button
+            class="button--dark button-show-hide"
+            mat-raised-button
+            [disabled]="hasEnded"
+            (click)="changeState()"
+        >
+            {{ hasStarted ? "End the match" : "Start the match" }}
+        </button>
+    </div>
+</ng-container>
 
 <app-match-events-container
     class="events-container"

@@ -1,9 +1,13 @@
-import { MenuItem } from "../../../../../../../shared/models/misc.model";
-import { SettingsPermission } from "../../../../../../../shared/models/permission.model";
+import { SettingsMenuItem } from "../../../../../../../shared/models/misc.model";
+import { settingsPermissions } from "../../../../../../../shared/models/permission.model";
 
-export const settingsMenuItems: MenuItem[] = [
-    { name: SettingsPermission.General, route: "/app/settings/general" },
-    { name: SettingsPermission.Modify, route: "/app/settings/modify" },
-    { name: SettingsPermission.Help, route: "/app/settings/help" },
-    { name: SettingsPermission.Info, route: "/app/settings/info" },
+export const settingsMenuItems: SettingsMenuItem[] = [
+    { name: "General", route: "/app/settings/general", permission: null },
+    {
+        name: settingsPermissions.Modify,
+        route: "/app/settings/modify",
+        permission: settingsPermissions.Modify,
+    },
+    { name: "Help", route: "/app/settings/help", permission: null },
+    { name: "Info", route: "/app/settings/info", permission: null },
 ];
